@@ -14,5 +14,6 @@ public class AppSchema:Schema
         RegisterTypeMapping(typeof(Approver),typeof(ApproveType));
         RegisterTypeMapping(typeof(User),typeof(UserType));
         Query = provider.GetRequiredService<RootQuery>();
+        Mutation = provider.GetRequiredService<RootMutation>();
     }
 }
