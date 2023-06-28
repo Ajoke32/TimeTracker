@@ -1,12 +1,16 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Layout, Home, Login } from './pages'
 
 function App() {
- 
-
     return (
-        <div>
-           <h1 style={{textAlign:'center'}}>React</h1>
-            <h2>App</h2>
-        </div>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Layout />}>
+                    <Route index element={<Home />} />
+                    <Route path="login" element={<Login />} />
+                </Route>
+            </Routes>
+        </BrowserRouter>
     );
 }
 
