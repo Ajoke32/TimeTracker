@@ -1,10 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using TimeTracker.Enums;
 
 namespace TimeTracker.Models;
 
 public class User
 {
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [Key]
     public int Id { get; set; }
     
     [Required] public string FirstName { get; set; } = string.Empty;

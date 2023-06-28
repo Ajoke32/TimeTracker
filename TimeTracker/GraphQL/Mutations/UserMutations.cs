@@ -28,7 +28,7 @@ public sealed class UserMutations:ObjectGraphType
             });
 
         Field<UserType>("update")
-            .Argument<UserInputType>("user")
+            .Argument<UpdateInputType>("user")
             .ResolveAsync(async ctx =>
             {
                 var uow = ctx.RequestServices.GetRequiredService<IUnitOfWorkRepository>();
@@ -54,7 +54,7 @@ public sealed class UserMutations:ObjectGraphType
             });
 
         Field<bool>("delete")
-            .Argument<UserInputType>("user")
+            .Argument<UpdateInputType>("user")
             .ResolveAsync(async ctx =>
             {
                 var uow = ctx.RequestServices.GetRequiredService<IUnitOfWorkRepository>();

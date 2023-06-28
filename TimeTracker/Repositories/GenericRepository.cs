@@ -93,10 +93,10 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return Task.FromResult(true);
     }
 
-    public ValueTask<TEntity> UpdateAsync(TEntity entity)
+    public ValueTask<TEntity> UpdateAsync(TEntity model)
     {
-        var dbentity = _dbSet.Update(entity);
-        _context.Entry(entity).State = EntityState.Modified;
-        return new ValueTask<TEntity>(dbentity.Entity);
+        var entity = _dbSet.Update(model);
+        _context.Entry(model).State = EntityState.Modified;
+        return new ValueTask<TEntity>(entity.Entity);
     }
 }
