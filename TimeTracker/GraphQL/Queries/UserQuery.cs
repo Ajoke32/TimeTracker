@@ -2,6 +2,7 @@
 using GraphQL.Types;
 using TimeTracker.Absctration;
 using TimeTracker.GraphQL.Types;
+using TimeTracker.GraphQL.Types.InputTypes;
 using TimeTracker.Models;
 
 namespace TimeTracker.GraphQL.Queries;
@@ -35,6 +36,21 @@ public sealed class UserQuery : ObjectGraphType
                 return await uow.GenericRepository<User>().FindAsync(u => u.Email==email);
             });
         
-        
+        Field<string>("login")
+            .Argument<UserLoginInputType>("user")
+            .ResolveAsync(async ctx =>
+            {
+                var args = ctx.GetArgument<User>("user");
+
+                var mail = await _uow.GenericRepository<User>()
+                    .FindAsync(u => u.Email == args.Email);
+
+                if (mail == null)
+                {
+                    return "user with this email not found";
+                }
+                
+                return await Task.Run(() => "access token");
+            });
     }   
 }

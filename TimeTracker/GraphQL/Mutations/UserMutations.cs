@@ -64,5 +64,6 @@ public sealed class UserMutations:ObjectGraphType
                 await uow.SaveAsync();
                 return isDeleted;
             });
+        
     }
 }

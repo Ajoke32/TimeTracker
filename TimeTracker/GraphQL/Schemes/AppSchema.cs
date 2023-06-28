@@ -2,6 +2,7 @@
 
 using GraphQL.Types;
 using TimeTracker.GraphQL.Types;
+using TimeTracker.GraphQL.Types.InputTypes;
 using TimeTracker.Models;
 
 namespace TimeTracker.GraphQL.Schemes;
