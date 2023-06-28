@@ -41,7 +41,7 @@ builder.Services.AddGraphQL(options =>
 
 var app = builder.Build();
 
-/*
+
 app.UseSpaStaticFiles();
 
 app.UseSpa(spa =>
@@ -68,7 +68,7 @@ app.UseSpa(spa =>
         spa.UseReactDevelopmentServer(npmScript:"start");
     }
 
-});*/
+});
 
 app.UseGraphQL();
 app.UseGraphQLAltair();
