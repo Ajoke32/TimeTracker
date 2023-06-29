@@ -1,12 +1,16 @@
+using System.Text;
 using GraphQL;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using TimeTracker.Absctration;
 using TimeTracker.AppContext;
 using TimeTracker.GraphQL;
 using TimeTracker.GraphQL.Schemes;
 using TimeTracker.Repositories;
+using TimeTracker.Utils.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +19,24 @@ builder.Services.AddSpaStaticFiles(conf =>
     conf.RootPath = "ClientApp/build";
 });
 
+builder.Services.AddAuthentication(conf =>
+{
+    conf.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    conf.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    conf.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+         ValidateIssuer = false,
+         ValidateAudience = false,
+         ValidateLifetime = true,
+         IssuerSigningKey = new SymmetricSecurityKey(
+             Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
+         ValidateIssuerSigningKey = true,
+         RequireExpirationTime = true,
+    };
+});
 
 builder.Services.AddScoped<IRepositoryFactory, RepositoryFactory>();
 
@@ -36,13 +58,16 @@ builder.Services.AddGraphQL(options =>
         .AddSystemTextJson();
 });
 
-
+builder.Services.AddTransient<Authenticate>();
 
 
 var app = builder.Build();
 
 
 app.UseSpaStaticFiles();
+
+app.UseGraphQL();
+app.UseGraphQLAltair();
 
 app.UseSpa(spa =>
 {
@@ -70,8 +95,7 @@ app.UseSpa(spa =>
 
 });
 
-app.UseGraphQL();
-app.UseGraphQLAltair();
+
 
 
 app.Run();

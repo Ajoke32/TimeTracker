@@ -4,6 +4,9 @@ using TimeTracker.Absctration;
 using TimeTracker.GraphQL.Types;
 using TimeTracker.GraphQL.Types.InputTypes;
 using TimeTracker.Models;
+using BCrypt.Net;
+using TimeTracker.Utils.Auth;
+
 
 namespace TimeTracker.GraphQL.Queries;
 
@@ -36,21 +39,31 @@ public sealed class UserQuery : ObjectGraphType
                 return await uow.GenericRepository<User>().FindAsync(u => u.Email==email);
             });
         
+        
         Field<string>("login")
             .Argument<UserLoginInputType>("user")
             .ResolveAsync(async ctx =>
             {
                 var args = ctx.GetArgument<User>("user");
-
-                var mail = await _uow.GenericRepository<User>()
+                
+                var searchUser = await _uow.GenericRepository<User>()
                     .FindAsync(u => u.Email == args.Email);
 
-                if (mail == null)
+                if (searchUser == null)
                 {
                     return "user with this email not found";
                 }
+
+                if (!BCrypt.Net.BCrypt.Verify(args.Password, searchUser.Password))
+                {
+                    return "Wrong password";
+                }
+
+                var authService = ctx.RequestServices.GetRequiredService<Authenticate>();
+
+                var token = authService.GenerateToken(searchUser);
                 
-                return await Task.Run(() => "access token");
+                return token;
             });
     }   
 }

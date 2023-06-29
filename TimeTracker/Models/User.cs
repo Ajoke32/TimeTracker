@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TimeTracker.Enums;
 
@@ -18,7 +19,9 @@ public class User
     
     [Required] public WorkType WorkType { get; set; }
     
+
     public Permissions Permissions { get; set; }
+    
 
     public int VacationDays { get; set; }
     
@@ -28,4 +31,9 @@ public class User
     
     public List<Approver> Requests { get; } = new();
 
+    public User()
+    {
+        VacationDays = 30;
+        Permissions = Permissions.None;
+    }
 }
