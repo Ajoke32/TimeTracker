@@ -63,7 +63,8 @@ builder.Services.AddTransient<Authenticate>();
 
 var app = builder.Build();
 
-
+app.UseAuthentication();
+app.UseAuthentication();
 app.UseSpaStaticFiles();
 
 app.UseGraphQL();
