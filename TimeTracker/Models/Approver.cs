@@ -13,4 +13,9 @@ public class Approver
 
     public int UserApproverId { get; set; }
     public User UserApprover { get; set; } = null!;
+
+    public Approver()
+    {
+        IsApproved = false;
+    }
 }

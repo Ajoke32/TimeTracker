@@ -38,7 +38,7 @@ public class Authenticate
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha512Signature)
-            
+
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
