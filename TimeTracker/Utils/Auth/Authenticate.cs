@@ -19,13 +19,13 @@ public class Authenticate
     {
         var claims = new List<Claim>()
         {
-            new Claim(ClaimTypes.Name,user.FirstName),
-            new Claim(ClaimTypes.Email,user.Email),
-            new Claim(ClaimTypes.Surname,user.LastName),
-            new Claim("Id",user.Id.ToString()),
-            new Claim("Permissions",Convert.ToInt32(user.Permissions).ToString()),
-            new Claim("WorkType",user.WorkType.ToString()),
-            new Claim("VacationDays",user.VacationDays.ToString())
+            new ("Name",user.FirstName),
+            new (ClaimTypes.Email,user.Email),
+            new ("LastName",user.LastName),
+            new ("Id",user.Id.ToString()),
+            new ("Permissions",Convert.ToInt32(user.Permissions).ToString()),
+            new ("WorkType",user.WorkType.ToString()),
+            new ("VacationDays",user.VacationDays.ToString())
         };
         
         var key = Encoding.UTF8.GetBytes(_config["Jwt:Key"]!);

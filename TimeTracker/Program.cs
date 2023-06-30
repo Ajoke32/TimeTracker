@@ -1,12 +1,14 @@
 using System.Text;
 using GraphQL;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using TimeTracker.Absctration;
 using TimeTracker.AppContext;
+using TimeTracker.Enums;
 using TimeTracker.GraphQL;
 using TimeTracker.GraphQL.Schemes;
 using TimeTracker.Repositories;
@@ -42,12 +44,25 @@ builder.Services.AddAuthentication(conf =>
     };
 });
 
+builder.Services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("LoggedIn", (a) =>
     {
         a.RequireAuthenticatedUser();
     });
+    
+    options.AddPolicy("Read", p =>
+    {
+        p.Requirements.Add(new PermissionRequirement(Permissions.Read));
+    });
+    /*
+    options.AddPolicy("AllRights", p =>
+    {
+        p.Requirements.Add(new PermissionRequirement(Permissions.Create|Permissions.Read
+                                                                       |Permissions.Delete|Permissions.Update));
+    });*/
     
 });
 

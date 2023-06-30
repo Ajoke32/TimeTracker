@@ -22,15 +22,15 @@ public sealed class UserQuery : ObjectGraphType
         _uow = uow;
         Field<ListGraphType<UserType>>("users")
             .ResolveAsync(async ctx =>
-                await uow.GenericRepository<User>().GetAsync()).Description("gets all users")
-            .AuthorizeWithPolicy("Read");
+                await _uow.GenericRepository<User>().GetAsync()).Description("gets all users")
+            .AuthorizeWithPolicy(policy:"Read");
 
         Field<UserType>("user")
             .Argument<int>("id")
             .ResolveAsync(async _ =>
             {
                 var id = _.GetArgument<int>("id");
-                return await uow.GenericRepository<User>()
+                return await _uow.GenericRepository<User>()
                     .FindAsync(u => u.Id == id);
             }).Description("gets user by id");
 
@@ -39,7 +39,7 @@ public sealed class UserQuery : ObjectGraphType
             .ResolveAsync(async _ =>
             {
                 var email = _.GetArgument<string>("email");
-                return await uow.GenericRepository<User>().FindAsync(u => u.Email == email);
+                return await _uow.GenericRepository<User>().FindAsync(u => u.Email == email);
             }).AuthorizeWithPolicy(policy:"LoggedIn");
         
         
@@ -62,9 +62,9 @@ public sealed class UserQuery : ObjectGraphType
                     return "Wrong password";
                 }
 
-                var authService = ctx.RequestServices.GetRequiredService<Authenticate>();
+                var authService = ctx.RequestServices?.GetRequiredService<Authenticate>();
 
-                var token = authService.GenerateToken(searchUser);
+                var token = authService?.GenerateToken(searchUser);
                 
                 return token;
             });
