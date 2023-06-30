@@ -12,6 +12,8 @@ using TimeTracker.GraphQL.Schemes;
 using TimeTracker.Repositories;
 using TimeTracker.Utils.Auth;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSpaStaticFiles(conf =>
@@ -24,6 +26,7 @@ builder.Services.AddAuthentication(conf =>
     conf.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     conf.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
     conf.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    
 }).AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters()
@@ -35,8 +38,19 @@ builder.Services.AddAuthentication(conf =>
              Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
          ValidateIssuerSigningKey = true,
          RequireExpirationTime = true,
+         RequireSignedTokens = false
     };
 });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("LoggedIn", (a) =>
+    {
+        a.RequireAuthenticatedUser();
+    });
+    
+});
+
 
 builder.Services.AddScoped<IRepositoryFactory, RepositoryFactory>();
 
@@ -53,9 +67,11 @@ builder.Services.AddScoped<RootMutation>();
 
 builder.Services.AddGraphQL(options =>
 {
-    options.AddSchema<AppSchema>(serviceLifetime:GraphQL.DI.ServiceLifetime.Scoped).AddGraphTypes()
+    options.AddSchema<AppSchema>(GraphQL.DI.ServiceLifetime.Scoped)
+        .AddGraphTypes()
         .AddErrorInfoProvider(e => e.ExposeExceptionDetails = true)
-        .AddSystemTextJson();
+        .AddSystemTextJson()
+        .AddAuthorizationRule();
 });
 
 builder.Services.AddTransient<Authenticate>();
@@ -63,11 +79,14 @@ builder.Services.AddTransient<Authenticate>();
 
 var app = builder.Build();
 
+
 app.UseAuthentication();
-app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseSpaStaticFiles();
 
 app.UseGraphQL();
+
 app.UseGraphQLAltair();
 
 app.UseSpa(spa =>

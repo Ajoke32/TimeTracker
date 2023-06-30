@@ -1,26 +1,29 @@
 ﻿using GraphQL;
 using GraphQL.Types;
+using Microsoft.AspNetCore.Authorization;
 using TimeTracker.Absctration;
 using TimeTracker.GraphQL.Types;
 using TimeTracker.GraphQL.Types.InputTypes;
 using TimeTracker.Models;
-using BCrypt.Net;
 using TimeTracker.Utils.Auth;
 
 
 namespace TimeTracker.GraphQL.Queries;
 
+
 public sealed class UserQuery : ObjectGraphType
 {
     private readonly IUnitOfWorkRepository _uow;
     
+
     public UserQuery(IUnitOfWorkRepository uow)
     {
         
         _uow = uow;
         Field<ListGraphType<UserType>>("users")
             .ResolveAsync(async ctx =>
-                await uow.GenericRepository<User>().GetAsync()).Description("gets all users");
+                await uow.GenericRepository<User>().GetAsync()).Description("gets all users")
+            .AuthorizeWithPolicy("Read");
 
         Field<UserType>("user")
             .Argument<int>("id")
@@ -36,8 +39,8 @@ public sealed class UserQuery : ObjectGraphType
             .ResolveAsync(async _ =>
             {
                 var email = _.GetArgument<string>("email");
-                return await uow.GenericRepository<User>().FindAsync(u => u.Email==email);
-            });
+                return await uow.GenericRepository<User>().FindAsync(u => u.Email == email);
+            }).AuthorizeWithPolicy(policy:"LoggedIn");
         
         
         Field<string>("login")

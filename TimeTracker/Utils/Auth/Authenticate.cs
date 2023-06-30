@@ -23,7 +23,7 @@ public class Authenticate
             new Claim(ClaimTypes.Email,user.Email),
             new Claim(ClaimTypes.Surname,user.LastName),
             new Claim("Id",user.Id.ToString()),
-            new Claim("Permissions",user.Permissions.ToString()),
+            new Claim("Permissions",Convert.ToInt32(user.Permissions).ToString()),
             new Claim("WorkType",user.WorkType.ToString()),
             new Claim("VacationDays",user.VacationDays.ToString())
         };

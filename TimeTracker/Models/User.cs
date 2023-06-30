@@ -18,7 +18,7 @@ public class User
     [Required] public string Password { get; set; } = string.Empty;
     
     [Required] public WorkType WorkType { get; set; }
-    
+
 
     public Permissions Permissions { get; set; }
     
