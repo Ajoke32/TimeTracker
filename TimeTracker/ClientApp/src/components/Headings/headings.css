@@ -1,0 +1,19 @@
+﻿.heading-text__h1 {
+    color: var(--color-cyan);
+    text-align: center;
+    font-size: 48px;
+    font-family: var(--font-header);
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.heading-text__h2 {
+    color: var(--color-blue);
+    text-align: center;
+    font-size: 40px;
+    font-family: var(--font-header);
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}

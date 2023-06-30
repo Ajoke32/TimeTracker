@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { User } from '../intrerfaces';
 
-const initialState: { user: User|undefined } =
+const initialState: { user: User|undefined, userToken: string, isAuthenticated: boolean } =
 {
     user: undefined,
+    userToken: '',
+    isAuthenticated: false
 }
 
 const userSlice = createSlice({
@@ -13,5 +15,5 @@ const userSlice = createSlice({
     },
 });
 
-export const userReducer = userSlice.reducer;
+export const user = userSlice.reducer;
 // export const { } = userSlice.actions;

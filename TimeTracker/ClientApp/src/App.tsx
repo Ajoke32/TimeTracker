@@ -1,16 +1,10 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Layout, Home, Login } from './pages'
+import { BrowserRouter } from "react-router-dom";
+import { AuthWrapper } from "./auth";
 
 function App() {
     return (
         <BrowserRouter>
-            <Routes>
-                <Route path="/login" element={<Login />} />
-
-                <Route path="/" element={<Layout />}>
-                    <Route index element={<Home />} />
-                </Route>
-            </Routes>
+            <AuthWrapper />
         </BrowserRouter>
     );
 }
