@@ -20,15 +20,24 @@ public sealed class UserMutations:ObjectGraphType
             .ResolveAsync(async ctx =>
             {
                 var uow = ctx.RequestServices.GetRequiredService<IUnitOfWorkRepository>();
-                var user = ctx.GetArgument<User>("user");
                 
+                var user = ctx.GetArgument<User>("user");
+
+                var email = await uow.GenericRepository<User>()
+                    .FindAsync(u => u.Email == user.Email);
+
+                if (email != null) { return null;}
+
+                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+                
+
                 var created = await uow.GenericRepository<User>().CreateAsync(user);
                 await uow.SaveAsync();
                 return created;
             });
 
         Field<UserType>("update")
-            .Argument<UpdateInputType>("user")
+            .Argument<UpdateUserInputType>("user")
             .ResolveAsync(async ctx =>
             {
                 var uow = ctx.RequestServices.GetRequiredService<IUnitOfWorkRepository>();
@@ -54,7 +63,7 @@ public sealed class UserMutations:ObjectGraphType
             });
 
         Field<bool>("delete")
-            .Argument<UpdateInputType>("user")
+            .Argument<UpdateUserInputType>("user")
             .ResolveAsync(async ctx =>
             {
                 var uow = ctx.RequestServices.GetRequiredService<IUnitOfWorkRepository>();
