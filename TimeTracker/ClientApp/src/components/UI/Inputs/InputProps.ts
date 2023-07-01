@@ -6,10 +6,3 @@ export interface TextInputProps {
     register: any;
     errors: any;
 }
-
-export interface PasswordInputProps {
-    name: string;
-    placeholder: string;
-    register: any;
-    errors: any;
-}

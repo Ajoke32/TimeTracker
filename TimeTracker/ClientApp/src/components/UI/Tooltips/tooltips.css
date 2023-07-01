@@ -14,3 +14,14 @@
     margin-left: .5vw;
 }
 
+.error-tooltip__wrapper {
+    display: flex;
+    height: 2vh;
+}
+
+.error-tooltip__wrapper p {
+    margin: .2vw 1vh;
+    font-size: smaller;
+    color: var(--color-red);
+}
+

@@ -3,8 +3,6 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import TextInput from "../UI/Inputs/TextInput";
 import LargeButton from "../UI/Buttons/LargeButton";
 import InputTooltip from "../UI/Tooltips/InputTooltip";
-import GoogleButton from "../UI/Buttons/GoogleButton";
-import LoginMenuSeparator from "../UI/Separators/LoginMenuSeparator";
 import H1 from "../Headings/H1"
 import "./LoginForm.css"
 import PasswordInput from "../UI/Inputs/PasswordInput";
@@ -36,10 +34,7 @@ export const LoginForm = () => {
             <form onSubmit={handleSubmit(onSubmit)}>
 
                 <H1 value="Sign in"/>
-
-                <GoogleButton/>
-
-                <LoginMenuSeparator/>
+                
 
                 <div className="login-inputs__wrapper">
                     <TextInput name="email" placeholder="Enter your work email" register={register("email", { required: "Login can't be empty!" })} errors={errors.email} />

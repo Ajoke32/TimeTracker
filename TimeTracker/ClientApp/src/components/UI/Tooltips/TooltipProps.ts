@@ -3,3 +3,7 @@
     url?: string;
     urlTitle?: string;
 }
+
+export interface ErrorTooltipProps {
+    errors : any;
+}
