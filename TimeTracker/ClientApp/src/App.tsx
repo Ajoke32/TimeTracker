@@ -1,10 +1,10 @@
 import { BrowserRouter } from "react-router-dom";
-import { AuthWrapper } from "./auth";
+import { AppRoutes } from "./pages";
 
 function App() {
     return (
         <BrowserRouter>
-            <AuthWrapper />
+            <AppRoutes />
         </BrowserRouter>
     );
 }
