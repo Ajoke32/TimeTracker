@@ -1,5 +1,4 @@
-﻿import React from 'react';
-import SideContentInner from "./SideContentInner";
+﻿import SideContentInner from "./SideContentInner";
 
 const LoginSideContent = () => {
     return (

@@ -1,5 +1,4 @@
-﻿import React from 'react';
-import "./LoginSideContent.css"
+﻿import "./LoginSideContent.css"
 import H2 from "../Headings/H2";
 import DefaultTooltip from "../UI/Tooltips/DefaultTooltip";
 import SideContentImage from "./SideContentImage";

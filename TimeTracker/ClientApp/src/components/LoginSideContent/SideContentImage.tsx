@@ -1,5 +1,4 @@
-﻿import React from 'react';
-import "./LoginSideContent.css"
+﻿import "./LoginSideContent.css"
 
 const SideContentImage = () => {
     return (

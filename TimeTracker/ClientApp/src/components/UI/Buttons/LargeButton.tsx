@@ -1,5 +1,4 @@
-﻿import React from 'react';
-import {ButtonProps} from "./ButtonProps";
+﻿import {ButtonProps} from "./ButtonProps";
 import './buttons.css';
 
 const LargeButton = ({type, value} : ButtonProps) => {

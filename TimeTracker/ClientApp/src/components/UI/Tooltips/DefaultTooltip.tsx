@@ -1,5 +1,4 @@
-﻿import React from 'react';
-import {TooltipProps} from "./TooltipProps";
+﻿import {TooltipProps} from "./TooltipProps";
 
 const DefaultTooltip = ({title} : TooltipProps) => {
     return (

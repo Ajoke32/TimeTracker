@@ -1,6 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Home, Login, Layout } from "..";
-import { IsUserAuthenticated } from "../../utils";
 import { useCurrentSelector } from '../../hooks';
 
 

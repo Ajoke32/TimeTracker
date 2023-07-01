@@ -1,5 +1,4 @@
-﻿import React from 'react';
-import "./headings.css"
+﻿import "./headings.css"
 
 const H2 = ({ value }: { value: string }) => {
     return (

@@ -1,5 +1,4 @@
-﻿import React from 'react';
-import {TooltipProps} from "./TooltipProps";
+﻿import {TooltipProps} from "./TooltipProps";
 import "./tooltips.css"
 
 const InputTooltip = ({title, url, urlTitle} : TooltipProps) => {

@@ -1,5 +1,4 @@
-﻿import React from 'react';
-import "./LoginMenuSeparator.css"
+﻿import "./LoginMenuSeparator.css"
 
 const LoginMenuSeparator = () => {
     return (

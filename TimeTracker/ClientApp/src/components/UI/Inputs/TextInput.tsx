@@ -1,5 +1,4 @@
-﻿import React from 'react';
-import { TextInputProps } from "./InputProps";
+﻿import { TextInputProps } from "./InputProps";
 import './inputs.css'
 
 const TextInput = ({ name, placeholder, register, errors }: TextInputProps) => {

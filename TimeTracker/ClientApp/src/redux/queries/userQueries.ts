@@ -1,7 +1,5 @@
-import { error } from 'console';
 import { AjaxQuery } from './query';
-import { map, catchError, of } from 'rxjs';
-import { useCurrentSelector } from '../../hooks';
+import { map } from 'rxjs';
 
 export function UserLoginQuery(user: { email: string, password: string }) {
     //const token = useCurrentSelector((state) => state.user.token);
