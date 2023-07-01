@@ -1,4 +1,3 @@
-import React from "react";
 import { LoginForm } from "../../components";
 import LoginSideContent from "../../components/LoginSideContent/LoginSideContent";
 import "./Login.css"

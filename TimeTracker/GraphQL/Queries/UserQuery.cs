@@ -14,11 +14,11 @@ namespace TimeTracker.GraphQL.Queries;
 public sealed class UserQuery : ObjectGraphType
 {
     private readonly IUnitOfWorkRepository _uow;
-    
+
 
     public UserQuery(IUnitOfWorkRepository uow)
     {
-        
+
         _uow = uow;
         Field<ListGraphType<UserType>>("users")
             .ResolveAsync(async ctx =>
@@ -41,32 +41,34 @@ public sealed class UserQuery : ObjectGraphType
                 var email = _.GetArgument<string>("email");
                 return await _uow.GenericRepository<User>().FindAsync(u => u.Email == email);
             }).AuthorizeWithPolicy(policy:"LoggedIn");
-        
-        
-        Field<string>("login")
+
+
+        Field<string>("response")
             .Argument<UserLoginInputType>("user")
             .ResolveAsync(async ctx =>
             {
                 var args = ctx.GetArgument<User>("user");
-                
+
                 var searchUser = await _uow.GenericRepository<User>()
                     .FindAsync(u => u.Email == args.Email);
 
                 if (searchUser == null)
                 {
-                    return "user with this email not found";
+                    ctx.Errors.Add(new ExecutionError("Email not found!"));
+                    return "Error";
                 }
 
                 if (!BCrypt.Net.BCrypt.Verify(args.Password, searchUser.Password))
                 {
-                    return "Wrong password";
+                    ctx.Errors.Add(new ExecutionError("Wrong password!"));
+                    return "Error";
                 }
 
                 var authService = ctx.RequestServices?.GetRequiredService<Authenticate>();
 
                 var token = authService?.GenerateToken(searchUser);
-                
+
                 return token;
             });
-    }   
+    }
 }
