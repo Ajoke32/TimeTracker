@@ -66,17 +66,13 @@ builder.Services.AddAuthorization(options =>
     
 });
 
-builder.Services.AddCors(options =>
+builder.Services.AddCors(c =>
 {
-    options.AddPolicy(name: "MyAllowSpecificOrigins",
-        policy =>
-        {
-            policy.AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
-        });
+    c.AddPolicy("AllowOrigin", o =>
+    {
+        o.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
+    });
 });
-
 
 builder.Services.AddScoped<IRepositoryFactory, RepositoryFactory>();
 
@@ -105,7 +101,7 @@ builder.Services.AddTransient<Authenticate>();
 
 var app = builder.Build();
 
-app.UseCors("MyAllowSpecificOrigins");
+app.UseCors("AllowOrigin");
 app.UseAuthentication();
 app.UseAuthorization();
 

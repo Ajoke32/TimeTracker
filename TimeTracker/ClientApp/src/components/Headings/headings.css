@@ -1,4 +1,4 @@
-﻿.heading-text__h1 {
+﻿.heading-text-h1 {
     color: var(--color-cyan);
     text-align: center;
     font-size: 48px;
@@ -8,7 +8,7 @@
     line-height: normal;
 }
 
-.heading-text__h2 {
+.heading-text-h2 {
     color: var(--color-blue);
     text-align: center;
     font-size: 40px;
