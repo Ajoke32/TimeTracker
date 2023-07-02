@@ -130,6 +130,8 @@ var app = builder.Build();
 
 app.UseCors("MyAllowSpecificOrigins");
 
+
+
 app.UseAuthentication();
 app.UseAuthorization();
 

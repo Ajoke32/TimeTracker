@@ -6,6 +6,9 @@ import InputTooltip from "../UI/Tooltips/InputTooltip";
 import H1 from "../Headings/H1"
 import "./LoginForm.css"
 import PasswordInput from "../UI/Inputs/PasswordInput";
+import {useAppDispatch, useCurrentSelector} from "../../hooks";
+import {login} from "../../redux";
+import H2 from "../Headings/H2";
 
 type Inputs = {
     email: string
@@ -13,8 +16,10 @@ type Inputs = {
 }
 
 export const LoginForm = () => {
-    const dispatch = useDispatch();
-    const { register, handleSubmit, formState: { errors }, reset } = useForm<Inputs>({
+    const dispatch = useAppDispatch();
+    const {loading,error} = useCurrentSelector(state=>state.user);
+    const { register, handleSubmit,
+        formState: { errors }, reset } = useForm<Inputs>({
         mode: 'onBlur',
         defaultValues: {
             email: '',
@@ -23,7 +28,7 @@ export const LoginForm = () => {
     });
 
     const onSubmit: SubmitHandler<Inputs> = (data) => {
-        dispatch({ type: 'USER_LOGIN', payload: data });
+        dispatch(login(data));
         reset();
     }
 
@@ -31,10 +36,13 @@ export const LoginForm = () => {
 
     return (
         <div className="login-form__wrapper">
+
             <form onSubmit={handleSubmit(onSubmit)}>
 
                 <H1 value="Sign in"/>
-                
+
+                <H2 value={loading?"loading..":""}></H2>
+                <H2 value={error!==""?error:""}></H2>
 
                 <div className="login-inputs__wrapper">
                     <TextInput name="email" placeholder="Enter your work email" register={register("email", { required: "Login can't be empty!" })} errors={errors.email} />

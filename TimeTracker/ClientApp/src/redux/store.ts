@@ -7,7 +7,7 @@ const middleware = createEpicMiddleware();
 
 export const store = configureStore({
     reducer: {
-      user,
+      user:user,
     },
     middleware: [
       middleware
@@ -16,5 +16,6 @@ export const store = configureStore({
 
 middleware.run(rootEpic);
 
-export type AppDispatch = typeof store.dispatch;
+export type AppDispatch = typeof store.dispatch
+
 export type RootState = ReturnType<typeof store.getState>
