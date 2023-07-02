@@ -27,9 +27,9 @@ public class User
     
     public List<Vacation> Vacations { get; } = new();
     
-    public List<Approver> Approvers { get; } = new();
+    public List<UserApprover> Approvers { get; } = new();
     
-    public List<Approver> Requests { get; } = new();
+    public List<UserApprover> Senders { get; } = new();
 
     public User()
     {

@@ -9,57 +9,67 @@ namespace TimeTracker.GraphQL.Mutations;
 
 public sealed class ApproverMutations:ObjectGraphType
 {
+    private readonly IUnitOfWorkRepository _uof;
     public ApproverMutations(IUnitOfWorkRepository uof)
     {
+        _uof = uof;
+
         Field<bool>("create")
-            .Argument<ApproveInputType>("approve")
+            .Argument<int>("approverId")
+            .Argument<int>("userSenderId")
+            .Argument<List<int>>("approvers",nullable:true)
             .ResolveAsync(async ctx =>
             {
-                var approveInput = ctx.GetArgument<ApproveGetType>("approve");
 
-                var approvers = approveInput.ApproversId;
+                var approverId= ctx.GetArgument<int>("approverId");
 
-                if (approvers.Any())
+                var userSenderId = ctx.GetArgument<int>("userSenderId");
+
+                var approvers = ctx.GetArgument<List<int>>("approvers");
+                
+                if (approvers!=null)
                 {
                     foreach (var id in approvers)
                     {
-                        await uof.GenericRepository<Approver>().CreateAsync(new Approver()
+                        await _uof.GenericRepository<UserApprover>().CreateAsync(new UserApprover()
                         {
-                                UserApproverId = int.Parse(id),
-                                UserSenderId = approveInput.UserSenderId,
+                                ApproverId = id,
+                                UserId = userSenderId,
                         });
                     }
 
-                    await uof.SaveAsync();
+                    await _uof.SaveAsync();
                     return true;
                 }
 
-                await uof.GenericRepository<Approver>().CreateAsync(new Approver()
+                await _uof.GenericRepository<UserApprover>().CreateAsync(new UserApprover()
                 {
-                    UserApproverId = approveInput.ApproverId,
-                    UserSenderId = approveInput.UserSenderId
+                    ApproverId = approverId,
+                    UserId = userSenderId
                 });
-                await uof.SaveAsync();
+                await _uof.SaveAsync();
 
                 return true;
-            }).AuthorizeWithPolicy("Create");
+            });
 
 
-        Field<bool>("removeUserApprover")
+        Field<bool>("deleteUserApprover")
             .Argument<int>("userId")
             .Argument<int>("approverId")
             .ResolveAsync(async ctx =>
             {
                 var userId = ctx.GetArgument<int>("userId");
                 var approverId = ctx.GetArgument<int>("approverId");
-                var approveRecord = await uof.GenericRepository<Approver>()
-                    .FindAsync(a => a.UserSenderId == userId && a.UserApproverId == approverId);
+                var approveRecord = await uof.GenericRepository<UserApprover>()
+                    .FindAsync(a => a.UserId == userId && a.ApproverId == approverId);
                 
                 if (approveRecord == null) { return false; }
-                
-                return await uof.GenericRepository<Approver>().DeleteAsync(approveRecord);
-            });
 
+                var result = await uof.GenericRepository<UserApprover>().DeleteAsync(approveRecord);
+                
+                await uof.SaveAsync();
+                return result;
+            }).AuthorizeWithPolicy("Delete");
         
     }
 }

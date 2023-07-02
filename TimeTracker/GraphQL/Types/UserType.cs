@@ -26,7 +26,7 @@ public sealed class UserType:ObjectGraphType<User>
         
         Field(x => x.Approvers).Description("user vacation approved requests");
 
-        Field(x => x.Requests).Description("user vacation requests");
+        Field(x => x.Senders).Description("user vacation requests");
 
         Field(x => x.Vacations).Description("user vacations");
 

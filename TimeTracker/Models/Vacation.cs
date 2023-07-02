@@ -10,7 +10,7 @@ public class Vacation
      
     public int UserId { get; set; }
     
-    public bool VacationState { get; set; }
+    public bool? VacationState { get; set; }
     
     [Required]
     public DateTime StartDate { get; set; }

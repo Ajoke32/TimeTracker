@@ -19,7 +19,7 @@ public class Authenticate
     {
         var claims = new List<Claim>()
         {
-            new ("Name",user.FirstName),
+            new ("FirstName",user.FirstName),
             new (ClaimTypes.Email,user.Email),
             new ("LastName",user.LastName),
             new ("Id",user.Id.ToString()),

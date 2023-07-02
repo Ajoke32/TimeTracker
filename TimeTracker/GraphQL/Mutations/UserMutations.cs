@@ -34,7 +34,7 @@ public sealed class UserMutations:ObjectGraphType
                 var created = await uow.GenericRepository<User>().CreateAsync(user);
                 await uow.SaveAsync();
                 return created;
-            });
+            }).AuthorizeWithPolicy("Create");
 
         Field<UserType>("update")
             .Argument<UpdateUserInputType>("user")

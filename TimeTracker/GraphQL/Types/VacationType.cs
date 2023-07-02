@@ -14,5 +14,7 @@ public sealed class VacationType: ObjectGraphType<Vacation>
         Field(x => x.StartDate).Description("vacation start date");
 
         Field(x => x.EndDate).Description("vacation end date");
+
+        Field(x => x.VacationState).Description("vacation state");
     }
 }

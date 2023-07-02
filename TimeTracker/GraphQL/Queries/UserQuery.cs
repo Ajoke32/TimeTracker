@@ -1,6 +1,9 @@
 ﻿using GraphQL;
+using GraphQL.Server.Transports.AspNetCore.Errors;
 using GraphQL.Types;
+using GraphQL.Validation;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using TimeTracker.Absctration;
 using TimeTracker.GraphQL.Types;
 using TimeTracker.GraphQL.Types.InputTypes;
@@ -21,17 +24,28 @@ public sealed class UserQuery : ObjectGraphType
 
         _uow = uow;
         Field<ListGraphType<UserType>>("users")
+            .Argument<string>("include",nullable:true,configure:c=>c.DefaultValue="")
             .ResolveAsync(async ctx =>
-                await _uow.GenericRepository<User>().GetAsync()).Description("gets all users")
-            .AuthorizeWithPolicy(policy:"Read");
+            {
+                var include = ctx.GetArgument<string>("include");
+                
+                return await _uow.GenericRepository<User>().GetAsync(includeProperties: include);
+            })
+            .Description("gets all users");
 
         Field<UserType>("user")
             .Argument<int>("id")
+            .Argument<string>("include",nullable:true)
             .ResolveAsync(async _ =>
             {
                 var id = _.GetArgument<int>("id");
+
+                var include = _.GetArgument<string?>("include");
+
                 return await _uow.GenericRepository<User>()
-                    .FindAsync(u => u.Id == id);
+                        .FindAsync(u=>u.Id==id,relatedData:include);
+                    
+
             }).Description("gets user by id");
 
         Field<UserType>("userByEmail")
@@ -42,7 +56,7 @@ public sealed class UserQuery : ObjectGraphType
                 return await _uow.GenericRepository<User>().FindAsync(u => u.Email == email);
             }).AuthorizeWithPolicy(policy:"LoggedIn");
 
-
+        
         Field<string>("response")
             .Argument<UserLoginInputType>("user")
             .ResolveAsync(async ctx =>

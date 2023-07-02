@@ -23,6 +23,7 @@ builder.Services.AddSpaStaticFiles(conf =>
     conf.RootPath = "ClientApp/build";
 });
 
+
 builder.Services.AddAuthentication(conf =>
 {
     conf.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -70,6 +71,22 @@ builder.Services.AddAuthorization(options =>
         p.Requirements.Add(new PermissionRequirement(Permissions.Create));
     });
     
+    options.AddPolicy("Delete", p =>
+    {
+        p.Requirements.Add(new PermissionRequirement(Permissions.Delete));
+    });
+    
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "MyAllowSpecificOrigins",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+        });
 });
 
 builder.Services.AddCors(options =>
@@ -101,9 +118,9 @@ builder.Services.AddGraphQL(options =>
 {
     options.AddSchema<AppSchema>(GraphQL.DI.ServiceLifetime.Scoped)
         .AddGraphTypes()
-        .AddErrorInfoProvider(e => e.ExposeExceptionDetails = true)
         .AddSystemTextJson()
-        .AddAuthorizationRule();
+        .AddAuthorizationRule()
+        .AddErrorInfoProvider(e => e.ExposeExceptionDetails = true);
 });
 
 builder.Services.AddTransient<Authenticate>();
@@ -112,6 +129,7 @@ builder.Services.AddTransient<Authenticate>();
 var app = builder.Build();
 
 app.UseCors("MyAllowSpecificOrigins");
+
 app.UseAuthentication();
 app.UseAuthorization();
 

@@ -1,7 +1,10 @@
-﻿namespace TimeTracker.GraphQL.Types;
+﻿using GraphQL.Types;
+
+namespace TimeTracker.GraphQL.Types;
 
 public class ApproveGetType
 {
+   
     public List<string> ApproversId { get; set; } = new();
     
     public int ApproverId { get; set; }
