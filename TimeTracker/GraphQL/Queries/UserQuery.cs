@@ -57,7 +57,7 @@ public sealed class UserQuery : ObjectGraphType
             }).AuthorizeWithPolicy(policy:"LoggedIn");
         
         
-        Field<string>("login")
+        Field<string>("response")
             .Argument<UserLoginInputType>("user")
             .ResolveAsync(async ctx =>
             {
