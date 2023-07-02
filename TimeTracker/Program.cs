@@ -24,14 +24,6 @@ builder.Services.AddSpaStaticFiles(conf =>
 });
 
 
-builder.Services.AddCors(c =>
-{
-    c.AddPolicy("AllowOrigin", o =>
-    {
-        o.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
-    });
-});
-
 builder.Services.AddAuthentication(conf =>
 {
     conf.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
