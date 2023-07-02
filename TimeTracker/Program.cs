@@ -23,6 +23,15 @@ builder.Services.AddSpaStaticFiles(conf =>
     conf.RootPath = "ClientApp/build";
 });
 
+
+builder.Services.AddCors(c =>
+{
+    c.AddPolicy("AllowOrigin", o =>
+    {
+        o.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
+    });
+});
+
 builder.Services.AddAuthentication(conf =>
 {
     conf.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -69,6 +78,11 @@ builder.Services.AddAuthorization(options =>
         p.Requirements.Add(new PermissionRequirement(Permissions.Create));
     });
     
+    options.AddPolicy("Delete", p =>
+    {
+        p.Requirements.Add(new PermissionRequirement(Permissions.Delete));
+    });
+    
 });
 
 
@@ -89,9 +103,9 @@ builder.Services.AddGraphQL(options =>
 {
     options.AddSchema<AppSchema>(GraphQL.DI.ServiceLifetime.Scoped)
         .AddGraphTypes()
-        .AddErrorInfoProvider(e => e.ExposeExceptionDetails = true)
         .AddSystemTextJson()
-        .AddAuthorizationRule();
+        .AddAuthorizationRule()
+        .AddErrorInfoProvider(e => e.ExposeExceptionDetails = true);
 });
 
 builder.Services.AddTransient<Authenticate>();
@@ -99,6 +113,7 @@ builder.Services.AddTransient<Authenticate>();
 
 var app = builder.Build();
 
+app.UseCors("AllowOrigin");
 
 app.UseAuthentication();
 app.UseAuthorization();
