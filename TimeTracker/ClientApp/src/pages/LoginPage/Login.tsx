@@ -5,7 +5,9 @@ import "./Login.css"
 export const Login = () => {
     return (
         <div className="login-page__wrapper">
-            <LoginForm/>
-            <LoginSideContent/>
+            <div className="login-page__wrapper-inner">
+                <LoginForm/>
+                <LoginSideContent/>
+            </div>
         </div>
 )};

@@ -24,6 +24,7 @@ export const LoginForm = () => {
 
     const onSubmit: SubmitHandler<Inputs> = (data) => {
         dispatch({ type: 'USER_LOGIN', payload: data });
+        console.log(data)
         reset();
     }
 
@@ -46,7 +47,7 @@ export const LoginForm = () => {
                     </div>
                 </div>
 
-                <LargeButton type="submit" value="Submit"/>
+                <LargeButton type="submit" value="Login"/>
 
                 <div className="tooltip-wrapper__bold">
                     <InputTooltip title="Don't have an account?" url="/auth" urlTitle="Get started"/>

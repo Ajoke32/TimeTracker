@@ -4,8 +4,9 @@ import { TextInputProps } from "./InputProps";
 import './inputs.css'
 import ErrorTooltip from "../Tooltips/ErrorTooltip";
 
-const PasswordInput = forwardRef((props: TextInputProps, ref: Ref<HTMLInputElement>) => {
-    const { name, placeholder, errors } = props;
+const PasswordInput = React.forwardRef<HTMLInputElement, TextInputProps>(
+    (props: TextInputProps, ref) => {
+        const { name, placeholder, errors } = props;
     const [showPassword, setPasswordVisible] = useState(false);
     const [password, setPassword] = useState('');
 
