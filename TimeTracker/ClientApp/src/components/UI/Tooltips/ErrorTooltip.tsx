@@ -1,7 +1,7 @@
 ﻿import React from 'react';
-import {ErrorTooltipProps} from "./TooltipProps";
+import { ErrorTooltipProps } from "./TooltipProps";
 
-const ErrorTooltip = ({errors} : ErrorTooltipProps) => {
+const ErrorTooltip = ({ errors }: ErrorTooltipProps) => {
     return (
         <div className="error-tooltip__wrapper">
             {errors && <div><p>{errors.message}</p></div>}

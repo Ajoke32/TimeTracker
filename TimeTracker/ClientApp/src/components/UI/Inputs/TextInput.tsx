@@ -1,18 +1,16 @@
-﻿import React from 'react';
-import { forwardRef, Ref } from 'react';
+﻿import { forwardRef, Ref } from 'react';
 import {TextInputProps} from "./InputProps";
 import './inputs.css'
 import ErrorTooltip from "../Tooltips/ErrorTooltip";
 
-const TextInput = forwardRef((props: TextInputProps, ref: Ref<HTMLInputElement>) => {
-    const { name, placeholder, errors } = props;
+const TextInput =  ({ name, placeholder, register, errors }: TextInputProps) => {
 
     return (
         <div>
-            <input type="text" name={name} placeholder={placeholder} ref={ref} className="text-input" />
+            <input type="text" name={name} placeholder={placeholder} {...register} className="text-input" autoComplete='off'/>
             <ErrorTooltip errors={errors} />
         </div>
     );
-});
+};
 
 export default TextInput;

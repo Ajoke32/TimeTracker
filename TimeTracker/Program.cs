@@ -58,6 +58,7 @@ builder.Services.AddAuthorization(options =>
         p.Requirements.Add(new PermissionRequirement(Permissions.Read));
     });
     
+    
     options.AddPolicy("AllRights", p =>
     {
         p.Requirements.Add(new PermissionRequirement(Permissions.Create|Permissions.Read
@@ -69,6 +70,17 @@ builder.Services.AddAuthorization(options =>
         p.Requirements.Add(new PermissionRequirement(Permissions.Create));
     });
     
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "MyAllowSpecificOrigins",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+        });
 });
 
 
@@ -99,7 +111,7 @@ builder.Services.AddTransient<Authenticate>();
 
 var app = builder.Build();
 
-
+app.UseCors("MyAllowSpecificOrigins");
 app.UseAuthentication();
 app.UseAuthorization();
 
