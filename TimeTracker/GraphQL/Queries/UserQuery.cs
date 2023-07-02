@@ -1,7 +1,9 @@
 ﻿using GraphQL;
+using GraphQL.Execution;
 using GraphQL.Server.Transports.AspNetCore.Errors;
 using GraphQL.Types;
 using GraphQL.Validation;
+using GraphQL.Validation.Errors;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using TimeTracker.Absctration;
@@ -68,14 +70,13 @@ public sealed class UserQuery : ObjectGraphType
 
                 if (searchUser == null)
                 {
-                    ctx.Errors.Add(new ExecutionError("Email not found!"));
-                    return "Error";
+                
+                    throw new RequestError("user with this email not found");
                 }
 
                 if (!BCrypt.Net.BCrypt.Verify(args.Password, searchUser.Password))
                 {
-                    ctx.Errors.Add(new ExecutionError("Wrong password!"));
-                    return "Error";
+                    throw new RequestError("wrong password");
                 }
 
                 var authService = ctx.RequestServices?.GetRequiredService<Authenticate>();

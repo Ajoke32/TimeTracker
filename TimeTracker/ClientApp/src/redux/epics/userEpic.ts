@@ -1,15 +1,15 @@
-import { combineEpics, Epic, ofType } from "redux-observable";
-import { redirect } from "react-router-dom";
+import { Epic, ofType } from "redux-observable";
 import { PayloadAction } from "@reduxjs/toolkit";
-import { map, mergeMap, Observable, of, concat } from "rxjs";
+import { map, mergeMap, Observable} from "rxjs";
 import { UserLoginQuery } from "../queries/userQueries";
 import { login, logout } from '../slices';
 
 export const userLoginEpic: Epic = (action: Observable<PayloadAction<{ email: string, password: string }>>, state) =>
     action.pipe(
         ofType("USER_LOGIN"),
-        mergeMap(action => UserLoginQuery(action.payload).pipe(
-            map((res: string) => login(res))
+        mergeMap(action =>
+            UserLoginQuery(action.payload)
+                .pipe(map((res: string) => login(res)),
         ))
     );
 

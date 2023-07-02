@@ -12,3 +12,4 @@ export const ReadCookie = (name: string): string | undefined => {
 export const SetCookie = (cookieName: string, cookieValue: string) => {
     document.cookie = `${encodeURIComponent(cookieName)}=${encodeURIComponent(cookieValue)}`
 }
+
