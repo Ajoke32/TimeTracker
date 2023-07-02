@@ -1,3 +1,4 @@
-export * from './Layout';
 export * from './Home';
-export * from './Login';
+export * from './LoginPage/Login';
+export * from './Structure/AppRoutes';
+export * from './Structure/Layout';
