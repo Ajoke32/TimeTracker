@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { UserSliceState } from '../intrerfaces';
+import { User, UserSliceState } from '../intrerfaces';
 import { DeleteCookie, GetDecodedToken, IsUserAuthenticated, SetCookie } from "../../utils";
 
 
@@ -43,9 +43,21 @@ const userSlice = createSlice({
             state.error = "";
             DeleteCookie('user');
         },
+
+        userAdd: (state) => {
+            state.loading = true;
+        },
+        userAddSuccess: (state) => { // TODO Some universal func
+            state.loading = false;
+        },
+        userAddFail: (state, action: PayloadAction<string>) => { // TODO Some universal func
+            state.loading = false;
+            state.error = action.payload;
+        },
     },
 });
 
 export const user = userSlice.reducer;
 export const { login, logout,
-    loginSuccess, loginFail } = userSlice.actions;
+    loginSuccess, loginFail,
+    userAdd, userAddFail, userAddSuccess } = userSlice.actions;

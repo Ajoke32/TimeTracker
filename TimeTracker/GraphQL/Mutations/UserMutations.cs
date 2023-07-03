@@ -26,14 +26,14 @@ public sealed class UserMutations:ObjectGraphType
                 var email = await uow.GenericRepository<User>()
                     .FindAsync(u => u.Email == user.Email);
 
-                if (email != null) { return null;}
+                if (email != null) { return false;}
 
                 user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
                 
 
                 var created = await uow.GenericRepository<User>().CreateAsync(user);
                 await uow.SaveAsync();
-                return created;
+                return true;
             }).AuthorizeWithPolicy("Create");
 
         Field<UserType>("update")

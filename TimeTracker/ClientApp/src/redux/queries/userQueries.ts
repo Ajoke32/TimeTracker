@@ -1,25 +1,22 @@
 import { AjaxQuery } from './query';
-import { ResponseError, User } from '../intrerfaces';
-import { GetDecodedToken } from '../../utils';
+import { QueryStructure, ResponseError, User } from '../intrerfaces';
+import { ReadCookie } from '../../utils';
 
 
 export function UserLoginQuery(user: { email: string, password: string }) {
-    interface Structure {
-        data: { userQuery: { login: string } },
-        errors: ResponseError[] | null,
-    }
-
-    return AjaxQuery<Structure>(
+    return AjaxQuery<QueryStructure<{ userQuery: { login: string } }>>(
         "query Login($user: UserLoginInputType!) {userQuery {login(user: $user)}}",
         { user: user }
     );
 }
 
 export function AddUserQuery(user: User) {
-    interface Structure {
-        data: { userQuery: { create: User } },
-        errors: ResponseError[] | null,
-    }
 
-    const token = GetDecodedToken();
+    const token = ReadCookie('user');
+
+    return AjaxQuery<QueryStructure<{ userMutation: { create: boolean } }>>(
+        "", // mutation AddUser($user: UserInputType!){ userMutation { create(user: $user) { firstName } }}
+        { user: user },
+        token
+    )
 }

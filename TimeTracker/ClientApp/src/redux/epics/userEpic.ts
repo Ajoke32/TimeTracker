@@ -1,8 +1,9 @@
 import { Epic, ofType } from "redux-observable";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { catchError, map, mergeMap, Observable, of } from "rxjs";
-import { UserLoginQuery } from "../queries/userQueries";
-import { loginFail, loginSuccess, logout } from '../slices';
+import { AddUserQuery, UserLoginQuery } from "../queries/userQueries";
+import { loginFail, loginSuccess, userAddFail, userAddSuccess } from '../slices';
+import { User } from "../intrerfaces";
 
 interface userLoginPayload {
     email: string,
@@ -21,6 +22,23 @@ export const userLoginEpic: Epic = (action: Observable<PayloadAction<userLoginPa
                         return loginSuccess(resp.response.data.userQuery.login);
                     }),
                     catchError((e: Error) => of(loginFail("unexpected error")))
+                ),
+        )
+    );
+
+export const addUserEpic: Epic = (action: Observable<PayloadAction<User>>, state) =>
+    action.pipe(
+        ofType("user/userAdd"),
+        mergeMap(action =>
+            AddUserQuery(action.payload)
+                .pipe(
+                    map(resp => {
+                        if (resp.response.errors != null || resp.response.data.userMutation.create == false) {
+                            return userAddFail("Failed to add user")
+                        }
+                        return userAddSuccess();
+                    }),
+                    catchError((e: Error) => of(userAddFail("unexpected error")))
                 ),
         )
     );
