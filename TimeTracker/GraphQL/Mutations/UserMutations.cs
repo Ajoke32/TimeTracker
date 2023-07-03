@@ -1,9 +1,12 @@
-﻿using GraphQL;
+﻿using AutoMapper;
+using GraphQL;
 using GraphQL.Types;
+using GraphQL.Validation;
 using TimeTracker.Absctration;
 using TimeTracker.GraphQL.Types;
 using TimeTracker.GraphQL.Types.InputTypes;
 using TimeTracker.Models;
+using TimeTracker.Models.Dtos;
 
 namespace TimeTracker.GraphQL.Mutations;
 
@@ -11,27 +14,30 @@ public sealed class UserMutations:ObjectGraphType
 {
    
     
-    public UserMutations()
+    public UserMutations(IMapper mapper)
     {
 
-        
+
         Field<UserType>("create")
             .Argument<UserInputType>("user")
             .ResolveAsync(async ctx =>
             {
                 var uow = ctx.RequestServices.GetRequiredService<IUnitOfWorkRepository>();
-                
-                var user = ctx.GetArgument<User>("user");
+
+                var user = ctx.GetArgument<UserInputDto>("user");
 
                 var email = await uow.GenericRepository<User>()
                     .FindAsync(u => u.Email == user.Email);
 
-                if (email != null) { return false;}
+                if (email != null)
+                {
+                    throw new ValidationError("user with this email already exist");
+                }
 
                 user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
                 
+                var created = await uow.GenericRepository<User>().CreateAsync(mapper.Map<User>(user));
 
-                var created = await uow.GenericRepository<User>().CreateAsync(user);
                 await uow.SaveAsync();
                 return true;
             }).AuthorizeWithPolicy("Create");

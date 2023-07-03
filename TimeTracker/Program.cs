@@ -100,6 +100,7 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped<IRepositoryFactory, RepositoryFactory>();
 
