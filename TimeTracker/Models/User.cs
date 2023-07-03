@@ -18,11 +18,10 @@ public class User
     [Required] public string Password { get; set; } = string.Empty;
     
     [Required] public WorkType WorkType { get; set; }
-
-
+    
     public Permissions Permissions { get; set; }
     
-
+    public int HoursPerMonth { get; set; }
     public int VacationDays { get; set; }
     
     public List<Vacation> Vacations { get; } = new();
