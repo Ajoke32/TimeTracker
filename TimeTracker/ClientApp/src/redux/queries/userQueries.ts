@@ -1,18 +1,11 @@
 import { AjaxQuery } from './query';
+import { ResponseError } from '../intrerfaces';
 
 
 export function UserLoginQuery(user: { email: string, password: string }) {
     
-   // const token = useCurrentSelector((state) => state.user.token);
+   //const token = useTypedSelector((state) => state.user.token);
 
-
-
-    interface ResponseError{
-        message:string,
-        extensions:{
-            code:string
-        }
-    }
     interface Structure{
         data: { userQuery: { response: string }},
         errors:ResponseError[]|null,

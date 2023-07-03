@@ -1,7 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Home, Login, Layout } from "..";
-import { IsUserAuthenticated } from "../../utils";
-import { useCurrentSelector } from '../../hooks';
+import { useTypedSelector } from '../../hooks';
 
 
 export const AppRoutes = () => {
@@ -9,7 +8,7 @@ export const AppRoutes = () => {
 
   return (
     <Routes>
-      {useCurrentSelector((state) => state.user.status) ? (
+      {useTypedSelector((state) => state.user.status) ? (
         <>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />

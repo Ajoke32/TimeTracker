@@ -6,7 +6,7 @@ import InputTooltip from "../UI/Tooltips/InputTooltip";
 import H1 from "../Headings/H1"
 import "./LoginForm.css"
 import PasswordInput from "../UI/Inputs/PasswordInput";
-import {useAppDispatch, useCurrentSelector} from "../../hooks";
+import {useAppDispatch, useTypedSelector} from "../../hooks";
 import {login} from "../../redux";
 import H2 from "../Headings/H2";
 
@@ -17,7 +17,7 @@ type Inputs = {
 
 export const LoginForm = () => {
     const dispatch = useAppDispatch();
-    const {loading,error} = useCurrentSelector(state=>state.user);
+    const {loading,error} = useTypedSelector(state=>state.user);
     const { register, handleSubmit,
         formState: { errors }, reset } = useForm<Inputs>({
         mode: 'onBlur',

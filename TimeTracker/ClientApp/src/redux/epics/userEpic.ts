@@ -24,12 +24,3 @@ export const userLoginEpic: Epic = (action: Observable<PayloadAction<userLoginPa
                 ),
         )
     );
-
-
-export const userLogoutEpic: Epic = (action, state) =>
-    action.pipe(
-        ofType("USER_LOGOUT"),
-        map(() => {
-            logout();
-        })
-    );

@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { useDispatch } from "react-redux"
+import { logout } from "../../redux";
 
 
 export const Layout = () => {
@@ -8,7 +9,7 @@ export const Layout = () => {
 
     return (
         <main className="App">
-            <button onClick={() => { dispatch({ type: 'USER_LOGOUT' }); }}>TEMP LOGOUT</button>
+            <button onClick={() => { dispatch(logout()); }}>TEMP LOGOUT</button>
             <Outlet />
         </main>
     )
