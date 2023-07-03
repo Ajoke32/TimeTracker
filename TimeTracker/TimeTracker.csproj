@@ -26,6 +26,7 @@
 
     <ItemGroup>
       <Folder Include="Utils\UserUtils\" />
+      <Folder Include="Validation\Errors\" />
       <Folder Include="wwwroot\" />
     </ItemGroup>
 

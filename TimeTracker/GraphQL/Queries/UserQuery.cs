@@ -1,16 +1,13 @@
 ﻿using GraphQL;
 using GraphQL.Execution;
-using GraphQL.Server.Transports.AspNetCore.Errors;
 using GraphQL.Types;
 using GraphQL.Validation;
-using GraphQL.Validation.Errors;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
 using TimeTracker.Absctration;
 using TimeTracker.GraphQL.Types;
 using TimeTracker.GraphQL.Types.InputTypes;
 using TimeTracker.Models;
 using TimeTracker.Utils.Auth;
+
 
 
 namespace TimeTracker.GraphQL.Queries;
@@ -70,13 +67,12 @@ public sealed class UserQuery : ObjectGraphType
 
                 if (searchUser == null)
                 {
-                
-                    throw new RequestError("user with this email not found");
+                    throw new ValidationError("user with this email not found");
                 }
 
                 if (!BCrypt.Net.BCrypt.Verify(args.Password, searchUser.Password))
                 {
-                    throw new RequestError("wrong password");
+                    throw new ValidationError("wrong password");
                 }
 
                 var authService = ctx.RequestServices?.GetRequiredService<Authenticate>();
