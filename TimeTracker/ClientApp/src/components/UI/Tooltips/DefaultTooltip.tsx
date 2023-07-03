@@ -1,12 +1,9 @@
-﻿import React from 'react';
-import {TooltipProps} from "./TooltipProps";
+﻿import {TooltipProps} from "./TooltipProps";
 
-const DefaultTooltip = ({title} : TooltipProps) => {
+export const DefaultTooltip = ({title} : TooltipProps) => {
     return (
         <div className="tooltip-wrapper">
             <p>{title}</p>
         </div>
     );
 };
-
-export default DefaultTooltip;

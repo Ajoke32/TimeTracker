@@ -1,12 +1,9 @@
-﻿import React from 'react';
-import "./LoginSideContent.css"
+﻿import "./LoginSideContent.css"
 
-const SideContentImage = () => {
+export const SideContentImage = () => {
     return (
         <div className="image-wrapper">
             
         </div>
     );
 };
-
-export default SideContentImage;
