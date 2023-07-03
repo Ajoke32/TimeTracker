@@ -1,12 +1,12 @@
 import { Epic, ofType } from "redux-observable";
 import { PayloadAction } from "@reduxjs/toolkit";
-import {catchError, map, mergeMap, Observable, of} from "rxjs";
+import { catchError, map, mergeMap, Observable, of } from "rxjs";
 import { UserLoginQuery } from "../queries/userQueries";
-import {loginFail, loginSuccess, logout} from '../slices';
+import { loginFail, loginSuccess, logout } from '../slices';
 
-interface userLoginPayload{
-    email:string,
-    password:string
+interface userLoginPayload {
+    email: string,
+    password: string
 }
 export const userLoginEpic: Epic = (action: Observable<PayloadAction<userLoginPayload>>, state) =>
     action.pipe(
@@ -14,13 +14,13 @@ export const userLoginEpic: Epic = (action: Observable<PayloadAction<userLoginPa
         mergeMap(action =>
             UserLoginQuery(action.payload)
                 .pipe(
-                    map(resp=>{
-                        if(resp.response.errors!=null){
+                    map(resp => {
+                        if (resp.response.errors != null) {
                             return loginFail(resp.response.errors[0].message)
                         }
-                        return loginSuccess(resp.response.data.userQuery.response);
+                        return loginSuccess(resp.response.data.userQuery.login);
                     }),
-                    catchError((e:Error)=>of(loginFail("unexpected error")))
+                    catchError((e: Error) => of(loginFail("unexpected error")))
                 ),
         )
     );

@@ -1,15 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { User } from '../intrerfaces';
-import { DeleteCookie, IsUserAuthenticated, SetCookie } from "../../utils";
+import { UserSliceState } from '../intrerfaces';
+import { DeleteCookie, GetDecodedToken, IsUserAuthenticated, SetCookie } from "../../utils";
 
-const initialState: { user: User | null, token: string | null, status: boolean, loading: boolean, error: string } =
-{
-    user: null,
-    token: null,
-    status: false,
+
+const initialState: UserSliceState = {
+    user: null, // Get user data if needed
+    token: GetDecodedToken(),
+    status: IsUserAuthenticated(),
     loading: false,
     error: ""
-}
+};
 
 type UserInput = {
     email: string,
@@ -26,9 +26,10 @@ const userSlice = createSlice({
         loginSuccess: (state, action: PayloadAction<string>) => {
             SetCookie('user', action.payload)
             if (IsUserAuthenticated()) {
-                state.token = action.payload;
+                state.token = GetDecodedToken();
                 state.status = true;
                 state.loading = false;
+                state.error = "";
             }
         },
         loginFail: (state, action: PayloadAction<string>) => {
@@ -39,6 +40,7 @@ const userSlice = createSlice({
         logout: (state) => {
             state.token = null;
             state.status = false;
+            state.error = "";
             DeleteCookie('user');
         },
     },

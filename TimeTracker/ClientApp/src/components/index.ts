@@ -1,4 +1,5 @@
 export * from './LoginForm/LoginForm'
+export * from './AddUserForm/AddUserForm'
 export * from './Headings'
 export * from './LoginSideContent'
 export * from './UI'
