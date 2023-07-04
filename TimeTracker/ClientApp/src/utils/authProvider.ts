@@ -6,7 +6,9 @@ export const IsUserAuthenticated = (): boolean => {
     const userToken = ReadCookie('user');
 
     if (userToken !== null && userToken !== "") {
-        const expires = new Date((jwt_decode(userToken) as TokenStructure).exp);
+        const timeStamp: number = parseInt((jwt_decode(userToken) as TokenStructure).exp)
+        const expires = new Date(timeStamp * 1000);
+
         return expires > new Date();
     }
     return false;
