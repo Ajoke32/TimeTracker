@@ -19,6 +19,7 @@ public class User
     
     [Required] public WorkType WorkType { get; set; }
     
+    public bool IsEmailActivated { get; set; }
     public Permissions Permissions { get; set; }
     
     public int HoursPerMonth { get; set; }

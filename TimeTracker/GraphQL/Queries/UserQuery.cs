@@ -7,7 +7,7 @@ using TimeTracker.GraphQL.Types;
 using TimeTracker.GraphQL.Types.InputTypes;
 using TimeTracker.Models;
 using TimeTracker.Utils.Auth;
-
+using TimeTracker.Utils.Email;
 
 
 namespace TimeTracker.GraphQL.Queries;
@@ -64,17 +64,52 @@ public sealed class UserQuery : ObjectGraphType
 
                 var searchUser = await _uow.GenericRepository<User>()
                     .FindAsync(u => u.Email == args.Email);
-
-                if (!BCrypt.Net.BCrypt.Verify(args.Password, searchUser.Password) || searchUser == null)
+                
+                if (searchUser == null)
                 {
                     throw new ValidationError("Wrong credentials!");
                 }
 
-                var authService = ctx.RequestServices?.GetRequiredService<Authenticate>();
+                if (searchUser.IsEmailActivated)
+                {
+                    var authService = ctx.RequestServices?.GetRequiredService<Authenticate>();
 
-                var token = authService?.GenerateToken(searchUser);
+                    return AuthorizeWithActivatedEmail(searchUser, args.Password, authService);
+                }
 
-                return token;
+                var emailAuthService = ctx.RequestServices?.GetRequiredService<EmailService>();
+                return await AuthorizeWithNoActivatedEmailAsync(searchUser,emailAuthService);
             });
+
+        Field<bool>("verifyEmail")
+            .Argument<string>("token")
+            .ResolveAsync(async _ =>
+            {
+                var token = _.GetArgument<string>("token");
+                var authEmailService = _.RequestServices?.GetRequiredService<EmailTokenService>();
+                
+                return await authEmailService.VerifyUserToken(token);
+            });
+        
+    }
+
+
+    private string AuthorizeWithActivatedEmail(User actualUser,string password,Authenticate authenticate)
+    {
+        if (!BCrypt.Net.BCrypt.Verify(password, actualUser.Password))
+        {
+            throw new ValidationError("Wrong credentials!");
+        }
+        
+        var token = authenticate.GenerateToken(actualUser);
+        
+        return token;
+    }
+
+    private async Task<string> AuthorizeWithNoActivatedEmailAsync(User actualUser,EmailService mailService)
+    {
+        await mailService.SendEmailConfirmationAsync(actualUser);
+
+        return "confirmation email delivered";
     }
 }
