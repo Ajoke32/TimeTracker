@@ -1,5 +1,9 @@
-import { User } from './'
+import { DecodedTokenStructure, TokenStructure, User } from './'
 
-export interface TimeTrackerState {
-    user: User,
+export interface UserSliceState {
+    user: User | null,
+    token: DecodedTokenStructure | null,
+    status: boolean,
+    loading: boolean,
+    error: string
 }

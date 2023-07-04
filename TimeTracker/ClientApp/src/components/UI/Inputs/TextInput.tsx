@@ -1,16 +1,13 @@
-﻿import { forwardRef, Ref } from 'react';
-import {TextInputProps} from "./InputProps";
+﻿import { TextInputProps } from "./InputProps";
 import './inputs.css'
-import ErrorTooltip from "../Tooltips/ErrorTooltip";
+import { ErrorTooltip } from "../Tooltips";
 
-const TextInput =  ({ name, placeholder, register, errors }: TextInputProps) => {
+export const TextInput = ({ name, placeholder, register, errors }: TextInputProps) => {
 
     return (
         <div>
-            <input type="text" name={name} placeholder={placeholder} {...register} className="text-input" autoComplete='off'/>
+            <input type="text" name={name} placeholder={placeholder} {...register} className="text-input" autoComplete='off' />
             <ErrorTooltip errors={errors} />
         </div>
     );
 };
-
-export default TextInput;

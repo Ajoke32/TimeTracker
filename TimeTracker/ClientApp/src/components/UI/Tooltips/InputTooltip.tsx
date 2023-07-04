@@ -1,8 +1,7 @@
-﻿import React from 'react';
-import {TooltipProps} from "./TooltipProps";
+﻿import { TooltipProps } from "./TooltipProps";
 import "./tooltips.css"
 
-const InputTooltip = ({title, url, urlTitle} : TooltipProps) => {
+export const InputTooltip = ({ title, url, urlTitle }: TooltipProps) => {
     return (
         <div className="tooltip-wrapper">
             <p>{title}</p>
@@ -10,5 +9,3 @@ const InputTooltip = ({title, url, urlTitle} : TooltipProps) => {
         </div>
     );
 };
-
-export default InputTooltip;

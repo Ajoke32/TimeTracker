@@ -1,14 +1,11 @@
-﻿import React from 'react';
-import SideContentInner from "./SideContentInner";
+﻿import { SideContentInner } from "./";
 
-const LoginSideContent = () => {
+export const LoginSideContent = () => {
     return (
         <div className="side-content__wrapper">
             <div className="side-content__vector"></div>
-            <SideContentInner/>
+            <SideContentInner />
             <div className="side-content__vector"></div>
         </div>
     );
 };
-
-export default LoginSideContent;

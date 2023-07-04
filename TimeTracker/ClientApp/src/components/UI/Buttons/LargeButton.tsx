@@ -1,8 +1,7 @@
-﻿import React from 'react';
-import {ButtonProps} from "./ButtonProps";
+﻿import {ButtonProps} from "./ButtonProps";
 import './buttons.css';
 
-const LargeButton = ({type, value} : ButtonProps) => {
+export const LargeButton = ({type, value} : ButtonProps) => {
     return (
         <div>
             <button type={type} value={value} className="btn-large">
@@ -11,5 +10,3 @@ const LargeButton = ({type, value} : ButtonProps) => {
         </div>
     );
 };
-
-export default LargeButton;
