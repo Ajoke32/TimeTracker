@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using TimeTracker.Enums;
+using TimeTracker.GraphQL.Types;
 using TimeTracker.Models;
 using TimeTracker.Models.Dtos;
 
@@ -16,6 +17,15 @@ public class UserProfile:Profile
             .ForMember(x=>x.WorkType,
                 o=>
                     o.MapFrom(dto=>(WorkType)dto.WorkType));
-        
+
+
+        CreateMap<User, UserGetDto>()
+            .ForMember(u => u.Permissions,
+                o =>
+                    o.MapFrom(m => (int)m.Permissions))
+            .ForMember(u=>u.WorkType,
+                o=>
+                    o.MapFrom(m=>(int)m.WorkType));
+
     }
 }

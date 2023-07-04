@@ -1,4 +1,5 @@
-﻿using GraphQL;
+﻿using AutoMapper;
+using GraphQL;
 using GraphQL.Execution;
 using GraphQL.Types;
 using GraphQL.Validation;
@@ -6,6 +7,7 @@ using TimeTracker.Absctration;
 using TimeTracker.GraphQL.Types;
 using TimeTracker.GraphQL.Types.InputTypes;
 using TimeTracker.Models;
+using TimeTracker.Models.Dtos;
 using TimeTracker.Utils.Auth;
 using TimeTracker.Utils.Email;
 
@@ -18,7 +20,7 @@ public sealed class UserQuery : ObjectGraphType
     private readonly IUnitOfWorkRepository _uow;
 
 
-    public UserQuery(IUnitOfWorkRepository uow)
+    public UserQuery(IUnitOfWorkRepository uow,IMapper mapper)
     {
 
         _uow = uow;
@@ -28,7 +30,9 @@ public sealed class UserQuery : ObjectGraphType
             {
                 var include = ctx.GetArgument<string>("include");
                 
-                return await _uow.GenericRepository<User>().GetAsync(includeProperties: include);
+                var users = await _uow.GenericRepository<User>().GetAsync(includeProperties: include);
+                
+                return mapper.Map<List<User>,List<UserGetDto>>(users.ToList());
             })
             .Description("gets all users");
 
