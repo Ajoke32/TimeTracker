@@ -19,14 +19,14 @@
     font-weight: 400;
 }
 
-.input-wrapper {
+.input-wrapper__inner {
     position: relative;
 }
 
 .input-wrapper button {
     display: flex;
     position: absolute;
-    top:25%;
+    top:35%;
     right: 4%;
     border: none;
     background: none;

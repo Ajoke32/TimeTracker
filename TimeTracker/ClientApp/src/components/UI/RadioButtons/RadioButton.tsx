@@ -1,7 +1,14 @@
 ﻿import React from 'react';
 import "./radiobuttons.css"
 
-const RadioButton = () => {
+interface RadioButtonProps  {
+    data: any[]
+}
+
+
+const RadioButton = ({data}) => {
+    
+    
     return (
         <div className="radio-button__wrapper">
             <div>

@@ -8,7 +8,7 @@ const SideContentInner = () => {
     return (
         <div className="side-content__inner">
             <H2 value="Be effective"/>
-            <DefaultTooltip title="Optimize your work processes and accomplish more"/>
+            <DefaultTooltip description="Optimize your work processes and accomplish more"/>
             <SideContentImage/>
         </div>
     );

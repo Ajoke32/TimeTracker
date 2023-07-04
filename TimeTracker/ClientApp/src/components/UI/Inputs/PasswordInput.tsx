@@ -16,11 +16,13 @@ const PasswordInput = React.forwardRef<HTMLInputElement, TextInputProps>(
     
     return (
         <div className="input-wrapper">
-            <input type={showPassword ? 'text' : 'password'} value={password}  onChange={(e) => setPassword(e.target.value)} name={name} placeholder={placeholder} ref={ref} className="text-input" />
+            <div className="input-wrapper__inner">
+                <input type={showPassword ? 'text' : 'password'} value={password}  onChange={(e) => setPassword(e.target.value)} name={name} placeholder={placeholder} ref={ref} className="text-input" />
+                <button type="button" className="password-input__toggle-btn" onClick={togglePasswordVisibility}>
+                    <img src={ showPassword ? (require("../../../assets/images/hide_password_icon.png")) : require("../../../assets/images/show_password_icon.png")} alt=""/>
+                </button>
+            </div>
             <ErrorTooltip errors={errors}/>
-            <button type="button" className="password-input__toggle-btn" onClick={togglePasswordVisibility}>
-                <img src={ showPassword ? (require("../../../assets/images/hide_password_icon.png")) : require("../../../assets/images/show_password_icon.png")} alt=""/>
-            </button>
         </div>
     );
 });

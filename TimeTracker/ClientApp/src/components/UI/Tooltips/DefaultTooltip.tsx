@@ -1,10 +1,10 @@
 ﻿import React from 'react';
 import {TooltipProps} from "./TooltipProps";
 
-const DefaultTooltip = ({title} : TooltipProps) => {
+const DefaultTooltip = ({description} : TooltipProps) => {
     return (
         <div className="tooltip-wrapper">
-            <p>{title}</p>
+            <p>{description}</p>
         </div>
     );
 };

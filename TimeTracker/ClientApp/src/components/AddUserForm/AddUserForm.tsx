@@ -3,9 +3,9 @@ import {SubmitHandler, useForm} from 'react-hook-form';
 import TextInput from "../UI/Inputs/TextInput";
 import PasswordInput from "../UI/Inputs/PasswordInput";
 import SmallButton from "../UI/Buttons/SmallButton";
-import "./AddUserForm.css"
 import RadioButton from "../UI/RadioButtons/RadioButton";
 import CheckboxInput from "../UI/Inputs/CheckboxInput";
+import "./AddUserForm.css"
 
 enum Permissions {
     Create = 1,
@@ -21,19 +21,9 @@ const options: Permissions[] = [
     Permissions.Read,
 ];
 
-
-    interface FormData {
-        firstName: string;
-        lastName: string;
-        email: string;
-        password: string;
-    }
         
 const AddUserForm = () => {
-
-
-    
-    
+        
     return (
         <div className="user-form__wrapper-inner">
             <form>
@@ -42,8 +32,6 @@ const AddUserForm = () => {
                 <TextInput name="lastName" placeholder="Last name"/>
 
                 <TextInput name="email" placeholder="Enter email"/>
-
-                <PasswordInput name="password" placeholder="Password"/>
 
                 <RadioButton/>
 

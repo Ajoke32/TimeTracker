@@ -1,5 +1,5 @@
 ﻿export interface TooltipProps {
-    title: string;
+    description: string;
     url?: string;
     urlTitle?: string;
 }

@@ -43,14 +43,14 @@ export const LoginForm = () => {
                     <div className="password-input__wrapper">
                         <PasswordInput name="password" placeholder="Password" register={register("password", { required: "Password can't be empty!" })} errors={errors.password}/>
 
-                        <InputTooltip title="Forgot your password?" url="/" urlTitle="Click here"/>
+                        <InputTooltip description="Forgot your password?" url="/" urlTitle="Click here"/>
                     </div>
                 </div>
 
                 <LargeButton type="submit" value="Login"/>
 
-                <div className="tooltip-wrapper__bold">
-                    <InputTooltip title="Don't have an account?" url="/auth" urlTitle="Get started"/>
+                <div className="tooltip-wrapper__bold" style={{display: 'none'}}>
+                    <InputTooltip description="Don't have an account?" url="/auth" urlTitle="Get started"/>
                 </div>
 
             </form>

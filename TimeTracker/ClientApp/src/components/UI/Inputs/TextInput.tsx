@@ -9,7 +9,7 @@ const TextInput = forwardRef((props: TextInputProps, ref: Ref<HTMLInputElement>)
 
     return (
         <div>
-            <input type="text" name={name} placeholder={placeholder} ref={ref} className="text-input" />
+            <input type="text" name={name} placeholder={placeholder} ref={ref}  className="text-input" />
             <ErrorTooltip errors={errors} />
         </div>
     );
