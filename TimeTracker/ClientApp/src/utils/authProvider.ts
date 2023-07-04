@@ -1,33 +1,33 @@
 import { ReadCookie } from "./cookieManager";
-import { DecodedTokenStructure, TokenStructure } from "../redux";
+import { TokenStructure, User } from "../redux";
 import jwt_decode from 'jwt-decode';
 
 export const IsUserAuthenticated = (): boolean => {
-    const decodedToken = GetDecodedToken();
+    const userToken = ReadCookie('user');
 
-    if (decodedToken !== null) {
-        return decodedToken.exp > new Date();
+    if (userToken !== null && userToken !== "") {
+        const expires = new Date((jwt_decode(userToken) as TokenStructure).exp);
+        return expires > new Date();
     }
     return false;
 }
 
-export const GetDecodedToken = (): DecodedTokenStructure | null => {
+export const GetUserFromToken = (): User | null => {
     const userToken = ReadCookie('user');
 
     if (userToken !== null && userToken !== "") {
         const decodedToken: TokenStructure = jwt_decode(userToken);
 
-        const result: DecodedTokenStructure = {
-            Id: parseInt(decodedToken.Id),
-            Email: decodedToken.Email,
-            FirstName: decodedToken.FirstName,
-            LastName: decodedToken.LastName,
-            Permissions: parseInt(decodedToken.Permissions),
-            VacationDays: parseInt(decodedToken.VacationDays),
-            WorkType: parseInt(decodedToken.WorkType),
-            exp: new Date(parseInt(decodedToken.exp) * 1000)
+        const result = {
+            id: parseInt(decodedToken.Id),
+            email: decodedToken.Email,
+            firstName: decodedToken.FirstName,
+            lastName: decodedToken.LastName,
+            permissions: parseInt(decodedToken.Permissions),
+            vacationDays: parseInt(decodedToken.VacationDays),
+            workType: parseInt(decodedToken.WorkType),
         }
-        return result;
+        return result as User;
     }
 
     return null;
