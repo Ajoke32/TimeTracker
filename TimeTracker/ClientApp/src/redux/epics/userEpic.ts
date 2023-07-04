@@ -33,8 +33,8 @@ export const addUserEpic: Epic = (action: Observable<PayloadAction<User>>, state
             AddUserQuery(action.payload)
                 .pipe(
                     map(resp => {
-                        if (resp.response.errors != null || resp.response.data.userMutation.create == false) {
-                            return userAddFail("Failed to add user")
+                        if (resp.response.errors != null) {
+                            return userAddFail(resp.response.errors[0].message)
                         }
                         return userAddSuccess();
                     }),

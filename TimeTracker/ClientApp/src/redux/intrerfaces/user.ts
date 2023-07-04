@@ -7,4 +7,5 @@ export interface User {
     workType: number;
     permissions: number;
     vacationDays: number;
+    hoursPerMonth: number;
   }

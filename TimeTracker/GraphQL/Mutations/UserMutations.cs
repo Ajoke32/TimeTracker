@@ -18,7 +18,7 @@ public sealed class UserMutations:ObjectGraphType
     {
 
 
-        Field<UserType>("create")
+        Field<bool>("create")
             .Argument<UserInputType>("user")
             .ResolveAsync(async ctx =>
             {
@@ -31,12 +31,12 @@ public sealed class UserMutations:ObjectGraphType
 
                 if (email != null)
                 {
-                    throw new ValidationError("user with this email already exist");
+                    throw new ValidationError("User with this email already exists!");
                 }
 
                 user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
                 
-                var created = await uow.GenericRepository<User>().CreateAsync(mapper.Map<User>(user));
+                await uow.GenericRepository<User>().CreateAsync(mapper.Map<User>(user));
 
                 await uow.SaveAsync();
                 return true;

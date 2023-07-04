@@ -15,7 +15,7 @@ export function AddUserQuery(user: User) {
     const token = ReadCookie('user');
 
     return AjaxQuery<QueryStructure<{ userMutation: { create: boolean } }>>(
-        "", // mutation AddUser($user: UserInputType!){ userMutation { create(user: $user) { firstName } }}
+        "mutation AddUser($user: UserInputType!){ userMutation {create(user: $user)} }",
         { user: user },
         token
     )
