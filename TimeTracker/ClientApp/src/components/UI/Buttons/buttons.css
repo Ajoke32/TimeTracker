@@ -16,6 +16,11 @@
     cursor: pointer;
 }
 
+.btn-large__wrapper {
+    width: 100%;
+    margin-top: 3vh;
+}
+
 .btn-large {
     width: 100%;
     font-weight: 700;

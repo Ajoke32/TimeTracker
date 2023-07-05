@@ -3,10 +3,12 @@ using TimeTracker.Models;
 
 namespace TimeTracker.GraphQL.Types.InputTypes;
 
-public sealed class UserInputType:InputObjectGraphType<User>
+public sealed class UpdateUserInputType:InputObjectGraphType<User>
 {
-    public UserInputType()
+    public UpdateUserInputType()
     {
+        Field(x => x.Id).Description("user id");
+        
         Field(x => x.Email).Description("user email");
 
         Field(x => x.FirstName).Description("user first name");

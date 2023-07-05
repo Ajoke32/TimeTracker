@@ -2,13 +2,20 @@
     outline: 0;
 }
 
-.radio-button__wrapper div {
+.radio-button__options-wrapper {
     display: inline-flex;
-    flex-wrap: wrap;
     width: 100%;
     border-radius: 10px;
     border: 1px solid var(--color-stroke-gray);
     
+}
+
+.radio-button__title-wrapper {
+    margin-bottom: 0.5vh;
+}
+
+.radio-button__title-wrapper > span {
+    font-weight: 600;
 }
 
 .radio-button__wrapper input[type="radio"] {
@@ -43,11 +50,14 @@
     transition: background-color .5s ease;
 }
 
-.radio-button__wrapper label:first-child span {
-    border-radius: .375em 0 0 .375em;
+.radio-button__wrapper label:not(:last-child) span {
     border-right: 1px solid var(--color-stroke-gray)
 }
 
 .radio-button__wrapper label:last-child span {
     border-radius: 0 .375em .375em 0;
+}
+
+.radio-button__wrapper label:first-child span {
+    border-radius: .375em 0 0 .375em;
 }

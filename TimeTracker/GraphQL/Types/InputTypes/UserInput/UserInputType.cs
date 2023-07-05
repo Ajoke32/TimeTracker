@@ -1,0 +1,27 @@
+﻿using GraphQL.Types;
+using TimeTracker.Models;
+using TimeTracker.Models.Dtos;
+
+namespace TimeTracker.GraphQL.Types.InputTypes;
+
+public sealed class UserInputType:InputObjectGraphType<UserInputDto>
+{
+    public UserInputType()
+    {
+        Field(x => x.Email).Description("user email");
+
+        Field(x => x.FirstName).Description("user first name");
+
+        Field(x => x.LastName).Description("");
+        
+        Field(x => x.Password).Description("");
+        
+        Field(x => x.WorkType).Description("user work type");
+
+        Field(x => x.Permissions).Description("user permissions");
+
+        Field(x => x.VacationDays).Description("user vacation days");
+
+        Field(x => x.HoursPerMonth).Description("hours per month");
+    }
+}

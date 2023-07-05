@@ -16,5 +16,6 @@ export enum Permissions
 }
 
 export interface CheckboxInputProps {
-    options: Permissions[],
+    title: string,
+    options: any[],
 }

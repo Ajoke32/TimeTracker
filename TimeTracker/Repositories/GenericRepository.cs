@@ -18,7 +18,8 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         _dbSet = context.Set<TEntity>();
     }
     
-    public async Task<IQueryable<TEntity>> GetAsync(Expression<Func<TEntity, bool>>? filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, int? take = null, int? skip = null,
+    public async Task<IQueryable<TEntity>> GetAsync(Expression<Func<TEntity, bool>>? filter = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, int? take = null, int? skip = null,
         string includeProperties = "")
     {
         IQueryable<TEntity> query = _dbSet;
@@ -73,13 +74,20 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
     public async Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> func, string? relatedData = null)
     {
-        IQueryable<TEntity> query = _dbSet;
-        if (relatedData != null)
+        try
         {
-            query = query.Include(relatedData);
+            IQueryable<TEntity> query = _dbSet;
+            if (relatedData != null)
+            {
+                query = query.Include(relatedData);
+            }
+
+            return await query.FirstOrDefaultAsync(func);
         }
-            
-        return await query.FirstOrDefaultAsync(func);
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
     public Task<bool> DeleteAsync(TEntity entity)

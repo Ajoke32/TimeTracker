@@ -1,26 +1,19 @@
 ﻿.login-form__wrapper {
     width: 37%;
-    height: 100%;
     display: inline-flex;
     flex: 1;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 10% 15%;
+    padding: 15% 13%;
     overflow: hidden;
     background-color: var(--color-white);
 }
 
-.login-form__wrapper form {
+.login-form {
     display: flex;
-    justify-content: space-evenly;
     flex-direction: column;
     width: 100%;
-    height: 100%;
-}
-
-.login-form__wrapper form h1 {
-    margin-bottom: 3vh;
 }
 
 .password-input__wrapper > div:last-child {
@@ -59,23 +52,37 @@
     margin-top: 2vh;
 }
 
-@media screen and (max-width: 640px) {
-    .login-form__wrapper {
-        padding: 20% 5%;
-    }
-
-    .login-form__wrapper *:not(h1) {
-        font-size: .9em;
-    }
-
+.login-form__messages-wrapper {
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-@media screen and (min-width: 640px) and (max-width: 1080px) {
+
+@media screen and(min-width: 1080px) and (max-width: 1680px) {
     .login-form__wrapper {
-        padding: 15% 12%;
+        padding: 25% 10%;
+    }
+}
+
+@media screen and (min-width: 640px) and (max-width: 1080px){
+    .login-form__wrapper {
+        padding: 30% 12%;
     }
 
     .login-form__wrapper *:not(h1) {
         font-size: .95em;
     }
 }
+
+@media screen and (max-width: 640px) {
+    .login-form__wrapper {
+        padding: 55% 5%;
+    }
+
+    .login-form__wrapper *:not(h1) {
+        font-size: .9em;
+    }
+}
+

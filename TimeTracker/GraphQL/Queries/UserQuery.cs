@@ -1,31 +1,50 @@
 ﻿using GraphQL;
+using GraphQL.Execution;
 using GraphQL.Types;
+using GraphQL.Validation;
 using TimeTracker.Absctration;
 using TimeTracker.GraphQL.Types;
 using TimeTracker.GraphQL.Types.InputTypes;
 using TimeTracker.Models;
+using TimeTracker.Utils.Auth;
+
+
 
 namespace TimeTracker.GraphQL.Queries;
+
 
 public sealed class UserQuery : ObjectGraphType
 {
     private readonly IUnitOfWorkRepository _uow;
-    
+
+
     public UserQuery(IUnitOfWorkRepository uow)
     {
-        
+
         _uow = uow;
         Field<ListGraphType<UserType>>("users")
+            .Argument<string>("include",nullable:true,configure:c=>c.DefaultValue="")
             .ResolveAsync(async ctx =>
-                await uow.GenericRepository<User>().GetAsync()).Description("gets all users");
+            {
+                var include = ctx.GetArgument<string>("include");
+                
+                return await _uow.GenericRepository<User>().GetAsync(includeProperties: include);
+            })
+            .Description("gets all users");
 
         Field<UserType>("user")
             .Argument<int>("id")
+            .Argument<string>("include",nullable:true)
             .ResolveAsync(async _ =>
             {
                 var id = _.GetArgument<int>("id");
-                return await uow.GenericRepository<User>()
-                    .FindAsync(u => u.Id == id);
+
+                var include = _.GetArgument<string?>("include");
+
+                return await _uow.GenericRepository<User>()
+                        .FindAsync(u=>u.Id==id,relatedData:include);
+                    
+
             }).Description("gets user by id");
 
         Field<UserType>("userByEmail")
@@ -33,24 +52,34 @@ public sealed class UserQuery : ObjectGraphType
             .ResolveAsync(async _ =>
             {
                 var email = _.GetArgument<string>("email");
-                return await uow.GenericRepository<User>().FindAsync(u => u.Email==email);
-            });
+                return await _uow.GenericRepository<User>().FindAsync(u => u.Email == email);
+            }).AuthorizeWithPolicy(policy:"LoggedIn");
+
         
-        Field<string>("login")
+        Field<string>("response")
             .Argument<UserLoginInputType>("user")
             .ResolveAsync(async ctx =>
             {
                 var args = ctx.GetArgument<User>("user");
 
-                var mail = await _uow.GenericRepository<User>()
+                var searchUser = await _uow.GenericRepository<User>()
                     .FindAsync(u => u.Email == args.Email);
 
-                if (mail == null)
+                if (searchUser == null)
                 {
-                    return "user with this email not found";
+                    throw new ValidationError("user with this email not found");
                 }
-                
-                return await Task.Run(() => "access token");
+
+                if (!BCrypt.Net.BCrypt.Verify(args.Password, searchUser.Password))
+                {
+                    throw new ValidationError("wrong password");
+                }
+
+                var authService = ctx.RequestServices?.GetRequiredService<Authenticate>();
+
+                var token = authService?.GenerateToken(searchUser);
+
+                return token;
             });
-    }   
+    }
 }

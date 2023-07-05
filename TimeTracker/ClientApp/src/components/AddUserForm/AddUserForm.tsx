@@ -6,6 +6,7 @@ import SmallButton from "../UI/Buttons/SmallButton";
 import RadioButton from "../UI/RadioButtons/RadioButton";
 import CheckboxInput from "../UI/Inputs/CheckboxInput";
 import "./AddUserForm.css"
+import Dropdown from "../UI/Dropdowns/Dropdown";
 
 enum Permissions {
     Create = 1,
@@ -33,9 +34,9 @@ const AddUserForm = () => {
 
                 <TextInput name="email" placeholder="Enter email"/>
 
-                <RadioButton/>
-
-                <CheckboxInput options={options}/>
+                <RadioButton title="Select working hours percentage:" options={[ '50%', '60%', '70%', '80%', '90%', '100%', ]}/>
+                
+                <CheckboxInput title="Select user permissions:" options={options}/>
 
                 <SmallButton type="submit" value="Add user"/>
             </form>

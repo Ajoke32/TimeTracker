@@ -8,11 +8,15 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="12.0.1" />
+      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+      <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
       <PackageReference Include="GraphQL" Version="7.5.0" />
       <PackageReference Include="GraphQL.MemoryCache" Version="7.5.0" />
       <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="7.4.0" />
       <PackageReference Include="GraphQL.Server.Ui.Altair" Version="7.4.0" />
       <PackageReference Include="GraphQL.SystemTextJson" Version="7.5.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.8" />
       <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.8" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.8" />
     </ItemGroup>
@@ -23,6 +27,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Utils\UserUtils\" />
+      <Folder Include="Validation\Errors\" />
       <Folder Include="wwwroot\" />
     </ItemGroup>
 

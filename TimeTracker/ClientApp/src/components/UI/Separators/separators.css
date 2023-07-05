@@ -1,21 +1,18 @@
-﻿.login-separator__wrapper {
+﻿.separator__wrapper {
     width: 100%;
     height: 24px;
     flex-shrink: 0;
     display:inline-flex;
     align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
 }
 
 .horizontal-line {
     width: 80%;
-    height: 1px;
+    height: 2px;
     
     background: var(--color-stroke-gray);
 }
 
-.separator-text {
-    margin: auto 10px;
-}
 
 

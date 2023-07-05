@@ -4,7 +4,7 @@ import './buttons.css';
 
 const LargeButton = ({type, value} : ButtonProps) => {
     return (
-        <div>
+        <div className="btn-large__wrapper">
             <button type={type} value={value} className="btn-large">
                 {value}
             </button>

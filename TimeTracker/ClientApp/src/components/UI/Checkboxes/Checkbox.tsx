@@ -2,15 +2,14 @@
 import "./checkboxes.css"
 
 interface CheckboxProps {
-    onChange: (event: ChangeEvent<HTMLInputElement>) => void;
     value: number;
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({ onChange, value }) => {
+const Checkbox: React.FC<CheckboxProps> = ({ value }) => {
     return (
         <div className="checkbox-wrapper">
             <label className="checkbox-inner">
-                <input type="checkbox" onChange={onChange} value={value} />
+                <input type="checkbox" value={value} />
                 <div className="checkbox-checkmark"></div>
             </label>
         </div>

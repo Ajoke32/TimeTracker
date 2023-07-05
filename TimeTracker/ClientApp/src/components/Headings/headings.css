@@ -18,6 +18,36 @@
     line-height: normal;
 }
 
+.heading-text__h3 {
+    color: var(--color-red);
+    text-align: center;
+    font-size: 32px;
+    font-family: var(--font-header);
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.heading-text__h4 {
+    color: var(--color-red);
+    text-align: center;
+    font-size: 24px;
+    font-family: var(--font-header);
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.heading-text__h4 {
+    color: var(--color-red);
+    text-align: center;
+    font-size: 16px;
+    font-family: var(--font-header);
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
 @media screen and (max-width: 640px) {
 
     .heading-text__h1 {
@@ -26,5 +56,9 @@
     
     .heading-text__h2 {
         font-size: 32px;
+    }
+    
+    .heading-text__h3 {
+        font-size: 24px;
     }
 }
