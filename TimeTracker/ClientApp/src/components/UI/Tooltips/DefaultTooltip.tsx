@@ -1,9 +1,9 @@
-﻿import {TooltipProps} from "./TooltipProps";
+﻿import { TooltipProps } from "./TooltipProps";
 
-export const DefaultTooltip = ({title} : TooltipProps) => {
+export const DefaultTooltip = ({ description }: TooltipProps) => {
     return (
         <div className="tooltip-wrapper">
-            <p>{title}</p>
+            <p>{description}</p>
         </div>
     );
 };

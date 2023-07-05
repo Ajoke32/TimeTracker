@@ -5,7 +5,7 @@ import { DeleteCookie, GetUserFromToken, IsUserAuthenticated, SetCookie } from "
 
 const initialState: UserSliceState = {
     user: GetUserFromToken(),
-    status: IsUserAuthenticated(),
+    status: /*IsUserAuthenticated()*/true,
     loading: false,
     error: ""
 };

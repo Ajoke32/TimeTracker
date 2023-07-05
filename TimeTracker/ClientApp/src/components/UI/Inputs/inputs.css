@@ -19,14 +19,14 @@
     font-weight: 400;
 }
 
-.input-wrapper {
+.input-wrapper__inner {
     position: relative;
 }
 
 .input-wrapper button {
     display: flex;
     position: absolute;
-    top:25%;
+    top:35%;
     right: 4%;
     border: none;
     background: none;
@@ -40,4 +40,39 @@
 
 .error-message__wrapper p {
     font-size: smaller;
+}
+
+.checkbox-input__wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    
+}
+
+.checkbox-input__wrapper input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+    border-radius: 5px;
+}
+
+.checkbox-input__wrapper-inner {
+    display: inline-flex;
+    padding: 0.5vh;
+    align-items: center;
+}
+
+.checkbox-input__wrapper-inner > label {
+    margin-left: .5vw;
+}
+
+.checkbox-input__title-wrapper {
+    margin-bottom: .5vh;
+    margin-top: 2vh;
+}
+
+.checkbox-input__title-wrapper > span {
+    font-weight: 600;
 }

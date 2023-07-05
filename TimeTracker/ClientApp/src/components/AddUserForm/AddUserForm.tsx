@@ -1,12 +1,28 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { TextInput } from "../UI/Inputs";
+import { TextInput, CheckboxInput } from "../UI/Inputs";
 import { useAppDispatch, useTypedSelector } from "../../hooks";
+import { RadioButton } from '../UI/RadioButtons';
+import { SmallButton } from '../UI/Buttons';
 
 type Inputs = {
     email: string
     firstName: string
     lastName: string
 }
+
+enum Permissions {
+    Create = 1,
+    Update = 2,
+    Delete = 4,
+    Read = 8,
+}
+
+const options: Permissions[] = [
+    Permissions.Create,
+    Permissions.Update,
+    Permissions.Delete,
+    Permissions.Read,
+];
 
 export const AddUserForm = () => {
     const dispatch = useAppDispatch();
@@ -25,14 +41,20 @@ export const AddUserForm = () => {
         reset();
     }
     return (
-        <div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <TextInput name="firstName" placeholder="First name" register={register("firstName", { required: "First name can't be empty!" })} errors={errors.firstName} />
+        <div className="user-form__wrapper-inner">
+            <form>
+                <TextInput name="firstName" placeholder="First name" />
 
-                <TextInput name="lastName" placeholder="Last name" register={register("lastName", { required: "Last name can't be empty!" })} errors={errors.lastName} />
+                <TextInput name="lastName" placeholder="Last name" />
 
-                <TextInput name="email" placeholder="Enter email" register={register("email", { required: "Email can't be empty!" })} errors={errors.email} />
+                <TextInput name="email" placeholder="Enter email" />
+
+                <RadioButton />
+
+                <CheckboxInput options={options} />
+
+                <SmallButton type="submit" value="Add user" />
             </form>
         </div>
     );
-}
+};

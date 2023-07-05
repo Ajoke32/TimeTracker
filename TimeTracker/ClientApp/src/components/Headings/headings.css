@@ -17,3 +17,14 @@
     font-weight: 600;
     line-height: normal;
 }
+
+@media screen and (max-width: 640px) {
+
+    .heading-text__h1 {
+        font-size: 40px;
+    }
+    
+    .heading-text__h2 {
+        font-size: 32px;
+    }
+}

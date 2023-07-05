@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { Home, Login, Layout } from "..";
+import { Home, Login, Layout, AddUser } from "..";
 import { useTypedSelector } from '../../hooks';
 
 
@@ -12,6 +12,7 @@ export const AppRoutes = () => {
         <>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
+            <Route path='userAdd' element={<AddUser />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Route>
         </>
