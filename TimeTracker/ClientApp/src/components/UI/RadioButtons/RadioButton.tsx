@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import "./radiobuttons.css"
 
 interface RadioButtonProps  {
@@ -7,7 +7,7 @@ interface RadioButtonProps  {
 }
 
 
-const RadioButton = ({title, options} : RadioButtonProps) => {
+export const RadioButton = ({title, options} : RadioButtonProps) => {
     
     
     return (
@@ -24,5 +24,3 @@ const RadioButton = ({title, options} : RadioButtonProps) => {
         </div>
     );
 };
-
-export default RadioButton;

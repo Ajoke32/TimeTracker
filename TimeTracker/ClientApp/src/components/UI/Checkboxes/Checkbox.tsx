@@ -1,11 +1,12 @@
-﻿import React, { ChangeEvent } from 'react';
+﻿import React from 'react';
 import "./checkboxes.css"
 
 interface CheckboxProps {
     value: number;
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({ value }) => {
+export const Checkbox: React.FC<CheckboxProps> = ({ value }) => {
+
     return (
         <div className="checkbox-wrapper">
             <label className="checkbox-inner">
@@ -15,5 +16,3 @@ const Checkbox: React.FC<CheckboxProps> = ({ value }) => {
         </div>
     );
 };
-
-export default Checkbox;

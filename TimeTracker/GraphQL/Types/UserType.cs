@@ -23,6 +23,8 @@ public sealed class UserType:ObjectGraphType<User>
         Field(x => x.VacationDays).Description("");
 
         Field(x => x.WorkType).Description("");
+
+        Field(x => x.HoursPerMonth).Description("");
         
         Field(x => x.Approvers).Description("user vacation approved requests");
 

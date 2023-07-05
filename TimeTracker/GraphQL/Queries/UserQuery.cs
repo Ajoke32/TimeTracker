@@ -56,7 +56,7 @@ public sealed class UserQuery : ObjectGraphType
             }).AuthorizeWithPolicy(policy:"LoggedIn");
 
         
-        Field<string>("response")
+        Field<string>("login")
             .Argument<UserLoginInputType>("user")
             .ResolveAsync(async ctx =>
             {
@@ -65,14 +65,9 @@ public sealed class UserQuery : ObjectGraphType
                 var searchUser = await _uow.GenericRepository<User>()
                     .FindAsync(u => u.Email == args.Email);
 
-                if (searchUser == null)
+                if (!BCrypt.Net.BCrypt.Verify(args.Password, searchUser.Password) || searchUser == null)
                 {
-                    throw new ValidationError("user with this email not found");
-                }
-
-                if (!BCrypt.Net.BCrypt.Verify(args.Password, searchUser.Password))
-                {
-                    throw new ValidationError("wrong password");
+                    throw new ValidationError("Wrong credentials!");
                 }
 
                 var authService = ctx.RequestServices?.GetRequiredService<Authenticate>();

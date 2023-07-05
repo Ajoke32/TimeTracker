@@ -1,17 +1,22 @@
 import { AjaxQuery } from './query';
-import { ResponseError } from '../intrerfaces';
+import { QueryStructure, ResponseError, User } from '../intrerfaces';
+import { ReadCookie } from '../../utils';
 
 
 export function UserLoginQuery(user: { email: string, password: string }) {
-    
-   //const token = useTypedSelector((state) => state.user.token);
-
-    interface Structure{
-        data: { userQuery: { response: string }},
-        errors:ResponseError[]|null,
-    }
-    return AjaxQuery<Structure>(
-        "query Login($user: UserLoginInputType!) {userQuery {response(user: $user)}}",
-        {user:user}
+    return AjaxQuery<QueryStructure<{ userQuery: { login: string } }>>(
+        "query Login($user: UserLoginInputType!) {userQuery {login(user: $user)}}",
+        { user: user }
     );
+}
+
+export function AddUserQuery(user: User) {
+
+    const token = ReadCookie('user');
+
+    return AjaxQuery<QueryStructure<{ userMutation: { create: boolean } }>>(
+        "mutation AddUser($user: UserInputType!){ userMutation {create(user: $user)} }",
+        { user: user },
+        token
+    )
 }

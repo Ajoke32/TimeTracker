@@ -1,15 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { User } from '../intrerfaces';
-import { DeleteCookie, IsUserAuthenticated, SetCookie } from "../../utils";
+import { UserSliceState } from '../intrerfaces';
+import { DeleteCookie, GetUserFromToken, IsUserAuthenticated, SetCookie } from "../../utils";
 
-const initialState: { user: User | null, token: string | null, status: boolean, loading: boolean, error: string } =
-{
-    user: null,
-    token: null,
-    status: false,
+
+const initialState: UserSliceState = {
+    user: GetUserFromToken(),
+    status: /*IsUserAuthenticated()*/true,
     loading: false,
     error: ""
-}
+};
 
 type UserInput = {
     email: string,
@@ -26,9 +25,9 @@ const userSlice = createSlice({
         loginSuccess: (state, action: PayloadAction<string>) => {
             SetCookie('user', action.payload)
             if (IsUserAuthenticated()) {
-                state.token = action.payload;
                 state.status = true;
                 state.loading = false;
+                state.error = "";
             }
         },
         loginFail: (state, action: PayloadAction<string>) => {
@@ -37,13 +36,25 @@ const userSlice = createSlice({
             state.error = action.payload;
         },
         logout: (state) => {
-            state.token = null;
             state.status = false;
+            state.error = "";
             DeleteCookie('user');
+        },
+
+        userAdd: (state) => {
+            state.loading = true;
+        },
+        userAddSuccess: (state) => {
+            state.loading = false;
+        },
+        userAddFail: (state, action: PayloadAction<string>) => {
+            state.loading = false;
+            state.error = action.payload;
         },
     },
 });
 
 export const user = userSlice.reducer;
 export const { login, logout,
-    loginSuccess, loginFail } = userSlice.actions;
+    loginSuccess, loginFail,
+    userAdd, userAddFail, userAddSuccess } = userSlice.actions;
