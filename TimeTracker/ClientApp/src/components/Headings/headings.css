@@ -29,7 +29,7 @@
 }
 
 .heading-text__h4 {
-    color: var(--color-red);
+    color: var(--color-black);
     text-align: center;
     font-size: 24px;
     font-family: var(--font-header);
@@ -38,7 +38,7 @@
     line-height: normal;
 }
 
-.heading-text__h4 {
+.heading-text__h5 {
     color: var(--color-red);
     text-align: center;
     font-size: 16px;

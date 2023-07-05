@@ -1,33 +1,26 @@
 import { Outlet } from "react-router-dom";
-import { useDispatch } from "react-redux"
-import { logout } from "../../redux";
 import Header from "../../components/Header/Header";
-
 import "./Layout.css"
-import Dashboard from "../../components/Dashboard/Dashboard";
+import Sidebar from "../../components/Sidebar/Sidebar";
 
 
 export const Layout = () => {
-    const dispatch = useDispatch();
-
-
     return (
-        <div className="parent">
-            <div className="div1">
-                <div className="div1-inner">
+        <div className="layout-wrapper">
+            <div className="layout-logo__wrapper">
+                <div className="layout-logo__wrapper-inner">
                     <a href="/">
                     </a>
                 </div>
             </div>
-            <div className="div2">
+            <div className="layout-header__wrapper">
                 <Header/>
             </div>
-            <div className="div3">
-                <Dashboard/>
+            <div className="layout-dashboard__wrapper">
+                <Sidebar/>
             </div>
-            <div className="div4">
+            <div className="layout-content__wrapper">
                 <main className="App">
-                    <button onClick={() => { dispatch(logout()); }}>TEMP LOGOUT</button>
                     <Outlet />
                 </main>
             </div>

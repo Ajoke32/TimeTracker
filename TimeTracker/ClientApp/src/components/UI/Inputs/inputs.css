@@ -1,7 +1,9 @@
 ﻿@import '../../../styles/colors.css';
 
 .text-input,
-.password-input {
+.password-input,
+.search-input
+ {
     display: flex;
     width: 100%;
     height: 6vh;
@@ -15,7 +17,8 @@
 }
 
 .text-input::placeholder,
-.password-input::placeholder {
+.password-input::placeholder,
+.search-input::placeholder {
     font-weight: 400;
 }
 

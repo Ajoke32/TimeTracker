@@ -15,7 +15,7 @@ export const RadioButton = ({title, options} : RadioButtonProps) => {
             <div className="radio-button__title-wrapper"><span>{title}</span></div>
             <div className="radio-button__options-wrapper">
                 {options.map((option) => (
-                    <label>
+                    <label key={option}>
                         <input type="radio" name="radio"/>
                         <span>{option}</span>
                     </label>

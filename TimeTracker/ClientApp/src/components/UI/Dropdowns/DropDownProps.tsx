@@ -1,5 +1,5 @@
 ﻿
 export interface DropDownProps {
-    options: string[],
+    options: {value: any, name: string}[],
     title: string,
 }
