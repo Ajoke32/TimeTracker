@@ -87,18 +87,9 @@ export const Steps = () => {
         default:
             return (
                 <form>
-                    <table>
-                        <tr>
-                            <th>User</th>
-                            <th></th>
-                        </tr>
-                        <tr>
-                            <td>John Doe</td>
-                            <td>
-                                <input type="checkbox" />
-                            </td>
-                        </tr>
-                    </table>
+                    {/* <table>
+                       
+                    </table> */}
                     <SmallButton type="submit" value="Add user" />
                 </form>
             )
