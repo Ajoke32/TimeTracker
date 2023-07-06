@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { UserSliceState } from '../intrerfaces';
 import { DeleteCookie, GetUserFromToken, IsUserAuthenticated, SetCookie } from "../../utils";
+import { UserLoginType, UserAddType } from "../types";
 
 
 const initialState: UserSliceState = {
@@ -10,16 +11,13 @@ const initialState: UserSliceState = {
     error: ""
 };
 
-type UserInput = {
-    email: string,
-    password: string
-}
+
 
 const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        login: (state, action: PayloadAction<UserInput>) => {
+        login: (state, action: PayloadAction<UserLoginType>) => {
             state.loading = true;
         },
         loginSuccess: (state, action: PayloadAction<string>) => {
@@ -41,7 +39,7 @@ const userSlice = createSlice({
             DeleteCookie('user');
         },
 
-        userAdd: (state) => {
+        userAdd: (state, action: PayloadAction<UserAddType>) => {
             state.loading = true;
         },
         userAddSuccess: (state) => {

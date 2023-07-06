@@ -1,6 +1,6 @@
-﻿import React from 'react';
-import "./Header.css"
-const Header = () => {
+﻿import "./Header.css"
+
+export const Header = () => {
     return (
         <header className="header">
             <div className="header-profile__wrapper">
@@ -9,18 +9,16 @@ const Header = () => {
                         <button></button>
                     </div>
                 </div>
-                
+
                 <div className="header-profile__name">
                     <span>John Doe</span>
                 </div>
-                
+
                 <div className="header-profile__avatar">
                     <span>JD</span>
                 </div>
             </div>
         </header>
-        
+
     );
 };
-
-export default Header;

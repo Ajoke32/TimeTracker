@@ -12,11 +12,15 @@
 }
 
 .checkbox-inner {
-    display: inline-block;
+    display: inline-flex;
     position: relative;
     cursor: pointer;
     user-select: none;
     border-radius: 5px;
+}
+
+.checkbox-inner>span {
+    margin-left: 10px;
 }
 
 .checkbox-checkmark {
@@ -30,14 +34,14 @@
     border-radius: 5px;
 }
 
-.checkbox-inner input:checked ~ .checkbox-checkmark {
+.checkbox-inner input:checked~.checkbox-checkmark {
     transition: all 0.2s;
     background-color: var(--color-cyan);
     z-index: 1;
     opacity: .7;
 }
 
-.checkbox-inner input ~ .checkbox-checkmark {
+.checkbox-inner input~.checkbox-checkmark {
     transition: all 0.2s;
     opacity: 1;
 }
@@ -49,7 +53,7 @@
     transition: all 0.2s;
 }
 
-.checkbox-inner input:checked ~ .checkbox-checkmark:after {
+.checkbox-inner input:checked~.checkbox-checkmark:after {
     opacity: 1;
     transition: all 0.2s;
 }

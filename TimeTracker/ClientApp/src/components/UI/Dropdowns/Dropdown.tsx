@@ -2,17 +2,17 @@
 import "./dropdowns.css"
 import {DropDownProps} from "./DropDownProps";
 
-const Dropdown = ({options, title} : DropDownProps) => {
+const Dropdown = ({title, options } : DropDownProps) => {
     return (
         <div className="dropdown-wrapper">
-            <label htmlFor="touch"><span className="dropdown-span">{title}</span></label>
-            <input type="checkbox" id="touch"/>
-
-                <ul className="slide">
+            <div className="dropdown-wrapper__inner">
+                <select name={title} className="dropdown-body">
+                    <option disabled selected key={title}>{title}</option>
                     {options.map((option) => (
-                        <li><span>{option}</span></li>
+                        <option value={option.value} key={option.name}>{option.name}</option>
                     ))}
-                </ul>
+                </select>
+            </div>
         </div>
     );
 };

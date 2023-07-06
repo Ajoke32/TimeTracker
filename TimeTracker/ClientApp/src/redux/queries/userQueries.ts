@@ -20,3 +20,16 @@ export function AddUserQuery(user: User) {
         token
     )
 }
+
+/*
+"user":{
+    "email":"ipz211_bmm@student.ztu.edu.ua",
+    "firstName":"Mykhailo",
+    "lastName":"bekker",
+    "password":"testmail",
+    "workType":0,
+    "permissions":4,
+    "vacationDays":25,
+    "hoursPerMonth":50
+  }
+  */

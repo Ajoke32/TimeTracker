@@ -37,6 +37,8 @@
 
 .radio-button__wrapper label {
     width: 50%;
+    background: var(--color-white);
+    border-radius: inherit;
 }
 
 .radio-button__wrapper label span {
