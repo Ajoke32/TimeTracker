@@ -7,6 +7,7 @@ using TimeTracker.GraphQL.Types;
 using TimeTracker.GraphQL.Types.InputTypes;
 using TimeTracker.Models;
 using TimeTracker.Models.Dtos;
+using TimeTracker.Utils.Email;
 
 namespace TimeTracker.GraphQL.Mutations;
 
@@ -14,7 +15,7 @@ public sealed class UserMutations:ObjectGraphType
 {
    
     
-    public UserMutations(IMapper mapper)
+    public UserMutations(IMapper mapper,EmailService emailService)
     {
 
 
@@ -36,11 +37,12 @@ public sealed class UserMutations:ObjectGraphType
 
                 user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
                 
-                await uow.GenericRepository<User>().CreateAsync(mapper.Map<User>(user));
+                var created = await uow.GenericRepository<User>().CreateAsync(mapper.Map<User>(user));
 
                 await uow.SaveAsync();
+                emailService.SendAccountRegistration(created.Email);
                 return true;
-            }).AuthorizeWithPolicy("Create");
+            });//.AuthorizeWithPolicy("Create");
 
         Field<UserType>("update")
             .Argument<UpdateUserInputType>("user")

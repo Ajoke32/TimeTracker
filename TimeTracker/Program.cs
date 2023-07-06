@@ -13,7 +13,7 @@ using TimeTracker.GraphQL;
 using TimeTracker.GraphQL.Schemes;
 using TimeTracker.Repositories;
 using TimeTracker.Utils.Auth;
-
+using TimeTracker.Utils.Email;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -100,9 +100,14 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Services.AddDataProtection();
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped<IRepositoryFactory, RepositoryFactory>();
+
+builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<EmailTokenService>();
 
 builder.Services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
 
