@@ -1,10 +1,11 @@
 ﻿using GraphQL.Types;
 using TimeTracker.Models;
+using TimeTracker.Models.Dtos;
 
 
 namespace TimeTracker.GraphQL.Types;
 
-public sealed class UserType:ObjectGraphType<User>
+public sealed class UserType:ObjectGraphType<UserGetDto>
 {
     public UserType()
     {
@@ -18,13 +19,15 @@ public sealed class UserType:ObjectGraphType<User>
 
         Field(x => x.Password).Description("");
 
-        Field(x => x.Permissions).Description("");
+        Field(x=>x.Permissions).Description("");
 
         Field(x => x.VacationDays).Description("");
 
         Field(x => x.WorkType).Description("");
 
         Field(x => x.HoursPerMonth).Description("");
+
+        Field(x => x.IsEmailActivated).Description("");
         
         Field(x => x.Approvers).Description("user vacation approved requests");
 
