@@ -9,11 +9,7 @@ public class UserInputDto
      public string LastName { get; set; } = string.Empty;
     
      public string Email { get; set; } = string.Empty;
-    
-     public string Password { get; set; } = string.Empty;
-    
-     public int WorkType { get; set; }
-     
+
      public int Permissions { get; set; }
      
      public int HoursPerMonth { get; set; }

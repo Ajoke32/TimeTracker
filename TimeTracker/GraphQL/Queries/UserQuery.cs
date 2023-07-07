@@ -17,20 +17,19 @@ namespace TimeTracker.GraphQL.Queries;
 
 public sealed class UserQuery : ObjectGraphType
 {
+
     private readonly IUnitOfWorkRepository _uow;
-
-
     public UserQuery(IUnitOfWorkRepository uow,IMapper mapper)
     {
-
         _uow = uow;
+        
         Field<ListGraphType<UserType>>("users")
             .Argument<string>("include",nullable:true,configure:c=>c.DefaultValue="")
             .ResolveAsync(async ctx =>
             {
                 var include = ctx.GetArgument<string>("include");
                 
-                var users = await _uow.GenericRepository<User>().GetAsync(includeProperties: include);
+                var users = await uow.GenericRepository<User>().GetAsync(includeProperties: include);
                 
                 return mapper.Map<List<User>,List<UserGetDto>>(users.ToList());
             })
@@ -45,7 +44,7 @@ public sealed class UserQuery : ObjectGraphType
 
                 var include = _.GetArgument<string?>("include");
 
-                return await _uow.GenericRepository<User>()
+                return await uow.GenericRepository<User>()
                         .FindAsync(u=>u.Id==id,relatedData:include);
                     
 
@@ -56,7 +55,7 @@ public sealed class UserQuery : ObjectGraphType
             .ResolveAsync(async _ =>
             {
                 var email = _.GetArgument<string>("email");
-                return await _uow.GenericRepository<User>().FindAsync(u => u.Email == email);
+                return await uow.GenericRepository<User>().FindAsync(u => u.Email == email);
             }).AuthorizeWithPolicy(policy:"LoggedIn");
 
         
@@ -66,7 +65,7 @@ public sealed class UserQuery : ObjectGraphType
             {
                 var args = ctx.GetArgument<User>("user");
 
-                var searchUser = await _uow.GenericRepository<User>()
+                var searchUser = await uow.GenericRepository<User>()
                     .FindAsync(u => u.Email == args.Email);
                 
                 if (searchUser == null)
@@ -77,12 +76,12 @@ public sealed class UserQuery : ObjectGraphType
                 if (searchUser.IsEmailActivated)
                 {
                     var authService = ctx.RequestServices?.GetRequiredService<Authenticate>();
-
-                    return AuthorizeWithActivatedEmail(searchUser, args.Password, authService);
+                    
+                    return AuthorizeConfirmedEmail(searchUser, args.Password, authService!);
                 }
 
                 var emailAuthService = ctx.RequestServices?.GetRequiredService<EmailService>();
-                return await AuthorizeWithNoActivatedEmailAsync(searchUser,emailAuthService);
+                return await AuthorizeWithNoActivatedEmailAsync(searchUser,emailAuthService!,args.Password);
             });
 
         Field<bool>("verifyEmail")
@@ -92,13 +91,13 @@ public sealed class UserQuery : ObjectGraphType
                 var token = _.GetArgument<string>("token");
                 var authEmailService = _.RequestServices?.GetRequiredService<EmailTokenService>();
                 
-                return await authEmailService.VerifyUserToken(token);
+                return await authEmailService!.VerifyUserToken(token);
             });
         
     }
 
 
-    private string AuthorizeWithActivatedEmail(User actualUser,string password,Authenticate authenticate)
+    private string AuthorizeConfirmedEmail(User actualUser,string password,Authenticate authenticate)
     {
         if (!BCrypt.Net.BCrypt.Verify(password, actualUser.Password))
         {
@@ -110,8 +109,11 @@ public sealed class UserQuery : ObjectGraphType
         return token;
     }
 
-    private async Task<string> AuthorizeWithNoActivatedEmailAsync(User actualUser,EmailService mailService)
+    private async Task<string> AuthorizeWithNoActivatedEmailAsync(User actualUser,EmailService mailService,string password)
     {
+        actualUser.Password = BCrypt.Net.BCrypt.HashPassword(password);
+        await _uow.SaveAsync();
+        
         await mailService.SendEmailConfirmationAsync(actualUser);
 
         return "confirmation email delivered";

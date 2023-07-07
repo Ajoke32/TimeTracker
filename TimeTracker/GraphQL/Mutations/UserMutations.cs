@@ -15,7 +15,7 @@ public sealed class UserMutations:ObjectGraphType
 {
    
     
-    public UserMutations(IMapper mapper,EmailService emailService)
+    public UserMutations(IMapper mapper,EmailService emailService,IUnitOfWorkRepository uow)
     {
 
 
@@ -23,7 +23,6 @@ public sealed class UserMutations:ObjectGraphType
             .Argument<UserInputType>("user")
             .ResolveAsync(async ctx =>
             {
-                var uow = ctx.RequestServices.GetRequiredService<IUnitOfWorkRepository>();
 
                 var user = ctx.GetArgument<UserInputDto>("user");
 
@@ -34,8 +33,7 @@ public sealed class UserMutations:ObjectGraphType
                 {
                     throw new ValidationError("User with this email already exists!");
                 }
-
-                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+                
                 
                 var created = await uow.GenericRepository<User>().CreateAsync(mapper.Map<User>(user));
 
@@ -48,7 +46,6 @@ public sealed class UserMutations:ObjectGraphType
             .Argument<UpdateUserInputType>("user")
             .ResolveAsync(async ctx =>
             {
-                var uow = ctx.RequestServices.GetRequiredService<IUnitOfWorkRepository>();
                 
                 var user = ctx.GetArgument<User>("user");
 
@@ -61,10 +58,11 @@ public sealed class UserMutations:ObjectGraphType
             .Argument<int>("id")
             .ResolveAsync(async ctx =>
             {
-                var uow = ctx.RequestServices.GetRequiredService<IUnitOfWorkRepository>();
                 var id = ctx.GetArgument<int>("id");
                 var user = await uow.GenericRepository<User>().FindAsync(u=>u.Id==id);
-                var isDeleted = await uow.GenericRepository<User>().DeleteAsync(user);
+                var isDeleted = await uow.GenericRepository<User>()
+                    .DeleteAsync(user);
+                
                 await uow.SaveAsync();
 
                 return isDeleted;
@@ -74,9 +72,7 @@ public sealed class UserMutations:ObjectGraphType
             .Argument<UpdateUserInputType>("user")
             .ResolveAsync(async ctx =>
             {
-                var uow = ctx.RequestServices.GetRequiredService<IUnitOfWorkRepository>();
                 var user = ctx.GetArgument<User>("user");
-                
                 var isDeleted = await uow.GenericRepository<User>().DeleteAsync(user);
                 await uow.SaveAsync();
                 return isDeleted;

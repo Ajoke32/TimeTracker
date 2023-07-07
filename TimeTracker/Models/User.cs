@@ -9,6 +9,8 @@ public class User
 {
     public int Id { get; set; }
     
+    public static int FullTimeValue => 100;
+
     [Required] public string FirstName { get; set; } = string.Empty;
     
     [Required] public string LastName { get; set; } = string.Empty;

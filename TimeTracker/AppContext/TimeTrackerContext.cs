@@ -26,6 +26,8 @@ public class TimeTrackerContext:DbContext
             .WithMany(u => u.Approvers)
             .HasForeignKey(a => a.UserId)
             .OnDelete(DeleteBehavior.NoAction);
+        
+
 
         base.OnModelCreating(modelBuilder);
     }

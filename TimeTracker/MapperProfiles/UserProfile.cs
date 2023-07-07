@@ -16,7 +16,8 @@ public class UserProfile:Profile
                     o.MapFrom(dto => (Permissions)dto.Permissions))
             .ForMember(x=>x.WorkType,
                 o=>
-                    o.MapFrom(dto=>(WorkType)dto.WorkType));
+                    o.MapFrom(m=>
+                        m.HoursPerMonth==User.FullTimeValue?WorkType.FullTime:WorkType.PartTime));
 
 
         CreateMap<User, UserGetDto>()
