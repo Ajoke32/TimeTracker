@@ -1,1 +1,1 @@
-export * from './LoginMenuSeparator'
+export * from './Separator'

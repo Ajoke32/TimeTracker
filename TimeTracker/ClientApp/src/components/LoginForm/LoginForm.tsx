@@ -1,11 +1,13 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { TextInput, PasswordInput } from "../UI/Inputs";
 import { LargeButton } from "../UI/Buttons";
 import { InputTooltip } from "../UI/Tooltips";
-import { H1, H2 } from "../Headings"
+import { Loader } from "../UI/Loaders";
+import { H1, H5 } from "../Headings"
 import "./LoginForm.css"
-import { PasswordInput, TextInput } from "../UI/Inputs";
 import { useAppDispatch, useTypedSelector } from "../../hooks";
 import { login } from "../../redux";
+
 
 type Inputs = {
     email: string
@@ -32,30 +34,30 @@ export const LoginForm = () => {
     return (
         <div className="login-form__wrapper">
 
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <H1 value="Sign in" />
+            <div className="login-form__messages-wrapper">
+                {loading ? <Loader /> : ""}
+                <H5 value={error ? error : ""} />
+            </div>
 
-                <H1 value="Sign in" />
-
-                <H2 value={loading ? "loading.." : ""}></H2>
-                <H2 value={error !== "" ? error : ""}></H2>
-
+            <form onSubmit={handleSubmit(onSubmit)} className="login-form">
                 <div className="login-inputs__wrapper">
                     <TextInput name="email" placeholder="Enter your work email" register={register("email", { required: "Email can't be empty!" })} errors={errors.email} />
 
                     <div className="password-input__wrapper">
                         <PasswordInput name="password" placeholder="Password" register={register("password", { required: "Password can't be empty!" })} errors={errors.password} />
 
-                        <InputTooltip title="Forgot your password?" url="/" urlTitle="Click here" />
+                        <InputTooltip description="Forgot your password?" url="/" urlTitle="Click here" />
                     </div>
                 </div>
 
-                <LargeButton type="submit" value="Submit" />
-
-                <div className="tooltip-wrapper__bold">
-                    <InputTooltip title="Don't have an account?" url="/auth" urlTitle="Get started" />
+                <div className="tooltip-wrapper__bold" style={{ display: 'none' }}>
+                    <InputTooltip description="Don't have an account?" url="/auth" urlTitle="Get started" />
                 </div>
 
+                <LargeButton type="submit" value="Login" />
             </form>
+
         </div>
     );
 }
