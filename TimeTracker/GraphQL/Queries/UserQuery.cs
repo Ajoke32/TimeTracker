@@ -32,7 +32,7 @@ public sealed class UserQuery : ObjectGraphType
                 
                 var users = await uow.GenericRepository<User>().GetAsync(includeProperties: include);
                 
-                return mapper.Map<List<User>,List<UserGetDto>>(users.ToList());
+                return mapper.Map<List<User>,List<UserDisplayDto>>(users.ToList());
             })
             .Description("gets all users");
 
@@ -49,7 +49,7 @@ public sealed class UserQuery : ObjectGraphType
                 var user = await uow.GenericRepository<User>()
                     .FindAsync(u=>u.Id==id,relatedData:include);
                 
-                return mapper.Map<UserGetDto>(user);
+               return mapper.Map<UserDisplayDto>(user);
 
             }).Description("gets user by id");
 
@@ -61,7 +61,7 @@ public sealed class UserQuery : ObjectGraphType
                
                 var user = await uow.GenericRepository<User>().FindAsync(u => u.Email == email);
                 
-                return mapper.Map<UserGetDto>(user);
+                return mapper.Map<UserDisplayDto>(user);
             });//.AuthorizeWithPolicy(policy:"LoggedIn");
 
         

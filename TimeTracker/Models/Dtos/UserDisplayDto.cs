@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
+using TimeTracker.MapperProfiles;
 
 namespace TimeTracker.Models.Dtos;
 
 
-public class UserGetDto
+public class UserDisplayDto
 {
     public int Id { get; set; }
     
@@ -27,7 +28,7 @@ public class UserGetDto
     
     public List<Vacation> Vacations { get; } = new();
     
-    public List<UserApprover> Approvers { get; } = new();
+    public List<UserApproverDisplayDto> Approvers { get; } = new();
     
-    public List<UserApprover> Senders { get; } = new();
+    public List<UserApproverDisplayDto> Senders { get; } = new();
 }

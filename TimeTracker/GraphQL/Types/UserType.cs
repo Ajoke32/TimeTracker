@@ -5,7 +5,7 @@ using TimeTracker.Models.Dtos;
 
 namespace TimeTracker.GraphQL.Types;
 
-public sealed class UserType:ObjectGraphType<UserGetDto>
+public sealed class UserType:ObjectGraphType<UserDisplayDto>
 {
     public UserType()
     {
@@ -16,8 +16,6 @@ public sealed class UserType:ObjectGraphType<UserGetDto>
         Field(x => x.FirstName).Description("user first name");
 
         Field(x => x.LastName).Description("");
-
-        Field(x => x.Password).Description("");
 
         Field(x=>x.Permissions).Description("");
 
