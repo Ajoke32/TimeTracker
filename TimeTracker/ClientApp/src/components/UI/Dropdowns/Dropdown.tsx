@@ -1,12 +1,11 @@
-﻿import React from 'react';
-import "./dropdowns.css"
-import {DropDownProps} from "./DropDownProps";
+﻿import "./dropdowns.css"
+import { DropDownProps } from "./DropDownProps";
 
-const Dropdown = ({title, options } : DropDownProps) => {
+export const Dropdown = ({ title, options }: DropDownProps) => {
     return (
         <div className="dropdown-wrapper">
             <div className="dropdown-wrapper__inner">
-                <select name={title} className="dropdown-body">
+                <select name={title} className="dropdown-body" >
                     <option disabled selected key={title}>{title}</option>
                     {options.map((option) => (
                         <option value={option.value} key={option.name}>{option.name}</option>
@@ -16,5 +15,3 @@ const Dropdown = ({title, options } : DropDownProps) => {
         </div>
     );
 };
-
-export default Dropdown;

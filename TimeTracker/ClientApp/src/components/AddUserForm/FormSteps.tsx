@@ -1,17 +1,20 @@
 import { useAppDispatch } from "../../hooks";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { RadioButton } from "../UI/RadioButtons"
 import { TextInput, CheckboxInput, SmallButton } from "../UI";
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { userAdd } from "../../redux";
+import { useTypedSelector } from "../../hooks";
 
 type Inputs = {
-    email: string
-    firstName: string
+    firstName: string,
     lastName: string,
-    workingHours: number,
-    permissions: number
+    email: string,
+    hoursPerMonth: number,
+    permissions: number,
+    workType: number,
+    vacationDays: number,
 }
-
 
 enum Permissions {
     Create = 1,
@@ -27,15 +30,13 @@ const options: Permissions[] = [
     Permissions.Read,
 ];
 
-
 export const Steps = () => {
     const dispatch = useAppDispatch();
     const radioOptions: number[] = [50, 60, 70, 80, 90, 100]
 
-    const [selectedOption, setSelectedOption] = useState<number>(radioOptions[0]);
-    const [checkedOptions, setCheckedOptions] = useState<number>(0);
     const [step, setStep] = useState<number>(0);
-
+    const [checkedOptions, setCheckedOptions] = useState<number>(0);
+    const [dispatched, setDispatched] = useState<string>()
 
     const { register, handleSubmit,
         formState: { errors }, reset } = useForm<Inputs>({
@@ -44,19 +45,36 @@ export const Steps = () => {
                 email: '',
                 firstName: '',
                 lastName: '',
-                workingHours: radioOptions[0],
-                permissions: checkedOptions
+                hoursPerMonth: radioOptions[0],
+                permissions: checkedOptions,
+                workType: 0,
+                vacationDays: 30,
             }
         });
 
     const onSubmit: SubmitHandler<Inputs> = (data) => {
         data.permissions = checkedOptions;
-        console.log(data)
-        setStep(2);
-        //dispatch(userAdd(data));
+        data.workType = data.hoursPerMonth == 100 ? 0 : 1;
 
+        setDispatched(dispatch(userAdd(data)).type);
         reset();
     }
+
+    const { loading, error } = useTypedSelector(state => state.user);
+
+    useEffect(() => {
+        if (loading) {
+            // Show loader
+        }
+        else if (dispatched === 'user/userAdd') {
+            if (error === '')
+                setStep(1);
+            else {
+                // Show error
+            }
+        }
+    }, [loading]);
+
     switch (step) {
         case 0:
             return (
@@ -75,7 +93,7 @@ export const Steps = () => {
 
                     <RadioButton title="Select working hours percentage:" options={radioOptions}
                         name="workingHours"
-                        register={register("workingHours")} />
+                        register={register("hoursPerMonth")} />
 
                     <CheckboxInput title="Select user permissions:" options={options}
                         register={register('permissions')}
