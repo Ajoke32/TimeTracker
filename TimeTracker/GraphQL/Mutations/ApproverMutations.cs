@@ -15,12 +15,12 @@ public sealed class ApproverMutations:ObjectGraphType
         _uof = uof;
 
         Field<bool>("create")
-            .Argument<int>("approverId")
+            .Argument<int>("approverId",nullable:true)
             .Argument<int>("userSenderId")
             .Argument<List<int>>("approvers",nullable:true)
             .ResolveAsync(async ctx =>
             {
-
+                
                 var approverId= ctx.GetArgument<int>("approverId");
 
                 var userSenderId = ctx.GetArgument<int>("userSenderId");
@@ -31,7 +31,7 @@ public sealed class ApproverMutations:ObjectGraphType
                 {
                     foreach (var id in approvers)
                     {
-                        await _uof.GenericRepository<UserApprover>().CreateAsync(new UserApprover()
+                        await _uof.GenericRepository<UserApprover>().CreateAsync(new UserApprover
                         {
                                 ApproverId = id,
                                 UserId = userSenderId,

@@ -24,9 +24,12 @@ public class UserProfile:Profile
             .ForMember(u => u.Permissions,
                 o =>
                     o.MapFrom(m => (int)m.Permissions))
-            .ForMember(u=>u.WorkType,
-                o=>
-                    o.MapFrom(m=>(int)m.WorkType));
+            .ForMember(u => u.WorkType,
+                o =>
+                    o.MapFrom(m => (int)m.WorkType))
+            .ForMember(u => u.Approvers,
+                o =>
+                    o.MapFrom(x => x.Approvers));
 
     }
 }
