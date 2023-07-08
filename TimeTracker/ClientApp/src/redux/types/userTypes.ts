@@ -7,6 +7,8 @@ export type UserAddType = {
     firstName: string,
     lastName: string,
     email: string,
-    workingHours: number,
-    permissions: number
+    hoursPerMonth: number,
+    permissions: number,
+    workType: number,
+    vacationDays: number,
 }
