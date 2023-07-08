@@ -21,6 +21,10 @@ public class User
     
     [Required] public WorkType WorkType { get; set; }
     
+    public string? RefreshToken { get; set; }
+    
+    public DateTime? RefreshTokenExpiration { get; set; }
+    
     public bool IsEmailActivated { get; set; }
     public Permissions Permissions { get; set; }
     

@@ -4,6 +4,7 @@ using GraphQL.Execution;
 using GraphQL.Types;
 using GraphQL.Validation;
 using TimeTracker.Absctration;
+using TimeTracker.Enums;
 using TimeTracker.GraphQL.Types;
 using TimeTracker.GraphQL.Types.InputTypes;
 using TimeTracker.Models;
@@ -59,7 +60,7 @@ public sealed class UserQuery : ObjectGraphType
             }).AuthorizeWithPolicy(policy:"LoggedIn");
 
         
-        Field<string>("login")
+        Field<LoginResponseType>("login")
             .Argument<UserLoginInputType>("user")
             .ResolveAsync(async ctx =>
             {
@@ -77,7 +78,7 @@ public sealed class UserQuery : ObjectGraphType
                 {
                     var authService = ctx.RequestServices?.GetRequiredService<Authenticate>();
                     
-                    return AuthorizeConfirmedEmail(searchUser, args.Password, authService!);
+                    return await AuthorizeConfirmedEmailAsync(searchUser, args.Password, authService!);
                 }
 
                 var emailAuthService = ctx.RequestServices?.GetRequiredService<EmailService>();
@@ -93,11 +94,28 @@ public sealed class UserQuery : ObjectGraphType
                 
                 return await authEmailService!.VerifyUserToken(token);
             });
-        
+
+        Field<string>("refreshToken")
+            .Argument<int>("userId")
+            .ResolveAsync(async _ =>
+            {
+                var id = _.GetArgument<int>("userId");
+                var user = await _uow.GenericRepository<User>()
+                    .FindAsync(u => u.Id == id);
+
+                if (user == null)
+                {
+                    return "user not found";
+                }
+                var authService = _.RequestServices?.GetRequiredService<Authenticate>();
+                
+                return authService!.RefreshToken(user);
+            });
+
     }
 
 
-    private string AuthorizeConfirmedEmail(User actualUser,string password,Authenticate authenticate)
+    private async Task<LoginResponse> AuthorizeConfirmedEmailAsync(User actualUser,string password,Authenticate authenticate)
     {
         if (!BCrypt.Net.BCrypt.Verify(password, actualUser.Password))
         {
@@ -105,17 +123,29 @@ public sealed class UserQuery : ObjectGraphType
         }
         
         var token = authenticate.GenerateToken(actualUser);
+        var refToken = authenticate.GenerateRefreshToken();
+        actualUser.RefreshToken = refToken.Token;
+        actualUser.RefreshTokenExpiration = refToken.Expiration;
+        await _uow.SaveAsync();
         
-        return token;
+        return new LoginResponse
+        {
+            Code = (int)AuthCode.Token,
+            Message = token
+        };
     }
 
-    private async Task<string> AuthorizeWithNoActivatedEmailAsync(User actualUser,EmailService mailService,string password)
+    private async Task<LoginResponse> AuthorizeWithNoActivatedEmailAsync(User actualUser,EmailService mailService,string password)
     {
         actualUser.Password = BCrypt.Net.BCrypt.HashPassword(password);
         await _uow.SaveAsync();
         
         await mailService.SendEmailConfirmationAsync(actualUser);
 
-        return "confirmation email delivered";
+        return new LoginResponse
+        {
+            Code = (int)AuthCode.EmailDelivered,
+            Message = "email delivered"
+        };
     }
 }

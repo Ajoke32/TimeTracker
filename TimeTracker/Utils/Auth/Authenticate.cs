@@ -1,6 +1,8 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
+using GraphQLParser;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using TimeTracker.Models;
@@ -11,6 +13,7 @@ public class Authenticate
 {
     private readonly IConfiguration _config;
     
+    private readonly int _tokenExpiration = 5;
     public Authenticate(IConfiguration config)
     {
         _config = config;
@@ -35,7 +38,7 @@ public class Authenticate
         var tokenDescriptor = new SecurityTokenDescriptor()
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.Now.AddMinutes(5),
+            Expires = DateTime.Now.AddMinutes(_tokenExpiration),
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha512Signature)
@@ -48,5 +51,18 @@ public class Authenticate
         
         return tokenHandler.WriteToken(token);
     }
-    
+
+    public RefreshToken GenerateRefreshToken()
+    {
+        return new RefreshToken
+        {
+            Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+            Expiration = DateTime.Now.AddMinutes(_tokenExpiration*2)
+        };
+    }
+
+    public string RefreshToken(User user)
+    {
+        return user.RefreshTokenExpiration < DateTime.Now ? "refresh token expires" : GenerateToken(user);
+    }
 }
