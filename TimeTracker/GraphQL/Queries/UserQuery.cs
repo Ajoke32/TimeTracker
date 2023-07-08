@@ -4,6 +4,7 @@ using GraphQL.Execution;
 using GraphQL.Types;
 using GraphQL.Validation;
 using TimeTracker.Absctration;
+using TimeTracker.Enums;
 using TimeTracker.GraphQL.Types;
 using TimeTracker.GraphQL.Types.InputTypes;
 using TimeTracker.Models;
@@ -17,20 +18,19 @@ namespace TimeTracker.GraphQL.Queries;
 
 public sealed class UserQuery : ObjectGraphType
 {
+
     private readonly IUnitOfWorkRepository _uow;
-
-
     public UserQuery(IUnitOfWorkRepository uow,IMapper mapper)
     {
-
         _uow = uow;
+        
         Field<ListGraphType<UserType>>("users")
             .Argument<string>("include",nullable:true,configure:c=>c.DefaultValue="")
             .ResolveAsync(async ctx =>
             {
                 var include = ctx.GetArgument<string>("include");
                 
-                var users = await _uow.GenericRepository<User>().GetAsync(includeProperties: include);
+                var users = await uow.GenericRepository<User>().GetAsync(includeProperties: include);
                 
                 return mapper.Map<List<User>,List<UserGetDto>>(users.ToList());
             })
@@ -45,7 +45,7 @@ public sealed class UserQuery : ObjectGraphType
 
                 var include = _.GetArgument<string?>("include");
 
-                return await _uow.GenericRepository<User>()
+                return await uow.GenericRepository<User>()
                         .FindAsync(u=>u.Id==id,relatedData:include);
                     
 
@@ -56,17 +56,17 @@ public sealed class UserQuery : ObjectGraphType
             .ResolveAsync(async _ =>
             {
                 var email = _.GetArgument<string>("email");
-                return await _uow.GenericRepository<User>().FindAsync(u => u.Email == email);
+                return await uow.GenericRepository<User>().FindAsync(u => u.Email == email);
             }).AuthorizeWithPolicy(policy:"LoggedIn");
 
         
-        Field<string>("login")
+        Field<LoginResponseType>("login")
             .Argument<UserLoginInputType>("user")
             .ResolveAsync(async ctx =>
             {
                 var args = ctx.GetArgument<User>("user");
 
-                var searchUser = await _uow.GenericRepository<User>()
+                var searchUser = await uow.GenericRepository<User>()
                     .FindAsync(u => u.Email == args.Email);
                 
                 if (searchUser == null)
@@ -77,12 +77,12 @@ public sealed class UserQuery : ObjectGraphType
                 if (searchUser.IsEmailActivated)
                 {
                     var authService = ctx.RequestServices?.GetRequiredService<Authenticate>();
-
-                    return AuthorizeWithActivatedEmail(searchUser, args.Password, authService);
+                    
+                    return await AuthorizeConfirmedEmailAsync(searchUser, args.Password, authService!);
                 }
 
                 var emailAuthService = ctx.RequestServices?.GetRequiredService<EmailService>();
-                return await AuthorizeWithNoActivatedEmailAsync(searchUser,emailAuthService);
+                return await AuthorizeWithNoActivatedEmailAsync(searchUser,emailAuthService!,args.Password);
             });
 
         Field<bool>("verifyEmail")
@@ -92,13 +92,30 @@ public sealed class UserQuery : ObjectGraphType
                 var token = _.GetArgument<string>("token");
                 var authEmailService = _.RequestServices?.GetRequiredService<EmailTokenService>();
                 
-                return await authEmailService.VerifyUserToken(token);
+                return await authEmailService!.VerifyUserToken(token);
             });
-        
+
+        Field<string>("refreshToken")
+            .Argument<int>("userId")
+            .ResolveAsync(async _ =>
+            {
+                var id = _.GetArgument<int>("userId");
+                var user = await _uow.GenericRepository<User>()
+                    .FindAsync(u => u.Id == id);
+
+                if (user == null)
+                {
+                    return "user not found";
+                }
+                var authService = _.RequestServices?.GetRequiredService<Authenticate>();
+                
+                return authService!.RefreshToken(user);
+            });
+
     }
 
 
-    private string AuthorizeWithActivatedEmail(User actualUser,string password,Authenticate authenticate)
+    private async Task<LoginResponse> AuthorizeConfirmedEmailAsync(User actualUser,string password,Authenticate authenticate)
     {
         if (!BCrypt.Net.BCrypt.Verify(password, actualUser.Password))
         {
@@ -106,14 +123,29 @@ public sealed class UserQuery : ObjectGraphType
         }
         
         var token = authenticate.GenerateToken(actualUser);
+        var refToken = authenticate.GenerateRefreshToken();
+        actualUser.RefreshToken = refToken.Token;
+        actualUser.RefreshTokenExpiration = refToken.Expiration;
+        await _uow.SaveAsync();
         
-        return token;
+        return new LoginResponse
+        {
+            Code = (int)AuthCode.Token,
+            Message = token
+        };
     }
 
-    private async Task<string> AuthorizeWithNoActivatedEmailAsync(User actualUser,EmailService mailService)
+    private async Task<LoginResponse> AuthorizeWithNoActivatedEmailAsync(User actualUser,EmailService mailService,string password)
     {
+        actualUser.Password = BCrypt.Net.BCrypt.HashPassword(password);
+        await _uow.SaveAsync();
+        
         await mailService.SendEmailConfirmationAsync(actualUser);
 
-        return "confirmation email delivered";
+        return new LoginResponse
+        {
+            Code = (int)AuthCode.EmailDelivered,
+            Message = "email delivered"
+        };
     }
 }

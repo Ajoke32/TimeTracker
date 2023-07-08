@@ -17,6 +17,7 @@ public class AppSchema:Schema
         RegisterTypeMapping(typeof(UserApprover),typeof(ApproveType));
         RegisterTypeMapping(typeof(UserGetDto),typeof(UserType));
         RegisterTypeMapping(typeof(User),typeof(UserType));
+        RegisterTypeMapping(typeof(LoginResponse),typeof(LoginResponseType));
         Query = provider.GetRequiredService<RootQuery>();
         Mutation = provider.GetRequiredService<RootMutation>();
     }

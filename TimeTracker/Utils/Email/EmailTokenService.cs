@@ -78,7 +78,7 @@ public class EmailTokenService
             {
                 return false;
             }
-
+            
             user.IsEmailActivated = true;
             
             await _repository.SaveAsync();
