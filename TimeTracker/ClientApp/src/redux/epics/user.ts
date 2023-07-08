@@ -17,7 +17,8 @@ export const addUserEpic: Epic = (action: Observable<PayloadAction<UserAddType>>
                         }
                         return userAddSuccess();
                     }),
-                    catchError((e: Error) => of(userAddFail("unexpected error")))
+                    catchError((e: Error) => {
+                        return of(userAddFail("unexpected error"))})
                 ),
         )
     );

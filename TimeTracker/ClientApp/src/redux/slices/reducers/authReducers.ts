@@ -12,10 +12,15 @@ export const logoutReducer = (state: AuthSliceState) => {
 
 export const loginReducer = (state: AuthSliceState, action: PayloadAction<UserLoginType>) => {
     state.loading = true;
+    state.error = "";
 }
 
-export const loginSuccessReducer = (state: AuthSliceState, action: PayloadAction<string>) => {
-    SetCookie('user', action.payload)
+export const loginSuccessReducer = (state: AuthSliceState, action: PayloadAction<{ message: string, code: number }>) => {
+    if (action.payload.code === 2) {
+        return
+    }
+
+    SetCookie('user', action.payload.message)
     if (IsUserAuthenticated()) {
         state.status = true;
         state.loading = false;

@@ -51,7 +51,7 @@ public class EmailService
         var body = $@"<div style='display:flex;width:100%;height:100%;justify-content:center;align-items:center;flex-direction:column;gap:10px;'>
                    <h2>Click to confirm your email</h2>
                    <a style='padding:15px 20px;background-color:#8ecae6;border-radius:5px;text-decoration:none;color:#14213d;';
-                   href='http://localhost:5166/emailVerify?code={confirmationLink}'>Confirm email</a>
+                   href='http://localhost:5166/emailVerify/{confirmationLink}'>Confirm email</a>
                     </div>";
         
         SendEmail(user.Email,body,"Email confirmation");

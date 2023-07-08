@@ -16,7 +16,7 @@ type Inputs = {
 
 export const LoginForm = () => {
     const dispatch = useAppDispatch();
-    const { loading, error } = useTypedSelector(state => state.user);
+    const { loading, error } = useTypedSelector(state => state.auth);
     const { register, handleSubmit,
         formState: { errors }, reset } = useForm<Inputs>({
             mode: 'onBlur',

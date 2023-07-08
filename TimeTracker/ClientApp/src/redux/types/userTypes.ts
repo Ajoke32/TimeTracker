@@ -9,6 +9,5 @@ export type UserAddType = {
     email: string,
     hoursPerMonth: number,
     permissions: number,
-    workType: number,
     vacationDays: number,
 }

@@ -5,8 +5,8 @@ import { ReadCookie } from '../../utils';
 
 
 export function UserLoginQuery(userData: { email: string, password: string }) {
-    return AjaxQuery<QueryStructure<{ userQuery: { login: string } }>>(
-        "query Login($user: UserLoginInputType!) {userQuery {login(user: $user)}}",
+    return AjaxQuery<QueryStructure<{ userQuery: { login: { code: number, message: string } } }>>(
+        "query Login($user: UserLoginInputType!) {userQuery {login(user: $user) {message, code}}}",
         { user: userData }
     );
 }

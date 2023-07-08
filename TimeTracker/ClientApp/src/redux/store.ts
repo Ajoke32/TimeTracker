@@ -7,8 +7,8 @@ const middleware = createEpicMiddleware();
 
 export const store = configureStore({
     reducer: {
-      user:user,
       auth: auth,
+      user:user,
     },
     middleware: [
       middleware

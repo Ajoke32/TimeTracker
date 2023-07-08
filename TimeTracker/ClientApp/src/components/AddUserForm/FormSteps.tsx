@@ -12,7 +12,6 @@ type Inputs = {
     email: string,
     hoursPerMonth: number,
     permissions: number,
-    workType: number,
     vacationDays: number,
 }
 
@@ -38,7 +37,7 @@ export const Steps = () => {
     const [checkedOptions, setCheckedOptions] = useState<number>(0);
     const [dispatched, setDispatched] = useState<string>()
 
-    const { register, handleSubmit,
+    const { register, handleSubmit, setValue,
         formState: { errors }, reset } = useForm<Inputs>({
             mode: 'onBlur',
             defaultValues: {
@@ -47,15 +46,13 @@ export const Steps = () => {
                 lastName: '',
                 hoursPerMonth: radioOptions[0],
                 permissions: checkedOptions,
-                workType: 0,
                 vacationDays: 30,
             }
         });
 
     const onSubmit: SubmitHandler<Inputs> = (data) => {
         data.permissions = checkedOptions;
-        data.workType = data.hoursPerMonth == 100 ? 0 : 1;
-
+        data.hoursPerMonth = parseInt((data.hoursPerMonth).toString())
         setDispatched(dispatch(userAdd(data)).type);
         reset();
     }

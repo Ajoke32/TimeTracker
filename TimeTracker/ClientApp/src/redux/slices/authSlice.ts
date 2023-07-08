@@ -6,7 +6,7 @@ import { logoutReducer, loginReducer, loginSuccessReducer, loginFailReducer } fr
 
 const initialState: AuthSliceState = {
     user: GetUserFromToken(),
-    status: /*IsUserAuthenticated()*/true,
+    status: IsUserAuthenticated(),
     loading: false,
     error: ""
 };
