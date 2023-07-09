@@ -19,13 +19,17 @@ public sealed class UserMutations:ObjectGraphType
     {
 
 
-        Field<bool>("create")
+        Field<int>("create")
             .Argument<UserInputType>("user")
             .ResolveAsync(async ctx =>
             {
 
                 var user = ctx.GetArgument<UserInputDto>("user");
-
+                if (!EmailValidation.IsValidEmail(user.Email))
+                {
+                    throw new ValidationError("invalid email format");
+                }
+                
                 var email = await uow.GenericRepository<User>()
                     .FindAsync(u => u.Email == user.Email);
 
@@ -39,7 +43,7 @@ public sealed class UserMutations:ObjectGraphType
 
                 await uow.SaveAsync();
                 emailService.SendAccountRegistration(created.Email);
-                return true;
+                return created.Id;
             });//.AuthorizeWithPolicy("Create");
 
         Field<UserType>("update")

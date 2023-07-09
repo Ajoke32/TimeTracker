@@ -1,22 +1,20 @@
 ﻿using GraphQL.Types;
 using GraphQLParser.AST;
+using TimeTracker.MapperProfiles;
 using TimeTracker.Models;
+using TimeTracker.Models.Dtos;
 
 namespace TimeTracker.GraphQL.Types;
 
-public sealed class ApproveType:ObjectGraphType<UserApprover>
+public sealed class ApproveType:ObjectGraphType<UserApproverDisplayDto>
 {
     public ApproveType()
     {
         Field(x => x.Id).Description("approve id");
 
-        Field(x => x.Approver).Description("user approver");
+        Field(x => x.Approver,nullable:true).Description("user approver");
 
-        Field(x => x.User).Description("user sender");
-
-        Field(x => x.UserId).Description("user sender id");
-
-        Field(x => x.ApproverId).Description("user approver id");
+        Field(x => x.User,nullable:true).Description("user sender");
 
         Field(x => x.IsApproved).Description("approve state");
         
