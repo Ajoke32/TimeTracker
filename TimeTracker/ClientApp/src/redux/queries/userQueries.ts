@@ -21,3 +21,9 @@ export function AddUserQuery(userData: UserAddType) {
     )
 }
 
+export function EmailVerifyQuery(token: string) {
+    return AjaxQuery<QueryStructure<{ userQuery: { verifyEmail: boolean } }>>(
+        "query VerifyUser($token: String!){ userQuery { verifyEmail(token: $token) } }",
+        { token: token },
+    )
+}

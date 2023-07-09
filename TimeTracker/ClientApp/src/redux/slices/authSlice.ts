@@ -1,7 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { AuthSliceState } from '../intrerfaces';
 import { GetUserFromToken, IsUserAuthenticated } from "../../utils";
-import { logoutReducer, loginReducer, loginSuccessReducer, loginFailReducer } from './reducers'
+import {
+    logoutReducer, loginReducer, emailVerifyReducer,
+    loginSuccessReducer, loginFailReducer,
+    emailVerifyFailReducer, emailVerifySuccessReducer
+} from './reducers'
 
 
 const initialState: AuthSliceState = {
@@ -19,8 +23,11 @@ const authSlice = createSlice({
         login: loginReducer,
         loginSuccess: loginSuccessReducer,
         loginFail: loginFailReducer,
+        verify: emailVerifyReducer,
+        verifySuccess: emailVerifySuccessReducer,
+        verifyFail: emailVerifyFailReducer
     },
 });
 
 export const auth = authSlice.reducer;
-export const { login, logout, loginFail, loginSuccess } = authSlice.actions;
+export const { login, logout, loginFail, loginSuccess, verify, verifyFail, verifySuccess } = authSlice.actions;
