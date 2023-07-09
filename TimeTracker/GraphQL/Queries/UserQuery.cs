@@ -97,7 +97,13 @@ public sealed class UserQuery : ObjectGraphType
                 var token = _.GetArgument<string>("token");
                 var authEmailService = _.RequestServices?.GetRequiredService<EmailTokenService>();
                 
-                return await authEmailService!.VerifyUserToken(token);
+                var result = await authEmailService!.VerifyUserToken(token);
+                if (!result)
+                {
+                    throw new ValidationError("invalid token");
+                }
+
+                return true;
             });
 
         Field<string>("refreshToken")
