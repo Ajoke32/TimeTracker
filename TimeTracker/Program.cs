@@ -1,4 +1,5 @@
 using System.Text;
+using AutoMapper;
 using GraphQL;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -11,6 +12,7 @@ using TimeTracker.AppContext;
 using TimeTracker.Enums;
 using TimeTracker.GraphQL;
 using TimeTracker.GraphQL.Schemes;
+using TimeTracker.MapperProfiles;
 using TimeTracker.Repositories;
 using TimeTracker.Utils.Auth;
 using TimeTracker.Utils.Email;
@@ -101,6 +103,8 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddDataProtection();
+
+
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

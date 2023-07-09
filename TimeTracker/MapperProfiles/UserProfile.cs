@@ -8,25 +8,28 @@ namespace TimeTracker.MapperProfiles;
 
 public class UserProfile:Profile
 {
+
     public UserProfile()
     {
         CreateMap<UserInputDto, User>()
             .ForMember(x => x.Permissions,
                 o =>
                     o.MapFrom(dto => (Permissions)dto.Permissions))
-            .ForMember(x=>x.WorkType,
-                o=>
-                    o.MapFrom(m=>
-                        m.HoursPerMonth==User.FullTimeValue?WorkType.FullTime:WorkType.PartTime));
+            .ForMember(x => x.WorkType,
+                o =>
+                    o.MapFrom(m =>
+                        m.HoursPerMonth == User.FullTimeValue ? WorkType.FullTime : WorkType.PartTime));
 
-
-        CreateMap<User, UserGetDto>()
+        CreateMap<User, UserDisplayDto>()
             .ForMember(u => u.Permissions,
                 o =>
                     o.MapFrom(m => (int)m.Permissions))
-            .ForMember(u=>u.WorkType,
-                o=>
-                    o.MapFrom(m=>(int)m.WorkType));
+            .ForMember(u => u.WorkType,
+                o =>
+                    o.MapFrom(m => (int)m.WorkType));
+
+        CreateMap<UserApprover, UserApproverDisplayDto>();
 
     }
 }
+
