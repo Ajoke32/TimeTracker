@@ -9,29 +9,18 @@ import "./EmailVerify.css"
 export const EmailVerify = () => {
     const dispatch = useAppDispatch();
     const { loading, error } = useTypedSelector(state => state.auth);
-    const [dispatched, setDispatched] = useState<string>('')
-    const [message, setMessage] = useState<string>('')
 
     useEffect(() => {
         const code = new URLSearchParams(window.location.search).get('code')
-        setDispatched(dispatch(verify(code!)).type);
+        dispatch(verify(code!));
     }, []);
 
-    useEffect(() => {
-        if (dispatched === 'auth/verify') {
-            if (error === '' && !loading)
-                {
-                    setMessage('successfuly');
-                    // ? some timer with auto-redirect
-                }
-        }
-    }, [loading]);
 
     return (
         <div className="email-verify-page-wrapper">
             <div className="login-form__messages-wrapper">
                 {loading ? <Loader /> : ""}
-                <H5 value={error ? error : message ? message : ''} />
+                <H5 value={error ? error :!loading?'successfully' : ''} />
             </div>
             <H2 value={``} />
             <InputTooltip description="Return to the" url="/" urlTitle="Login" />
