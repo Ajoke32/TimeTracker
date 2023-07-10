@@ -1,10 +1,9 @@
-﻿import { AddUserForm } from "../../components";
-import "./AddUser.css"
-
+﻿import "./AddUser.css"
+import {useAppDispatch} from "../../hooks";
+import {AddUserSteps} from "../../components/AddUserForm/AddUserSteps";
 export const AddUser = () => {
+    
     return (
-        <div className="add-user-form__wrapper">
-            <AddUserForm />
-        </div>
-    );
+        <AddUserSteps/>
+    )
 };

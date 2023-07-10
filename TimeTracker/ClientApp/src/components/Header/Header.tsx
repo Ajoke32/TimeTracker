@@ -1,4 +1,5 @@
 ﻿import "./Header.css"
+import ProfileAvatar from "../UI/Misc/ProfileAvatar";
 
 export const Header = () => {
     return (
@@ -14,9 +15,7 @@ export const Header = () => {
                     <span>John Doe</span>
                 </div>
 
-                <div className="header-profile__avatar">
-                    <span>JD</span>
-                </div>
+                <ProfileAvatar initials="JD"/>
             </div>
         </header>
 

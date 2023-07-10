@@ -2,8 +2,13 @@
 .sidebar-list__link {
     display: flex;
     height: 100%;
+    width: 100%;
     align-items: center;
+    justify-content: center;
     text-decoration: none;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .sidebar-list {
@@ -54,6 +59,10 @@
 
 .sidebar-list li:hover::before {
     transform: translateX(0);
+}
+
+.sidebar-list hr {
+    width: 80%;
 }
 
 .sidebar-logout__btn {
