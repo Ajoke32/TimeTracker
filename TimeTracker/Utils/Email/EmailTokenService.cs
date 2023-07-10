@@ -55,9 +55,7 @@ public class EmailTokenService
         {
             var protector = _protectionProvider.CreateProtector("emailDataProtection");
             
-            var decodedToken = HttpUtility.UrlDecode(token);
-
-            var unprotected = protector.Unprotect(Convert.FromBase64String(decodedToken));
+            var unprotected = protector.Unprotect(Convert.FromBase64String(token));
 
             await using var ms = new MemoryStream(unprotected);
         
