@@ -87,7 +87,7 @@ public class EmailTokenService
         }
         catch (Exception e)
         {
-            throw new Exception(e.Message);
+            return false;
         }
         
     }
