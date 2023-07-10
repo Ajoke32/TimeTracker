@@ -17,7 +17,8 @@ export const loginReducer = (state: AuthSliceState, action: PayloadAction<UserLo
 
 export const loginSuccessReducer = (state: AuthSliceState, action: PayloadAction<{ message: string, code: number }>) => {
     if (action.payload.code === 2) {
-        return
+        state.loading = false;
+        state.error = "Check your email for confirmation letter!";
     }
 
     SetCookie('user', action.payload.message)

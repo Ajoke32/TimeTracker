@@ -20,7 +20,7 @@ export const AppRoutes = () => {
         </>
       ) : (
         <>
-          <Route path="/emailVerify/:code" element={<EmailVerify />} />
+          <Route path="/emailVerify" element={<EmailVerify />} />
           <Route path="/login" element={<Login />} />
           <Route path="/*" element={<Navigate to="/login" />} />
         </>

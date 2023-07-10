@@ -8,13 +8,13 @@ import "./EmailVerify.css"
 
 export const EmailVerify = () => {
     const dispatch = useAppDispatch();
-    const { code } = useParams();
     const { loading, error } = useTypedSelector(state => state.auth);
     const [dispatched, setDispatched] = useState<string>('')
     const [message, setMessage] = useState<string>('')
 
     useEffect(() => {
-        setDispatched(dispatch(verify(code)).type);
+        const code = new URLSearchParams(window.location.search).get('code')
+        setDispatched(dispatch(verify(code!)).type);
     }, []);
 
     useEffect(() => {
