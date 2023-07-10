@@ -1,4 +1,5 @@
-﻿using GraphQL.Validation;
+﻿using System.Web;
+using GraphQL.Validation;
 using Microsoft.AspNetCore.DataProtection;
 using TimeTracker.Absctration;
 using TimeTracker.Models;
@@ -39,7 +40,7 @@ public class EmailTokenService
             writer.Write($"{user.FirstName}{user.LastName}");
             var protectedBytes = protector.Protect(ms.ToArray());
 
-            return Convert.ToBase64String(protectedBytes);
+            return HttpUtility.UrlEncode(Convert.ToBase64String(protectedBytes));
         }
         catch (Exception e)
         {
@@ -53,8 +54,10 @@ public class EmailTokenService
         try
         {
             var protector = _protectionProvider.CreateProtector("emailDataProtection");
-        
-            var unprotected = protector.Unprotect(Convert.FromBase64String(token));
+            
+            var decodedToken = HttpUtility.UrlDecode(token);
+
+            var unprotected = protector.Unprotect(Convert.FromBase64String(decodedToken));
 
             await using var ms = new MemoryStream(unprotected);
         
