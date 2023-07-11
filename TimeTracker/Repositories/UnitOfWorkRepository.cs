@@ -3,7 +3,7 @@ using TimeTracker.AppContext;
 
 namespace TimeTracker.Repositories;
 
-public class UnitOfWorkRepository:IUnitOfWorkRepository,IDisposable
+public class UnitOfWorkRepository:IUnitOfWorkRepository, IDisposable
 {
     private readonly TimeTrackerContext _context;
 

@@ -1,4 +1,4 @@
-import { Separator } from "../UI/Separators";
+import { Hr } from "../UI";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux";
 import "./Sidebar.css"
@@ -31,7 +31,7 @@ export const Sidebar = () => {
                             <span>Calendar</span>
                         </a>
                     </li>
-                    <Separator />
+                    <Hr />
                     <li>
                         <a href="/team" className="sidebar-list__link">
                             <div className="sidebar-list__image-wrapper"><div className="team-img__wrapper"></div></div>

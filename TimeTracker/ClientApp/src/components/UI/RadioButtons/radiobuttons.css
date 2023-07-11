@@ -11,11 +11,11 @@
 }
 
 .radio-button__title-wrapper {
-    margin-bottom: 0.5vh;
+    margin-bottom: 1.5vh;
 }
 
 .radio-button__title-wrapper > span {
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .radio-button__wrapper input[type="radio"] {

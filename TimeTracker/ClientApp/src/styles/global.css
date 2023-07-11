@@ -16,9 +16,13 @@ h1 {
     font-weight: 700;
 }
 
-h2 {
+h2, th {
     font-family: var(--font-header);
     font-weight: 600;
+}
+
+th {
+    font-size: 14px;
 }
 
 p, input, a, button, span, option, select {
