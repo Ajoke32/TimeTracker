@@ -14,5 +14,6 @@ export const SetCookie = (cookieName: string, cookieValue: string) => {
 }
 
 export const DeleteCookie = (name: string) => {
-    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`
+    document.cookie = `${name}=; max-age=-1`
+    console.log(document.cookie)
 }

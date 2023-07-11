@@ -5,9 +5,10 @@ import { PayloadAction } from "@reduxjs/toolkit"
 
 
 export const logoutReducer = (state: AuthSliceState) => {
+    DeleteCookie('user');
     state.status = false;
     state.error = "";
-    DeleteCookie('user');
+    window.location.reload();
 }
 
 export const loginReducer = (state: AuthSliceState, action: PayloadAction<UserLoginType>) => {

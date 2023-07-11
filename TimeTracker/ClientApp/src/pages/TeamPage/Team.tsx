@@ -3,10 +3,8 @@ import { H4, LargeButton } from "../../components";
 import { Dropdown } from "../../components/UI/Dropdowns";
 import { SearchInput } from "../../components/UI/Inputs";
 import { useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
-import { User } from "../../redux/intrerfaces";
 
-const Team = () => {
+export const Team = () => {
 
     const dispatch = useDispatch();
 
@@ -34,5 +32,3 @@ const Team = () => {
         </div>
     );
 };
-
-export default Team;
