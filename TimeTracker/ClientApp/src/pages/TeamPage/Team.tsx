@@ -20,8 +20,8 @@ const Team = () => {
                 <div className="team-menu__main">
                     <div className="team-menu__main-navbar">
                         <div className="main-navbar__left">
-                            <Dropdown options={[{ value: true, name: "Active" }, { value: false, name: "Inactive" }]} title="Show users" />
-                            <SearchInput name="search" placeholder="Search by name or email" />
+                            <Dropdown options={[{value: true, name: "Active"},{value: false, name: "Inactive"}]} title="Show users"/>
+                            <SearchInput name="search" placeholder="Search by name or email" onSearch={null}/>
                         </div>
                         <div className="main-navbar__btn">
                             <a className="add-user__link" href="/team/adduser">
