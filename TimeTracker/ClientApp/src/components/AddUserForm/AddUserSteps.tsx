@@ -7,7 +7,7 @@ import "./AddUserForms.css"
 
 export const AddUserSteps = () => {
     
-    const [step, setStep] = useState<number>(0);
+    const [step, setStep] = useState<number>(1);
     const [dispatched, setDispatched] = useState<string>()
 
     const { loading, error } = useTypedSelector(state => state.user);

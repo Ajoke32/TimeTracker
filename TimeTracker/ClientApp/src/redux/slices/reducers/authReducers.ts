@@ -1,6 +1,6 @@
 import { AuthSliceState } from "../../intrerfaces";
-import { UserLoginType, UserAddType } from "../../types";
-import { DeleteCookie, GetUserFromToken, IsUserAuthenticated, SetCookie } from "../../../utils";
+import { UserLoginType } from "../../types";
+import {DeleteCookie, IsUserAuthenticated, SetCookie} from "../../../utils";
 import { PayloadAction } from "@reduxjs/toolkit"
 
 
@@ -8,7 +8,6 @@ export const logoutReducer = (state: AuthSliceState) => {
     DeleteCookie('user');
     state.status = false;
     state.error = "";
-    window.location.reload();
 }
 
 export const loginReducer = (state: AuthSliceState, action: PayloadAction<UserLoginType>) => {

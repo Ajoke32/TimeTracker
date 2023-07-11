@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Home, Login, AddUser, Layout, EmailVerify } from "..";
 import { useTypedSelector } from '../../hooks';
-import { Team, TeamLayout } from '../TeamPage';
+import { Team} from '../TeamPage';
 
 
 export const AppRoutes = () => {
@@ -13,10 +13,8 @@ export const AppRoutes = () => {
         <>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
-            <Route path="/team" element={<TeamLayout/>}>
-              <Route index element={<Team/>}/>
-              <Route path="adduser" element={<AddUser />} />
-            </Route>
+            <Route path="/team" element={<Team />} />
+            <Route path="/team/adduser" element={<AddUser />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Route>
         </>
