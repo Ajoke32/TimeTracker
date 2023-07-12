@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
+using Quartz;
 using TimeTracker.Absctration;
 using TimeTracker.AppContext;
 using TimeTracker.Enums;
@@ -15,6 +16,7 @@ using TimeTracker.GraphQL.Schemes;
 using TimeTracker.MapperProfiles;
 using TimeTracker.Repositories;
 using TimeTracker.Utils.Auth;
+using TimeTracker.Utils.BackgroungTasks;
 using TimeTracker.Utils.Email;
 
 
@@ -24,6 +26,7 @@ builder.Services.AddSpaStaticFiles(conf =>
 {
     conf.RootPath = "ClientApp/build";
 });
+
 
 
 builder.Services.AddAuthentication(conf =>
@@ -104,7 +107,21 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddDataProtection();
 
+builder.Services.AddQuartz(q =>
+{
+    q.UseMicrosoftDependencyInjectionJobFactory();
+    var jobKey = new JobKey("auto");
+    q.AddJob<AccuralOfHours>(o=>o.WithIdentity(jobKey));
 
+    q.AddTrigger(o =>
+    {
+        o.ForJob(jobKey)
+            .WithIdentity("auth-trigger")
+            .WithCronSchedule("0 0 0 ? * MON,FRI *");
+    });
+});
+
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

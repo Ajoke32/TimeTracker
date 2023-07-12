@@ -23,6 +23,8 @@ public class User
     
     public string? RefreshToken { get; set; }
     
+    public int WorkedHours { get; set; }
+    
     public DateTime? RefreshTokenExpiration { get; set; }
     
     public bool IsEmailActivated { get; set; }
