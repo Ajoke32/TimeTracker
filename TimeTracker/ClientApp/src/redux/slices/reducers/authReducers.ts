@@ -50,3 +50,8 @@ export const emailVerifyFailReducer = (state: AuthSliceState, action: PayloadAct
     state.loading = false;
     state.error = action.payload;
 }
+
+export const userVerifyReducer = (state: AuthSliceState, action: PayloadAction<string | null>) => {
+    state.loading = true;
+    state.error = "";
+}

@@ -86,22 +86,21 @@ public sealed class UserQuery : ObjectGraphType
                     return await AuthorizeConfirmedEmailAsync(searchUser, args.Password, authService!);
                 }
 
-                var emailAuthService = ctx.RequestServices?.GetRequiredService<EmailService>();
-                return await AuthorizeWithNoActivatedEmailAsync(searchUser,emailAuthService!,args.Password);
+                throw new ValidationError("Account is not activated!");
             });
 
-        Field<bool>("verifyEmail")
+        Field<bool>("verifyUser")
             .Argument<string>("token")
             .ResolveAsync(async _ =>
             {
                 var token = _.GetArgument<string>("token");
                 var authEmailService = _.RequestServices?.GetRequiredService<EmailTokenService>();
                 
-                var result =  await authEmailService!.VerifyUserToken(token);
+                var result =  await authEmailService!.VerifyUserToken(token, 18000); //5 hours
 
                 if (!result)
                 {
-                    throw new  ValidationError("invalid token");
+                    throw new  ValidationError("Invalid token");
                 }
 
                 return true;
@@ -117,7 +116,7 @@ public sealed class UserQuery : ObjectGraphType
 
                 if (user == null)
                 {
-                    return "user not found";
+                    return "User not found";
                 }
                 var authService = _.RequestServices?.GetRequiredService<Authenticate>();
                 

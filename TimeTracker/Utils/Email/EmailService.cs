@@ -12,10 +12,12 @@ namespace TimeTracker.Utils.Email;
 public class EmailService
 {
     private readonly EmailTokenService _tokenService;
+    private readonly IUnitOfWorkRepository _uow;
     
-    public EmailService(EmailTokenService tokenService)
+    public EmailService(EmailTokenService tokenService, IUnitOfWorkRepository uow)
     {
         _tokenService = tokenService;
+        _uow = uow;
     }
   
     public void SendEmail(string to,string body,string subject)
@@ -48,26 +50,25 @@ public class EmailService
     {
         var confirmationLink = await _tokenService.GenerateUserEmailTokenAsync(user.Id);
         
-        var body = $@"<div style='display:flex;width:100%;height:100%;justify-content:center;align-items:center;flex-direction:column;gap:10px;'>
+        var body = $@"<div style='width:100%;display:flex;flex-direction:column;align-items:center;gap:10px;'>
                    <h2>Click to confirm your email</h2>
-                   <a style='padding:15px 20px;background-color:#8ecae6;border-radius:5px;text-decoration:none;color:#14213d;';
-                   href='https://timetrackerproj.azurewebsites.net/emailVerify?code={confirmationLink}'>Confirm email</a>
+                   <a style='padding:15px 20px;background-color:#8ecae6;border-radius:5px;text-decoration:none;color:#14213d;'
+                   href='https://timetrackerproj.azurewebsites.net/userVerify?token={confirmationLink}'>Confirm email</a>
                     </div>";
         
         SendEmail(user.Email,body,"Email confirmation");
     }
 
-    public void SendAccountRegistration(string email)
+    public async Task SendAccountRegistrationAsync(int userId, string userEmail)
     {
-        var body = @"<div style='display:flex;justify-content:center;align-items:center;flex-direction:column;'>
-                   <h2>Your account is almost ready</h2>
-                   <p>Pass additional verification</p>
-                   <a style='padding:15px 20px;background-color:#8ecae6;border-radius:5px;text-decoration:none;color:#14213d;' href='https://timetrackerproj.azurewebsites.net/login'>Verify me</a>
-                   </div>";
-        
-        SendEmail(email,body,"Account actions required");
-    }
+        var confirmationLink = await _tokenService.GenerateUserEmailTokenAsync(userId);
 
+        var body = $@"<div style='display:flex;align-items:center;flex-direction:column;width:100%;'>
+                    <h2>Your account is almost ready</h2>
+                    <p>Pass additional verification:</p>
+                    <a style='padding:15px 20px;background-color:#8ecae6;border-radius:5px;text-decoration:none;color:#14213d;' href='https://timetrackerproj.azurewebsites.net/userVerify?verify={confirmationLink}'>Verify me</a>
+                    </div>";
 
-   
+        SendEmail(userEmail, body, "Account actions required");
+    } 
 }

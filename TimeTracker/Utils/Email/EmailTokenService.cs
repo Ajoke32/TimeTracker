@@ -13,8 +13,6 @@ public class EmailTokenService
     
     private readonly IUnitOfWorkRepository _repository;
     
-    private readonly int _tokenExpiration = 300; // secs
-    
     public EmailTokenService(IDataProtectionProvider dataProtectionProvider,IUnitOfWorkRepository repos)
     {
         _protectionProvider = dataProtectionProvider;
@@ -46,10 +44,9 @@ public class EmailTokenService
         {
             throw new Exception(e.Message);
         }
-       
-    }
 
-    public async Task<bool> VerifyUserToken(string token)
+    }
+    public async Task<bool> VerifyUserToken(string token, int tokenExpiration = 300)
     {
         try
         {
@@ -63,7 +60,7 @@ public class EmailTokenService
 
             var createdAt = reader.ReadInt64();
         
-            var expirationTime = createdAt + _tokenExpiration;
+            var expirationTime = createdAt + tokenExpiration;
         
             if (expirationTime < DateTimeOffset.UtcNow.ToUnixTimeSeconds()){ return false; }
 
@@ -86,10 +83,33 @@ public class EmailTokenService
             
             return true;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return false;
         }
         
+    }
+
+    public int? GetUserIdFromToken(string token){
+        try
+        {
+            var protector = _protectionProvider.CreateProtector("emailDataProtection");
+
+            var unprotected = protector.Unprotect(Convert.FromBase64String(token));
+
+            using var ms = new MemoryStream(unprotected);
+
+            using var reader = new BinaryReader(ms);
+
+            if (reader is not null)
+            {
+                reader.ReadInt64();
+                return reader.ReadInt32();
+            }
+            return null;
+        }
+        catch(Exception) {
+            return null;
+        }
     }
 }

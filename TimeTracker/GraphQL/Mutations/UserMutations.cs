@@ -42,7 +42,8 @@ public sealed class UserMutations:ObjectGraphType
                 var created = await uow.GenericRepository<User>().CreateAsync(mapper.Map<User>(user));
 
                 await uow.SaveAsync();
-                emailService.SendAccountRegistration(created.Email);
+
+                await emailService.SendAccountRegistrationAsync(created.Id, created.Email);
                 return created.Id;
             });//.AuthorizeWithPolicy("Create");
 
@@ -81,6 +82,35 @@ public sealed class UserMutations:ObjectGraphType
                 await uow.SaveAsync();
                 return isDeleted;
             });
+
+        Field<string>("verifyUser")
+        .Argument<string>("token")
+        .Argument<string>("password")
+        .ResolveAsync(async ctx =>
+        {
+            var token = ctx.GetArgument<string>("token");
+            var authEmailService = ctx.RequestServices?.GetRequiredService<EmailTokenService>();
+                
+            var valid = await authEmailService!.VerifyUserToken(token, 18000);
+            if(valid)
+            {
+                var id = authEmailService.GetUserIdFromToken(token);
+                
+                var user = await uow.GenericRepository<User>().FindAsync(u=>u.Id==id);
+                if(user is not null)
+                {
+                    var password = ctx.GetArgument<string>("password");
+                    user.Password = BCrypt.Net.BCrypt.HashPassword(password);
+                    var updated = await uow.GenericRepository<User>().UpdateAsync(user);
+                    
+                    await uow.SaveAsync();
+                    await emailService.SendEmailConfirmationAsync(updated);
+
+                    return "Check your email!";
+                }
+            }
+            return "Failed to verify account!";
+        });
         
     }
 }

@@ -4,7 +4,8 @@ import { GetUserFromToken, IsUserAuthenticated } from "../../utils";
 import {
     logoutReducer, loginReducer, emailVerifyReducer,
     loginSuccessReducer, loginFailReducer,
-    emailVerifyFailReducer, emailVerifySuccessReducer
+    emailVerifyFailReducer, emailVerifySuccessReducer,
+    userVerifyReducer
 } from './reducers'
 
 
@@ -25,9 +26,10 @@ const authSlice = createSlice({
         loginFail: loginFailReducer,
         verify: emailVerifyReducer,
         verifySuccess: emailVerifySuccessReducer,
-        verifyFail: emailVerifyFailReducer
+        verifyFail: emailVerifyFailReducer,
+        userVerify: userVerifyReducer
     },
 });
 
 export const auth = authSlice.reducer;
-export const { login, logout, loginFail, loginSuccess, verify, verifyFail, verifySuccess } = authSlice.actions;
+export const { login, logout, loginFail, loginSuccess, verify, verifyFail, verifySuccess, userVerify } = authSlice.actions;
