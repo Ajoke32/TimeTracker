@@ -12,8 +12,6 @@ public class TimeTrackerContext:DbContext
     public DbSet<Vacation> Vacations { get; set; }
     
     public DbSet<UserApprover> Approvers { get; set; }
-    
-    public DbSet<TestData> TestData { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
