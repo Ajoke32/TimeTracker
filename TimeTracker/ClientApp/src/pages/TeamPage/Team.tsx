@@ -5,6 +5,7 @@ import { SearchInput } from "../../components/UI/Inputs";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { User } from "../../redux/intrerfaces";
+import { RangeInput } from "../../components/UI/Inputs/RangeInput";
 
 const Team = () => {
 

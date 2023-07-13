@@ -15,7 +15,7 @@ export const Layout = () => {
             <div className="layout-header__wrapper">
                 <Header/>
             </div>
-            <div className="layout-dashboard__wrapper">
+            <div className="layout-sidebar__wrapper">
                 <Sidebar/>
             </div>
             <div className="layout-content__wrapper">

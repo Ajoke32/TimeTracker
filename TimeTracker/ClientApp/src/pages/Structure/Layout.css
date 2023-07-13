@@ -35,7 +35,7 @@
     flex-direction: column;
     
 }
-.layout-dashboard__wrapper {
+.layout-sidebar__wrapper {
 
     grid-area: 2 / 1 / 3 / 2;
 }
