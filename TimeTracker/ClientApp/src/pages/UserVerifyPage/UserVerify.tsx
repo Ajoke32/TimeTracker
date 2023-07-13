@@ -3,7 +3,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState, useEffect } from "react";
 import { H5, InputTooltip, Loader, PasswordInput, LargeButton } from "../../components";
 import { useTypedSelector, useAppDispatch } from "../../hooks";
-import { verify, userVerify } from "../../redux";
+import { emailVerify, userVerify } from "../../redux";
 import "./UserVerify.css"
 
 type Inputs = {
@@ -26,10 +26,9 @@ export const UserVerify = () => {
 
         if (tokenParam) {
             setParam('token')
-            dispatch(verify(tokenParam));
+            dispatch(emailVerify(tokenParam));
         }
-
-        if (verifyParam) {
+        else if (verifyParam) {
             setParam('verify')
         }
 
@@ -44,8 +43,7 @@ export const UserVerify = () => {
         });
 
     const onSubmit: SubmitHandler<Inputs> = (data) => {
-        //dispatch(userVerify(verifyParam));
-
+        dispatch(userVerify({ token: verifyParam!, password: data.password }));
         reset();
     }
 
@@ -65,7 +63,7 @@ export const UserVerify = () => {
             return (
                 <div className="user-verify-page-wrapper">
                     <form className="user-password-form" onSubmit={handleSubmit(onSubmit)}>
-                        <PasswordInput name="password" placeholder="Password" register={register("password", { required: "Password can't be empty!" })} errors={errors.password}/>
+                        <PasswordInput name="password" placeholder="Password" register={register("password", { required: "Password can't be empty!" })} errors={errors.password} />
                         <LargeButton type="submit" value="Confirm" />
                     </form>
                 </div>

@@ -1,10 +1,7 @@
 import { PayloadAction} from "@reduxjs/toolkit";
+import { DefaultState } from "../../intrerfaces";
 
-export interface DefaultState{
-    loading:boolean,
-    error:string
-}
-export const defaultState:DefaultState = {
+export const defaultState: DefaultState = {
     loading: false,
     error: ""
 }

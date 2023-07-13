@@ -36,22 +36,3 @@ export const loginFailReducer = (state: AuthSliceState, action: PayloadAction<st
     state.loading = false;
     state.error = action.payload;
 }
-
-export const emailVerifyReducer = (state: AuthSliceState, action: PayloadAction<string | undefined>) => {
-    state.loading = true;
-    state.error = "";
-}
-export const emailVerifySuccessReducer = (state: AuthSliceState) => {
-    state.loading = false;
-}
-
-export const emailVerifyFailReducer = (state: AuthSliceState, action: PayloadAction<string>) => {
-    state.status = false;
-    state.loading = false;
-    state.error = action.payload;
-}
-
-export const userVerifyReducer = (state: AuthSliceState, action: PayloadAction<string | null>) => {
-    state.loading = true;
-    state.error = "";
-}
