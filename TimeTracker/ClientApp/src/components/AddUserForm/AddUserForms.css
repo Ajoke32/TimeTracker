@@ -52,6 +52,15 @@
     text-align: center;
 }
 
+.edit-form__wrapper-inner form input {
+    opacity: .5;
+}
+
+.edit-form__wrapper-inner .user-form__title {
+    text-align: center;
+    font-size: 1.1em;
+}
+
 @media screen and (max-width: 640px) {
     .user-form__wrapper-inner {
         width: 90%;

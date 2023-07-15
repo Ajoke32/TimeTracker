@@ -15,16 +15,19 @@ interface ApproversTableProps {
 const ApproversTable = ({users, onChange} : ApproversTableProps) => {
     const [approvers, setApprovers] = useState<Number[]>([]);
     const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
-    
+
     const handleCheckboxChange = (userId: number, checked: boolean) => {
-        if (checked) {
-            setApprovers([...approvers, userId]);
-            onChange([...approvers, userId]);
-        } else {
-            setApprovers(approvers.filter(id => id !== userId));
-            onChange(approvers.filter(id => id !== userId));
-        }
+        setApprovers((prevApprovers) => {
+            const updatedApprovers = checked
+                ? [...prevApprovers, userId]
+                : prevApprovers.filter((id) => id !== userId);
+            
+            onChange(updatedApprovers);
+            return updatedApprovers;
+        });
     };
+    
+    
     const handleSearch = (searchValue: string) => {
         const filtered = users.filter(
             (user) =>
@@ -59,7 +62,7 @@ const ApproversTable = ({users, onChange} : ApproversTableProps) => {
                                 <Checkbox
                                     value={user.id}
                                     optionName={null}
-                                    isMultipleChoice={false}
+                                    isChecked={approvers.includes(user.id)}
                                     onChange={(value, checked) => handleCheckboxChange(value, checked)}
                                 />
                             </td>

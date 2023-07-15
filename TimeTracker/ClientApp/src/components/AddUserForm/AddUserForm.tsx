@@ -80,18 +80,16 @@ export const AddUserForm = ({ onNextStep }: AddUserFormProps) => {
                     register={register("email", { required: "Email name can't be empty!" })}
                     errors={errors.email} />
 
-                {/*<RadioButton title="Select working hours percentage:" options={radioOptions}
-                    name="hoursPerMonth"
-                    register={register("hoursPerMonth")} />*/}
-
                 <RangeInput title="Select working hours %:" minRange={25} maxRange={100} step={5} value={hoursPerMonthValue} register={register("hoursPerMonth")} onChange={setHoursPerMonthValue}/>
 
                 <CheckboxInput title="Select user permissions:" options={options}
                     register={register('permissions')}
                     selected={checkedOptions}
                     setSelected={setCheckedOptions}
-                    values={Permissions} />
-                <SmallButton type="submit" value="Add user" />
+                    values={Permissions}
+                    isMultipleChoice={true}
+                />
+                <SmallButton type="submit" value="Add user"/>
             </form>
         </div>
     );

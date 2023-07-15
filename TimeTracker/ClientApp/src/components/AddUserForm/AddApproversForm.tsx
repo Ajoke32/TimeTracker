@@ -20,15 +20,15 @@ const AddApproversForm = () => {
         const users: User[] = [];
         for (let i = 0; i < count; i++) {
             const user: User = {
-                id: Math.floor(Math.random() * 1000), // Generate a random number for the id
-                firstName: `User${i + 1}`, // Replace with a random first name or any logic you prefer
-                lastName: `Lastname${i + 1}`, // Replace with a random last name or any logic you prefer
-                email: `user${i + 1}@example.com`, // Replace with a random email or any logic you prefer
-                password: "password", // Replace with a random password or any logic you prefer
-                workType: Math.floor(Math.random() * 3), // Generate a random number for workType (0, 1, or 2)
-                permissions: Math.floor(Math.random() * 4), // Generate a random number for permissions (0 to 3)
-                vacationDays: Math.floor(Math.random() * 30), // Generate a random number for vacationDays (0 to 29)
-                hoursPerMonth: Math.floor(Math.random() * 160), // Generate a random number for hoursPerMonth (0 to 159)
+                id: Math.floor(Math.random() * 1000),
+                firstName: `User${i + 1}`,
+                lastName: `Lastname${i + 1}`,
+                email: `user${i + 1}@example.com`,
+                password: "password",
+                workType: Math.floor(Math.random() * 3),
+                permissions: Math.floor(Math.random() * 4),
+                vacationDays: Math.floor(Math.random() * 30),
+                hoursPerMonth: Math.floor(Math.random() * 160),
             };
             users.push(user);
         }

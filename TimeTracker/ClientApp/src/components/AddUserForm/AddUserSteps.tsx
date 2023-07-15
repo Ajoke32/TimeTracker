@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import AddApproversForm from "./AddApproversForm";
 import {AddUserForm} from "./AddUserForm";
 import "./AddUserForms.css"
+import EditUserForm from "./EditUserForm";
 
 
 export const AddUserSteps = () => {
@@ -32,13 +33,13 @@ export const AddUserSteps = () => {
     switch (step) {
         case 0:
             return (
-                <div className="add-user-form__wrapper">
+                <div className="user-form__wrapper">
                     <AddUserForm onNextStep={handleNextStep}/>
                 </div>
             )
         default:
             return (
-                <div className="add-user-form__wrapper">
+                <div className="user-form__wrapper">
                     <AddApproversForm/>
                 </div>
             )
