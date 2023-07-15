@@ -6,8 +6,9 @@ export const addReducer = (state: UserSliceState, action: PayloadAction<UserAddT
     state.loading = true;
 }
 
-export const addSuccessReducer = (state: UserSliceState) => {
+export const addSuccessReducer = (state: UserSliceState,action:PayloadAction<number>) => {
     state.loading = false;
+    state.userId=action.payload;
 }
 
 export const addFailReducer = (state: UserSliceState, action: PayloadAction<string>) => {

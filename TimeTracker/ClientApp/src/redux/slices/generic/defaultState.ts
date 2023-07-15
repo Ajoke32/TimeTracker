@@ -16,7 +16,7 @@ export function createErrorReducer<T extends DefaultState>(callback:Function|nul
     }
 }
 
-export function createSuccessReducer<T extends DefaultState,V>(callback:Function|null=null){
+export function createSuccessReducerWithPayload<T extends DefaultState,V>(callback:Function|null=null){
     return (state: T, action: PayloadAction<V>):void => {
         state.loading=false;
         state.error='';
@@ -25,10 +25,28 @@ export function createSuccessReducer<T extends DefaultState,V>(callback:Function
     }
 }
 
+export function createSuccessReducerWithoutPayload<T extends DefaultState>(callback:Function|null=null){
+    return (state: T):void => {
+        state.loading=false;
+        state.error='';
+        if(callback!==null)
+            callback(state);
+    }
+}
+
+
 export function createPendingReducer<T extends DefaultState>(callback:Function|null=null){
     return (state: T):void => {
         state.loading=true;
         if(callback!==null)
             callback(state);
+    }
+}
+
+export function createPendingReducerWithPayload<T extends DefaultState,V>(callback:Function|null=null){
+    return (state:T,action:PayloadAction<V>)=>{
+        state.loading=true;
+        if(callback!==null)
+            callback(state,action);
     }
 }

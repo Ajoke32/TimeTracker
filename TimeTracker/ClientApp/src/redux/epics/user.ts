@@ -15,7 +15,7 @@ export const addUserEpic: Epic = (action: Observable<PayloadAction<UserAddType>>
                         if (resp.response.errors != null) {
                             return userAddFail(resp.response.errors[0].message)
                         }
-                        return userAddSuccess();
+                        return userAddSuccess(resp.response.data.userMutation.create);
                     }),
                     catchError((e: Error) => {
                         return of(userAddFail("unexpected error"))

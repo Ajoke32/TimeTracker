@@ -11,6 +11,7 @@ type Inputs = {
 }
 
 export const UserVerify = () => {
+
     const dispatch = useAppDispatch();
     const { loading, error } = useTypedSelector(state => state.auth);
     const [param, setParam] = useState<string | null>('');
