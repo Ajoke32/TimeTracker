@@ -1,7 +1,8 @@
 import { AjaxQuery } from './query';
-import { QueryStructure, ResponseError } from '../intrerfaces';
+import {QueryStructure} from '../intrerfaces';
 import { UserAddType } from '../types'
 import { ReadCookie } from '../../utils';
+
 
 
 export function UserLoginQuery(userData: { email: string, password: string }) {
@@ -21,9 +22,20 @@ export function AddUserQuery(userData: UserAddType) {
     )
 }
 
-export function EmailVerifyQuery(token: string) {
-    return AjaxQuery<QueryStructure<{ userQuery: { verifyEmail: boolean } }>>(
-        "query VerifyUser($token: String!){ userQuery { verifyEmail(token: $token) } }",
+export function UserVerifyQuery(token: string) {
+    return AjaxQuery<QueryStructure<{ userQuery: { verifyUser: boolean } }>>(
+        "query VerifyUser($token: String!){ userQuery { verifyUser(token: $token) } }",
         { token: token },
     )
+}
+
+export function PasswordConfirmQuery(data:{token: string, password: string}) {
+    return AjaxQuery<QueryStructure<{ userQuery: { verifyUser: boolean } }>>(
+        `mutation Verify($token: String!, $password: String!){ userMutation {verifyUser(token: $token, password: $password)} }`,
+        {
+            token: data.token,
+            password: data.password
+        },
+    )
+
 }

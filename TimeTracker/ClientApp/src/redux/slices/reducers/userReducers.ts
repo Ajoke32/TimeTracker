@@ -14,3 +14,22 @@ export const addFailReducer = (state: UserSliceState, action: PayloadAction<stri
     state.loading = false;
     state.error = action.payload;
 }
+
+export const emailVerifyReducer = (state: UserSliceState, action: PayloadAction<string | undefined>) => {
+    state.loading = true;
+    state.error = "";
+}
+
+export const userVerifyReducer = (state: UserSliceState, action: PayloadAction<{token: string, password: string}>) => {
+    state.loading = true;
+    state.error = "";
+}
+
+export const verifySuccessReducer = (state: UserSliceState) => {
+    state.loading = false;
+}
+
+export const verifyFailReducer = (state: UserSliceState, action: PayloadAction<string>) => {
+    state.loading = false;
+    state.error = action.payload;
+}

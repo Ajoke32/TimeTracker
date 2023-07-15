@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { Home, Login, AddUser, Layout, EmailVerify } from "..";
+import { Home, Login, AddUser, Layout, UserVerify } from "..";
 import { useTypedSelector } from '../../hooks';
 import { Team} from '../TeamPage';
 
@@ -20,7 +20,7 @@ export const AppRoutes = () => {
         </>
       ) : (
         <>
-          <Route path="/emailVerify" element={<EmailVerify />} />
+          <Route path="/userVerify" element={<UserVerify />} />
           <Route path="/login" element={<Login />} />
           <Route path="/*" element={<Navigate to="/login" />} />
         </>
