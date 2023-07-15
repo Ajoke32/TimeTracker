@@ -1,6 +1,6 @@
 import { ajax } from 'rxjs/ajax';
 
-export function AjaxQuery<T>(query: string, variables: object, token: string | null = null) {
+export function AjaxQuery<T>(query: string, variables: object|null=null, token: string | null = null) {
 
     return ajax<T>({
         url: "/graphql",

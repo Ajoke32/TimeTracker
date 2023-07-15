@@ -2,11 +2,10 @@ import {
     createErrorReducer,
     createPendingReducer,
     createSuccessReducer,
-    DefaultState,
     defaultState
-} from "./generic/defaultState";
+} from "./generic";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {User} from "../intrerfaces";
+import {DefaultState, User} from "../intrerfaces";
 
 interface UsersSliceState extends DefaultState{
     users:User[],
