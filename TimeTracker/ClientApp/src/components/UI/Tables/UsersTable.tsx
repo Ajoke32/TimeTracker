@@ -2,13 +2,14 @@
 import {User} from "../../../redux";
 import ProfileAvatar from "../Misc/ProfileAvatar";
 import "./tables.css"
-import {Dropdown} from "../Dropdowns";
-import {SearchInput} from "../Inputs";
-import {LargeButton} from "../Buttons";
-import ConfirmModal from "../Modals/ConfirmModal";
+import { Dropdown } from "../Dropdowns";
+import { SearchInput } from "../Inputs";
+import { LargeButton } from "../Buttons";
+import { ConfirmModal } from "../Modals/ConfirmModal";
 
 const UsersTable = ({users} : {users: User[]}) => {
     const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
+    const [showModal, setShowModal] = useState(false);
 
     const handleSearch = (searchValue: string) => {
         const filtered = users.filter(
@@ -19,6 +20,11 @@ const UsersTable = ({users} : {users: User[]}) => {
         );
         setFilteredUsers(filtered);
     };
+
+    const handleModalButtonClick = () => {
+        setShowModal(!showModal);
+    };
+    
     
     return (
         <div className="users-table__wrapper">
@@ -70,10 +76,21 @@ const UsersTable = ({users} : {users: User[]}) => {
                             <td>
                                 <div className="users-table__actions-wrapper">
                                     <div className="users-table__actions-edit">
-                                        <button></button>
+                                        <button>
+                                            
+                                        </button>
                                     </div>
                                     <div className="users-table__actions-archieve">
-                                        <button></button>
+                                        <button  onClick={handleModalButtonClick}>
+                                            {showModal && (
+                                                <ConfirmModal
+                                                    title="WARNING"
+                                                    description={`Are you sure you want to deactivate ${user.firstName} ${user.lastName}?`}
+                                                    onCancel={() => setShowModal(false)}
+                                                    onConfirm={() => console.log('user removed')}
+                                                />
+                                            )}
+                                        </button>
                                     </div>
                                 </div>
                             </td>

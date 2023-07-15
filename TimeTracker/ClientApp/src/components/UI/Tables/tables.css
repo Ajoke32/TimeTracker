@@ -157,7 +157,7 @@ tbody::-webkit-scrollbar-thumb:hover {
     height: 100%;
 }
 
-.users-table__actions-wrapper button {
+.users-table__actions-wrapper > div > button {
     height: 100%;
     border: none;
     width: 100%;

@@ -1,35 +1,28 @@
-﻿import React, { useState } from 'react';
+﻿import React from 'react';
 import "./modals.css"
+import {SmallButton} from "../Buttons";
 
-const Modal = () => {
-    const [isOpen, setIsOpen] = useState(false);
+interface ConfirmModalProps {
+    title: string,
+    description: string,
+    onConfirm: () => void
+    onCancel: () => void,
+}
 
-    const handleOpenModal = () => {
-        setIsOpen(true);
-        document.body.style.overflow = 'hidden'; // Prevent scrolling of background content
-    };
-
-    const handleCloseModal = () => {
-        setIsOpen(false);
-        document.body.style.overflow = 'auto'; // Restore scrolling of background content
-    };
+export const ConfirmModal = ({title="WARNING", description, onConfirm, onCancel} : ConfirmModalProps) => {
 
     return (
         <div>
-            <button onClick={handleOpenModal}>Open Modal</button>
-            {isOpen && (
-                <div className="modal-overlay">
-                    <div className="modal">
-                        <div className="modal-content">
-                            <h2>Modal Title</h2>
-                            <p>Modal content goes here...</p>
-                            <button onClick={handleCloseModal}>Close</button>
-                        </div>
+            <div className="confirm-modal__wrapper">
+                <div className="confirm-modal__content">
+                    <h2>{title}</h2>
+                    <p>{description}</p>
+                    <div className="confirm-modal__btn-wrapper">
+                        <SmallButton type="submit" value="YES" onClick={onConfirm}/>
+                        <SmallButton type="submit" value="Cancel" onClick={onCancel}/>
                     </div>
                 </div>
-            )}
+            </div>
         </div>
     );
 };
-
-export default Modal;
