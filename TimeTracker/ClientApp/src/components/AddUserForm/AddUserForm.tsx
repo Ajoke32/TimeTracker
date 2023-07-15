@@ -1,6 +1,5 @@
 import { useAppDispatch } from "../../hooks";
 import { useState } from 'react';
-import { RadioButton } from "../UI"
 import { TextInput, CheckboxInput, SmallButton } from "../UI";
 import { useForm, SubmitHandler } from 'react-hook-form';
 import StepsElement from "../UI/Misc/StepsElement";

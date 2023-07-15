@@ -26,6 +26,10 @@
     position: relative;
 }
 
+.search-input::-webkit-search-cancel-button {
+    -webkit-appearance:none;
+}
+
 .input-wrapper button {
     display: flex;
     position: absolute;
@@ -113,7 +117,8 @@
 }
 
 .range-input__values-inner {
-    width: 5vh;
+    width: 3vh;
+    height: 3vh;
     text-align: center;
     font-size: 10px;
 }
@@ -130,10 +135,28 @@
 }
 
 .chosenValue {
-    font-size: 1.1rem !important;
-    opacity: 1 !important;
-    border: 2px solid rgba(91, 175, 195, .7) !important;
+    background: rgba(91, 175, 195, .5) !important;
+    border: 2px solid var(--color-cyan);
     border-radius: 50% !important;
+}
+
+.chosenValue > button {
+    color: var(--color-black);
+    opacity: .9 !important;
+}
+
+@media screen and (max-height: 840px) {
+    .chosenValue > button {
+        font-size: 1em;
+    }
+
+    .range-input__values-inner > button {
+        font-size: .9em;
+    }
+
+    .range-input__wrapper input {
+        height: 7px;
+    }
 }
 
 
