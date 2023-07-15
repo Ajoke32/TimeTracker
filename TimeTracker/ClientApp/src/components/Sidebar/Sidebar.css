@@ -1,23 +1,22 @@
-﻿
-.sidebar-list__link {
-    display: flex;
-    height: 100%;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-.sidebar-list {
+﻿.sidebar-list {
     margin-top: 6vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     list-style: none;
     height: 80vh;
+}
+
+.sidebar-list__link {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    text-decoration: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-left: 10%;
 }
 
 .sidebar-list li {
@@ -115,6 +114,7 @@
     
     .sidebar-list__link {
         justify-content: center;
+        margin: 0;
     }
     
     .sidebar-list__link span {
@@ -131,5 +131,9 @@
 @media screen and (min-width: 840px) and (max-width: 1080px) {
     .sidebar-list__link span {
         font-size: 12px;
+    }
+    
+    .sidebar-list__link {
+        margin-left: 10%;
     }
 }

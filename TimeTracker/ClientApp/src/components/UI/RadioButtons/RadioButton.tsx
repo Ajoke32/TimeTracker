@@ -11,6 +11,8 @@ interface RadioButtonProps {
 export const RadioButton = ({ title, options, name, register }: RadioButtonProps) => {
 
     const [selectedOption, setSelectedOption] = useState<number>(50);
+    
+    
 
     return (
         <div className="radio-button__wrapper">

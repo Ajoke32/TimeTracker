@@ -1,72 +1,181 @@
-.approvers-table__wrapper {
+.approvers-table__wrapper,
+.users-table__wrapper {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.table-wrapper__inner {
+    flex: 1;
+    overflow: auto;
 }
 
 .approvers-table__wrapper  input {
     margin: 2vh 0 2vh 0;
 }
 
-.approvers-table__table {
+.approvers-table__table,
+.users-table__table {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 80%;
-    background: white;
-    border-collapse: collapse;
-}
-
-.approvers-table__table tr{
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    height: 7vh;
-}
-
-.approvers-table__table tr:not:nth-child(1) {
-    border-bottom: 1px solid var(--color-stroke-gray);
-
-}
-
-.approvers-table__table th:first-child,
-.approvers-table__table td:first-child{
-    width: 60%;
-}
-
-.approvers-table__table th:last-child,
-.approvers-table__table td:last-child{
-    width: 40%;
-}
-
-.approvers-table__table td {
-    display: flex;
-    align-items: center;
     height: 100%;
+    border-collapse: collapse;
+    background: transparent;
 }
 
-.approvers-table__table thead, tbody {
+.approvers-table__table thead tr,
+.approvers-table__table tbody tr {
+    display: grid;
+    grid-template-columns: .5fr 2.5fr 1fr;
+    grid-template-rows: 7vh;
+    grid-column-gap: 0;
+    grid-row-gap: 0;
+}
+
+.users-table__table thead tr,
+.users-table__table tbody tr {
+    display: grid;
+    grid-template-columns: .5fr repeat(2, 2fr) repeat(3, 1fr);
+    grid-template-rows: 7vh;
+    grid-column-gap: 0;
+    grid-row-gap: 0;
+}
+
+.approvers-table__table thead,
+.approvers-table__table tbody,
+.users-table__table thead,
+.users-table__table tbody{
     width: 100%;
-    display: block;
 }
 
-.approvers-table__table tbody {
+.approvers-table__table tbody,
+.users-table__table tbody{
     overflow: auto;
 }
 
-.approvers-table__table thead {
+thead {
+    padding: 0 .5em 0 0;
     background: var(--color-background-grey);
-    border-bottom: none;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-radius: 2vh;
 }
 
-.approvers-table__username-row > *:first-child {
-    margin: 0 10% 0 5%;
+table thead tr {
+    align-items: center;
+    border-radius: 2vh;
 }
 
-.approvers-table__table >tbody tr > td:last-child {
+thead tr th {
+    display: flex;
+    align-items: center;
     justify-content: center;
-    margin-left: 10px;
+    height: 80%;
+}
+
+tbody::-webkit-scrollbar {
+    width: .5em;
+}
+
+tbody::-webkit-scrollbar-thumb {
+    background-color: rgba(91, 175, 195, .3);
+    border-radius: 1vh;
+}
+
+tbody::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-cyan);
+}
+
+.approvers-table__table tbody tr:nth-child(2n),
+.users-table__table tbody tr:nth-child(2n){
+    background: rgba(234,241, 244, 0.7);
+    border-radius: 2vh;
+}
+
+.users-table__table tbody td,
+.approvers-table__table tbody td{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.users-table__navbar {
+    display: inline-flex;
+    justify-content: space-between;
+}
+
+.users-table__navbar-left {
+    display: inline-flex;
+    width: 70%;
+    justify-content: space-between;
+}
+
+.users-table__navbar {
+    width: 100%;
+    height: 15%;
+}
+
+.users-table__navbar-left > div:first-child {
+    width: 25%;
+}
+.users-table__navbar-left > div:last-child {
+    width: 70%;
+}
+
+.users-table__navbar-btn {
+    width: 25%;
+}
+
+.users-table__navbar-btn div {
+    margin: 0;
+    width: 100%;
+}
+
+.users-table__navbar-btn div button {
+    font-weight: 500;
+    padding: 0;
+}
+
+.add-user__link {
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    height: 6vh;
+}
+
+.users-table__actions-wrapper {
+    width: 50%;
+    height: 2.5vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.users-table__actions-wrapper > div {
+    width: 100%;
+    height: 100%;
+}
+
+.users-table__actions-wrapper button {
+    height: 100%;
+    border: none;
+    width: 100%;
+    background: transparent;
+}
+
+.users-table__actions-edit {
+    display: flex;
+    background: url("../../../assets/images/edit_user_icon.png");
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.users-table__actions-archieve {
+    display: flex;
+    background: url("../../../assets/images/archieve_user_icon.png");
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
 }

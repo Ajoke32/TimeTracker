@@ -26,3 +26,13 @@ export interface CheckboxInputProps {
     selected: number,
     setSelected: (value: number ) => void
 }
+
+export interface RangeInputProps {
+    title : string,
+    minRange: number,
+    maxRange: number,
+    step: number,
+    value: number,
+    register: any,
+    onChange: any;
+}
