@@ -26,11 +26,15 @@
     position: relative;
 }
 
+.search-input::-webkit-search-cancel-button {
+    -webkit-appearance:none;
+}
+
 .input-wrapper button {
     display: flex;
     position: absolute;
-    top:25%;
-    right: 9%;
+    top: 34%;
+    right: 3%;
     border: none;
     background: none;
     cursor: pointer;
@@ -82,5 +86,79 @@
 
 .password-input__toggle-btn img {
     height: 2vh;
-    
 }
+
+.range-input__wrapper {
+    width: 100%;
+}
+
+.range-input__wrapper input{
+    -webkit-appearance:none;
+    width:100%;
+    height: 12px;
+    border-radius:5px;
+    background-color:rgba(91, 175, 195, .7);
+    outline:none;
+}
+.range-input__wrapper input::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:3vh;
+    height:3vh;
+    border-radius:50%;
+    background-color: var(--color-cyan);
+}
+
+.range-input__values-wrapper {
+    display: flex;
+    width: 100%;
+    margin-top: 2vh;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.range-input__values-inner {
+    width: 3vh;
+    height: 3vh;
+    text-align: center;
+    font-size: 10px;
+}
+
+.range-input__values-inner > button {
+    display: block;
+    font-size: .9rem;
+    opacity: .5;
+    padding: 10%;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+}
+
+.chosenValue {
+    background: rgba(91, 175, 195, .5) !important;
+    border: 2px solid var(--color-cyan);
+    border-radius: 50% !important;
+}
+
+.chosenValue > button {
+    color: var(--color-black);
+    opacity: .9 !important;
+}
+
+@media screen and (max-height: 840px) {
+    .chosenValue > button {
+        font-size: 1em;
+    }
+
+    .range-input__values-inner > button {
+        font-size: .9em;
+    }
+
+    .range-input__wrapper input {
+        height: 7px;
+    }
+}
+
+
+
+

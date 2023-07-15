@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import StepsElement from "../UI/Misc/StepsElement";
 import ApproversTable from "../UI/Tables/ApproversTable";
 import {User} from "../../redux";
@@ -7,6 +7,14 @@ import {SmallButton} from "../UI";
 
 const AddApproversForm = () => {
     const username = "John Doe";
+
+    const [approvers, setApprovers] = useState<Number[]>([]);
+
+    const handleApproversChange = (newApprovers: Number[]) => {
+        setApprovers(newApprovers);
+    };
+    
+    console.log(approvers.join(", "));
 
     const generateRandomUsers = (count: number): User[] => {
         const users: User[] = [];
@@ -27,7 +35,7 @@ const AddApproversForm = () => {
         return users;
     };
 
-    const users: User[] = generateRandomUsers(15);
+    const users: User[] = generateRandomUsers(20);
     
     
     return (
@@ -37,7 +45,7 @@ const AddApproversForm = () => {
 
                 <span className="user-form__title">Select vacations approver(s) for {username}</span>
 
-                <ApproversTable users={users}/>
+                <ApproversTable users={users} onChange={handleApproversChange}/>
                 <div className="user-form__btn-wrapper">
                     <a href="/team">Later</a>
                     <SmallButton type="submit" value="Submit"/>

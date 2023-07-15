@@ -40,12 +40,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 4vh;
-    width: 4vh;
+    height: 3vh;
+    width: 3vh;
     --color-bg: 91, 175, 195;
     background-color: rgba(var(--color-bg), 0.5);
-    border: 1px solid var(--color-black);
+    border: 2px solid var(--color-cyan);
     border-radius: 100%;
+}
+
+.profile-avatar__wrapper span {
+    font-size: .8em;
 }
 
 
