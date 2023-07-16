@@ -32,6 +32,10 @@ public sealed class UserType:ObjectGraphType<UserDisplayDto>
         Field(x => x.Senders).Description("user vacation requests");
 
         Field(x => x.Vacations).Description("user vacations");
+        
+        Field(x=>x.DeletedAt,nullable:true).Description("user deleted at");
+        
+        Field(x=>x.IsDeleted,nullable:true).Description("user deleted");
 
     }
 }

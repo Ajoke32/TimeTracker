@@ -35,7 +35,7 @@ export const ApproversTable = ({users, onChange} : ApproversTableProps) => {
         );
         setFilteredUsers(filtered);
     };
-    
+
     return (
         <div className="approvers-table__wrapper">
             <SearchInput name="userSearch" placeholder="Search user" onSearch={handleSearch}/>

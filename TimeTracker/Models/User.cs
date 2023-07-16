@@ -1,11 +1,10 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 using TimeTracker.Enums;
+using TimeTracker.Utils.SoftDelete;
 
 namespace TimeTracker.Models;
 
-public class User
+public class User:SoftDeleteBase
 {
     public int Id { get; set; }
     
@@ -40,6 +39,7 @@ public class User
     public User()
     {
         VacationDays = 30;
+        IsDeleted = false;
         Permissions = Permissions.None;
     }
 }

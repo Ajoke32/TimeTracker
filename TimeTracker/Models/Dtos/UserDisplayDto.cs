@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using TimeTracker.MapperProfiles;
+using TimeTracker.Utils.SoftDelete;
 
 namespace TimeTracker.Models.Dtos;
 
 
-public class UserDisplayDto
+public class UserDisplayDto:SoftDeleteBase
 {
     public int Id { get; set; }
     
