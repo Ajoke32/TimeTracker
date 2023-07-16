@@ -9,6 +9,6 @@ public abstract class SoftDeleteBase:ISoftDelete
         DeletedAt = null;
     }
 
-    public bool? IsDeleted { get; set; }
+    public bool IsDeleted { get; set; }
     public DateTime? DeletedAt { get; set; }
 }

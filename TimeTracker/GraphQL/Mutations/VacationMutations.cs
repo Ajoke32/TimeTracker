@@ -1,5 +1,6 @@
 ﻿using GraphQL;
 using GraphQL.Types;
+using GraphQL.Validation;
 using TimeTracker.Absctration;
 using TimeTracker.GraphQL.Types;
 using TimeTracker.GraphQL.Types.InputTypes.VacationInput;
@@ -17,6 +18,16 @@ public sealed class VacationMutations:ObjectGraphType
             {
                 var vacation = _.GetArgument<Vacation>("vacation");
 
+                var user = await uow.GenericRepository<User>()
+                    .FindAsync(u => u.Id == vacation.UserId);
+
+                var diff = vacation.EndDate - vacation.StartDate;
+                
+                if (diff.Days > user!.VacationDays)
+                {
+                    throw new ValidationError("Vacation period invalid");
+                }
+                
                 var res = await uow.GenericRepository<Vacation>().CreateAsync(vacation);
                 await uow.SaveAsync();
                 return res;

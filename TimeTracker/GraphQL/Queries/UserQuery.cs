@@ -30,7 +30,8 @@ public sealed class UserQuery : ObjectGraphType
             {
                 var include = ctx.GetArgument<string>("include");
                 
-                var users = await uow.GenericRepository<User>().GetAsync(includeProperties: include);
+                var users = await uow.GenericRepository<User>()
+                    .GetAsync(includeProperties: include);
                 
                 return mapper.Map<List<User>,List<UserDisplayDto>>(users.ToList());
             })
@@ -74,19 +75,19 @@ public sealed class UserQuery : ObjectGraphType
                 var searchUser = await uow.GenericRepository<User>()
                     .FindAsync(u => u.Email == args.Email);
                 
-                if (searchUser == null)
+                if (searchUser == null||searchUser.IsDeleted)
                 {
                     throw new ValidationError("Wrong credentials!");
                 }
-
-                if (searchUser.IsEmailActivated)
-                {
-                    var authService = ctx.RequestServices?.GetRequiredService<Authenticate>();
+                
+                
+                if (!searchUser.IsEmailActivated) throw new ValidationError("Account is not activated!");
+                
+                
+                var authService = ctx.RequestServices?.GetRequiredService<Authenticate>();
                     
-                    return await AuthorizeConfirmedEmailAsync(searchUser, args.Password, authService!);
-                }
+                return await AuthorizeConfirmedEmailAsync(searchUser, args.Password, authService!);
 
-                throw new ValidationError("Account is not activated!");
             });
 
         Field<bool>("verifyUser")

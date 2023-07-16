@@ -1,3 +1,5 @@
+import {Vacation} from "../types";
+
 export interface User {
     id: number;
     firstName: string;
@@ -8,4 +10,6 @@ export interface User {
     permissions: number;
     vacationDays: number;
     hoursPerMonth: number;
-  }
+    vacations?:Vacation[]
+}
+

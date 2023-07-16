@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.InteropServices.JavaScript;
+
 
 namespace TimeTracker.Models;
 
@@ -14,6 +13,8 @@ public class Vacation
     
     [Required]
     public DateTime StartDate { get; set; }
+
+    public string Message { get; set; } = string.Empty;
     
     [Required]
     public DateTime EndDate { get; set; }
