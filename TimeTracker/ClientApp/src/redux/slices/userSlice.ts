@@ -4,7 +4,8 @@ import { addFailReducer, addReducer, addSuccessReducer, userVerifyReducer, email
 
 const initialState: UserSliceState = {
     loading: false,
-    error: ""
+    error: "",
+    userId:null
 };
 
 const userSlice = createSlice({

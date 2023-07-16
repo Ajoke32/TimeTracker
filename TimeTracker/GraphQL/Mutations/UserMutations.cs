@@ -65,6 +65,9 @@ public sealed class UserMutations:ObjectGraphType
             {
                 var id = ctx.GetArgument<int>("id");
                 var user = await uow.GenericRepository<User>().FindAsync(u=>u.Id==id);
+                
+                if (user == null) { return false;}
+                
                 var isDeleted = await uow.GenericRepository<User>()
                     .DeleteAsync(user);
                 

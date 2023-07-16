@@ -13,7 +13,7 @@ const AddApproversForm = () => {
     const handleApproversChange = (newApprovers: Number[]) => {
         setApprovers(newApprovers);
     };
-    
+
     console.log(approvers.join(", "));
 
     const generateRandomUsers = (count: number): User[] => {
@@ -36,8 +36,8 @@ const AddApproversForm = () => {
     };
 
     const users: User[] = generateRandomUsers(20);
-    
-    
+
+
     return (
         <div className="user-form__wrapper-inner">
             <form>

@@ -1,7 +1,7 @@
 import {
     createErrorReducer,
     createPendingReducer,
-    createSuccessReducer,
+    createSuccessReducerWithPayload,
     defaultState
 } from "./generic";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
@@ -21,7 +21,7 @@ const usersSlice = createSlice({
     initialState,
     reducers: {
         fetchUsers: createPendingReducer(),
-        fetchUsersSuccess: createSuccessReducer<typeof initialState,User[]>(
+        fetchUsersSuccess: createSuccessReducerWithPayload<typeof initialState,User[]>(
             (state:UsersSliceState,action:PayloadAction<User[]>)=>{
             state.users=action.payload;
         }),

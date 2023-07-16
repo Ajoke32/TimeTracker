@@ -15,7 +15,7 @@ interface ApproversTableProps {
 const ApproversTable = ({users, onChange} : ApproversTableProps) => {
     const [approvers, setApprovers] = useState<Number[]>([]);
     const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
-    
+
     const handleCheckboxChange = (userId: number, checked: boolean) => {
         if (checked) {
             setApprovers([...approvers, userId]);
@@ -33,7 +33,7 @@ const ApproversTable = ({users, onChange} : ApproversTableProps) => {
         );
         setFilteredUsers(filtered);
     };
-    
+
     return (
         <div className="approvers-table__wrapper">
             <SearchInput name="userSearch" placeholder="Search user" onSearch={handleSearch}/>

@@ -16,6 +16,7 @@ using TimeTracker.MapperProfiles;
 using TimeTracker.Repositories;
 using TimeTracker.Utils.Auth;
 using TimeTracker.Utils.Email;
+using TimeTracker.Utils.SoftDelete;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -119,6 +120,7 @@ builder.Services.AddDbContext<TimeTrackerContext>((serv,options) =>
 {
     var config = serv.GetRequiredService<IConfiguration>();
     options.UseSqlServer(config.GetConnectionString("TimeTracker"));
+    options.AddInterceptors(new SoftDeleteInterceptor());
 });
 
 builder.Services.AddScoped<RootQuery>();
