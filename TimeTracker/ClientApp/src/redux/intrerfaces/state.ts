@@ -1,13 +1,18 @@
 import { User } from './'
 
-export interface AuthSliceState {
-    user: User | null,
-    status: boolean,
+export interface DefaultState {
     loading: boolean,
     error: string
 }
 
-export interface UserSliceState {
-    loading: boolean,
-    error: string,
+export interface AuthSliceState extends DefaultState {
+    user: User | null,
+    status: boolean,
+}
+
+export interface UserSliceState extends DefaultState {
+}
+
+export interface UsersSliceState extends DefaultState {
+    users: User[],
 }

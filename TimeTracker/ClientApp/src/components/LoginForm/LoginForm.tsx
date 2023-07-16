@@ -1,8 +1,8 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { TextInput, PasswordInput } from "../UI/Inputs";
-import { LargeButton } from "../UI/Buttons";
-import { InputTooltip } from "../UI/Tooltips";
-import { Loader } from "../UI/Loaders";
+import { TextInput, PasswordInput } from "../UI";
+import { LargeButton } from "../UI";
+import { InputTooltip } from "../UI";
+import { Loader } from "../UI";
 import { H1, H5 } from "../Headings"
 import "./LoginForm.css"
 import { useAppDispatch, useTypedSelector } from "../../hooks";

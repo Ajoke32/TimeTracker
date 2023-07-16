@@ -52,10 +52,7 @@ export const Sidebar = () => {
                             <span>Log out</span>
                         </button>
                     </li>
-
                 </ul>
-
-
             </nav>
         </div>
     );
