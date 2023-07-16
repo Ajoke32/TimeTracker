@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-size: 16px;
 }
 
 #root {
@@ -9,6 +10,7 @@
     height: 100vh;
     margin: 0;
     background: var(--color-white);
+
 }
 
 h1 {
@@ -22,13 +24,13 @@ h2, th {
 }
 
 th {
-    font-size: 14px;
+    font-size: .9rem;
 }
 
 p, input, a, button, span, option, select {
     font-family: var(--font-text);
     font-weight: 500;
-    font-size: 16px;
+    font-size: 1rem;
     color: var(--color-black);
     
 }
@@ -36,8 +38,29 @@ p, input, a, button, span, option, select {
 label {
     font-family: var(--font-text);
     font-weight: 500;
-    font-size: 16px;
+    font-size: 1rem;
     color: var(--color-black);
 }
+
+@media screen and (max-width: 640px) {
+    * {
+        font-size: .75rem;
+    }
+}
+
+@media screen and (min-width: 640px) and (max-width: 920px) {
+
+    * {
+        font-size: .85rem;
+    }
+    
+}
+
+@media screen and (min-width: 920px) and (max-width: 1080px) {
+    * {
+        font-size: .95rem;
+    }
+}
+
 
 

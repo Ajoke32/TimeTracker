@@ -1,4 +1,5 @@
 export * from './authSlice'
 export * from './userSlice'
 export * from './usersSlice'
-export * from './vacationSlice'
+export * from './approversSlice'
+

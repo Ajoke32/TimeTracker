@@ -16,7 +16,7 @@
 
 .team-menu__header-wrapper > div {
     display: inline-block;
-    padding: 2vh;
+    padding: 1.2rem;
 }
 
 .team-menu__main {
@@ -24,7 +24,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    padding: 2vh 5vh;
+    padding: 2rem 3rem;
     overflow: hidden;
     
     background: var(--color-white);

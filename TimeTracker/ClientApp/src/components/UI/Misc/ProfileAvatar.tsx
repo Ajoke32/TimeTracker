@@ -1,7 +1,7 @@
 import React from 'react';
 import "./misc.css"
 
-const ProfileAvatar = ({initials} : {initials:string}) => {
+export const ProfileAvatar = ({initials} : {initials:string}) => {
     
     return (
         <div className="profile-avatar__wrapper">
@@ -9,5 +9,3 @@ const ProfileAvatar = ({initials} : {initials:string}) => {
         </div>
     );
 };
-
-export default ProfileAvatar;

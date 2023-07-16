@@ -1,37 +1,49 @@
-import {DefaultState} from "../intrerfaces";
+import { DefaultState, User } from "../intrerfaces";
 import {
     createErrorReducer,
-     createPendingReducerWithPayload,
+    createPendingReducerWithPayload,
     createSuccessReducerWithoutPayload,
+    createSuccessReducerWithPayload,
     defaultState
 } from "./generic";
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {ApproversAddType} from "../types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ApproversAddType, FetchApproversType } from "../types";
 
 
-interface ApproversState extends DefaultState{
-    approvers:number[]
+interface ApproversState extends DefaultState {
+    userApprovers: number[],
+    approversList: User[]
 }
 
 const initialState: ApproversState = {
     ...defaultState,
-    approvers:[]
+    userApprovers: [],
+    approversList: []
 };
 
 
 const approversSlice = createSlice({
-    name: 'approver',
+    name: 'approvers',
     initialState,
     reducers: {
-        addApprovers:createPendingReducerWithPayload<typeof initialState,ApproversAddType>(),
-        addApproversSuccess:createSuccessReducerWithoutPayload(),
-        addApproversFail:createErrorReducer(),
-        setApprovers:(state:ApproversState,action:PayloadAction<number[]>)=>{
-            state.approvers=action.payload;
-        }
+        addApprovers: createPendingReducerWithPayload<typeof initialState, ApproversAddType>(),
+        addApproversSuccess: createSuccessReducerWithoutPayload(),
+        addApproversFail: createErrorReducer(),
+        setApprovers: (state: ApproversState, action: PayloadAction<number[]>) => {
+            state.userApprovers = action.payload;
+        },
+        fetchApprovers: createPendingReducerWithPayload<ApproversState, FetchApproversType>(),
+        fetchApproversSuccess: createSuccessReducerWithPayload<typeof initialState, User[]>(
+            (state: ApproversState, action: PayloadAction<User[]>) => {
+                state.approversList = [...state.approversList, ...action.payload];
+            }),
+        fetchApproversFail: createErrorReducer()
     },
 });
 
 export const approvers = approversSlice.reducer;
-export const { addApprovers,setApprovers,
-    addApproversSuccess,addApproversFail} = approversSlice.actions;
+export const {
+    addApprovers, setApprovers,
+    addApproversSuccess, addApproversFail,
+    fetchApprovers,
+    fetchApproversFail, fetchApproversSuccess } = approversSlice.actions;

@@ -1,7 +1,7 @@
 ﻿import {SearchInputProps} from "./InputProps";
 import './inputs.css'
 
-export const SearchInput = ({ name, placeholder, register, errors, onSearch }: SearchInputProps) => {
+export const SearchInput = ({ name, placeholder, register, errors, onSearch, isDisabled }: SearchInputProps) => {
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target;
         onSearch(value);
@@ -18,7 +18,8 @@ export const SearchInput = ({ name, placeholder, register, errors, onSearch }: S
                     {...register} 
                     onChange={handleInputChange}
                     className="search-input" 
-                    autoComplete='off'/>
+                    autoComplete='off'
+                    />
                 <button className="search-input__toggle-btn">
                     <img src={require("../../../assets/images/search_input_icon.png")}  alt="search"/>
                 </button>

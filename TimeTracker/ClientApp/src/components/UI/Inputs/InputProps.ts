@@ -1,4 +1,8 @@
-﻿export interface TextInputProps {
+﻿export interface InputProps {
+    isDisabled?: boolean
+}
+
+export interface TextInputProps extends InputProps{
     name: string;
     placeholder: string;
     register?: any;
@@ -20,10 +24,10 @@ export enum Permissions
 export interface CheckboxInputProps {
     title: string,
     options: any[],
-    
     values: any,
     register: any,
     selected: number,
+    isMultipleChoice: boolean,
     setSelected: (value: number ) => void
 }
 
@@ -33,6 +37,5 @@ export interface RangeInputProps {
     maxRange: number,
     step: number,
     value: number,
-    register: any,
     onChange: any;
 }

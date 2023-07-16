@@ -5,4 +5,5 @@ export interface ButtonProps {
     type: "button" | "submit" | "reset" | undefined;
     value: string;
     handleClick?:Function
+
 }

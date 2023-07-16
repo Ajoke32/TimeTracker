@@ -1,30 +1,29 @@
-import React from 'react';
-import {User} from "../../../redux";
-import ProfileAvatar from "../Misc/ProfileAvatar";
-import {Checkbox} from "../Checkboxes";
-import {useState} from "react";
+import { User } from "../../redux";
+import { ProfileAvatar, Checkbox, SearchInput } from "../UI";
+import { useState } from "react";
 import "./tables.css"
-import {SearchInput} from "../Inputs/SearchInput";
-import {SmallButton} from "../Buttons";
 
 interface ApproversTableProps {
     users: User[],
-    onChange: (approvers: Number[]) => void,
+    onChange: (approvers: number[]) => void,
 }
 
-const ApproversTable = ({users, onChange} : ApproversTableProps) => {
-    const [approvers, setApprovers] = useState<Number[]>([]);
+export const ApproversTable = ({users, onChange} : ApproversTableProps) => {
+    const [approvers, setApprovers] = useState<number[]>([]);
     const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
 
     const handleCheckboxChange = (userId: number, checked: boolean) => {
-        if (checked) {
-            setApprovers([...approvers, userId]);
-            onChange([...approvers, userId]);
-        } else {
-            setApprovers(approvers.filter(id => id !== userId));
-            onChange(approvers.filter(id => id !== userId));
-        }
+        setApprovers((prevApprovers) => {
+            const updatedApprovers = checked
+                ? [...prevApprovers, userId]
+                : prevApprovers.filter((id) => id !== userId);
+            
+            onChange(updatedApprovers);
+            return updatedApprovers;
+        });
     };
+    
+    
     const handleSearch = (searchValue: string) => {
         const filtered = users.filter(
             (user) =>
@@ -59,7 +58,7 @@ const ApproversTable = ({users, onChange} : ApproversTableProps) => {
                                 <Checkbox
                                     value={user.id}
                                     optionName={null}
-                                    isMultipleChoice={false}
+                                    isChecked={approvers.includes(user.id)}
                                     onChange={(value, checked) => handleCheckboxChange(value, checked)}
                                 />
                             </td>
@@ -71,5 +70,3 @@ const ApproversTable = ({users, onChange} : ApproversTableProps) => {
         </div>
     );
 };
-
-export default ApproversTable;

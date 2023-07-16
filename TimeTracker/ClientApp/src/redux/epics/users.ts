@@ -1,14 +1,15 @@
-import {Epic, ofType} from "redux-observable";
-import {catchError, map, mergeMap, Observable, of} from "rxjs";
-import {PayloadAction} from "@reduxjs/toolkit";
-import { FetchUsers} from "../queries/userQueries";
-import {fetchUsersFail, fetchUsersSuccess} from "../slices";
+import { Epic, ofType } from "redux-observable";
+import { catchError, map, mergeMap, Observable, of } from "rxjs";
+import { PayloadAction } from "@reduxjs/toolkit";
+import { FetchUsersQuery } from "../queries/userQueries";
+import { fetchUsersFail, fetchUsersSuccess } from "../slices";
+import { FetchUsersType } from "../types";
 
-export const fetchUsersEpic: Epic = (action: Observable<PayloadAction>, state) =>
+export const fetchUsersEpic: Epic = (action: Observable<PayloadAction<FetchUsersType>>, state) =>
     action.pipe(
         ofType("users/fetchUsers"),
         mergeMap(action =>
-            FetchUsers()
+            FetchUsersQuery(action.payload)
                 .pipe(
                     map(resp => {
                         if (resp.response.errors != null) {
@@ -17,7 +18,7 @@ export const fetchUsersEpic: Epic = (action: Observable<PayloadAction>, state) =
                         return fetchUsersSuccess(resp.response.data.userQuery.users);
                     }),
                     catchError((e: Error) => {
-                        return of(fetchUsersFail("unexpected error"))
+                        return of(fetchUsersFail("Unexpected error"))
                     })
                 ),
         )

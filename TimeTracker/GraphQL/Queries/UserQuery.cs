@@ -26,13 +26,27 @@ public sealed class UserQuery : ObjectGraphType
         
         Field<ListGraphType<UserType>>("users")
             .Argument<string>("include",nullable:true,configure:c=>c.DefaultValue="")
+            .Argument<int>("take", nullable: true)
+            .Argument<int>("skip", nullable: true)
+            .Argument<int>("userId", nullable: true)
+            .Argument<bool>("onlyActivated", nullable: false)
             .ResolveAsync(async ctx =>
             {
                 var include = ctx.GetArgument<string>("include");
+                var activated = ctx.GetArgument<bool>("onlyActivated");
+                var userId = ctx.GetArgument<int>("userId");
+
+                var take = ctx.GetArgument<int>("take");
+                var skip = ctx.GetArgument<int>("skip");
+                Console.WriteLine($"Id = {userId}");
                 
-                var users = await uow.GenericRepository<User>()
-                    .GetAsync(includeProperties: include);
-                
+                var users = await uow.GenericRepository<User>().GetAsync(
+                    includeProperties: include, 
+                    take: take, 
+                    skip: skip, 
+                    filter: activated ? (u => u.IsEmailActivated && u.Id != userId) : (u => u.Id != userId)
+                );
+
                 return mapper.Map<List<User>,List<UserDisplayDto>>(users.ToList());
             })
             .Description("gets all users");

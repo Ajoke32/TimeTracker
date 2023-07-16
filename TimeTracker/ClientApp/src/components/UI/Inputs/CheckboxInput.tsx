@@ -1,20 +1,35 @@
-﻿import { CheckboxInputProps, Permissions } from "./InputProps";
+﻿import { CheckboxInputProps } from "./InputProps";
 import { Checkbox } from "../Checkboxes";
 
-export const CheckboxInput = ({ title, options, selected, setSelected, values }: CheckboxInputProps) => {
+export const CheckboxInput = ({ title, options, values, selected, setSelected, isMultipleChoice }: CheckboxInputProps) => {
+    const handleCheckboxChange = (value: number, checked: boolean) => {
+        const updatedValue = isMultipleChoice ? (checked ? (selected | value) : (selected & ~value)) : (checked ? value : 0);
 
-   
+        setSelected(updatedValue);
+    };
 
     return (
         <div className="checkbox-input__wrapper">
-            <div className="checkbox-input__title-wrapper"><span>{title}</span></div>
-            {options.map((option) => (
-                <div className="checkbox-input__wrapper-inner" key={option.toFixed()}>
+            <div className="checkbox-input__title-wrapper">
+                <span>{title}</span>
+            </div>
+            <div className="checkbox-input__wrapper-inner">
+                {options.map((option) => {
+                    const isChecked = (selected & option) === option;
 
-                    <Checkbox isMultipleChoice={true} key={option + 1} value={option} selected={selected} setSelected={setSelected} optionName={values[option]}/>
-
-                </div>
-            ))}
+                    return (
+                        <div className="checkbox-wrapper" key={option.toFixed()}>
+                            <Checkbox
+                                key={option + 1}
+                                value={option}
+                                isChecked={isChecked}
+                                optionName={values[option]}
+                                onChange={handleCheckboxChange}
+                            />
+                        </div>
+                    );
+                })}
+            </div>
         </div>
     );
 };

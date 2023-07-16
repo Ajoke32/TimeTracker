@@ -1,11 +1,9 @@
 import { useAppDispatch } from "../../hooks";
 import { useState } from 'react';
-import { TextInput, CheckboxInput, SmallButton } from "../UI";
+import { TextInput, CheckboxInput, SmallButton, StepsElement, RangeInput } from "../UI";
 import { useForm, SubmitHandler } from 'react-hook-form';
-import StepsElement from "../UI/Misc/StepsElement";
-import "./AddUserForms.css";
 import { userAdd } from "../../redux";
-import {RangeInput} from "../UI/Inputs/RangeInput";
+import "./AddUserForms.css";
 
 type Inputs = {
     firstName: string,
@@ -37,7 +35,6 @@ interface AddUserFormProps {
 
 export const AddUserForm = ({ onNextStep }: AddUserFormProps) => {
     const dispatch = useAppDispatch();
-    const radioOptions: number[] = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
     const [checkedOptions, setCheckedOptions] = useState<number>(0);
     const [hoursPerMonthValue, setHoursPerMonthValue] = useState<number>(100);
     
@@ -58,7 +55,6 @@ export const AddUserForm = ({ onNextStep }: AddUserFormProps) => {
     const onSubmit: SubmitHandler<Inputs> = (data) => {
         data.permissions = checkedOptions;
         data.hoursPerMonth = parseInt((hoursPerMonthValue).toString())
-        reset();
         onNextStep(dispatch(userAdd(data)).type);
         reset();
     }
@@ -80,18 +76,16 @@ export const AddUserForm = ({ onNextStep }: AddUserFormProps) => {
                     register={register("email", { required: "Email name can't be empty!" })}
                     errors={errors.email} />
 
-                {/*<RadioButton title="Select working hours percentage:" options={radioOptions}
-                    name="hoursPerMonth"
-                    register={register("hoursPerMonth")} />*/}
-
-                <RangeInput title="Select working hours %:" minRange={25} maxRange={100} step={5} value={hoursPerMonthValue} register={register("hoursPerMonth")} onChange={setHoursPerMonthValue}/>
+                <RangeInput title="Select working hours %:" minRange={25} maxRange={100} step={5} value={hoursPerMonthValue} onChange={setHoursPerMonthValue}/>
 
                 <CheckboxInput title="Select user permissions:" options={options}
                     register={register('permissions')}
                     selected={checkedOptions}
                     setSelected={setCheckedOptions}
-                    values={Permissions} />
-                <SmallButton type="submit" value="Add user" />
+                    values={Permissions}
+                    isMultipleChoice={true}
+                />
+                <SmallButton type="submit" value="Add user"/>
             </form>
         </div>
     );

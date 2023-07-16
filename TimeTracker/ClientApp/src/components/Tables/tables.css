@@ -30,7 +30,7 @@
 .approvers-table__table tbody tr {
     display: grid;
     grid-template-columns: .5fr 2.5fr 1fr;
-    grid-template-rows: 7vh;
+    grid-template-rows: 4rem;
     grid-column-gap: 0;
     grid-row-gap: 0;
 }
@@ -39,7 +39,7 @@
 .users-table__table tbody tr {
     display: grid;
     grid-template-columns: .5fr repeat(2, 2fr) repeat(3, 1fr);
-    grid-template-rows: 7vh;
+    grid-template-rows: 4.5rem;
     grid-column-gap: 0;
     grid-row-gap: 0;
 }
@@ -57,7 +57,7 @@
 }
 
 thead {
-    padding: 0 .5em 0 0;
+    padding: 0 .5rem 0 0;
     background: var(--color-background-grey);
     border-radius: 2vh;
 }
@@ -75,7 +75,7 @@ thead tr th {
 }
 
 tbody::-webkit-scrollbar {
-    width: .5em;
+    width: .5rem;
 }
 
 tbody::-webkit-scrollbar-thumb {
@@ -157,7 +157,7 @@ tbody::-webkit-scrollbar-thumb:hover {
     height: 100%;
 }
 
-.users-table__actions-wrapper button {
+.users-table__actions-wrapper > div > button {
     height: 100%;
     border: none;
     width: 100%;
@@ -166,7 +166,7 @@ tbody::-webkit-scrollbar-thumb:hover {
 
 .users-table__actions-edit {
     display: flex;
-    background: url("../../../assets/images/edit_user_icon.png");
+    background: url("../../assets/images/edit_user_icon.png");
     background-size: contain;
     background-position: center center;
     background-repeat: no-repeat;
@@ -174,7 +174,7 @@ tbody::-webkit-scrollbar-thumb:hover {
 
 .users-table__actions-archieve {
     display: flex;
-    background: url("../../../assets/images/archieve_user_icon.png");
+    background: url("../../assets/images/archieve_user_icon.png");
     background-size: contain;
     background-position: center center;
     background-repeat: no-repeat;

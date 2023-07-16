@@ -5,38 +5,27 @@ interface CheckboxProps {
     value: number;
     optionName: string | number | boolean | null;
     selected?: number,
+    isChecked: boolean,
     setSelected?: (value: number) => void
-    isMultipleChoice: boolean,
-
     onChange?: (value: number, checked: boolean) => void;
 }
 
-export const Checkbox: React.FC<CheckboxProps> = ({
-      value, 
-      selected = 0, 
-      setSelected = () => {}, 
-      onChange = () => {},
-      optionName, 
-      isMultipleChoice, 
-    }: CheckboxProps) => {
+export const Checkbox = ({value, isChecked = false, optionName, onChange = () => {}}: CheckboxProps) => {
     const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const { value, checked } = event.target;
-
-        if (isMultipleChoice) {
-            if (checked) {
-                setSelected(selected += Number(value));
-            } else {
-                setSelected(selected -= Number(value));
-            }
-        } else {
-            onChange(Number(value), checked);
-        }
+        const { checked } = event.target;
+        onChange(value, checked);
     };
 
     return (
         <div className="checkbox-wrapper" key={value}>
             <label className="checkbox-inner">
-                <input key={value} type="checkbox" value={value} onChange={handleCheckboxChange}/>
+                <input
+                    key={value}
+                    type="checkbox"
+                    value={value}
+                    checked={isChecked}
+                    onChange={handleCheckboxChange}
+                />
                 <div className="checkbox-checkmark" />
                 <span>{optionName}</span>
             </label>

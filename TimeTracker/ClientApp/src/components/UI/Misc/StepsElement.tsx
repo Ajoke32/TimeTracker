@@ -6,7 +6,7 @@ interface StepsElementProps {
     currentStep: number;
 }
 
-const StepsElement = ({title, currentStep} : StepsElementProps) => {
+export const StepsElement = ({title, currentStep} : StepsElementProps) => {
     return (
         <div className="steps-element__wrapper">
             <span className="steps-element__title">{title}</span>
@@ -17,5 +17,3 @@ const StepsElement = ({title, currentStep} : StepsElementProps) => {
         </div>
     );
 };
-
-export default StepsElement;
