@@ -2,8 +2,8 @@ import { combineEpics, Epic } from "redux-observable";
 import { catchError } from "rxjs";
 import { userLoginEpic } from './auth'
 import { addUserEpic, passwordConfirmEpic, userVerifyEpic } from './user'
-import {fetchUsersEpic} from "./users";
-import {addApproversEpic} from "./approvers";
+import { fetchUsersEpic } from "./users";
+import { addApproversEpic, fetchApproversEpic } from "./approvers";
 
 export const rootEpic: Epic = (action$, store$, dependencies) =>
     combineEpics(
@@ -12,7 +12,8 @@ export const rootEpic: Epic = (action$, store$, dependencies) =>
         passwordConfirmEpic,
         userVerifyEpic,
         fetchUsersEpic,
-        addApproversEpic
+        addApproversEpic,
+        fetchApproversEpic
     )
         (action$, store$, dependencies).pipe(
             catchError((error, source) => {

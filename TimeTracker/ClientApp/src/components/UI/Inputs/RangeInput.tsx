@@ -6,7 +6,6 @@ export const RangeInput = ({title, minRange, maxRange, step, value, onChange }: 
     const rangeInputValues = [];
     for (let i = minRange; i <= maxRange; i += step) {
         rangeInputValues.push(i);
-        console.log(value);
     }
     
     const handleRangeInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +28,15 @@ export const RangeInput = ({title, minRange, maxRange, step, value, onChange }: 
                 <input type="range" min={minRange} max={maxRange} step={step} value={value} onChange={handleRangeInputChange}/>
                 <div className="range-input__values-wrapper">
                     {rangeInputValues.map((val) => (
-                        <div key={val} className={`range-input__values-inner ${val === value ? "chosenValue" : ""}`}><button type="button" onClick={handleButtonClick} value={val}>{val}</button></div>
+                        <div key={val} className={`range-input__values-inner ${val === value ? "chosenValue" : ""}`}>
+                            <button 
+                                type="button" 
+                                onClick={handleButtonClick} 
+                                value={val}
+                            >
+                                {val}
+                            </button>
+                        </div>
                     ))}
                 </div>
             </div>

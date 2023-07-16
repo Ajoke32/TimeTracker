@@ -1,6 +1,6 @@
 import { AjaxQuery } from './query';
-import {QueryStructure, User} from '../intrerfaces';
-import { UserAddType } from '../types'
+import { QueryStructure, User } from '../intrerfaces';
+import { UserAddType, FetchApproversType } from '../types'
 import { ReadCookie } from '../../utils';
 
 
@@ -29,20 +29,44 @@ export function UserVerifyQuery(token: string) {
     )
 }
 
-export function PasswordConfirmQuery(data:{token: string, password: string}) {
+export function PasswordConfirmQuery(data: { token: string, password: string }) {
+    const { token, password } = data;
     return AjaxQuery<QueryStructure<{ userQuery: { verifyUser: boolean } }>>(
-        `mutation Verify($token: String!, $password: String!){ userMutation {verifyUser(token: $token, password: $password)} }`,
+        `mutation Verify($token: String!, $password: String!) {
+            userMutation {
+              verifyUser(token: $token, password: $password)
+            }
+          }`,
         {
-            token: data.token,
-            password: data.password
+            token: token,
+            password: password
         },
     )
 
 }
 
-export function FetchUsers(){
-
-    return AjaxQuery<QueryStructure<{userQuery:{users:User[]}}>>(
-      'query{userQuery{users{id,email,workType,firstName,lastName}}}'
+export function FetchUsersQuery(data: FetchApproversType) {
+    const { take, skip, activated, userId } = data;
+    return AjaxQuery<QueryStructure<{ userQuery: { users: User[] } }>>(
+        `query GetUsers($take: Int, $skip: Int, $activated: Boolean!, $userId: Int) {
+        userQuery {
+          users(take: $take, skip: $skip, onlyActivated: $activated, userId: $userId) {
+            id
+            email
+            workType
+            firstName
+            lastName
+            isEmailActivated
+            vacationDays
+            hoursPerMonth
+          }
+        }
+      }`,
+        {
+            take: take,
+            skip: skip,
+            activated: activated,
+            userId: userId
+        },
     );
 }

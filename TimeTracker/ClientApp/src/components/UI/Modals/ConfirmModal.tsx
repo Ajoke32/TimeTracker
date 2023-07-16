@@ -1,35 +1,40 @@
-﻿import React, { useState } from 'react';
+﻿import React, {useState} from 'react';
 import "./modals.css"
+import {SmallButton} from "../";
 
-const Modal = () => {
+interface ConfirmModalProps {
+    title: string,
+    description: string,
+    onConfirm: (value : any) => void
+    value: any,
+}
+
+export const ConfirmModal = ({title, description, onConfirm, value} : ConfirmModalProps) => {
     const [isOpen, setIsOpen] = useState(false);
-
-    const handleOpenModal = () => {
-        setIsOpen(true);
-        document.body.style.overflow = 'hidden'; // Prevent scrolling of background content
-    };
-
-    const handleCloseModal = () => {
-        setIsOpen(false);
-        document.body.style.overflow = 'auto'; // Restore scrolling of background content
-    };
+    const handleConfirm = () => {
+        onConfirm(value);
+        handleOpenCloseModal();
+    }
+    
+    const handleOpenCloseModal = () => {
+        setIsOpen(!isOpen);
+    }
+    
+    
 
     return (
-        <div>
-            <button onClick={handleOpenModal}>Open Modal</button>
-            {isOpen && (
-                <div className="modal-overlay">
-                    <div className="modal">
-                        <div className="modal-content">
-                            <h2>Modal Title</h2>
-                            <p>Modal content goes here...</p>
-                            <button onClick={handleCloseModal}>Close</button>
-                        </div>
+        <div className="modal-wrapper">
+            <button  type="button" className="modal-open-close__btn"  onClick={handleOpenCloseModal}></button>
+            <div className="modal-window__wrapper" style={isOpen ? {display: 'flex'} : {display: 'none'}}>
+                <div className="modal-window__content">
+                    <h2>{title}</h2>
+                    <p>{description}</p>
+                    <div className="modal-btn__wrapper">
+                        <SmallButton type="submit" value="Yes" handleClick={handleConfirm}/>
+                        <SmallButton type="submit" value="Cancel" handleClick={handleOpenCloseModal}/>
                     </div>
                 </div>
-            )}
+            </div>
         </div>
     );
 };
-
-export default Modal;

@@ -1,7 +1,10 @@
 ﻿import "./Header.css"
-import ProfileAvatar from "../UI/Misc/ProfileAvatar";
+import { ProfileAvatar } from "../UI";
+import { useTypedSelector } from "../../hooks";
 
 export const Header = () => {
+    const authState = useTypedSelector(state => state.auth);
+
     return (
         <header className="header">
             <div className="header-profile__wrapper">
@@ -12,10 +15,10 @@ export const Header = () => {
                 </div>
 
                 <div className="header-profile__name">
-                    <span>John Doe</span>
+                    <span>{`${authState.user?.firstName} ${authState.user?.lastName}`}</span>
                 </div>
 
-                <ProfileAvatar initials="JD"/>
+                <ProfileAvatar initials={`${authState.user?.firstName[0]}${authState.user?.lastName[0]}`}/>
             </div>
         </header>
 

@@ -1,7 +1,7 @@
 ﻿.heading-text__h1 {
     color: var(--color-cyan);
     text-align: center;
-    font-size: 48px;
+    font-size: 3rem;
     font-family: var(--font-header);
     font-style: normal;
     font-weight: 700;
@@ -11,7 +11,7 @@
 .heading-text__h2 {
     color: var(--color-blue);
     text-align: center;
-    font-size: 40px;
+    font-size: 2.5rem;
     font-family: var(--font-header);
     font-style: normal;
     font-weight: 600;
@@ -21,7 +21,7 @@
 .heading-text__h3 {
     color: var(--color-red);
     text-align: center;
-    font-size: 32px;
+    font-size: 2rem;
     font-family: var(--font-header);
     font-style: normal;
     font-weight: 600;
@@ -31,7 +31,7 @@
 .heading-text__h4 {
     color: var(--color-black);
     text-align: center;
-    font-size: 24px;
+    font-size: 1.5rem;
     font-family: var(--font-header);
     font-style: normal;
     font-weight: 600;
@@ -41,7 +41,7 @@
 .heading-text__h5 {
     color: var(--color-red);
     text-align: center;
-    font-size: 16px;
+    font-size: 1rem;
     font-family: var(--font-header);
     font-style: normal;
     font-weight: 600;
@@ -51,14 +51,14 @@
 @media screen and (max-width: 640px) {
 
     .heading-text__h1 {
-        font-size: 40px;
+        font-size: 2rem;
     }
     
     .heading-text__h2 {
-        font-size: 32px;
+        font-size: 1.5rem;
     }
     
     .heading-text__h3 {
-        font-size: 24px;
+        font-size: 1.2rem;
     }
 }
