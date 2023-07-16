@@ -18,7 +18,7 @@ export const addUserEpic: Epic = (action: Observable<PayloadAction<UserAddType>>
                         return userAddSuccess(resp.response.data.userMutation.create);
                     }),
                     catchError((e: Error) => {
-                        return of(userAddFail("unexpected error"))
+                        return of(userAddFail("Unexpected error"))
                     })
                 ),
         )
@@ -41,7 +41,7 @@ export const userVerifyEpic: Epic = (action: Observable<PayloadAction<string>>, 
                     }),
                     catchError((e: Error) => {
                         console.log(e);
-                        return of(verifyFail("unexpected error"))
+                        return of(verifyFail("Unexpected error"))
                     })
                 ),
         )
@@ -64,7 +64,7 @@ export const passwordConfirmEpic: Epic = (action: Observable<PayloadAction<{ tok
                     }),
                     catchError((e: Error) => {
                         console.log(e);
-                        return of(verifyFail("unexpected error"))
+                        return of(verifyFail("Unexpected error"))
                     })
                 ),
         )

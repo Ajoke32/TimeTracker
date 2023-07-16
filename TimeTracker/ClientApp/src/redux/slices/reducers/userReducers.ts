@@ -6,9 +6,9 @@ export const addReducer = (state: UserSliceState, action: PayloadAction<UserAddT
     state.loading = true;
 }
 
-export const addSuccessReducer = (state: UserSliceState,action:PayloadAction<number>) => {
+export const addSuccessReducer = (state: UserSliceState, action: PayloadAction<number>) => {
     state.loading = false;
-    state.userId=action.payload;
+    state.userId = action.payload;
 }
 
 export const addFailReducer = (state: UserSliceState, action: PayloadAction<string>) => {
@@ -21,7 +21,7 @@ export const emailVerifyReducer = (state: UserSliceState, action: PayloadAction<
     state.error = "";
 }
 
-export const userVerifyReducer = (state: UserSliceState, action: PayloadAction<{token: string, password: string}>) => {
+export const userVerifyReducer = (state: UserSliceState, action: PayloadAction<{ token: string, password: string }>) => {
     state.loading = true;
     state.error = "";
 }

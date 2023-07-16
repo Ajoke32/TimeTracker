@@ -30,8 +30,8 @@ export const ConfirmModal = ({title, description, onConfirm, value} : ConfirmMod
                     <h2>{title}</h2>
                     <p>{description}</p>
                     <div className="modal-btn__wrapper">
-                        <SmallButton type="submit" value="Yes" onClick={handleConfirm}/>
-                        <SmallButton type="submit" value="Cancel" onClick={handleOpenCloseModal}/>
+                        <SmallButton type="submit" value="Yes" handleClick={handleConfirm}/>
+                        <SmallButton type="submit" value="Cancel" handleClick={handleOpenCloseModal}/>
                     </div>
                 </div>
             </div>

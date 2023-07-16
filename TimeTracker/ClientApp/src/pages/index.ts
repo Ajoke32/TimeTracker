@@ -5,4 +5,5 @@ export * from './Structure/Layout';
 export * from './AddUserPage/AddUser';
 export * from './UserVerifyPage/UserVerify'
 export * from './EditUserPage/EditUser'
+export * from './TeamPage/Team'
 

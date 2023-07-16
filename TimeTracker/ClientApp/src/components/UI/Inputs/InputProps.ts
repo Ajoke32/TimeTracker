@@ -37,6 +37,5 @@ export interface RangeInputProps {
     maxRange: number,
     step: number,
     value: number,
-    register: any,
     onChange: any;
 }

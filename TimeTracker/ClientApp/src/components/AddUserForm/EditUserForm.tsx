@@ -76,7 +76,7 @@ const EditUserForm = (user : UserAddType) => {
                     name="hoursPerMonth"
                     register={register("hoursPerMonth")} />*/}
 
-                <RangeInput title="Select working hours %:" minRange={25} maxRange={100} step={5} value={hoursPerMonthValue} register={register("hoursPerMonth")} onChange={setHoursPerMonthValue}/>
+                <RangeInput title="Select working hours %:" minRange={25} maxRange={100} step={5} value={hoursPerMonthValue} onChange={setHoursPerMonthValue}/>
 
                 <CheckboxInput 
                     title="Select user permissions:" 
