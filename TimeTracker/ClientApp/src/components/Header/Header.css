@@ -72,3 +72,14 @@
     border: 3px solid var(--color-cyan);
     border-radius: 100%;
 }
+
+.header .profile-avatar__wrapper {
+    width: 5vh;
+    height: 5vh;
+
+    border: 2px solid var(--color-cyan);
+}
+
+.header .profile-avatar__wrapper span {
+    font-size: 1.2em;
+}
