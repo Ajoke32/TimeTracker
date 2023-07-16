@@ -1,13 +1,13 @@
-﻿import React, {useState} from 'react';
-import {User} from "../../../redux";
-import ProfileAvatar from "../Misc/ProfileAvatar";
+﻿import React, { useState } from 'react';
+import { User } from "../../redux";
+import { ProfileAvatar } from "../UI";
+import { Dropdown } from "../UI";
+import { SearchInput } from "../UI";
+import { LargeButton } from "../UI";
+import { ConfirmModal } from "../UI/Modals/ConfirmModal";
 import "./tables.css"
-import { Dropdown } from "../Dropdowns";
-import { SearchInput } from "../Inputs";
-import { LargeButton } from "../Buttons";
-import { ConfirmModal } from "../Modals/ConfirmModal";
 
-const UsersTable = ({users} : {users: User[]}) => {
+export const UsersTable = ({users} : {users: User[]}) => {
     const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
     const [showModal, setShowModal] = useState(false);
 
@@ -102,5 +102,3 @@ const UsersTable = ({users} : {users: User[]}) => {
         </div>
     );
 };
-
-export default UsersTable;

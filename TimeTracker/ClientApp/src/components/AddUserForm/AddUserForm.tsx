@@ -1,11 +1,9 @@
 import { useAppDispatch } from "../../hooks";
 import { useState } from 'react';
-import { TextInput, CheckboxInput, SmallButton } from "../UI";
+import { TextInput, CheckboxInput, SmallButton, StepsElement, RangeInput } from "../UI";
 import { useForm, SubmitHandler } from 'react-hook-form';
-import StepsElement from "../UI/Misc/StepsElement";
-import "./AddUserForms.css";
 import { userAdd } from "../../redux";
-import {RangeInput} from "../UI/Inputs/RangeInput";
+import "./AddUserForms.css";
 
 type Inputs = {
     firstName: string,

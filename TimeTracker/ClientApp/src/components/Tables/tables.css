@@ -166,7 +166,7 @@ tbody::-webkit-scrollbar-thumb:hover {
 
 .users-table__actions-edit {
     display: flex;
-    background: url("../../../assets/images/edit_user_icon.png");
+    background: url("../../assets/images/edit_user_icon.png");
     background-size: contain;
     background-position: center center;
     background-repeat: no-repeat;
@@ -174,7 +174,7 @@ tbody::-webkit-scrollbar-thumb:hover {
 
 .users-table__actions-archieve {
     display: flex;
-    background: url("../../../assets/images/archieve_user_icon.png");
+    background: url("../../assets/images/archieve_user_icon.png");
     background-size: contain;
     background-position: center center;
     background-repeat: no-repeat;

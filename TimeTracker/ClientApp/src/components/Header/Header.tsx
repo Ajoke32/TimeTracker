@@ -1,5 +1,5 @@
 ﻿import "./Header.css"
-import ProfileAvatar from "../UI/Misc/ProfileAvatar";
+import { ProfileAvatar } from "../UI";
 
 export const Header = () => {
     return (

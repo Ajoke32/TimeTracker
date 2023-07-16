@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
-import StepsElement from "../UI/Misc/StepsElement";
-import ApproversTable from "../UI/Tables/ApproversTable";
+import {ApproversTable} from "../Tables";
 import {User} from "../../redux";
+import {SmallButton, StepsElement} from "../UI";
 import "./AddUserForms.css"
-import {SmallButton} from "../UI";
 
 const AddApproversForm = () => {
     const username = "John Doe";

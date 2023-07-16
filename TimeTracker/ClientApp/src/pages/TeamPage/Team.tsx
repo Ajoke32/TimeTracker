@@ -1,9 +1,7 @@
 ﻿import "./Team.css"
-import { H4, LargeButton } from "../../components";
-import { Dropdown } from "../../components/UI/Dropdowns";
-import { SearchInput } from "../../components/UI/Inputs";
+import { H4 } from "../../components";
 import { useDispatch } from "react-redux";
-import UsersTable from "../../components/UI/Tables/UsersTable";
+import { UsersTable } from "../../components/Tables";
 import {User} from "../../redux";
 
 

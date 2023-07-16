@@ -1,18 +1,17 @@
 import React from 'react';
-import {User} from "../../../redux";
-import ProfileAvatar from "../Misc/ProfileAvatar";
-import {Checkbox} from "../Checkboxes";
+import {User} from "../../redux";
+import {ProfileAvatar} from "../UI";
+import {Checkbox} from "../UI";
 import {useState} from "react";
 import "./tables.css"
-import {SearchInput} from "../Inputs/SearchInput";
-import {SmallButton} from "../Buttons";
+import {SearchInput} from "../UI";
 
 interface ApproversTableProps {
     users: User[],
     onChange: (approvers: Number[]) => void,
 }
 
-const ApproversTable = ({users, onChange} : ApproversTableProps) => {
+export const ApproversTable = ({users, onChange} : ApproversTableProps) => {
     const [approvers, setApprovers] = useState<Number[]>([]);
     const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
 
@@ -74,5 +73,3 @@ const ApproversTable = ({users, onChange} : ApproversTableProps) => {
         </div>
     );
 };
-
-export default ApproversTable;
