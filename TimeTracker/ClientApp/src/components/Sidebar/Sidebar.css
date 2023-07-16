@@ -123,14 +123,14 @@
     
     .sidebar-list__image-wrapper {
         margin: 0;
-        width: 32px;
-        height: 32px;
+        width: 2rem;
+        height: 2rem;
     }
 }
 
 @media screen and (min-width: 840px) and (max-width: 1080px) {
     .sidebar-list__link span {
-        font-size: 12px;
+        font-size: .75rem;
     }
     
     .sidebar-list__link {

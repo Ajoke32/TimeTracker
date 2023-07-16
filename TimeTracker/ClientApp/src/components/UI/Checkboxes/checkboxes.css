@@ -27,8 +27,8 @@
     position: relative;
     top: 0;
     left: 0;
-    height: 1.3em;
-    width: 1.3em;
+    height: 1.3rem;
+    width: 1.3rem;
     background-color: var(--color-white);
     border: 1px solid var(--color-stroke-gray);
     border-radius: 5px;
@@ -59,10 +59,10 @@
 }
 
 .checkbox-inner .checkbox-checkmark:after {
-    left: 0.45em;
-    top: 0.25em;
-    width: 0.25em;
-    height: 0.5em;
+    left: 0.45rem;
+    top: 0.25rem;
+    width: 0.25rem;
+    height: 0.5rem;
     border: solid var(--color-white);
     border-width: 0 0.15em 0.15em 0;
     transform: rotate(45deg);
