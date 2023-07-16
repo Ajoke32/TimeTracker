@@ -15,6 +15,7 @@ export interface VacationInputType{
 }
 
 export interface UserApprover{
+    id:number,
     user:User,
     approver:User,
     isApproved:boolean

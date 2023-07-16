@@ -34,7 +34,6 @@ public sealed class VacationMutations:ObjectGraphType
             });
 
         Field<VacationType>("updateState")
-            .Argument<bool>("state",nullable:true)
             .Argument<int>("id")
             .ResolveAsync(async _ =>
             {
@@ -43,13 +42,19 @@ public sealed class VacationMutations:ObjectGraphType
 
                 var vacation = await uow.GenericRepository<Vacation>()
                     .FindAsync(v => v.Id == id);
+                
                 if (vacation == null)
                 {
-                    throw new Exception("vacation not found");
+                    throw new ArgumentException("vacation not exist");
                 }
 
-                vacation.VacationState = state;
+                var user = await uow.GenericRepository<User>()
+                    .FindAsync(u => u.Id == vacation.UserId,relatedData:"Approvers");
+
+                vacation.VacationState = IsVacationConfirmed(user!.Approvers);
+                
                 var updated = await uow.GenericRepository<Vacation>().UpdateAsync(vacation);
+                
                 await uow.SaveAsync();
 
                 return updated;
@@ -66,5 +71,11 @@ public sealed class VacationMutations:ObjectGraphType
                 await uow.SaveAsync();
                 return updated;
             });
+    }
+
+
+    private bool IsVacationConfirmed(IEnumerable<UserApprover> userApprovers)
+    {
+        return userApprovers.All(userApprover => userApprover.IsApproved);
     }
 } 

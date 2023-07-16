@@ -15,6 +15,9 @@ export const VacationsRequestTable = () => {
         dispatch(fetchRequests(userId!))
     },[])
 
+    function approve(id:number,state:boolean){
+
+    }
 
     return (
         <div style={{display:"flex",justifyContent:"center"}}>
@@ -28,18 +31,24 @@ export const VacationsRequestTable = () => {
                      </tr>
                     </thead>
                     <tbody>
-                        <tr>
                         {requests.map(r=>{
-                            return <>
+                            return <tr>
                                 <td style={{padding:"5px",border:"1px solid black"}} key={r.user.id}>{r.user.firstName}</td>
-                                <td style={{padding:"5px",border:"1px solid black"}} key={`${r.user.id}-2`}>{r.isApproved?"approved":"not approved"}</td>
-                                <td style={{padding:"5px",border:"1px solid black"}}>
-                                    <button>Approve</button>
-                                    <button style={{marginLeft:"5px"}}>Decline</button>
+                                <td style={{padding:"5px",border:"1px solid black"}} key={`${r.user.id}-2`}>
+                                    {r.isApproved?"approved":"not approved"}
                                 </td>
-                            </>
+                                <td style={{padding:"5px",border:"1px solid black"}}>
+                                    <button onClick={()=>{
+                                        approve(r.id,true);
+                                    }}>Approve</button>
+
+                                    <button style={{marginLeft:"5px"}} onClick={()=>{
+                                        approve(r.id,false);
+                                    }}>Decline
+                                    </button>
+                                </td>
+                            </tr>
                         })}
-                        </tr>
                     </tbody>
                 </table>
             }
