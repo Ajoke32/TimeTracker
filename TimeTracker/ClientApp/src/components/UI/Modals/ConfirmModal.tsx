@@ -1,25 +1,37 @@
-﻿import React from 'react';
+﻿import React, {useState} from 'react';
 import "./modals.css"
-import {SmallButton} from "../Buttons";
+import {SmallButton} from "../";
 
 interface ConfirmModalProps {
     title: string,
     description: string,
-    onConfirm: () => void
-    onCancel: () => void,
+    onConfirm: (value : any) => void
+    value: any,
 }
 
-export const ConfirmModal = ({title="WARNING", description, onConfirm, onCancel} : ConfirmModalProps) => {
+export const ConfirmModal = ({title, description, onConfirm, value} : ConfirmModalProps) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const handleConfirm = () => {
+        onConfirm(value);
+        handleOpenCloseModal();
+    }
+    
+    const handleOpenCloseModal = () => {
+        setIsOpen(!isOpen);
+    }
+    
+    
 
     return (
-        <div>
-            <div className="confirm-modal__wrapper">
-                <div className="confirm-modal__content">
+        <div className="modal-wrapper">
+            <button  type="button" className="modal-open-close__btn"  onClick={handleOpenCloseModal}></button>
+            <div className="modal-window__wrapper" style={isOpen ? {display: 'flex'} : {display: 'none'}}>
+                <div className="modal-window__content">
                     <h2>{title}</h2>
                     <p>{description}</p>
-                    <div className="confirm-modal__btn-wrapper">
-                        <SmallButton type="submit" value="YES" onClick={onConfirm}/>
-                        <SmallButton type="submit" value="Cancel" onClick={onCancel}/>
+                    <div className="modal-btn__wrapper">
+                        <SmallButton type="submit" value="Yes" onClick={handleConfirm}/>
+                        <SmallButton type="submit" value="Cancel" onClick={handleOpenCloseModal}/>
                     </div>
                 </div>
             </div>

@@ -30,6 +30,7 @@ th {
 p, input, a, button, span, option, select {
     font-family: var(--font-text);
     font-weight: 500;
+    font-size: 1rem;
     color: var(--color-black);
     
 }
@@ -37,6 +38,7 @@ p, input, a, button, span, option, select {
 label {
     font-family: var(--font-text);
     font-weight: 500;
+    font-size: 1rem;
     color: var(--color-black);
 }
 

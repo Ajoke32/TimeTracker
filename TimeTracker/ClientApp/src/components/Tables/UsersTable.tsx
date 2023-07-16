@@ -1,16 +1,11 @@
 ﻿import React, { useState } from 'react';
 import { User } from "../../redux";
-import { ProfileAvatar } from "../UI";
-import { Dropdown } from "../UI";
-import { SearchInput } from "../UI";
-import { LargeButton } from "../UI";
-import { ConfirmModal } from "../UI/Modals/ConfirmModal";
+import { ProfileAvatar, Dropdown, SearchInput, LargeButton, ConfirmModal } from "../UI";
 import "./tables.css"
 
 export const UsersTable = ({users} : {users: User[]}) => {
     const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
-    const [showModal, setShowModal] = useState(false);
-
+    
     const handleSearch = (searchValue: string) => {
         const filtered = users.filter(
             (user) =>
@@ -21,8 +16,10 @@ export const UsersTable = ({users} : {users: User[]}) => {
         setFilteredUsers(filtered);
     };
 
-    const handleModalButtonClick = () => {
-        setShowModal(!showModal);
+    const handleConfirmButtonClick = (value: number) => {
+        setFilteredUsers((users) =>
+            users.filter((user) => user.id !== value)
+        );
     };
     
     
@@ -57,6 +54,7 @@ export const UsersTable = ({users} : {users: User[]}) => {
 
                     <tbody>
                     {filteredUsers.map((user) => (
+                        
                         <tr key={user.id}>
                             <td>
                                 <ProfileAvatar initials={`${user.firstName[0]}${user.lastName[0]}`}/>
@@ -77,21 +75,17 @@ export const UsersTable = ({users} : {users: User[]}) => {
                                 <div className="users-table__actions-wrapper">
                                     <div className="users-table__actions-edit">
                                         <button>
-                                            
                                         </button>
                                     </div>
                                     <div className="users-table__actions-archieve">
-                                        <button  onClick={handleModalButtonClick}>
-                                            {showModal && (
-                                                <ConfirmModal
-                                                    title="WARNING"
-                                                    description={`Are you sure you want to deactivate ${user.firstName} ${user.lastName}?`}
-                                                    onCancel={() => setShowModal(false)}
-                                                    onConfirm={() => console.log('user removed')}
-                                                />
-                                            )}
-                                        </button>
+                                            <ConfirmModal
+                                                title="CONFIRM"
+                                                description={`Are you sure you want to deactivate ${user.firstName} ${user.lastName}?`}
+                                                value={user.id}
+                                                onConfirm={handleConfirmButtonClick}
+                                            />
                                     </div>
+                                        
                                 </div>
                             </td>
                         </tr>
@@ -99,6 +93,7 @@ export const UsersTable = ({users} : {users: User[]}) => {
                     </tbody>
                 </table>
             </div>
+            
         </div>
     );
 };

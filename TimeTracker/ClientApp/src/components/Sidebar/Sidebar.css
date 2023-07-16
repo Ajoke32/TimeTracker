@@ -1,5 +1,5 @@
 ﻿.sidebar-list {
-    margin-top: 6vh;
+    margin-top: 3.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -21,8 +21,8 @@
 
 .sidebar-list li {
     width: 80%;
-    height: 4vh;
-    padding: 3vh;
+    height: 3rem;
+    padding: 2rem;
     margin-bottom: 2vh;
     border-radius: 10px;
     cursor: pointer;

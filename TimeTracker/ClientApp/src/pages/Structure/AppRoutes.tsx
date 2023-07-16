@@ -12,9 +12,6 @@ export const AppRoutes = () => {
     <Routes>
       {useTypedSelector((state) => state.auth.status) ? (
         <>
-        </>
-      ) : (
-        <>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="/team" element={<Team />} />
@@ -22,6 +19,9 @@ export const AppRoutes = () => {
             <Route path="*" element={<Navigate to="/" />} />
             <Route path="/edit" element={<EditUser/>} />
           </Route>
+        </>
+      ) : (
+        <>
           <Route path="/userVerify" element={<UserVerify />} />
           <Route path="/login" element={<Login />} />
           <Route path="/*" element={<Navigate to="/login" />} />
