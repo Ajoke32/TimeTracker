@@ -24,24 +24,7 @@ export const Sidebar = () => {
                             <span>Time Tracker</span>
                         </a>
                     </li>
-
-                    <li>
-                        <a href="/vacation/create" className="sidebar-list__link">
-                            <span>Create Vacation</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/vacations" className="sidebar-list__link">
-                            <span>My Vacations</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="/vacation/requests" className="sidebar-list__link">
-                            <span>Vacations requests</span>
-                        </a>
-                    </li>
-
+                    
                     <li>
                         <a href="" className="sidebar-list__link">
                             <div className="sidebar-list__image-wrapper"><div className="calendar-img__wrapper"></div></div>

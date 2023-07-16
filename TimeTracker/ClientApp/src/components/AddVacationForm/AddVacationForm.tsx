@@ -2,8 +2,8 @@ import React from 'react';
 import {Loader, SmallButton, TextInput} from "../UI";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {useAppDispatch, useTypedSelector} from "../../hooks";
-import {createVacation} from "../../redux";
 import {H5} from "../Headings";
+import {createVacation} from "../../redux/slices/vacationSlice";
 
 
 interface VacationInput{

@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {useAppDispatch, useTypedSelector} from "../../../hooks";
-import {fetchRequests} from "../../../redux";
 import {Loader} from "../Loaders";
+import {fetchRequests} from "../../../redux/slices/vacationSlice";
 
 export const VacationsRequestTable = () => {
 

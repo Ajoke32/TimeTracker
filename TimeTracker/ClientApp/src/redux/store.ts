@@ -2,7 +2,8 @@ import { configureStore } from '@reduxjs/toolkit'
 import { createEpicMiddleware } from 'redux-observable';
 import { user, auth, users } from './slices';
 import { rootEpic } from "./epics"
-import { approvers } from "./slices/approversSlice";
+import { approvers } from "./slices";
+import {vacation} from "./slices/vacationSlice";
 
 const middleware = createEpicMiddleware();
 
@@ -11,7 +12,8 @@ export const store = configureStore({
     auth: auth,
     user: user,
     users: users,
-    approvers: approvers
+    approvers: approvers,
+    vacations:vacation
   },
   middleware: [
     middleware
