@@ -8,7 +8,7 @@ export const Sidebar = () => {
     const dispatch = useDispatch();
 
     return (
-        <div>
+        <div className="sidebar-wrapper">
             <nav>
                 <ul className="sidebar-list">
                     <li>
@@ -31,7 +31,9 @@ export const Sidebar = () => {
                             <span>Calendar</span>
                         </a>
                     </li>
+
                     <Hr />
+
                     <li>
                         <a href="/team" className="sidebar-list__link">
                             <div className="sidebar-list__image-wrapper"><div className="team-img__wrapper"></div></div>
@@ -46,12 +48,12 @@ export const Sidebar = () => {
                         </a>
                     </li>
 
-                    <li>
-                        <button onClick={() => { dispatch(logout()); }} className="sidebar-list__link sidebar-logout__btn">
-                            <div className="sidebar-list__image-wrapper"><div className="logout-img__wrapper"></div></div>
-                            <span>Log out</span>
-                        </button>
-                    </li>
+                <li className="sidebar-list__logout-link">
+                    <button onClick={() => { dispatch(logout()); }} className="sidebar-list__link sidebar-logout__btn">
+                        <div className="sidebar-list__image-wrapper"><div className="logout-img__wrapper"></div></div>
+                        <span>Log out</span>
+                    </button>
+                </li>
                 </ul>
             </nav>
         </div>

@@ -22,7 +22,6 @@
 }
 
 .user-form__title {
-    margin-bottom: 1.5rem;
     font-weight: 600;
 }
 
@@ -35,8 +34,8 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    margin-top: 3.5rem;
     width: 100%;
+    margin-top: 3vh;
 }
 
 .user-form__btn-wrapper > div:last-child {
@@ -48,7 +47,7 @@
 }
 
 .user-form__btn-wrapper > a{
-    margin-right: 1.5rem;
+    margin-right: 2vh;
     text-align: center;
 }
 

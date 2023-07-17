@@ -34,13 +34,13 @@ export const AddUserSteps = () => {
         case 0:
             return (
                 <div className="user-form__wrapper">
-                    <AddUserForm onNextStep={handleNextStep}/>
+                    <AddApproversForm/>
                 </div>
             )
         default:
             return (
                 <div className="user-form__wrapper">
-                    <AddApproversForm/>
+                    <AddUserForm onNextStep={handleNextStep}/>
                 </div>
             )
     }

@@ -2,6 +2,7 @@ import { ReadCookie } from "./cookieManager";
 import { TokenStructure, User } from "../redux";
 import jwt_decode from 'jwt-decode';
 
+
 export const IsUserAuthenticated = (): boolean => {
     const userToken = ReadCookie('user');
 
