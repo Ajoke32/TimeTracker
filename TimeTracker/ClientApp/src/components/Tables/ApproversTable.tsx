@@ -1,18 +1,15 @@
-import React from 'react';
-import {User} from "../../redux";
-import {ProfileAvatar} from "../UI";
-import {Checkbox} from "../UI";
-import {useState} from "react";
+import { User } from "../../redux";
+import { ProfileAvatar, Checkbox, SearchInput } from "../UI";
+import { useState } from "react";
 import "./tables.css"
-import {SearchInput} from "../UI";
 
 interface ApproversTableProps {
     users: User[],
-    onChange: (approvers: Number[]) => void,
+    onChange: (approvers: number[]) => void,
 }
 
 export const ApproversTable = ({users, onChange} : ApproversTableProps) => {
-    const [approvers, setApprovers] = useState<Number[]>([]);
+    const [approvers, setApprovers] = useState<number[]>([]);
     const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
 
     const handleCheckboxChange = (userId: number, checked: boolean) => {

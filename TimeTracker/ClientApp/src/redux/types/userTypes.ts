@@ -11,3 +11,10 @@ export type UserAddType = {
     permissions: number,
     vacationDays: number,
 }
+
+export interface FetchUsersType {
+    take: number,
+    skip: number,
+    activated: Boolean,
+    userId: number
+}

@@ -14,16 +14,10 @@ export const AddUserSteps = () => {
     const { loading, error } = useTypedSelector(state => state.user);
 
     useEffect(() => {
-        if (loading) {
-            // Show loader
-        }
-        else if (dispatched === 'user/userAdd') {
-            if (error === '')
+        if (dispatched === 'user/userAdd') {
+           if (error === '' && !loading)
                 setStep(1);
-            else {
-                // Show error
-            }
-        }
+       }
     }, [loading]);
 
     const handleNextStep = (dispatchedType: string) => {
