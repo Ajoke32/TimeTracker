@@ -47,6 +47,8 @@ export const Sidebar = () => {
                             <span>Settings</span>
                         </a>
                     </li>
+                    
+                    
 
                 <li className="sidebar-list__logout-link">
                     <button onClick={() => { dispatch(logout()); }} className="sidebar-list__link sidebar-logout__btn">
