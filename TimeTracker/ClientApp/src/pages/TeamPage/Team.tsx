@@ -1,10 +1,9 @@
 ﻿import "./Team.css"
-import { H4 } from "../../components";
+import { H4, Loader } from "../../components";
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useTypedSelector } from "../../hooks";
 import { UsersTable } from "../../components/Tables";
 import { User, fetchUsers } from "../../redux";
-import { Loader } from "../../components/UI";
 
 
 export const Team = () => {

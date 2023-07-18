@@ -5,22 +5,19 @@ import "./tables.css"
 
 interface ApproversTableProps {
     users: User[],
+    approvers: number[];
     onChange: (approvers: number[]) => void,
 }
 
-export const ApproversTable = ({users, onChange} : ApproversTableProps) => {
-    const [approvers, setApprovers] = useState<number[]>([]);
+export const ApproversTable = ({users, onChange, approvers} : ApproversTableProps) => {
     const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
 
     const handleCheckboxChange = (userId: number, checked: boolean) => {
-        setApprovers((prevApprovers) => {
-            const updatedApprovers = checked
-                ? [...prevApprovers, userId]
-                : prevApprovers.filter((id) => id !== userId);
-            
-            onChange(updatedApprovers);
-            return updatedApprovers;
-        });
+        const updatedApprovers = checked
+            ? [...approvers, userId]
+            : approvers.filter((id) => id !== userId);
+
+        onChange(updatedApprovers);
     };
     
     
