@@ -63,8 +63,8 @@ public sealed class UserQuery : ObjectGraphType
                 
                 var user = await uow.GenericRepository<User>()
                     .FindAsync(u=>u.Id==id,relatedData:include);
-                
-               return mapper.Map<UserDisplayDto>(user);
+
+                return user;
 
             }).Description("gets user by id");
 
@@ -75,8 +75,8 @@ public sealed class UserQuery : ObjectGraphType
                 var email = _.GetArgument<string>("email");
                
                 var user = await uow.GenericRepository<User>().FindAsync(u => u.Email == email);
-                
-                return mapper.Map<UserDisplayDto>(user);
+
+                return user;
             });//.AuthorizeWithPolicy(policy:"LoggedIn");
 
         

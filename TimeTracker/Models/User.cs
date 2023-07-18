@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using TimeTracker.Enums;
 using TimeTracker.Utils.SoftDelete;
 
@@ -26,6 +27,9 @@ public class User:SoftDeleteBase
     public DateTime? RefreshTokenExpiration { get; set; }
     
     public bool IsEmailActivated { get; set; }
+    
+    [Column(TypeName = "int")]
+    [EnumDataType(typeof(Permissions))]
     public Permissions Permissions { get; set; }
     
     public int HoursPerMonth { get; set; }

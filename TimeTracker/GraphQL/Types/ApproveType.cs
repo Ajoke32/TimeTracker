@@ -6,7 +6,7 @@ using TimeTracker.Models.Dtos;
 
 namespace TimeTracker.GraphQL.Types;
 
-public sealed class ApproveType:ObjectGraphType<UserApproverDisplayDto>
+public sealed class ApproveType:ObjectGraphType<UserApprover>
 {
     public ApproveType()
     {

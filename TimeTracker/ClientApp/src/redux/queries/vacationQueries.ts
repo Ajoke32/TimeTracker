@@ -2,6 +2,7 @@ import {UserApprover, VacationInputType} from "../types";
 import {QueryStructure} from "../intrerfaces";
 import {AjaxQuery} from "./query";
 import {ReadCookie} from "../../utils";
+import {ApproverVacation} from "../types/ApproverVacationTypes";
 
 
 export function AddVacationQuery(vacation:VacationInputType) {
@@ -16,8 +17,8 @@ export function AddVacationQuery(vacation:VacationInputType) {
 }
 
 export function FetchVacationsRequest(id:number){
-    return AjaxQuery<QueryStructure<{ userQuery: { user:{senders:UserApprover[]} } }>>(
-        'query GetUserRequest($userId: Int!) {userQuery {user(id: $userId, include: "Senders.User.Vacations") {senders{user{firstName,lastName,email,id,vacations{startDate,endDate,message}}}}}}',
+    return AjaxQuery<QueryStructure<{ approverVacationQuery: { requests:ApproverVacation[]}}>>(
+        'query GetRequests($userId:Int!){approverVacationQuery{requests(userId:$userId){id,isApproved,vacation{vacationState,id,endDate,startDate,user{firstName,lastName,email}}}}}',
         {userId:id}
     )
 }

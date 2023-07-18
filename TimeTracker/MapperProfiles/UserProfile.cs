@@ -27,25 +27,6 @@ public class UserProfile:Profile
             .ForMember(u => u.WorkType,
                 o =>
                     o.MapFrom(m => (int)m.WorkType));
-
-        CreateMap<UserApprover, UserApproverDisplayDto>();
-
-        CreateMap<Vacation, VacationDto>();
+        
     }
 }
-
-public class VacationDto
-{
-    public int Id { get; set; }
-
-    public UserDisplayDto User { get; set; } = null!;
-    
-    public bool? VacationState { get; set; }
-    
-    public DateTime StartDate { get; set; }
-
-    public string Message { get; set; } = string.Empty;
-    
-    public DateTime EndDate { get; set; }
-}
-

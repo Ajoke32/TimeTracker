@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GraphQL;
 using GraphQL.Types;
 using TimeTracker.Absctration;
 using TimeTracker.GraphQL.Types;
@@ -11,15 +12,17 @@ public sealed class ApproverVacationQuery:ObjectGraphType
 {
     public ApproverVacationQuery(IUnitOfWorkRepository uow,IMapper mapper)
     {
-        Field<ListGraphType<ApproverVacationType>>("fetch")
+        Field<ListGraphType<ApproverVacationType>>("requests")
+            .Argument<int>("userId")
             .ResolveAsync(async context =>
             {
-
-                var vac =
-                    await uow.GenericRepository<ApproverVacation>().GetAsync(includeProperties:"Vacation.User");
-
-
-                return vac;
+                var id = context.GetArgument<int>("userId");
+                
+                
+                return  await uow.GenericRepository<ApproverVacation>()
+                        .GetAsync(
+                            includeProperties:"Vacation.User",
+                            filter:u=>u.UserId==id);
             });
     }
 }

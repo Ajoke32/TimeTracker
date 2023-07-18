@@ -38,8 +38,7 @@ export const VacationsRequestTable = () => {
                        </div>
                    </div>
                    {requests.map(u=>{
-                       return u.user.vacations?.map(v=>{
-                           const diff = moment(v.endDate).diff(v.startDate)
+                       return u.vacation.map(v=>{
                           return <div className="request-item">
                               <Checkbox
                                   value={1}
@@ -47,7 +46,7 @@ export const VacationsRequestTable = () => {
                                   isChecked={false}
                                   onChange={()=>{}}
                               />
-                              <span>{u.user.firstName} {u.user.lastName}</span>
+                              <span>{v} {u.user.lastName}</span>
                               <span>{u.user.email}</span>
                               <div className="btn-group">
                                   {!u.isApproved?<>

@@ -17,7 +17,9 @@ public sealed class UserType:ObjectGraphType<User>
 
         Field(x => x.LastName).Description("");
 
-        Field(x=>x.Permissions).Description("");
+        Field<int>("permissions")
+            .Resolve(context => (int)context.Source.Permissions)
+            .Description("");
 
         Field(x => x.VacationDays).Description("");
 

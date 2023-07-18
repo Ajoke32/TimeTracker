@@ -7,13 +7,14 @@ import {
 } from "./generic";
 import {DefaultState, User} from "../intrerfaces";
 import {UserApprover, VacationInputType} from "../types";
+import {ApproverVacation} from "../types/ApproverVacationTypes";
 
 
 
 
 
 interface VacationState extends DefaultState{
-    requests:UserApprover[]
+    requests:ApproverVacation[]
 }
 
 const initialState:VacationState = {
@@ -30,7 +31,7 @@ const vacationsSlice = createSlice({
         createVacationFail:createErrorReducer(),
 
         fetchRequests:createPendingReducerWithPayload<typeof initialState,number>(),
-        fetchRequestsSuccess:createSuccessReducerWithPayload<typeof initialState,UserApprover[]>((state:VacationState,action:PayloadAction<UserApprover[]>)=>{
+        fetchRequestsSuccess:createSuccessReducerWithPayload<typeof initialState,ApproverVacation[]>((state:VacationState,action:PayloadAction<ApproverVacation[]>)=>{
             state.requests=action.payload;
         }),
         fetchRequestsFail:createErrorReducer()

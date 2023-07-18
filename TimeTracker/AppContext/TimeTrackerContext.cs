@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using TimeTracker.Enums;
 using TimeTracker.Models;
 using TimeTracker.Utils.SoftDelete;
 
@@ -32,9 +34,10 @@ public class TimeTrackerContext:DbContext
             .HasForeignKey(a => a.UserId)
             .OnDelete(DeleteBehavior.NoAction);
         
-
-
+        
         base.OnModelCreating(modelBuilder);
     }
+
+
     
 }

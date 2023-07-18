@@ -93,8 +93,8 @@ public sealed class ApproverMutations:ObjectGraphType
                 
                
                 await uof.SaveAsync();
-                
-                return mapper.Map<UserApproverDisplayDto>(approve);
+
+                return approve;
             });
 
     }

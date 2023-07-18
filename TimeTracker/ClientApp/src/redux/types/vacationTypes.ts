@@ -4,7 +4,8 @@ import {User} from "../intrerfaces";
 export interface Vacation{
     startDate:Date,
     endDate:Date,
-    message?:string
+    message?:string,
+    user:User[]
 }
 
 export interface VacationInputType{
