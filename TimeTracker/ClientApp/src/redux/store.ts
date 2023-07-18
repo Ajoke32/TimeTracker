@@ -3,7 +3,7 @@ import { createEpicMiddleware } from 'redux-observable';
 import { user, auth, users } from './slices';
 import { rootEpic } from "./epics"
 import { approvers } from "./slices";
-import {vacation} from "./slices/vacationSlice";
+import {vacation} from "./slices";
 
 const middleware = createEpicMiddleware();
 

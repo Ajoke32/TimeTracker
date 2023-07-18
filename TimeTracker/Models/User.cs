@@ -36,7 +36,8 @@ public class User:SoftDeleteBase
     public List<UserApprover> Approvers { get; } = new();
     
     public List<UserApprover> Senders { get; } = new();
-    
+
+    public List<ApproverVacation> ApproverVacations { get; } = new();
 
     public User()
     {

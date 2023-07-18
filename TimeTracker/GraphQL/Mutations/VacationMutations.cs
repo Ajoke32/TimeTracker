@@ -76,6 +76,6 @@ public sealed class VacationMutations:ObjectGraphType
 
     private bool IsVacationConfirmed(IEnumerable<UserApprover> userApprovers)
     {
-        return userApprovers.All(userApprover => userApprover.IsApproved);
+        return true;
     }
 } 

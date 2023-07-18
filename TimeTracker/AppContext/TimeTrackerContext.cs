@@ -17,7 +17,7 @@ public class TimeTrackerContext:DbContext
     
     public DbSet<UserApprover> Approvers { get; set; }
     
-    
+    public DbSet<ApproverVacation> ApproversVacation { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserApprover>()

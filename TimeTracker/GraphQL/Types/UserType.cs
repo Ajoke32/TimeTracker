@@ -5,7 +5,7 @@ using TimeTracker.Models.Dtos;
 
 namespace TimeTracker.GraphQL.Types;
 
-public sealed class UserType:ObjectGraphType<UserDisplayDto>
+public sealed class UserType:ObjectGraphType<User>
 {
     public UserType()
     {
@@ -36,6 +36,8 @@ public sealed class UserType:ObjectGraphType<UserDisplayDto>
         Field(x=>x.DeletedAt,nullable:true).Description("user deleted at");
         
         Field(x=>x.IsDeleted,nullable:true).Description("user deleted");
+
+        Field(x => x.ApproverVacations,nullable:true).Description("user request");
 
     }
 }

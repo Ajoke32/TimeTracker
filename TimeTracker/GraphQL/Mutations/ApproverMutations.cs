@@ -91,7 +91,7 @@ public sealed class ApproverMutations:ObjectGraphType
                     throw new ArgumentException("not exist");
                 }
                 
-                approve.IsApproved = state;
+               
                 await uof.SaveAsync();
                 
                 return mapper.Map<UserApproverDisplayDto>(approve);

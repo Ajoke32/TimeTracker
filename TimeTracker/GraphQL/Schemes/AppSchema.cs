@@ -2,9 +2,6 @@
 
 using GraphQL.Types;
 using TimeTracker.GraphQL.Types;
-using TimeTracker.GraphQL.Types.InputTypes;
-using TimeTracker.GraphQL.Types.InputTypes.ApproveInput;
-using TimeTracker.MapperProfiles;
 using TimeTracker.Models;
 using TimeTracker.Models.Dtos;
 
@@ -20,6 +17,7 @@ public class AppSchema:Schema
         RegisterTypeMapping(typeof(User),typeof(UserType));
         RegisterTypeMapping(typeof(LoginResponse),typeof(LoginResponseType));
         RegisterTypeMapping(typeof(UserApproverDisplayDto),typeof(ApproveType));
+        RegisterTypeMapping(typeof(ApproverVacation),typeof(ApproverVacationType));
         Query = provider.GetRequiredService<RootQuery>();
         Mutation = provider.GetRequiredService<RootMutation>();
     }

@@ -38,7 +38,7 @@ public sealed class UserQuery : ObjectGraphType
 
                 var take = ctx.GetArgument<int>("take");
                 var skip = ctx.GetArgument<int>("skip");
-                Console.WriteLine($"Id = {userId}");
+                
                 
                 var users = await uow.GenericRepository<User>().GetAsync(
                     includeProperties: include, 
@@ -47,7 +47,7 @@ public sealed class UserQuery : ObjectGraphType
                     filter: activated ? (u => u.IsEmailActivated && u.Id != userId) : (u => u.Id != userId)
                 );
 
-                return mapper.Map<List<User>,List<UserDisplayDto>>(users.ToList());
+                return users;
             })
             .Description("gets all users");
 

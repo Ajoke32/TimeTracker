@@ -15,5 +15,8 @@ public sealed class RootMutation:ObjectGraphType
 
         Field<VacationMutations>("vacationMutation")
             .Resolve(_ => new { });
+        
+        Field<ApproverVacationMutations>("approverVacationMutation")
+            .Resolve(_ => new { });
     }
 }

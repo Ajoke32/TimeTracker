@@ -11,7 +11,7 @@ import {
 const initialState: AuthSliceState = {
     ...defaultState,
     user: GetUserFromToken(),
-    status: IsUserAuthenticated(),
+    status: true//IsUserAuthenticated(),
 };
 
 const authSlice = createSlice({

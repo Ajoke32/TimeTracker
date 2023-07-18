@@ -17,7 +17,7 @@ export function AddVacationQuery(vacation:VacationInputType) {
 
 export function FetchVacationsRequest(id:number){
     return AjaxQuery<QueryStructure<{ userQuery: { user:{senders:UserApprover[]} } }>>(
-        'query GetUserRequest($userId: Int!) {userQuery {user(id: $userId, include: "Senders.User.Vacations") {senders{user{firstName,id,vacations{startDate,endDate}}}}}}',
+        'query GetUserRequest($userId: Int!) {userQuery {user(id: $userId, include: "Senders.User.Vacations") {senders{user{firstName,lastName,email,id,vacations{startDate,endDate,message}}}}}}',
         {userId:id}
     )
 }

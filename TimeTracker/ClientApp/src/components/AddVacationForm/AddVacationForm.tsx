@@ -3,7 +3,7 @@ import {Loader, SmallButton, TextInput} from "../UI";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {useAppDispatch, useTypedSelector} from "../../hooks";
 import {H5} from "../Headings";
-import {createVacation} from "../../redux/slices/vacationSlice";
+import {createVacation} from "../../redux";
 
 
 interface VacationInput{

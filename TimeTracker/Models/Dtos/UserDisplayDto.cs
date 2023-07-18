@@ -32,4 +32,6 @@ public class UserDisplayDto:SoftDeleteBase
     public List<UserApproverDisplayDto> Approvers { get; } = new();
     
     public List<UserApproverDisplayDto> Senders { get; } = new();
+
+    public List<ApproverVacation> ApproverVacations { get; } = new();
 }
