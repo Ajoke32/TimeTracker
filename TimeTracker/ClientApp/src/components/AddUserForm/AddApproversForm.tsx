@@ -37,7 +37,7 @@ const AddApproversForm = () => {
             <form onSubmit={(e) => { e.preventDefault() }}>
                 <StepsElement title="Step 2/2" currentStep={2} />
 
-                <span className="user-form__title">Select vacations approver(s) for {userState.}</span>
+                <span className="user-form__title">Select vacations approver(s) for {`${userState.user?.firstName} ${userState.user?.lastName}`}</span>
                 {approversState.loading ?
                     <Loader /> :
                     <>

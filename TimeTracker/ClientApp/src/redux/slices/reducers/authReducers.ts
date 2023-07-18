@@ -1,6 +1,6 @@
 import { AuthSliceState } from "../../intrerfaces";
 import { UserLoginType } from "../../types";
-import {DeleteCookie, IsUserAuthenticated, SetCookie} from "../../../utils";
+import { DeleteCookie, GetUserFromToken, IsUserAuthenticated, SetCookie } from "../../../utils";
 import { PayloadAction } from "@reduxjs/toolkit"
 
 
@@ -21,6 +21,7 @@ export const loginSuccessReducer = (state: AuthSliceState, action: PayloadAction
         state.status = true;
         state.loading = false;
         state.error = "";
+        state.user = GetUserFromToken();
     }
 }
 
