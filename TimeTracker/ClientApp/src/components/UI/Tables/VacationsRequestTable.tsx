@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {useAppDispatch, useTypedSelector} from "../../../hooks";
 import {Loader} from "../Loaders";
-import {fetchRequests} from "../../../redux";
 import {Checkbox} from "../Checkboxes";
 import "./ApproversTable.css"
 import moment from "moment";
+import {fetchRequests, updateApproverVacationState} from "../../../redux";
+
+
 
 export const VacationsRequestTable = () => {
 
@@ -12,7 +14,8 @@ export const VacationsRequestTable = () => {
 
     const selected = useState([]);
 
-    const {requests,error,loading} = useTypedSelector(s=>s.vacations);
+    const {vacationRequests,error,loading} =
+        useTypedSelector(s=>s.approverVacations);
 
     const userId =
         useTypedSelector(s=>s.auth.user?.id);
@@ -21,52 +24,47 @@ export const VacationsRequestTable = () => {
         dispatch(fetchRequests(userId!))
     },[])
 
-    function approve(id:number,state:boolean){
 
+    function approve(id:number,state:boolean){
+        dispatch(updateApproverVacationState({id:id,isApproved:state}))
     }
 
     return (
         <div style={{display:"flex",justifyContent:"center",marginTop:"80px"}}>
-            <span>{error}</span>
-            {loading?<Loader/>:
+            <span>{error&&error}</span>
+            {loading&&vacationRequests.length===0?<Loader />:
                <div className="requests-wrapper">
                    <div className="search-bar">
                        <input type="text" placeholder="search by email" className="input-search"/>
                        <div className="btn-group">
-                           <button  className="btn-base btn-confirm">Approve selected</button>
-                           <button  className="btn-base btn-decline">Decline selected</button>
+                           <button  className="btn-base btn-confirm disabled" disabled={true}>Approve selected</button>
+                           <button  className="btn-base btn-decline disabled" disabled={true}>Decline selected</button>
                        </div>
                    </div>
-                   {requests.map(u=>{
-                       return u.vacation.map(v=>{
-                          return <div className="request-item">
+                   {vacationRequests.map(a=>{
+                           const diff = moment(a.vacation.endDate).diff(a.vacation.startDate);
+                          return <div key={a.id} className="request-item">
                               <Checkbox
                                   value={1}
                                   optionName={null}
                                   isChecked={false}
                                   onChange={()=>{}}
                               />
-                              <span>{v} {u.user.lastName}</span>
-                              <span>{u.user.email}</span>
+                              <span>{a.vacation.user.firstName} {a.vacation.user.lastName}</span>
+                              <span>{a.vacation.user.email}</span>
+                              <span className={a.isApproved?"approved":"declined"}>{a.isApproved?"Approved":"Declined"}</span>
                               <div className="btn-group">
-                                  {!u.isApproved?<>
-                                   <button onClick={()=>approve(u.id,true)} className="btn-base btn-confirm">Approve</button>
-                                   <button onClick={()=>approve(u.id,false)} className="btn-base btn-decline">Decline</button>
-                                  </>:<>
-                                   <button onClick={()=>approve(u.id,false)} className="btn-base btn-decline">Undo</button>
-                                  </>}
-
+                                   <button onClick={()=>approve(a.vacation.id,true)} className="btn-base btn-confirm">Approve</button>
+                                   <button onClick={()=>approve(a.vacation.id,false)} className="btn-base btn-decline">Decline</button>
                               </div>
                               <button className="btn-base btn-info more-btn">more</button>
                               <div className="more-info">
                                   <span>Vacation for: {moment(diff).format("D")} days</span>
-                                    <span>Start date: {moment(v.startDate).format("M/D/Y")}</span>
-                                    <span>End date: {moment(v.endDate).format("M/D/Y")}</span>
-                                     <span>Message: {v.message}</span>
+                                    <span>Start date: {moment(a.vacation.startDate).format("M/D/Y")}</span>
+                                    <span>End date: {moment(a.vacation.endDate).format("M/D/Y")}</span>
+                                     <span>Message: {a.vacation.message}</span>
                               </div>
                           </div>
-                       });
-
                    })}
 
 

@@ -10,9 +10,10 @@
 .request-item{
     position: relative;
     display: grid;
-    grid-template-columns: 50px 160px 1fr 1fr 100px;
+    grid-template-columns: 20px 160px 1fr 100px 1fr 100px;
     align-items: center;
     gap: 20px;
+    text-align: center;
 }
 
 
@@ -79,7 +80,7 @@
 
 .more-info{
     width: 250px;
-    right: 120px;
+    right: 110px;
     top: 0;
     background-color: #14213d;
     position: absolute;
@@ -98,8 +99,18 @@
     color: white;
 }
 
+.disabled{
+    opacity: 0.5;
+}
 
 .more-btn:hover~.more-info{
     transition: 0.2s;
   visibility: visible;
+}
+
+.declined{
+    color:#ef233c
+}
+.approved{
+    color: #70e000;
 }

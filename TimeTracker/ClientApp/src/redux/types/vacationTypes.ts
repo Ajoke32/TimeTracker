@@ -2,10 +2,11 @@ import {User} from "../intrerfaces";
 
 
 export interface Vacation{
+    id:number,
     startDate:Date,
     endDate:Date,
     message?:string,
-    user:User[]
+    user:User
 }
 
 export interface VacationInputType{

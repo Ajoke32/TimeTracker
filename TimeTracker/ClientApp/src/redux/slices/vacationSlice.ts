@@ -5,21 +5,18 @@ import {
     createSuccessReducerWithoutPayload, createSuccessReducerWithPayload,
     defaultState
 } from "./generic";
-import {DefaultState, User} from "../intrerfaces";
-import {UserApprover, VacationInputType} from "../types";
-import {ApproverVacation} from "../types/ApproverVacationTypes";
+import {DefaultState} from "../intrerfaces";
+import {VacationInputType} from "../types";
+import {ApproverVacation} from "../types/approverVacationTypes";
 
 
 
 
 
-interface VacationState extends DefaultState{
-    requests:ApproverVacation[]
-}
+interface VacationState extends DefaultState{}
 
 const initialState:VacationState = {
     ...defaultState,
-    requests:[]
 }
 
 const vacationsSlice = createSlice({
@@ -29,12 +26,6 @@ const vacationsSlice = createSlice({
         createVacation:createPendingReducerWithPayload<typeof initialState,VacationInputType>(),
         createVacationSuccess:createSuccessReducerWithoutPayload(),
         createVacationFail:createErrorReducer(),
-
-        fetchRequests:createPendingReducerWithPayload<typeof initialState,number>(),
-        fetchRequestsSuccess:createSuccessReducerWithPayload<typeof initialState,ApproverVacation[]>((state:VacationState,action:PayloadAction<ApproverVacation[]>)=>{
-            state.requests=action.payload;
-        }),
-        fetchRequestsFail:createErrorReducer()
     },
 });
 
@@ -42,6 +33,4 @@ const vacationsSlice = createSlice({
 export const vacation = vacationsSlice.reducer;
 export const  {createVacation,
     createVacationSuccess,
-    createVacationFail,
-fetchRequests,fetchRequestsSuccess,
-    fetchRequestsFail} =  vacationsSlice.actions
+    createVacationFail,} =  vacationsSlice.actions

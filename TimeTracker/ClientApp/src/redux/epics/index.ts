@@ -3,8 +3,9 @@ import { catchError } from "rxjs";
 import { userLoginEpic } from './auth'
 import { addUserEpic, passwordConfirmEpic, userVerifyEpic } from './user'
 import {fetchUsersEpic} from "./users";
-import {addVacationEpic, fetchVacationsRequestsEpic} from "./vacation";
+import {addVacationEpic} from "./vacation";
 import { addApproversEpic, fetchApproversEpic } from "./approvers";
+import {fetchVacationsRequestsEpic, updateApproverVacationEpic} from "./approverVacation";
 
 export const rootEpic: Epic = (action$, store$, dependencies) =>
     combineEpics(
@@ -16,7 +17,8 @@ export const rootEpic: Epic = (action$, store$, dependencies) =>
         addApproversEpic,
         addVacationEpic,
         fetchVacationsRequestsEpic,
-        fetchApproversEpic
+        fetchApproversEpic,
+        updateApproverVacationEpic
     )
         (action$, store$, dependencies).pipe(
             catchError((error, source) => {

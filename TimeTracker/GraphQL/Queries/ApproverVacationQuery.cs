@@ -22,7 +22,7 @@ public sealed class ApproverVacationQuery:ObjectGraphType
                 return  await uow.GenericRepository<ApproverVacation>()
                         .GetAsync(
                             includeProperties:"Vacation.User",
-                            filter:u=>u.UserId==id);
+                            filter:a=>a.UserId==id);
             });
     }
 }

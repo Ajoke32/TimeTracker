@@ -86,3 +86,22 @@
 
 }
 
+.prompt{
+    position: absolute;
+    right: 30px;
+    top:100px;
+    border: 1px solid lightgray;
+    height: 120px;
+    width: 400px;
+    display: flex;
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    flex-direction: column;
+    box-shadow: rgba(99, 99, 99, 0.2) 0 2px 8px 0;
+    word-break: break-all;
+    gap: 25px;
+    background-color: #dee2e6;
+}
+

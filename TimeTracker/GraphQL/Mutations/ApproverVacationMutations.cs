@@ -23,5 +23,27 @@ public sealed class ApproverVacationMutations:ObjectGraphType
                 await uow.SaveAsync();
                 return created;
             });
+
+        Field<ApproverVacationType>("updateState")
+            .Argument<bool>("state")
+            .Argument<int>("vacationId")
+            .ResolveAsync(async ctx =>
+            {
+                var id = ctx.GetArgument<int>("vacationId");
+                var state = ctx.GetArgument<bool>("state");
+                
+                var approverVacation = await uow.GenericRepository<ApproverVacation>()
+                    .FindAsync(a=>a.VacationId==id,relatedData:"Vacation");
+                
+                if (approverVacation == null)
+                {
+                    throw new ArgumentException("vacation not exist");
+                }
+                
+                approverVacation.IsApproved = state;
+                await uow.SaveAsync();
+                
+                return approverVacation;
+            });
     }
 }

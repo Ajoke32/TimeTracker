@@ -4,6 +4,7 @@ import { user, auth, users } from './slices';
 import { rootEpic } from "./epics"
 import { approvers } from "./slices";
 import {vacation} from "./slices";
+import {approverVacations} from "./slices";
 
 const middleware = createEpicMiddleware();
 
@@ -13,7 +14,8 @@ export const store = configureStore({
     user: user,
     users: users,
     approvers: approvers,
-    vacations:vacation
+    vacations:vacation,
+    approverVacations:approverVacations,
   },
   middleware: [
     middleware
