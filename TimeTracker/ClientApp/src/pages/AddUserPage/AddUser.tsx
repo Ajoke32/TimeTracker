@@ -1,8 +1,8 @@
 ﻿import "./AddUser.css"
-import {AddUserSteps} from "../../components/AddUserForm/AddUserSteps";
+import { AddUserSteps } from "../../components";
 export const AddUser = () => {
-    
+
     return (
-        <AddUserSteps/>
+        <AddUserSteps />
     )
 };

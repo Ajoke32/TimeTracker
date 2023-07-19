@@ -2,7 +2,7 @@ import { useAppDispatch } from "../../hooks";
 import { useState } from 'react';
 import { TextInput, CheckboxInput, SmallButton, StepsElement, RangeInput } from "../UI";
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { userAdd } from "../../redux";
+import { userAdd, Permission } from "../../redux";
 import "./AddUserForms.css";
 
 type Inputs = {
@@ -14,19 +14,11 @@ type Inputs = {
     vacationDays: number,
 }
 
-
-enum Permissions {
-    Create = 1,
-    Update = 2,
-    Delete = 4,
-    Read = 8,
-}
-
-const options: Permissions[] = [
-    Permissions.Create,
-    Permissions.Update,
-    Permissions.Delete,
-    Permissions.Read,
+const options: Permission[] = [
+    Permission.Create,
+    Permission.Update,
+    Permission.Delete,
+    Permission.Read,
 ];
 
 interface AddUserFormProps {
@@ -82,7 +74,7 @@ export const AddUserForm = ({ onNextStep }: AddUserFormProps) => {
                     register={register('permissions')}
                     selected={checkedOptions}
                     setSelected={setCheckedOptions}
-                    values={Permissions}
+                    values={Permission}
                     isMultipleChoice={true}
                 />
                 <SmallButton type="submit" value="Add user"/>

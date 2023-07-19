@@ -1,0 +1,14 @@
+import { useTypedSelector } from '../../hooks';
+
+interface ProtectedRouteProps {
+    permission: number,
+    component: JSX.Element
+}
+
+export const ProtectedRoute = ({ permission, component }: ProtectedRouteProps) => {
+    const state = useTypedSelector((state) => state.auth);
+
+    return ((state.user!.permissions & permission) ?
+        component : null
+    );
+}

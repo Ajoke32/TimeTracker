@@ -1,8 +1,8 @@
 import { Epic, ofType } from "redux-observable";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { catchError, map, mergeMap, Observable, of } from "rxjs";
-import { AddUserQuery, PasswordConfirmQuery, UserVerifyQuery  } from "../queries/userQueries";
-import { userAddFail, userAddSuccess, verifyFail, verifySuccess } from '../slices';
+import { AddUserQuery, PasswordConfirmQuery, UserVerifyQuery, FetchUserQuery } from "../queries/userQueries";
+import { userAddFail, userAddSuccess, verifyFail, verifySuccess, fetchUserFail, fetchUserSuccess } from '../slices';
 import { UserAddType } from "../types";
 
 export const addUserEpic: Epic = (action: Observable<PayloadAction<UserAddType>>, state) =>
@@ -69,3 +69,25 @@ export const passwordConfirmEpic: Epic = (action: Observable<PayloadAction<{ tok
                 ),
         )
     );
+
+export const fetchUserEpic: Epic = (action: Observable<PayloadAction<number>>, state) =>
+action.pipe(
+    ofType("user/fetchUser"),
+    mergeMap(action =>
+        FetchUserQuery(action.payload)
+            .pipe(
+                map(resp => {
+                    if (resp.response.errors != null) {
+                        return fetchUserFail(resp.response.errors[0].message)
+                    }
+                    if (!resp.response.data.userQuery.user)
+                        return fetchUserFail("failed 2")
+                    return fetchUserSuccess(resp.response.data.userQuery.user);
+                }),
+                catchError((e: Error) => {
+                    console.log(e);
+                    return of(verifyFail("Unexpected error"))
+                })
+            ),
+    )
+);

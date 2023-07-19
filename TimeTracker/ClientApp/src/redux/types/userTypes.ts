@@ -12,9 +12,12 @@ export type UserAddType = {
     vacationDays: number,
 }
 
-export interface FetchUsersType {
+export interface FetchUserType {
+    userId: number
+}
+
+export interface FetchUsersType extends FetchUserType {
     take: number,
     skip: number,
     activated: Boolean,
-    userId: number
 }

@@ -1,9 +1,7 @@
 import { AjaxQuery } from './query';
 import { QueryStructure, User } from '../intrerfaces';
-import { UserAddType, FetchApproversType } from '../types'
+import { UserAddType, FetchUsersType } from '../types'
 import { ReadCookie } from '../../utils';
-
-
 
 export function UserLoginQuery(userData: { email: string, password: string }) {
     return AjaxQuery<QueryStructure<{ userQuery: { login: { code: number, message: string } } }>>(
@@ -45,7 +43,7 @@ export function PasswordConfirmQuery(data: { token: string, password: string }) 
 
 }
 
-export function FetchUsersQuery(data: FetchApproversType) {
+export function FetchUsersQuery(data: FetchUsersType) {
     const { take, skip, activated, userId } = data;
     return AjaxQuery<QueryStructure<{ userQuery: { users: User[] } }>>(
         `query GetUsers($take: Int, $skip: Int, $activated: Boolean!, $userId: Int) {
@@ -66,6 +64,29 @@ export function FetchUsersQuery(data: FetchApproversType) {
             take: take,
             skip: skip,
             activated: activated,
+            userId: userId
+        },
+    );
+}
+
+export function FetchUserQuery(userId: number) {
+    return AjaxQuery<QueryStructure<{ userQuery: { user: User } }>>(
+        `query GetUser($userId: Int!) {
+            userQuery {
+              user(id: $userId) {
+                id
+                email
+                workType
+                firstName
+                lastName
+                isEmailActivated
+                vacationDays
+                hoursPerMonth
+                permissions
+              }
+            }
+          }`,
+        {
             userId: userId
         },
     );
