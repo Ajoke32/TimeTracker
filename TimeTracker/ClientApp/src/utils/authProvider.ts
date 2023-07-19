@@ -2,10 +2,11 @@ import { ReadCookie } from "./cookieManager";
 import { TokenStructure, User } from "../redux";
 import jwt_decode from 'jwt-decode';
 
+
 export const IsUserAuthenticated = (): boolean => {
     const userToken = ReadCookie('user');
 
-    if (userToken !== null && userToken !== "") {
+    if (userToken !== undefined && userToken !== "") {
         const timeStamp: number = parseInt((jwt_decode(userToken) as TokenStructure).exp)
         const expires = new Date(timeStamp * 1000);
 
@@ -17,7 +18,7 @@ export const IsUserAuthenticated = (): boolean => {
 export const GetUserFromToken = (): User | null => {
     const userToken = ReadCookie('user');
 
-    if (userToken !== null && userToken !== "") {
+    if (userToken !== undefined && userToken !== "") {
         const decodedToken: TokenStructure = jwt_decode(userToken);
 
         const result = {

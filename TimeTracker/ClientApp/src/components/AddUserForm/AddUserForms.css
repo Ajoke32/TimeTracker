@@ -3,9 +3,9 @@
     justify-content: space-evenly;
     flex-direction: column;
     width: 50%;
-    height: 80vh;
+    height: auto;
     max-height: 100%;
-    
+    min-height: 75%;
     background: var(--color-white);
     border: 1px solid var(--color-stroke-gray);
     border-radius: 10px;
@@ -22,8 +22,8 @@
 }
 
 .user-form__title {
-    margin-bottom: 1.5rem;
     font-weight: 600;
+    margin-bottom: .5rem;
 }
 
 .form-wrapper {
@@ -35,8 +35,8 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    margin-top: 3.5rem;
     width: 100%;
+    margin-top: 3vh;
 }
 
 .user-form__btn-wrapper > div:last-child {
@@ -48,7 +48,7 @@
 }
 
 .user-form__btn-wrapper > a{
-    margin-right: 1.5rem;
+    margin-right: 2vh;
     text-align: center;
 }
 
@@ -64,7 +64,6 @@
 @media screen and (max-width: 640px) {
     .user-form__wrapper-inner {
         width: 90%;
-        height: 60vh;
     }
     
     .user-form__wrapper *{
@@ -74,20 +73,19 @@
 
 @media screen and (min-width: 640px) and (max-width: 920px) {
     .user-form__wrapper-inner {
-        width: 80%;
-        height: 70vh;
+        width: 85%;
     }
 }
 
 @media screen and (min-width: 920px) and (max-width: 1080px) {
     .user-form__wrapper-inner {
-        width: 75%;
+        width: 80%;
     }
 }
 
 @media screen and (min-width: 1080px) and (max-width: 1680px) {
     .user-form__wrapper-inner {
-        width: 50%;
+        width: 75%;
     }
 }
 

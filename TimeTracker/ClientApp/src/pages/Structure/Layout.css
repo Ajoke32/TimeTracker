@@ -34,6 +34,8 @@
     align-items: flex-end;
     flex-direction: column;
     
+    overflow: hidden;
+    
 }
 .layout-sidebar__wrapper {
     grid-area: 2 / 1 / 3 / 2;
