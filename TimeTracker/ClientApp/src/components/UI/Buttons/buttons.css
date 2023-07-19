@@ -18,14 +18,14 @@
 
 .btn-large__wrapper {
     width: 100%;
-    margin-top: 3vh;
+    margin-top: 2vh;
 }
 
 .btn-large {
     width: 100%;
     font-weight: 700;
     font-size: 1.25rem;
-    height: 4rem;
+    height: 3rem;
     padding: 16px 50px;
 }
 
@@ -33,7 +33,7 @@
     width: 25%;
     font-weight: 500;
     font-size: 1rem;
-    height: 3.8rem;
+    height: 2.5rem;
 }
 
 .btn-large:hover,
