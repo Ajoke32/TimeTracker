@@ -26,7 +26,7 @@ export const VacationsRequestTable = () => {
 
 
     function approve(id:number,state:boolean){
-        dispatch(updateApproverVacationState({id:id,isApproved:state}))
+        dispatch(updateApproverVacationState({id:id,isApproved:state,approverId:userId!}))
     }
 
     return (

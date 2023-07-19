@@ -10,7 +10,5 @@ public sealed class ApproverVacationInputType:InputObjectGraphType<ApproverVacat
         Field(x => x.UserId).Description("approver id");
 
         Field(x => x.VacationId).Description("vacation id");
-        
-        Field(x=>x.IsApproved).Description("state");
     }
 }

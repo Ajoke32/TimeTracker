@@ -21,7 +21,7 @@ export const addVacationEpic: Epic = (action: Observable<PayloadAction<VacationI
                         if (resp.response.errors != null) {
                             return createVacationFail(resp.response.errors[0].message)
                         }
-                        return createVacationSuccess();
+                        return createVacationSuccess(resp.response.data.vacationMutation.create.id);
                     }),
                     catchError((e: Error) => {
                         return of(createVacationFail("unexpected error"))

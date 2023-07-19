@@ -13,10 +13,14 @@ import {ApproverVacation} from "../types/approverVacationTypes";
 
 
 
-interface VacationState extends DefaultState{}
+interface VacationState extends DefaultState{
+  created:boolean,
+    createdId?:number
+}
 
 const initialState:VacationState = {
     ...defaultState,
+    created:false
 }
 
 const vacationsSlice = createSlice({
@@ -24,7 +28,11 @@ const vacationsSlice = createSlice({
     initialState,
     reducers: {
         createVacation:createPendingReducerWithPayload<typeof initialState,VacationInputType>(),
-        createVacationSuccess:createSuccessReducerWithoutPayload(),
+        createVacationSuccess:createSuccessReducerWithPayload<typeof initialState,number>
+        ((state:VacationState,action:PayloadAction<number>)=>{
+            state.created=true;
+            state.createdId=action.payload
+        }),
         createVacationFail:createErrorReducer(),
     },
 });

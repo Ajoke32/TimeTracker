@@ -68,7 +68,22 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         }
         catch (Exception e)
         {
-            throw new Exception(e.Message);
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    public ValueTask<bool> AddRangeAsync(IEnumerable<TEntity> entities)
+    {
+        try
+        {
+            _dbSet.AddRange(entities);
+            return new ValueTask<bool>(true);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
         }
     }
 
@@ -107,4 +122,6 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         _context.Entry(model).State = EntityState.Modified;
         return new ValueTask<TEntity>(entity.Entity);
     }
+    
+    
 }

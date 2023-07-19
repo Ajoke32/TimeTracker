@@ -1,14 +1,15 @@
 import {Epic, ofType} from "redux-observable";
 import {catchError, map, mergeMap, Observable, of} from "rxjs";
 import {PayloadAction} from "@reduxjs/toolkit";
-import {UpdateApproverVacationState} from "../queries/vacationApproverQueries";
+import {CreateApproverVacation, UpdateApproverVacationState} from "../queries/vacationApproverQueries";
 import {
+    createApproverVacationFail, createApproverVacationSuccess,
     fetchRequestsFail, fetchRequestsSuccess,
     updateApproverVacationStateStateFail,
     updateApproverVacationStateStateSuccess
 } from "../slices";
 import {FetchVacationsRequest} from "../queries/vacationQueries";
-import {ApproverVacationUpdate} from "../types/approverVacationTypes";
+import {ApproverVacationUpdate, VacationApproverInput} from "../types/approverVacationTypes";
 
 
 
@@ -17,7 +18,7 @@ export const updateApproverVacationEpic: Epic = (action: Observable<PayloadActio
     action.pipe(
         ofType("approverVacation/updateApproverVacationState"),
         mergeMap(action =>
-            UpdateApproverVacationState(action.payload.id,action.payload.isApproved)
+            UpdateApproverVacationState(action.payload.id,action.payload.isApproved,action.payload.approverId!)
                 .pipe(
                     map(resp => {
                         if (resp.response.errors != null) {
@@ -48,6 +49,25 @@ export const fetchVacationsRequestsEpic: Epic = (action: Observable<PayloadActio
                     catchError((e: Error) => {
                         console.log(e);
                         return of(fetchRequestsFail("unexpected error"))
+                    })
+                ),
+        )
+    );
+
+export const createApproverVacationEpic: Epic = (action: Observable<PayloadAction<VacationApproverInput>>, state) =>
+    action.pipe(
+        ofType("approverVacation/createApproverVacation"),
+        mergeMap(action =>
+            CreateApproverVacation(action.payload)
+                .pipe(
+                    map(resp => {
+                        if (resp.response.errors != null) {
+                            return createApproverVacationFail(resp.response.errors[0].message)
+                        }
+                        return createApproverVacationSuccess();
+                    }),
+                    catchError((e: Error) => {
+                        return of(createApproverVacationFail("unexpected error"))
                     })
                 ),
         )

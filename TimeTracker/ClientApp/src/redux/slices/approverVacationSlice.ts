@@ -1,12 +1,12 @@
 import {DefaultState} from "../intrerfaces";
 import {
     createErrorReducer,
-    createPendingReducerWithPayload,
+    createPendingReducerWithPayload, createSuccessReducerWithoutPayload,
     createSuccessReducerWithPayload,
     defaultState
 } from "./generic";
-import {createSlice, current, PayloadAction} from "@reduxjs/toolkit";
-import {ApproverVacation, ApproverVacationUpdate} from "../types/approverVacationTypes";
+import {createSlice,  PayloadAction} from "@reduxjs/toolkit";
+import {ApproverVacation, ApproverVacationUpdate, VacationApproverInput} from "../types/approverVacationTypes";
 
 interface VacationApproverState extends DefaultState{
     vacationRequests:ApproverVacation[]
@@ -25,7 +25,7 @@ const approverVacationsSlice = createSlice({
         updateApproverVacationStateStateSuccess:(state:VacationApproverState,action:PayloadAction<ApproverVacationUpdate>)=>{
             state.loading=false;
             state.vacationRequests.map(a=>{
-                if(a.vacation.id===action.payload.id){
+                if(a.vacation.id===action.payload.vacation?.id){
                     a.isApproved=action.payload.isApproved;
                 }
                 return a;
@@ -39,7 +39,11 @@ const approverVacationsSlice = createSlice({
             state.vacationRequests=action.payload;
             state.loading=false;
         }),
-        fetchRequestsFail:createErrorReducer()
+        fetchRequestsFail:createErrorReducer(),
+
+        createApproverVacation:createPendingReducerWithPayload<typeof initialState,VacationApproverInput>(),
+        createApproverVacationSuccess:createSuccessReducerWithoutPayload(),
+        createApproverVacationFail:createErrorReducer()
     },
 });
 
@@ -49,4 +53,5 @@ export const  {updateApproverVacationState,
     updateApproverVacationStateStateSuccess,
     updateApproverVacationStateStateFail,
 fetchRequests,fetchRequestsFail,
-    fetchRequestsSuccess} =  approverVacationsSlice.actions
+    fetchRequestsSuccess,
+createApproverVacationSuccess,createApproverVacationFail,createApproverVacation} =  approverVacationsSlice.actions

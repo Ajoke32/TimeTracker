@@ -11,7 +11,15 @@ export interface ApproverVacation{
 export interface ApproverVacationUpdate{
     id:number,
     isApproved:boolean,
-    vacation?:Vacation
+    vacation?:Vacation,
+    approverId?:number
+}
+
+
+
+export interface VacationApproverInput{
+    vacationId:number,
+    userId:number,
 }
 
 

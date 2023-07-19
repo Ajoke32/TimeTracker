@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Loader, SmallButton, TextInput} from "../UI";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {useAppDispatch, useTypedSelector} from "../../hooks";
 import {H5} from "../Headings";
-import {createVacation} from "../../redux";
+import {createApproverVacation, createVacation} from "../../redux";
 
 
 interface VacationInput{
@@ -25,9 +25,18 @@ const AddVacationForm = () => {
     });
     const user = useTypedSelector(u=>u.auth.user);
 
-    const {loading,error} = useTypedSelector(s=>s.vacations);
+    const {loading,error,created,createdId} = useTypedSelector(s=>s.vacations);
+
+
 
     const dispatch = useAppDispatch();
+
+    useEffect(()=>{
+        if(created){
+            dispatch(createApproverVacation({userId:user?.id!,vacationId:createdId!}))
+        }
+    },[created])
+
     const onSubmit: SubmitHandler<VacationInput> = (data) => {
         dispatch(createVacation({...data,userId:user?.id!}))
         reset()

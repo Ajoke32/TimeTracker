@@ -9,7 +9,7 @@ export function AddVacationQuery(vacation:VacationInputType) {
 
     const token = ReadCookie('user');
 
-    return AjaxQuery<QueryStructure<{ userMutation: { create: boolean } }>>(
+    return AjaxQuery<QueryStructure<{ vacationMutation: { create: {id:number} } }>>(
         'mutation CreateVacations($vacation:VacationInputType!){vacationMutation{create(vacation:$vacation){id,userId}}}',
         { vacation:vacation},
         token
