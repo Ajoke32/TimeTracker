@@ -31,3 +31,12 @@
     border: 2px solid var(--color-stroke-gray);
     border-radius: 15px;
 }
+
+.team-menu__main > .loader {
+    width: 4rem;
+    height: 4rem;
+    align-self: center;
+    
+    border: 8px solid rgba(0, 0, 0, .1);
+    border-left-color: var(--color-cyan);
+}
