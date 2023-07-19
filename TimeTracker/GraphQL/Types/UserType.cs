@@ -5,7 +5,7 @@ using TimeTracker.Models.Dtos;
 
 namespace TimeTracker.GraphQL.Types;
 
-public sealed class UserType:ObjectGraphType<UserDisplayDto>
+public sealed class UserType:ObjectGraphType<User>
 {
     public UserType()
     {
@@ -17,7 +17,9 @@ public sealed class UserType:ObjectGraphType<UserDisplayDto>
 
         Field(x => x.LastName).Description("");
 
-        Field(x=>x.Permissions).Description("");
+        Field<int>("permissions")
+            .Resolve(context => (int)context.Source.Permissions)
+            .Description("");
 
         Field(x => x.VacationDays).Description("");
 
@@ -32,10 +34,12 @@ public sealed class UserType:ObjectGraphType<UserDisplayDto>
         Field(x => x.Senders).Description("user vacation requests");
 
         Field(x => x.Vacations).Description("user vacations");
-        
+
         Field(x=>x.DeletedAt,nullable:true).Description("user deleted at");
         
         Field(x=>x.IsDeleted,nullable:true).Description("user deleted");
+
+        Field(x => x.ApproverVacations,nullable:true).Description("user request");
 
     }
 }

@@ -38,7 +38,7 @@ public sealed class UserQuery : ObjectGraphType
 
                 var take = ctx.GetArgument<int>("take");
                 var skip = ctx.GetArgument<int>("skip");
-                Console.WriteLine($"Id = {userId}");
+                
                 
                 var users = await uow.GenericRepository<User>().GetAsync(
                     includeProperties: include, 
@@ -46,8 +46,8 @@ public sealed class UserQuery : ObjectGraphType
                     skip: skip, 
                     filter: activated ? (u => u.IsEmailActivated && u.Id != userId) : (u => u.Id != userId)
                 );
-                
-                return mapper.Map<List<User>,List<UserDisplayDto>>(users.ToList());
+
+                return users;
             })
             .Description("gets all users");
 
@@ -63,8 +63,8 @@ public sealed class UserQuery : ObjectGraphType
                 
                 var user = await uow.GenericRepository<User>()
                     .FindAsync(u=>u.Id==id,relatedData:include);
-                
-               return mapper.Map<UserDisplayDto>(user);
+
+                return user;
 
             }).Description("gets user by id");
 
@@ -75,8 +75,8 @@ public sealed class UserQuery : ObjectGraphType
                 var email = _.GetArgument<string>("email");
                
                 var user = await uow.GenericRepository<User>().FindAsync(u => u.Email == email);
-                
-                return mapper.Map<UserDisplayDto>(user);
+
+                return user;
             });//.AuthorizeWithPolicy(policy:"LoggedIn");
 
         
@@ -89,19 +89,19 @@ public sealed class UserQuery : ObjectGraphType
                 var searchUser = await uow.GenericRepository<User>()
                     .FindAsync(u => u.Email == args.Email);
                 
-                if (searchUser == null)
+                if (searchUser == null||searchUser.IsDeleted)
                 {
                     throw new ValidationError("Wrong credentials!");
                 }
-
-                if (searchUser.IsEmailActivated)
-                {
-                    var authService = ctx.RequestServices?.GetRequiredService<Authenticate>();
+                
+                
+                if (!searchUser.IsEmailActivated) throw new ValidationError("Account is not activated!");
+                
+                
+                var authService = ctx.RequestServices?.GetRequiredService<Authenticate>();
                     
-                    return await AuthorizeConfirmedEmailAsync(searchUser, args.Password, authService!);
-                }
+                return await AuthorizeConfirmedEmailAsync(searchUser, args.Password, authService!);
 
-                throw new ValidationError("Account is not activated!");
             });
 
         Field<bool>("verifyUser")

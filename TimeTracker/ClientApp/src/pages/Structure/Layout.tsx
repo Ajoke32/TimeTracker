@@ -1,7 +1,10 @@
 import { Outlet } from "react-router-dom";
-
-import { Header, Sidebar } from "../../components/";
+import {Header, Sidebar} from "../../components/";
 import "./Layout.css"
+
+
+
+
 
 export const Layout = () => {
     return (

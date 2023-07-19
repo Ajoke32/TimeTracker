@@ -10,7 +10,5 @@ public sealed class ApproveInputType:InputObjectGraphType<UserApprover>
         Field(x => x.ApproverId);
 
         Field(x => x.UserId);
-
-        Field(x => x.IsApproved);
     }
 }

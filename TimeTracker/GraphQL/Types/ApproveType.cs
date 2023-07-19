@@ -6,7 +6,7 @@ using TimeTracker.Models.Dtos;
 
 namespace TimeTracker.GraphQL.Types;
 
-public sealed class ApproveType:ObjectGraphType<UserApproverDisplayDto>
+public sealed class ApproveType:ObjectGraphType<UserApprover>
 {
     public ApproveType()
     {
@@ -15,8 +15,5 @@ public sealed class ApproveType:ObjectGraphType<UserApproverDisplayDto>
         Field(x => x.Approver,nullable:true).Description("user approver");
 
         Field(x => x.User,nullable:true).Description("user sender");
-
-        Field(x => x.IsApproved).Description("approve state");
-        
     }
 }
