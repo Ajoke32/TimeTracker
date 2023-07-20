@@ -21,4 +21,6 @@ public class Vacation
     
     [Required]
     public DateTime EndDate { get; set; }
+
+    public List<ApproverVacation> ApproverVacations { get; set; } = new();
 }

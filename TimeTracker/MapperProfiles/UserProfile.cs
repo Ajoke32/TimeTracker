@@ -27,6 +27,7 @@ public class UserProfile:Profile
             .ForMember(u => u.WorkType,
                 o =>
                     o.MapFrom(m => (int)m.WorkType));
-        
+
+        CreateMap<ApproverVacation, ApproverVacationInputDto>();
     }
 }

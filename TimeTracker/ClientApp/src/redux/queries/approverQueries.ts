@@ -17,11 +17,3 @@ export function AddApproversQuery(data: ApproversAddType) {
         token
     )
 }
-
-export function UpdateApproveState(state:boolean,id:number){
-
-    return AjaxQuery<QueryStructure<any>>(
-        'mutation UpdateApproveState($state:Boolean!,$id:Int!){approveMutation{updateState(state:$state,id:$id){isApproved,id}}}',
-        {state:state,id:id},
-    )
-}

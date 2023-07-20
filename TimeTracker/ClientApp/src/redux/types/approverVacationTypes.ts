@@ -5,13 +5,26 @@ export interface ApproverVacation{
     id:number,
     approver:User[],
     vacation:Vacation,
-    isApproved:boolean
+    isApproved?:boolean|null
 }
 
 export interface ApproverVacationUpdate{
     id:number,
     isApproved:boolean,
-    vacation?:Vacation
+    vacationId:number
+}
+
+export interface ApproverVacationUpdateMany{
+    id:number[],
+    isApproved:boolean,
+    approverId:number
+}
+
+
+
+export interface VacationApproverInput{
+    vacationId:number,
+    userId:number,
 }
 
 

@@ -1,26 +1,36 @@
 import {Epic, ofType} from "redux-observable";
 import {catchError, map, mergeMap, Observable, of} from "rxjs";
 import {PayloadAction} from "@reduxjs/toolkit";
-import {UpdateApproverVacationState} from "../queries/vacationApproverQueries";
 import {
-    fetchRequestsFail, fetchRequestsSuccess,
+    UpdateApproverVacations,
+    UpdateApproverVacationState
+} from "../queries/vacationApproverQueries";
+import {
+    fetchRequestsFail,
+    fetchRequestsSuccess,
+    updateApproversVacationsFail,
+    updateApproversVacationsSuccess,
     updateApproverVacationStateStateFail,
     updateApproverVacationStateStateSuccess
 } from "../slices";
 import {FetchVacationsRequest} from "../queries/vacationQueries";
-import {ApproverVacationUpdate} from "../types/approverVacationTypes";
+import {
+    ApproverVacationUpdateMany,
+    VacationApproverInput
+} from "../types/approverVacationTypes";
 
 
 
 
-export const updateApproverVacationEpic: Epic = (action: Observable<PayloadAction<ApproverVacationUpdate>>, state) =>
+export const updateApproverVacationEpic: Epic = (action: Observable<PayloadAction<ApproverVacationUpdateMany>>, state) =>
     action.pipe(
         ofType("approverVacation/updateApproverVacationState"),
         mergeMap(action =>
-            UpdateApproverVacationState(action.payload.id,action.payload.isApproved)
+            UpdateApproverVacationState(action.payload.id,action.payload.isApproved,action.payload.approverId!)
                 .pipe(
                     map(resp => {
                         if (resp.response.errors != null) {
+                            console.log(resp.response.errors);
                             return updateApproverVacationStateStateFail(resp.response.errors[0].message)
                         }
                         return updateApproverVacationStateStateSuccess(resp.response.data.approverVacationMutation.updateState);
@@ -48,6 +58,25 @@ export const fetchVacationsRequestsEpic: Epic = (action: Observable<PayloadActio
                     catchError((e: Error) => {
                         console.log(e);
                         return of(fetchRequestsFail("unexpected error"))
+                    })
+                ),
+        )
+    );
+
+export const updateApproversVacationsEpic: Epic = (action: Observable<PayloadAction<VacationApproverInput>>, state) =>
+    action.pipe(
+        ofType("approverVacation/updateApproversVacations"),
+        mergeMap(action =>
+            UpdateApproverVacations(action.payload)
+                .pipe(
+                    map(resp => {
+                        if (resp.response.errors != null) {
+                            return updateApproversVacationsFail(resp.response.errors[0].message)
+                        }
+                        return updateApproversVacationsSuccess();
+                    }),
+                    catchError((e: Error) => {
+                        return of(updateApproversVacationsFail("unexpected error"))
                     })
                 ),
         )

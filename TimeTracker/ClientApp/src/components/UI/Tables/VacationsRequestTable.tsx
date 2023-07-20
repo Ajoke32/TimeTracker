@@ -4,7 +4,8 @@ import {Loader} from "../Loaders";
 import {Checkbox} from "../Checkboxes";
 import "./ApproversTable.css"
 import moment from "moment";
-import {fetchRequests, updateApproverVacationState} from "../../../redux";
+import {fetchRequests, updateApproverVacationState, updateVacationState} from "../../../redux";
+import BaseButton from "../Buttons/BaseButton";
 
 
 
@@ -12,9 +13,11 @@ export const VacationsRequestTable = () => {
 
     const dispatch = useAppDispatch()
 
-    const selected = useState([]);
+    const [approves,setApproveId] = useState<number[]>([]);
 
-    const {vacationRequests,error,loading} =
+    const [selected,setSelected] = useState<number[]>([]);
+
+    const {vacationRequests,updated,error,loading} =
         useTypedSelector(s=>s.approverVacations);
 
     const userId =
@@ -24,9 +27,24 @@ export const VacationsRequestTable = () => {
         dispatch(fetchRequests(userId!))
     },[])
 
+    useEffect(()=>{
+        if(updated){
+            dispatch(updateVacationState(approves))
+        }
+    },[updated])
 
-    function approve(id:number,state:boolean){
-        dispatch(updateApproverVacationState({id:id,isApproved:state}))
+    function approve(ids:number[],state:boolean){
+        setApproveId(ids);
+        dispatch(updateApproverVacationState({id:ids,isApproved:state,approverId:userId!}))
+    }
+
+
+    function select(id:number){
+        if(selected.includes(id)){
+            setSelected(selected.filter(s=>s!==id));
+            return;
+        }
+        setSelected([...selected,id]);
     }
 
     return (
@@ -36,26 +54,38 @@ export const VacationsRequestTable = () => {
                <div className="requests-wrapper">
                    <div className="search-bar">
                        <input type="text" placeholder="search by email" className="input-search"/>
+                       <span>{loading&&"Working on it..."}</span>
                        <div className="btn-group">
-                           <button  className="btn-base btn-confirm disabled" disabled={true}>Approve selected</button>
-                           <button  className="btn-base btn-decline disabled" disabled={true}>Decline selected</button>
+                           <BaseButton onClick={()=>approve(selected,true)} text={"Approve selected"}
+                                       disabled={selected.length===0} btnStyle={'confirm'} />
+                           <BaseButton onClick={()=>approve(selected,false)} text={"Decline selected"}
+                                       disabled={selected.length===0} btnStyle={'decline'} />
                        </div>
                    </div>
                    {vacationRequests.map(a=>{
                            const diff = moment(a.vacation.endDate).diff(a.vacation.startDate);
                           return <div key={a.id} className="request-item">
                               <Checkbox
-                                  value={1}
-                                  optionName={null}
-                                  isChecked={false}
-                                  onChange={()=>{}}
+                                  value={a.id}
+                                  optionName={""}
+                                  isChecked={selected.includes(a.vacation.id)}
+                                  onChange={()=>{select(a.vacation.id)}}
                               />
                               <span>{a.vacation.user.firstName} {a.vacation.user.lastName}</span>
                               <span>{a.vacation.user.email}</span>
-                              <span className={a.isApproved?"approved":"declined"}>{a.isApproved?"Approved":"Declined"}</span>
+                              <span className={a.isApproved!==null?a.isApproved?"approved":"declined":"pending"}>
+                                  {a.isApproved!==null?a.isApproved?"Approved":"Declined":"Pending"}
+                              </span>
                               <div className="btn-group">
-                                   <button onClick={()=>approve(a.vacation.id,true)} className="btn-base btn-confirm">Approve</button>
-                                   <button onClick={()=>approve(a.vacation.id,false)} className="btn-base btn-decline">Decline</button>
+                                  {a.isApproved===null?
+                                      <>
+                                          <button onClick={()=>approve([a.vacation.id],false)} className="btn-base btn-decline">Decline</button>
+                                          <button onClick={()=>approve([a.vacation.id],true)} className="btn-base btn-confirm">Approve</button>
+                                      </>
+                                      :a.isApproved?<button onClick={()=>approve([a.vacation.id],false)} className="btn-base btn-decline">Decline</button>:
+                                          <button onClick={()=>approve([a.vacation.id],true)} className="btn-base btn-confirm">Approve</button>
+                                  }
+
                               </div>
                               <button className="btn-base btn-info more-btn">more</button>
                               <div className="more-info">

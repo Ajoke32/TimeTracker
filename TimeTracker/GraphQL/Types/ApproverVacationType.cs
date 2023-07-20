@@ -17,6 +17,6 @@ public sealed class ApproverVacationType:ObjectGraphType<ApproverVacation>
         
         Field(x => x.Id).Description("vacation id");
         
-        Field(x => x.IsApproved).Description("vacation state");
+        Field(x => x.IsApproved,nullable:true).Description("vacation state");
     }
 }

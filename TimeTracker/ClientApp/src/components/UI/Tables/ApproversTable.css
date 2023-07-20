@@ -4,7 +4,8 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width: 1000px;
+    width: 1100px;
+    border-radius: 8px;
 }
 
 .request-item{
@@ -97,6 +98,7 @@
 }
 .more-info span{
     color: white;
+    text-align: left;
 }
 
 .disabled{
@@ -113,4 +115,8 @@
 }
 .approved{
     color: #70e000;
+}
+
+.pending{
+    color:#ffa200;
 }
