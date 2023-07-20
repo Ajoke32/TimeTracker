@@ -32,7 +32,7 @@
     border-radius: 15px;
 }
 
-.team-menu__main > .loader {
+.team-menu__main .loader {
     width: 4rem;
     height: 4rem;
     align-self: center;

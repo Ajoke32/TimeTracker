@@ -7,7 +7,7 @@ export const UsersTable = ({ users }: { users: User[] }) => {
     const usersState = useTypedSelector(state => state.users);
 
     const handleConfirmButtonClick = (value: number) => {
-        console.log(123);
+        console.log(value);
         // setFilteredUsers((users) =>
         //     users.filter((user) => user.id !== value)
         // );
@@ -27,52 +27,42 @@ export const UsersTable = ({ users }: { users: User[] }) => {
                 </thead>
 
                 <tbody>
-                    {usersState.loading ?
-                        <div className="center-component">
-                            <Loader />
-                        </div>
-                        :
-                        <>
-                            {users.map((user) => (
+                    {users.map((user) => (
 
-                                <tr key={user.id}>
-                                    <td>
-                                        <ProfileAvatar initials={`${user.firstName[0]}${user.lastName[0]}`} />
-                                    </td>
-                                    <td className="table__name-col">
-                                        <span className="table__name-col__fullname">{user.firstName} {user.lastName}</span>
-                                    </td>
-                                    <td>
-                                        <span>{user.email}</span>
-                                    </td>
-                                    <td>
-                                        <span>{user.vacationDays}</span>
-                                    </td>
-                                    <td>
-                                        <span>{user.hoursPerMonth}</span>
-                                    </td>
-                                    <td>
-                                        <div className="users-table__actions-wrapper">
-                                            <div className="users-table__actions-edit">
-                                                <button>
-                                                </button>
-                                            </div>
-                                            <div className="users-table__actions-archieve">
-                                                <ConfirmModal
-                                                    title="CONFIRM"
-                                                    description={`Are you sure you want to deactivate ${user.firstName} ${user.lastName}?`}
-                                                    value={user.id}
-                                                    onConfirm={handleConfirmButtonClick}
-                                                />
-                                            </div>
+                        <tr key={user.id}>
+                            <td>
+                                <ProfileAvatar initials={`${user.firstName[0]}${user.lastName[0]}`} />
+                            </td>
+                            <td className="table__name-col">
+                                <span className="table__name-col__fullname">{user.firstName} {user.lastName}</span>
+                            </td>
+                            <td>
+                                <span>{user.email}</span>
+                            </td>
+                            <td>
+                                <span>{user.vacationDays}</span>
+                            </td>
+                            <td>
+                                <span>{user.hoursPerMonth}</span>
+                            </td>
+                            <td>
+                                <div className="users-table__actions-wrapper">
+                                    <div className="users-table__actions-edit">
+                                        <a href={`/team/edituser/${user.id}`} />
+                                    </div>
+                                    <div className="users-table__actions-archieve">
+                                        <ConfirmModal
+                                            title="CONFIRM"
+                                            description={`Are you sure you want to deactivate ${user.firstName} ${user.lastName}?`}
+                                            value={user.id}
+                                            onConfirm={handleConfirmButtonClick}
+                                        />
+                                    </div>
 
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-
-                        </>
-                    }
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </div>

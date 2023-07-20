@@ -3,7 +3,7 @@ import { CheckboxInput, SmallButton, TextInput } from "../UI";
 import { RangeInput } from "../UI/Inputs/RangeInput";
 import { useAppDispatch, useTypedSelector } from "../../hooks";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Permission, fetchUser } from '../../redux';
+import { Permission, fetchUser, User, editUser } from '../../redux';
 import { useParams } from 'react-router-dom'
 
 type Inputs = {
@@ -46,11 +46,12 @@ export const EditUserForm = () => {
         });
 
     const onSubmit: SubmitHandler<Inputs> = (data) => {
-        data.permissions = checkedOptions;
-        data.hoursPerMonth = parseInt((hoursPerMonthValue).toString())
-        console.log(data)
-        reset();
-
+        const editedUser = {
+            id: userState.user!.id,
+            permissions: checkedOptions,
+            hoursPerMonth: parseInt((hoursPerMonthValue).toString())
+        }
+        dispatch(editUser(editedUser as User));
     }
 
     return (

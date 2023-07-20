@@ -1,5 +1,5 @@
 ﻿import "./Team.css"
-import { H4, UsersTable, UsersTableNavbar } from "../../components";
+import { H4, UsersTable, UsersTableNavbar, Loader } from "../../components";
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useTypedSelector } from "../../hooks";
 import { User, fetchUsers } from "../../redux";
@@ -37,8 +37,13 @@ export const Team = () => {
                 <div className="team-menu__main">
                     <div className="users-table__wrapper">
                         <UsersTableNavbar users={usersState.users} setFilteredUsers={setFilteredUsers} />
-                        <UsersTable users={filteredUsers} />
-                        <button onClick={() => { loadMore() }}>Load more</button>
+                        {usersState.loading ? <Loader /> :
+                            <>
+                                <UsersTable users={filteredUsers} />
+                                <button onClick={() => { loadMore() }}>Load more</button>
+                            </>
+                        }
+
                     </div>
                 </div>
             </div>

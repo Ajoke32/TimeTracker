@@ -1,4 +1,4 @@
-﻿import React, {useState} from 'react';
+﻿import {useState} from 'react';
 import "./modals.css"
 import {SmallButton} from "../";
 
@@ -22,7 +22,7 @@ export const ConfirmModal = ({title, description, onConfirm, value} : ConfirmMod
     
     return (
         <div className="modal-wrapper">
-            <button  type="button" className="modal-open-close__btn"  onClick={handleOpenCloseModal}></button>
+            <button className="modal-open-close__btn" onClick={handleOpenCloseModal}></button>
             <div className="modal-window__wrapper" style={isOpen ? {display: 'flex'} : {display: 'none'}}>
                 <div className="modal-window__content">
                     <h2>{title}</h2>

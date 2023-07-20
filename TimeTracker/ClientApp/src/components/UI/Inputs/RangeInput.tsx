@@ -11,7 +11,6 @@ export const RangeInput = ({title, minRange, maxRange, step, value, onChange }: 
     const handleRangeInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const currentValue = Number(event.target.value);
         onChange(currentValue);
-        console.log(currentValue);
     };
 
     const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {

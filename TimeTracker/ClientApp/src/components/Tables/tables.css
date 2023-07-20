@@ -171,6 +171,11 @@ tbody::-webkit-scrollbar-thumb:hover {
     background-repeat: no-repeat;
 }
 
+.users-table__actions-edit > a {
+    height: 100%;
+    width: 100%;
+}
+
 .users-table__actions-archieve {
     display: flex;
     background: url("../../assets/images/archieve_user_icon.png");

@@ -13,7 +13,6 @@ export const userLoginEpic: Epic = (action: Observable<PayloadAction<UserLoginTy
             UserLoginQuery(action.payload)
                 .pipe(
                     map(resp => {
-                        console.log(resp)
                         if (resp.response.errors != null) {
                             return loginFail(resp.response.errors[0].message)
                         }

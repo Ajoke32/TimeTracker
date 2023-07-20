@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ApproversTable } from "../Tables";
-import { fetchApprovers, addApprovers } from "../../redux";
+import { fetchApprovers, addApprovers, fetchUser, users } from "../../redux";
 import { SmallButton, StepsElement, Loader } from "../UI";
 import { useAppDispatch, useTypedSelector } from "../../hooks";
 
@@ -10,18 +10,16 @@ const AddApproversForm = () => {
     const dispatch = useAppDispatch();
     const userState = useTypedSelector(state => state.user);
     const approversState = useTypedSelector(state => state.approvers);
-
-    const currentUser = `John Doe`
-
+    
     const [approvers, setApprovers] = useState<number[]>([]);
     const [fetched, setFetched] = useState<number>(0);
 
     const handleClick = () => {
-        dispatch(addApprovers({approvers: approvers, userId: userState.userId!}))
+        dispatch(addApprovers({approvers: approvers, userId: userState.user!.id!}))
     }
 
     const loadMore = () => {
-        dispatch(fetchApprovers({ take: 5, skip: fetched, activated: true, userId: userState.userId!}));
+        dispatch(fetchApprovers({ take: 5, skip: fetched, activated: true, userId: userState.user!.id!}));
     }
 
     useEffect(() => {
@@ -37,7 +35,7 @@ const AddApproversForm = () => {
             <form onSubmit={(e) => { e.preventDefault() }}>
                 <StepsElement title="Step 2/2" currentStep={2} />
                 
-                {/*<span className="user-form__title">Select vacations approver(s) for {`${userState.user?.firstName} ${userState.user?.lastName}`}</span>*/}
+                <span className="user-form__title">Select vacations approver(s) for {`${userState.user?.firstName} ${userState.user?.lastName}`}</span>
                 {approversState.loading ?
                     <Loader /> :
                     <>
