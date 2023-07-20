@@ -11,5 +11,9 @@ public sealed class RootQuery:ObjectGraphType
         Field<UserQuery>()
             .Name("userQuery")
             .Resolve(_ => new { });
+        
+        Field<ApproverVacationQuery>()
+            .Name("approverVacationQuery")
+            .Resolve(_ => new { });
     }
 }

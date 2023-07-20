@@ -1,6 +1,5 @@
 import {
     createErrorReducer,
-    createPendingReducer,
     createPendingReducerWithPayload,
     createSuccessReducerWithPayload,
     defaultState

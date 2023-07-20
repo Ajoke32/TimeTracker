@@ -1,0 +1,122 @@
+.requests-wrapper{
+    border: 1px solid #3a506b;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 1100px;
+    border-radius: 8px;
+}
+
+.request-item{
+    position: relative;
+    display: grid;
+    grid-template-columns: 20px 160px 1fr 100px 1fr 100px;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+}
+
+
+
+.search-bar{
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid lightgray;
+    padding-bottom: 15px;
+}
+
+.btn-base{
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    color: #f6f6f6;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.input-search{
+    padding: 10px 10px;
+    border: 1px solid lightgray;
+    border-radius: 8px;
+}
+.input-search:hover,
+.input-search:focus{
+    box-shadow: 0 0 3px 0 #0aa9ff;
+}
+
+.btn-confirm{
+    background-color: #70e000;
+}
+
+.btn-confirm:hover{
+    background-color: rgb(30, 224, 0);
+    box-shadow: 0 0 5px 0 #70e000;
+}
+
+
+.btn-decline{
+  background-color: #ff0a54;
+}
+
+.btn-decline:hover{
+    background-color: #ff0a27;
+    box-shadow: 0 0 5px 0 #ff0a8d;
+}
+
+.btn-info:hover{
+    background-color: #397cf8;
+    box-shadow: 0 0 5px 0 rgba(72, 181, 239, 0.96);
+}
+
+.btn-info{
+    background-color: #4895ef;
+}
+
+.btn-group{
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.more-info{
+    width: 250px;
+    right: 110px;
+    top: 0;
+    background-color: #14213d;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    line-height: 35px;
+    border-radius: 8px;
+    gap: 5px;
+    z-index: 100;
+    visibility: hidden;
+    word-break: break-all;
+    box-shadow: #001d3d 0 7px 29px 0;
+}
+.more-info span{
+    color: white;
+    text-align: left;
+}
+
+.disabled{
+    opacity: 0.5;
+}
+
+.more-btn:hover~.more-info{
+    transition: 0.2s;
+  visibility: visible;
+}
+
+.declined{
+    color:#ef233c
+}
+.approved{
+    color: #70e000;
+}
+
+.pending{
+    color:#ffa200;
+}

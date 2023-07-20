@@ -41,8 +41,6 @@ public class UserProfile:Profile
                 o =>
                     o.MapFrom(m => (int)m.WorkType));
 
-        CreateMap<UserApprover, UserApproverDisplayDto>();
-
+        CreateMap<ApproverVacation, ApproverVacationInputDto>();
     }
 }
-

@@ -1,11 +1,6 @@
-﻿using AutoMapper;
-using TimeTracker.MapperProfiles;
-using TimeTracker.Utils.SoftDelete;
+﻿namespace TimeTracker.Models.Dtos;
 
-namespace TimeTracker.Models.Dtos;
-
-
-public class UserDisplayDto:SoftDeleteBase
+public class UserDisplayDto
 {
     public int Id { get; set; }
     
@@ -29,7 +24,9 @@ public class UserDisplayDto:SoftDeleteBase
     
     public List<Vacation> Vacations { get; } = new();
     
-    public List<UserApproverDisplayDto> Approvers { get; } = new();
+    public List<ApproverVacation> ApproverVacations { get; set; }
+
+    public List<UserApprover> Approvers { get; set; }
     
-    public List<UserApproverDisplayDto> Senders { get; } = new();
+    public List<UserApprover> Senders { get; set; }
 }

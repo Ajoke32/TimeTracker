@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { Home, Login, AddUser, Layout, UserVerify, Team, EditUser, ProtectedRoute } from "..";
 import { useTypedSelector } from '../../hooks';
+import { VacationsRequestTable, AddVacationForm } from "../../components";
 import { Permission } from '../../redux';
 
 export const AppRoutes = () => {
@@ -33,6 +34,8 @@ export const AppRoutes = () => {
                 }
               />
             </Route>
+            <Route path="/vacation/create" element={<AddVacationForm />} />
+            <Route path="/vacation/requests" element={<VacationsRequestTable />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Route>
         </>
@@ -45,4 +48,4 @@ export const AppRoutes = () => {
       )}
     </Routes>
   );
-}
+};

@@ -15,4 +15,5 @@ public interface IGenericRepository<TEntity> where TEntity:class
     public Task<bool> DeleteAsync(TEntity entity);
 
     public ValueTask<TEntity> UpdateAsync(TEntity entity);
+    public ValueTask<bool> AddRangeAsync(IEnumerable<TEntity> entities);
 }

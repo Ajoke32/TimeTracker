@@ -107,6 +107,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddDataProtection();
 
+/*
 builder.Services.AddQuartz(q =>
 {
     q.UseMicrosoftDependencyInjectionJobFactory();
@@ -120,7 +121,7 @@ builder.Services.AddQuartz(q =>
     });
 });
 
-builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);*/
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

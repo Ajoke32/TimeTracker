@@ -1,5 +1,6 @@
 ﻿using GraphQL;
 using GraphQL.Types;
+using GraphQL.Validation;
 using TimeTracker.Absctration;
 using TimeTracker.GraphQL.Types;
 using TimeTracker.GraphQL.Types.InputTypes.VacationInput;
@@ -17,31 +18,44 @@ public sealed class VacationMutations:ObjectGraphType
             {
                 var vacation = _.GetArgument<Vacation>("vacation");
 
+                var user = await uow.GenericRepository<User>()
+                    .FindAsync(u => u.Id == vacation.UserId);
+
+                var diff = vacation.EndDate - vacation.StartDate;
+                
+                if (diff.Days > user!.VacationDays)
+                {
+                    throw new ValidationError("Vacation period invalid");
+                }
+                
                 var res = await uow.GenericRepository<Vacation>().CreateAsync(vacation);
                 await uow.SaveAsync();
                 return res;
             });
 
-        Field<VacationType>("updateState")
-            .Argument<bool>("state",nullable:true)
-            .Argument<int>("id")
+        Field<bool>("updateState")
+            .Argument<List<int>>("vacations")
             .ResolveAsync(async _ =>
             {
-                var state = _.GetArgument<bool>("state");
-                var id = _.GetArgument<int>("id");
-
-                var vacation = await uow.GenericRepository<Vacation>()
-                    .FindAsync(v => v.Id == id);
-                if (vacation == null)
+                var id = _.GetArgument<List<int>>("vacations");
+                
+                var vacations = await uow.GenericRepository<Vacation>()
+                    .GetAsync(v => id.Contains(v.Id),includeProperties:"ApproverVacations");
+                
+                if (!vacations.Any())
                 {
-                    throw new Exception("vacation not found");
+                    throw  new ValidationError("Vacations not found");
                 }
-
-                vacation.VacationState = state;
-                var updated = await uow.GenericRepository<Vacation>().UpdateAsync(vacation);
+                
+                
+                foreach (var vac in vacations)
+                {
+                    vac.VacationState = IsVacationConfirmed(vac.ApproverVacations);
+                }
+                
                 await uow.SaveAsync();
-
-                return updated;
+                
+                return true;
             });
 
 
@@ -55,5 +69,11 @@ public sealed class VacationMutations:ObjectGraphType
                 await uow.SaveAsync();
                 return updated;
             });
+    }
+
+
+    private bool IsVacationConfirmed(IEnumerable<ApproverVacation> av)
+    {
+        return av.All(appVacation => appVacation.IsApproved ?? false);
     }
 } 

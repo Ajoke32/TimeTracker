@@ -13,7 +13,7 @@ public class Authenticate
 {
     private readonly IConfiguration _config;
     
-    private readonly int _tokenExpiration = 5;
+    private readonly int _tokenExpiration = 120;
     public Authenticate(IConfiguration config)
     {
         _config = config;

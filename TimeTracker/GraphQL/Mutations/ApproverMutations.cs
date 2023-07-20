@@ -1,16 +1,18 @@
-﻿using GraphQL;
+﻿using AutoMapper;
+using GraphQL;
 using GraphQL.Types;
 using TimeTracker.Absctration;
 using TimeTracker.GraphQL.Types;
 using TimeTracker.GraphQL.Types.InputTypes.ApproveInput;
 using TimeTracker.Models;
+using TimeTracker.Models.Dtos;
 
 namespace TimeTracker.GraphQL.Mutations;
 
 public sealed class ApproverMutations:ObjectGraphType
 {
     private readonly IUnitOfWorkRepository _uof;
-    public ApproverMutations(IUnitOfWorkRepository uof)
+    public ApproverMutations(IUnitOfWorkRepository uof,IMapper mapper)
     {
         _uof = uof;
 
@@ -70,6 +72,30 @@ public sealed class ApproverMutations:ObjectGraphType
                 await uof.SaveAsync();
                 return result;
             }).AuthorizeWithPolicy("Delete");
-        
+
+
+        Field<ApproveType>("updateState")
+            .Argument<bool>("state")
+            .Argument<int>("id")
+            .ResolveAsync(async ctx =>
+            {
+                var state = ctx.GetArgument<bool>("state");
+                
+                var id = ctx.GetArgument<int>("id");
+                
+                var approve = await uof.GenericRepository<UserApprover>()
+                    .FindAsync(a => a.Id == id);
+
+                if (approve == null)
+                {
+                    throw new ArgumentException("not exist");
+                }
+                
+               
+                await uof.SaveAsync();
+
+                return approve;
+            });
+
     }
 }
