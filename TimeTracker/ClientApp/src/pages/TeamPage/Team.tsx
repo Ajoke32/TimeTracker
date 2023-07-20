@@ -1,17 +1,17 @@
 ﻿import "./Team.css"
-import { H4, Loader } from "../../components";
+import { H4, UsersTable, UsersTableNavbar, Loader } from "../../components";
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useTypedSelector } from "../../hooks";
-import { UsersTable } from "../../components/Tables";
 import { User, fetchUsers } from "../../redux";
 
 
 export const Team = () => {
     const dispatch = useAppDispatch();
-
-    const [fetched, setFetched] = useState<number>(0);
     const authState = useTypedSelector(state => state.auth);
     const usersState = useTypedSelector(state => state.users);
+
+    const [fetched, setFetched] = useState<number>(0);
+    const [filteredUsers, setFilteredUsers] = useState<User[]>(usersState.users);
 
     const loadMore = () => {
         dispatch(fetchUsers({ take: 5, skip: fetched, activated: false, userId: authState.user?.id! }));
@@ -22,8 +22,10 @@ export const Team = () => {
     }, [])
 
     useEffect(() => {
-        setFetched(usersState.users.length)
+        setFetched(usersState.users.length);
+        setFilteredUsers(usersState.users);
     }, [usersState.users.length])
+
 
     return (
         <div className="team-menu__wrapper">
@@ -33,13 +35,16 @@ export const Team = () => {
                 </div>
 
                 <div className="team-menu__main">
-                    {usersState.loading ?
-                        <Loader /> :
-                        <>
-                            <UsersTable users={usersState.users} />
-                            <button onClick={() => { loadMore() }}>Load more</button>
-                        </>
-                    }
+                    <div className="users-table__wrapper">
+                        <UsersTableNavbar users={usersState.users} setFilteredUsers={setFilteredUsers} />
+                        {usersState.loading ? <Loader /> :
+                            <>
+                                <UsersTable users={filteredUsers} />
+                                <button onClick={() => { loadMore() }}>Load more</button>
+                            </>
+                        }
+
+                    </div>
                 </div>
             </div>
         </div>

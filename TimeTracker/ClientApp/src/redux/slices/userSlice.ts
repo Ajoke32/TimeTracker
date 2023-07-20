@@ -1,11 +1,19 @@
-import { createSlice } from "@reduxjs/toolkit"
-import { UserSliceState } from '../intrerfaces';
-import { addFailReducer, addReducer, addSuccessReducer, userVerifyReducer, emailVerifyReducer, verifyFailReducer, verifySuccessReducer } from "./reducers";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { UserSliceState, User } from '../intrerfaces';
+import {
+    defaultState, createPendingReducerWithPayload,
+    createSuccessReducerWithPayload, createErrorReducer,
+    createSuccessReducerWithoutPayload
+} from "./generic";
+import {
+    addFailReducer, addReducer, addSuccessReducer,
+    userVerifyReducer, emailVerifyReducer,
+    verifyFailReducer, verifySuccessReducer
+} from "./reducers";
 
 const initialState: UserSliceState = {
-    loading: false,
-    error: "",
-    userId: null
+    ...defaultState,
+    user: null
 };
 
 const userSlice = createSlice({
@@ -15,12 +23,28 @@ const userSlice = createSlice({
         userAdd: addReducer,
         userAddSuccess: addSuccessReducer,
         userAddFail: addFailReducer,
+
         userVerify: userVerifyReducer,
-        emailVerify: emailVerifyReducer,
         verifySuccess: verifySuccessReducer,
-        verifyFail: verifyFailReducer
+        verifyFail: verifyFailReducer,
+
+        fetchUser: createPendingReducerWithPayload<UserSliceState, number>(),
+        fetchUserSuccess: createSuccessReducerWithPayload<UserSliceState, User>(
+            (state: UserSliceState, action: PayloadAction<User>) => {
+                state.user = action.payload;
+            }),
+        fetchUserFail: createErrorReducer(),
+
+        editUser: createPendingReducerWithPayload<UserSliceState, User>(),
+        editUserSuccess: createSuccessReducerWithoutPayload(),
+        editUserFail: createErrorReducer()
     },
 });
 
 export const user = userSlice.reducer;
-export const { userAdd, userAddSuccess, userAddFail, userVerify, emailVerify, verifyFail, verifySuccess } = userSlice.actions;
+export const {
+    userAdd, userAddSuccess, userAddFail,
+    userVerify, verifyFail, verifySuccess,
+    fetchUser, fetchUserFail, fetchUserSuccess,
+    editUser, editUserFail, editUserSuccess
+} = userSlice.actions;

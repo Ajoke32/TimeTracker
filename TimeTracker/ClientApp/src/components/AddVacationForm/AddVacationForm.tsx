@@ -12,7 +12,7 @@ interface VacationInput{
     message?:string
 }
 
-const AddVacationForm = () => {
+export const AddVacationForm = () => {
 
     const { register,handleSubmit,
         formState: { errors }, reset } = useForm<VacationInput>({
@@ -60,5 +60,3 @@ const AddVacationForm = () => {
         </div>
     );
 };
-
-export default AddVacationForm;

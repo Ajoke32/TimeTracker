@@ -18,16 +18,14 @@ public sealed class UserMutations:ObjectGraphType
     public UserMutations(IMapper mapper,EmailService emailService,IUnitOfWorkRepository uow)
     {
 
-
-        Field<int>("create")
+        Field<UserType>("create")
             .Argument<UserInputType>("user")
             .ResolveAsync(async ctx =>
             {
-
                 var user = ctx.GetArgument<UserInputDto>("user");
                 if (!EmailValidation.IsValidEmail(user.Email))
                 {
-                    throw new ValidationError("invalid email format");
+                    throw new ValidationError("Invalid email format");
                 }
                 
                 var email = await uow.GenericRepository<User>()
@@ -40,24 +38,26 @@ public sealed class UserMutations:ObjectGraphType
                 
                 
                 var created = await uow.GenericRepository<User>().CreateAsync(mapper.Map<User>(user));
-
                 await uow.SaveAsync();
 
                 await emailService.SendAccountRegistrationAsync(created.Id, created.Email);
-                return created.Id;
+                return mapper.Map<UserDisplayDto>(created);
             });//.AuthorizeWithPolicy("Create");
-        
-        
-        Field<UserType>("update")
+
+        Field<bool>("update")
             .Argument<UpdateUserInputType>("user")
             .ResolveAsync(async ctx =>
             {
-                
-                var user = ctx.GetArgument<User>("user");
+                var editedUser = ctx.GetArgument<UserUpdateDto>("user");
 
-                var updated = await uow.GenericRepository<User>().UpdateAsync(user);
+                var user = await uow.GenericRepository<User>()
+                                    .FindAsync(u => u.Id == editedUser.Id)
+                                    ?? throw new ValidationError("User not found!");                
+
+                var updated = await uow.GenericRepository<User>()
+                                       .UpdateAsync(mapper.Map<UserUpdateDto, User>(editedUser, user));
                 await uow.SaveAsync();
-                return updated;
+                return true;
             });
 
         Field<bool>("deleteById")
@@ -87,7 +87,7 @@ public sealed class UserMutations:ObjectGraphType
                 return isDeleted;
             });
 
-        Field<string>("verifyUser")
+        Field<bool>("verifyUser")
         .Argument<string>("token")
         .Argument<string>("password")
         .ResolveAsync(async ctx =>
@@ -95,25 +95,23 @@ public sealed class UserMutations:ObjectGraphType
             var token = ctx.GetArgument<string>("token");
             var authEmailService = ctx.RequestServices?.GetRequiredService<EmailTokenService>();
                 
-            var valid = await authEmailService!.VerifyUserToken(token, 18000);
+            var valid = await authEmailService!.VerifyUserToken(token, 72000); // 20 hours
             if(valid)
             {
                 var id = authEmailService.GetUserIdFromToken(token);
-                
                 var user = await uow.GenericRepository<User>().FindAsync(u=>u.Id==id);
-                if(user is not null)
+
+                if(user is not null /*&& !user.IsEmailActivated*/)
                 {
                     var password = ctx.GetArgument<string>("password");
                     user.Password = BCrypt.Net.BCrypt.HashPassword(password);
                     var updated = await uow.GenericRepository<User>().UpdateAsync(user);
                     
                     await uow.SaveAsync();
-                    await emailService.SendEmailConfirmationAsync(updated);
-
-                    return "Check your email!";
+                    return true;
                 }
             }
-            return "Failed to verify account!";
+            throw new  ValidationError("Invalid token");
         });
         
     }

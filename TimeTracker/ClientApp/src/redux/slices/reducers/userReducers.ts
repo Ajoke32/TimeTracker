@@ -1,4 +1,4 @@
-import { UserSliceState } from '../../intrerfaces';
+import { UserSliceState, User } from '../../intrerfaces';
 import { PayloadAction } from "@reduxjs/toolkit"
 import { UserAddType } from "../../types";
 
@@ -6,9 +6,9 @@ export const addReducer = (state: UserSliceState, action: PayloadAction<UserAddT
     state.loading = true;
 }
 
-export const addSuccessReducer = (state: UserSliceState, action: PayloadAction<number>) => {
+export const addSuccessReducer = (state: UserSliceState, action: PayloadAction<User>) => {
     state.loading = false;
-    state.userId = action.payload;
+    state.user = action.payload;
 }
 
 export const addFailReducer = (state: UserSliceState, action: PayloadAction<string>) => {

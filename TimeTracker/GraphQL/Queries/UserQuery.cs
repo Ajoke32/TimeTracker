@@ -161,17 +161,4 @@ public sealed class UserQuery : ObjectGraphType
         };
     }
 
-    private async Task<LoginResponse> AuthorizeWithNoActivatedEmailAsync(User actualUser,EmailService mailService,string password)
-    {
-        actualUser.Password = BCrypt.Net.BCrypt.HashPassword(password);
-        await _uow.SaveAsync();
-        
-        await mailService.SendEmailConfirmationAsync(actualUser);
-
-        return new LoginResponse
-        {
-            Code = (int)AuthCode.EmailDelivered,
-            Message = "email delivered"
-        };
-    }
 }

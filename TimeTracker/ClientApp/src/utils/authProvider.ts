@@ -28,7 +28,7 @@ export const GetUserFromToken = (): User | null => {
             lastName: decodedToken.LastName,
             permissions: parseInt(decodedToken.Permissions),
             vacationDays: parseInt(decodedToken.VacationDays),
-            workType: parseInt(decodedToken.WorkType),
+            workType: decodedToken.WorkType,
         }
         return result as User;
     }
