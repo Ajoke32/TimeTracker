@@ -5,14 +5,14 @@ export interface ApproverVacation{
     id:number,
     approver:User[],
     vacation:Vacation,
-    isApproved:boolean
+    isApproved?:boolean|null
 }
 
 export interface ApproverVacationUpdate{
     id:number,
     isApproved:boolean,
     vacation?:Vacation,
-    approverId?:number
+    approverId:number
 }
 
 

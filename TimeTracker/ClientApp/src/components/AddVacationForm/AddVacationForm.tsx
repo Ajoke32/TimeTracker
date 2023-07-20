@@ -3,7 +3,7 @@ import {Loader, SmallButton, TextInput} from "../UI";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {useAppDispatch, useTypedSelector} from "../../hooks";
 import {H5} from "../Headings";
-import {createApproverVacation, createVacation} from "../../redux";
+import {createVacation, updateApproversVacations} from "../../redux";
 
 
 interface VacationInput{
@@ -33,7 +33,7 @@ const AddVacationForm = () => {
 
     useEffect(()=>{
         if(created){
-            dispatch(createApproverVacation({userId:user?.id!,vacationId:createdId!}))
+            dispatch(updateApproversVacations({vacationId:createdId!,userId:user?.id!}))
         }
     },[created])
 

@@ -22,3 +22,11 @@ export function FetchVacationsRequest(id:number){
         {userId:id}
     )
 }
+
+export function UpdateVacationState(id:number){
+
+    return AjaxQuery<QueryStructure<{ vacationMutation:{updateState:{id:number}  } }>>(
+        'mutation UpdateVacationState($id:Int!){vacationMutation{updateState(id:$id){id}}}',
+        {id:id},
+    )
+}

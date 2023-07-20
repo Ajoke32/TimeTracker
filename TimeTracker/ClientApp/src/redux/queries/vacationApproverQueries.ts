@@ -19,3 +19,11 @@ export function CreateApproverVacation(approverVacation:VacationApproverInput){
         {approverVacation:approverVacation}
     )
 }
+
+export function UpdateApproverVacations(input:VacationApproverInput){
+
+    return AjaxQuery<QueryStructure<{}>>(
+        'mutation UpdateApproversVacations($av:ApproverVacationInputType!){approverVacationMutation{updateApproversVacations(approverVacation:$av)}}',
+        {av:input}
+    )
+}

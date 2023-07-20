@@ -9,19 +9,24 @@ import {createSlice,  PayloadAction} from "@reduxjs/toolkit";
 import {ApproverVacation, ApproverVacationUpdate, VacationApproverInput} from "../types/approverVacationTypes";
 
 interface VacationApproverState extends DefaultState{
-    vacationRequests:ApproverVacation[]
+    vacationRequests:ApproverVacation[],
+    updated:boolean
 }
 
 const initialState:VacationApproverState = {
     ...defaultState,
-    vacationRequests:[]
+    vacationRequests:[],
+    updated:false
 }
 
 const approverVacationsSlice = createSlice({
     name: 'approverVacation',
     initialState,
     reducers: {
-        updateApproverVacationState:createPendingReducerWithPayload<typeof initialState,ApproverVacationUpdate>(),
+        updateApproverVacationState:createPendingReducerWithPayload<typeof initialState,ApproverVacationUpdate>
+        ((state:VacationApproverState)=>{
+            state.updated=false;
+        }),
         updateApproverVacationStateStateSuccess:(state:VacationApproverState,action:PayloadAction<ApproverVacationUpdate>)=>{
             state.loading=false;
             state.vacationRequests.map(a=>{
@@ -30,6 +35,7 @@ const approverVacationsSlice = createSlice({
                 }
                 return a;
             })
+            state.updated=true;
         },
         updateApproverVacationStateStateFail:createErrorReducer(),
 
@@ -41,9 +47,15 @@ const approverVacationsSlice = createSlice({
         }),
         fetchRequestsFail:createErrorReducer(),
 
-        createApproverVacation:createPendingReducerWithPayload<typeof initialState,VacationApproverInput>(),
+        /*можливо потрібно буде створити просто один запис*/
+        /*createApproverVacation:createPendingReducerWithPayload<typeof initialState,VacationApproverInput>(),
         createApproverVacationSuccess:createSuccessReducerWithoutPayload(),
-        createApproverVacationFail:createErrorReducer()
+        createApproverVacationFail:createErrorReducer()*/
+
+        /*Оновлення не запису, а таблиці VacationApprovers*/
+        updateApproversVacations:createPendingReducerWithPayload<typeof initialState,VacationApproverInput>(),
+        updateApproversVacationsSuccess:createSuccessReducerWithoutPayload(),
+        updateApproversVacationsFail:createErrorReducer()
     },
 });
 
@@ -53,5 +65,5 @@ export const  {updateApproverVacationState,
     updateApproverVacationStateStateSuccess,
     updateApproverVacationStateStateFail,
 fetchRequests,fetchRequestsFail,
-    fetchRequestsSuccess,
-createApproverVacationSuccess,createApproverVacationFail,createApproverVacation} =  approverVacationsSlice.actions
+    fetchRequestsSuccess,updateApproversVacationsSuccess,
+    updateApproversVacationsFail,updateApproversVacations} =  approverVacationsSlice.actions

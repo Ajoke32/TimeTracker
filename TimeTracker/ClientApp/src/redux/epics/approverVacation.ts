@@ -1,10 +1,17 @@
 import {Epic, ofType} from "redux-observable";
 import {catchError, map, mergeMap, Observable, of} from "rxjs";
 import {PayloadAction} from "@reduxjs/toolkit";
-import {CreateApproverVacation, UpdateApproverVacationState} from "../queries/vacationApproverQueries";
 import {
-    createApproverVacationFail, createApproverVacationSuccess,
-    fetchRequestsFail, fetchRequestsSuccess,
+    CreateApproverVacation,
+    UpdateApproverVacations,
+    UpdateApproverVacationState
+} from "../queries/vacationApproverQueries";
+import {
+    fetchRequestsFail,
+    fetchRequestsSuccess,
+    updateApproversVacations,
+    updateApproversVacationsFail,
+    updateApproversVacationsSuccess,
     updateApproverVacationStateStateFail,
     updateApproverVacationStateStateSuccess
 } from "../slices";
@@ -54,20 +61,20 @@ export const fetchVacationsRequestsEpic: Epic = (action: Observable<PayloadActio
         )
     );
 
-export const createApproverVacationEpic: Epic = (action: Observable<PayloadAction<VacationApproverInput>>, state) =>
+export const updateApproversVacationsEpic: Epic = (action: Observable<PayloadAction<VacationApproverInput>>, state) =>
     action.pipe(
-        ofType("approverVacation/createApproverVacation"),
+        ofType("approverVacation/updateApproversVacations"),
         mergeMap(action =>
-            CreateApproverVacation(action.payload)
+            UpdateApproverVacations(action.payload)
                 .pipe(
                     map(resp => {
                         if (resp.response.errors != null) {
-                            return createApproverVacationFail(resp.response.errors[0].message)
+                            return updateApproversVacationsFail(resp.response.errors[0].message)
                         }
-                        return createApproverVacationSuccess();
+                        return updateApproversVacationsSuccess();
                     }),
                     catchError((e: Error) => {
-                        return of(createApproverVacationFail("unexpected error"))
+                        return of(updateApproversVacationsFail("unexpected error"))
                     })
                 ),
         )

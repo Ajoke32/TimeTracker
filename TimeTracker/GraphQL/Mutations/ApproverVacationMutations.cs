@@ -28,7 +28,7 @@ public sealed class ApproverVacationMutations:ObjectGraphType
 
         Field<ApproverVacationType>("updateState")
             .Argument<int>("approverId")
-            .Argument<bool>("state")
+            .Argument<bool>("state",nullable:true)
             .Argument<int>("vacationId")
             .ResolveAsync(async ctx =>
             {
@@ -46,6 +46,7 @@ public sealed class ApproverVacationMutations:ObjectGraphType
                 }
                 
                 approverVacation.IsApproved = state;
+
                 await uow.SaveAsync();
                 
                 return approverVacation;

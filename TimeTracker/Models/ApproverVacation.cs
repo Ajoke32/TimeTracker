@@ -12,6 +12,5 @@ public class ApproverVacation
 
     public Vacation Vacation { get; set; } = null!;
     
-    public bool IsApproved { get; set; }
-    
+    public bool? IsApproved { get; set; }
 }
