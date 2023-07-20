@@ -6,7 +6,11 @@ import {
     defaultState
 } from "./generic";
 import {createSlice,  PayloadAction} from "@reduxjs/toolkit";
-import {ApproverVacation, ApproverVacationUpdate, VacationApproverInput} from "../types/approverVacationTypes";
+import {
+    ApproverVacation, ApproverVacationUpdate,
+    ApproverVacationUpdateMany,
+    VacationApproverInput
+} from "../types/approverVacationTypes";
 
 interface VacationApproverState extends DefaultState{
     vacationRequests:ApproverVacation[],
@@ -23,18 +27,18 @@ const approverVacationsSlice = createSlice({
     name: 'approverVacation',
     initialState,
     reducers: {
-        updateApproverVacationState:createPendingReducerWithPayload<typeof initialState,ApproverVacationUpdate>
+        updateApproverVacationState:createPendingReducerWithPayload<typeof initialState,ApproverVacationUpdateMany>
         ((state:VacationApproverState)=>{
             state.updated=false;
         }),
-        updateApproverVacationStateStateSuccess:(state:VacationApproverState,action:PayloadAction<ApproverVacationUpdate>)=>{
+        updateApproverVacationStateStateSuccess:(state:VacationApproverState,action:PayloadAction<ApproverVacationUpdate[]>)=>{
             state.loading=false;
             state.vacationRequests.map(a=>{
-                if(a.vacation.id===action.payload.vacation?.id){
-                    a.isApproved=action.payload.isApproved;
-                }
+                const updated = action.payload.find(x=>
+                    x.vacationId===a.vacation.id);
+                if(updated){a.isApproved=updated.isApproved;}
                 return a;
-            })
+            });
             state.updated=true;
         },
         updateApproverVacationStateStateFail:createErrorReducer(),

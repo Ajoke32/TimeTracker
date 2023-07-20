@@ -20,5 +20,7 @@ public sealed class VacationType: ObjectGraphType<Vacation>
         Field(x => x.Message).Description("vacation desc");
         
         Field(x=>x.User).Description("user");
+
+        Field(x => x.ApproverVacations).Description("ApproverVacation");
     }
 }

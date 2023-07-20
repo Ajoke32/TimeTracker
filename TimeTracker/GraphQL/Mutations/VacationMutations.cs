@@ -33,27 +33,29 @@ public sealed class VacationMutations:ObjectGraphType
                 return res;
             });
 
-        Field<VacationType>("updateState")
-            .Argument<int>("id")
+        Field<bool>("updateState")
+            .Argument<List<int>>("vacations")
             .ResolveAsync(async _ =>
             {
-                var id = _.GetArgument<int>("id");
+                var id = _.GetArgument<List<int>>("vacations");
                 
-                var vacation = await uow.GenericRepository<Vacation>()
-                    .FindAsync(v => v.Id == id);
-                if (vacation == null)
+                var vacations = await uow.GenericRepository<Vacation>()
+                    .GetAsync(v => id.Contains(v.Id),includeProperties:"ApproverVacations");
+                
+                if (!vacations.Any())
                 {
-                    throw  new ValidationError("Vacation not found");
+                    throw  new ValidationError("Vacations not found");
                 }
                 
-                var approverVacations = await uow.GenericRepository<ApproverVacation>()
-                    .GetAsync(v => v.VacationId == id);
-
-                vacation.VacationState=IsVacationConfirmed(approverVacations);
+                
+                foreach (var vac in vacations)
+                {
+                    vac.VacationState = IsVacationConfirmed(vac.ApproverVacations);
+                }
                 
                 await uow.SaveAsync();
                 
-                return vacation;
+                return true;
             });
 
 
@@ -72,6 +74,6 @@ public sealed class VacationMutations:ObjectGraphType
 
     private bool IsVacationConfirmed(IEnumerable<ApproverVacation> av)
     {
-        return av.All(appVacation => appVacation.IsApproved??false);
+        return av.All(appVacation => appVacation.IsApproved ?? false);
     }
 } 

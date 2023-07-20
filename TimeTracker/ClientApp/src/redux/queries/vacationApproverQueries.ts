@@ -1,14 +1,13 @@
 import {AjaxQuery} from "./query";
 import {QueryStructure} from "../intrerfaces";
-import {ApproverVacationUpdate, VacationApproverInput} from "../types/approverVacationTypes";
+import {ApproverVacation, ApproverVacationUpdate, VacationApproverInput} from "../types/approverVacationTypes";
 
 
 
-export function UpdateApproverVacationState(id:number,state:boolean,approverId:number){
-    return AjaxQuery<QueryStructure<{ approverVacationMutation: { updateState:ApproverVacationUpdate}}>>(
-        'mutation UpdateApproverVacationState($state:Boolean!,$id:Int!,$userId:Int!)' +
-        '{approverVacationMutation{updateState(state:$state,vacationId:$id,approverId:$userId){id,isApproved,vacation{id}}}}',
-        {id:id,state:state,userId:approverId}
+export function UpdateApproverVacationState(ids:number[],state:boolean,approverId:number){
+    return AjaxQuery<QueryStructure<{ approverVacationMutation: { updateState:ApproverVacationUpdate[]}}>>(
+        'mutation UpdateState($approverId:Int!,$vacations:[Int!]!,$state:Boolean!){approverVacationMutation{updateState(approverId:$approverId,vacations:$vacations,state:$state){id,isApproved,vacationId}}}',
+        {vacations:ids,state:state,approverId:approverId}
     )
 }
 

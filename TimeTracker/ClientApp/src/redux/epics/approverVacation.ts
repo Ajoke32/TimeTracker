@@ -2,26 +2,27 @@ import {Epic, ofType} from "redux-observable";
 import {catchError, map, mergeMap, Observable, of} from "rxjs";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {
-    CreateApproverVacation,
     UpdateApproverVacations,
     UpdateApproverVacationState
 } from "../queries/vacationApproverQueries";
 import {
     fetchRequestsFail,
     fetchRequestsSuccess,
-    updateApproversVacations,
     updateApproversVacationsFail,
     updateApproversVacationsSuccess,
     updateApproverVacationStateStateFail,
     updateApproverVacationStateStateSuccess
 } from "../slices";
 import {FetchVacationsRequest} from "../queries/vacationQueries";
-import {ApproverVacationUpdate, VacationApproverInput} from "../types/approverVacationTypes";
+import {
+    ApproverVacationUpdateMany,
+    VacationApproverInput
+} from "../types/approverVacationTypes";
 
 
 
 
-export const updateApproverVacationEpic: Epic = (action: Observable<PayloadAction<ApproverVacationUpdate>>, state) =>
+export const updateApproverVacationEpic: Epic = (action: Observable<PayloadAction<ApproverVacationUpdateMany>>, state) =>
     action.pipe(
         ofType("approverVacation/updateApproverVacationState"),
         mergeMap(action =>
@@ -29,6 +30,7 @@ export const updateApproverVacationEpic: Epic = (action: Observable<PayloadActio
                 .pipe(
                     map(resp => {
                         if (resp.response.errors != null) {
+                            console.log(resp.response.errors);
                             return updateApproverVacationStateStateFail(resp.response.errors[0].message)
                         }
                         return updateApproverVacationStateStateSuccess(resp.response.data.approverVacationMutation.updateState);

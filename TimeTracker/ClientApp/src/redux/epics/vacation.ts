@@ -28,7 +28,7 @@ export const addVacationEpic: Epic = (action: Observable<PayloadAction<VacationI
         )
     );
 
-export const updateVacationStateEpic:Epic = (action: Observable<PayloadAction<number>>,state)=>
+export const updateVacationStateEpic:Epic = (action: Observable<PayloadAction<number[]>>,state)=>
     action.pipe(
         ofType("vacation/updateVacationState"),
         mergeMap(action=>

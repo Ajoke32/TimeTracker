@@ -13,7 +13,7 @@ export const VacationsRequestTable = () => {
 
     const dispatch = useAppDispatch()
 
-    const [approveId,setApproveId] = useState<number>(0);
+    const [approves,setApproveId] = useState<number[]>([]);
 
     const [selected,setSelected] = useState<number[]>([]);
 
@@ -29,14 +29,15 @@ export const VacationsRequestTable = () => {
 
     useEffect(()=>{
         if(updated){
-            dispatch(updateVacationState(approveId))
+            dispatch(updateVacationState(approves))
         }
     },[updated])
 
-    function approve(id:number,state:boolean){
-        setApproveId(id);
-        dispatch(updateApproverVacationState({id:id,isApproved:state,approverId:userId!}))
+    function approve(ids:number[],state:boolean){
+        setApproveId(ids);
+        dispatch(updateApproverVacationState({id:ids,isApproved:state,approverId:userId!}))
     }
+
 
     function select(id:number){
         if(selected.includes(id)){
@@ -53,9 +54,12 @@ export const VacationsRequestTable = () => {
                <div className="requests-wrapper">
                    <div className="search-bar">
                        <input type="text" placeholder="search by email" className="input-search"/>
+                       <span>{loading&&"Working on it..."}</span>
                        <div className="btn-group">
-                           <BaseButton text={"Approve selected"} disabled={selected.length===0} btnStyle={'confirm'} />
-                           <BaseButton text={"Decline selected"} disabled={selected.length===0} btnStyle={'decline'} />
+                           <BaseButton onClick={()=>approve(selected,true)} text={"Approve selected"}
+                                       disabled={selected.length===0} btnStyle={'confirm'} />
+                           <BaseButton onClick={()=>approve(selected,false)} text={"Decline selected"}
+                                       disabled={selected.length===0} btnStyle={'decline'} />
                        </div>
                    </div>
                    {vacationRequests.map(a=>{
@@ -64,8 +68,8 @@ export const VacationsRequestTable = () => {
                               <Checkbox
                                   value={a.id}
                                   optionName={""}
-                                  isChecked={selected.includes(a.id)}
-                                  onChange={()=>{select(a.id)}}
+                                  isChecked={selected.includes(a.vacation.id)}
+                                  onChange={()=>{select(a.vacation.id)}}
                               />
                               <span>{a.vacation.user.firstName} {a.vacation.user.lastName}</span>
                               <span>{a.vacation.user.email}</span>
@@ -75,11 +79,11 @@ export const VacationsRequestTable = () => {
                               <div className="btn-group">
                                   {a.isApproved===null?
                                       <>
-                                          <button onClick={()=>approve(a.vacation.id,false)} className="btn-base btn-decline">Decline</button>
-                                          <button onClick={()=>approve(a.vacation.id,true)} className="btn-base btn-confirm">Approve</button>
+                                          <button onClick={()=>approve([a.vacation.id],false)} className="btn-base btn-decline">Decline</button>
+                                          <button onClick={()=>approve([a.vacation.id],true)} className="btn-base btn-confirm">Approve</button>
                                       </>
-                                      :a.isApproved?<button onClick={()=>approve(a.vacation.id,false)} className="btn-base btn-decline">Decline</button>:
-                                          <button onClick={()=>approve(a.vacation.id,true)} className="btn-base btn-confirm">Approve</button>
+                                      :a.isApproved?<button onClick={()=>approve([a.vacation.id],false)} className="btn-base btn-decline">Decline</button>:
+                                          <button onClick={()=>approve([a.vacation.id],true)} className="btn-base btn-confirm">Approve</button>
                                   }
 
                               </div>

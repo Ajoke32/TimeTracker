@@ -11,7 +11,12 @@ export interface ApproverVacation{
 export interface ApproverVacationUpdate{
     id:number,
     isApproved:boolean,
-    vacation?:Vacation,
+    vacationId:number
+}
+
+export interface ApproverVacationUpdateMany{
+    id:number[],
+    isApproved:boolean,
     approverId:number
 }
 

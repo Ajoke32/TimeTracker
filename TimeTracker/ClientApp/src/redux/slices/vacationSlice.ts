@@ -38,7 +38,7 @@ const vacationsSlice = createSlice({
         }),
         createVacationFail:createErrorReducer(),
 
-        updateVacationState:createPendingReducerWithPayload<typeof initialState,number>(),
+        updateVacationState:createPendingReducerWithPayload<typeof initialState,number[]>(),
         updateVacationStateSuccess:createSuccessReducerWithoutPayload(),
         updateVacationStateFail:createErrorReducer()
     },
