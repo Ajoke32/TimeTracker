@@ -41,7 +41,7 @@ public sealed class UserMutations:ObjectGraphType
                 await uow.SaveAsync();
 
                 await emailService.SendAccountRegistrationAsync(created.Id, created.Email);
-                return mapper.Map<UserDisplayDto>(created);
+                return created;
             });//.AuthorizeWithPolicy("Create");
 
         Field<bool>("update")
