@@ -1,8 +1,8 @@
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { Home, Login, AddUser, Layout, UserVerify, Team, EditUser, ProtectedRoute } from "..";
 import { useTypedSelector } from '../../hooks';
-import { VacationsRequestTable, AddVacationForm } from "../../components";
 import { Permission } from '../../redux';
+import { CreateVacation, VacationRequests } from '../VacationPage';
 
 export const AppRoutes = () => {
   const state = useTypedSelector((state) => state.auth);
@@ -34,8 +34,11 @@ export const AppRoutes = () => {
                 }
               />
             </Route>
-            <Route path="/vacation/create" element={<AddVacationForm />} />
-            <Route path="/vacation/requests" element={<VacationsRequestTable />} />
+            <Route path="/vacation">
+                <Route index element={<Navigate to='/requests' />} /> // Add main page
+                <Route path="create" element={<CreateVacation />}/>
+                <Route path="requests" element={<VacationRequests />}/>
+            </Route>
             <Route path="*" element={<Navigate to="/" />} />
           </Route>
         </>
