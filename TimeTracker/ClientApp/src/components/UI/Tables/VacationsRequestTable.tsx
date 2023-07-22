@@ -5,7 +5,7 @@ import {Checkbox} from "../Checkboxes";
 import "./ApproversTable.css"
 import moment from "moment";
 import {fetchRequests, updateApproverVacationState, updateVacationState} from "../../../redux";
-import BaseButton from "../Buttons/BaseButton";
+import {BaseButton} from "../Buttons";
 
 
 
