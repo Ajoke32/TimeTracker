@@ -11,7 +11,8 @@ export interface AuthSliceState extends DefaultState {
 }
 
 export interface UserSliceState extends DefaultState {
-    userId:number|null
+    userId:number|null,
+    vacationDays?:number
 }
 
 export interface UsersSliceState extends DefaultState {

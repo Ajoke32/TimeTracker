@@ -3,7 +3,7 @@ import {Loader, SmallButton, TextInput} from "../UI";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {useAppDispatch, useTypedSelector} from "../../hooks";
 import {H5} from "../Headings";
-import {createVacation, updateApproversVacations} from "../../redux";
+import {createVacation, fetchVacationDays, updateApproversVacations} from "../../redux";
 
 
 interface VacationInput{
@@ -24,18 +24,21 @@ const AddVacationForm = () => {
         }
     });
     const user = useTypedSelector(u=>u.auth.user);
-
-    const {loading,error,created,createdId} = useTypedSelector(s=>s.vacations);
+    const days = useTypedSelector(s=>s.user.vacationDays);
+    const {loading,error,created,createdId}
+        = useTypedSelector(s=>s.vacations);
 
 
 
     const dispatch = useAppDispatch();
 
     useEffect(()=>{
+        dispatch(fetchVacationDays(user?.id!))
         if(created){
             dispatch(updateApproversVacations({vacationId:createdId!,userId:user?.id!}))
         }
     },[created])
+
 
     const onSubmit: SubmitHandler<VacationInput> = (data) => {
         dispatch(createVacation({...data,userId:user?.id!}))
@@ -45,7 +48,7 @@ const AddVacationForm = () => {
     return (
         <div style={{display:"flex",alignItems:"center",justifyContent:"center",marginTop:'80px',height:"100%"}}>
             <form onSubmit={handleSubmit(onSubmit)} style={{display:"flex",gap:"10px",flexDirection:"column",width:"50%"}}>
-                <H5 value={`Available vacation days ${user?.vacationDays}`} />
+                <H5 value={`Available vacation days ${days}`} />
                 <div className="login-form__messages-wrapper">
                     {loading?<Loader/>:""}
                     <H5 value={error} />

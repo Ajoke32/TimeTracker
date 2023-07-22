@@ -70,3 +70,10 @@ export function FetchUsersQuery(data: FetchApproversType) {
         },
     );
 }
+
+export function FetchUserVacationDays(id:number){
+    return AjaxQuery<QueryStructure<{ userQuery:{user:{vacationDays:number}} }>>(
+        'query FetchUserVacationDays($id:Int!){userQuery{user(id:$id){vacationDays}}}',
+        {id:id}
+    )
+}

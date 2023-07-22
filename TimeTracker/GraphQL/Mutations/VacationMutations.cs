@@ -77,17 +77,26 @@ public sealed class VacationMutations:ObjectGraphType
     }
 
 
-    private bool? IsVacationConfirmed(IEnumerable<ApproverVacation> avs)
+    private bool? IsVacationConfirmed(List<ApproverVacation> avs)
     {
+        int approvals=0, rejections=0, pending=0;
+        
         foreach (var av in avs)
         {
-            if (av.IsApproved == null)
-                return null;
-            
-            if(av.IsApproved == false)
+            if (av.IsApproved == false)
                 return false;
+            
+            if (av.IsApproved == true)
+                approvals++;
+            else
+                pending++;
+        }
+
+        if (pending > 0)
+        {
+            return null;
         }
         
-        return true;
+        return approvals==avs.Count;
     }
 } 

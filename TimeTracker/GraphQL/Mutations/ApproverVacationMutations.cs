@@ -36,12 +36,12 @@ public sealed class ApproverVacationMutations:ObjectGraphType
                 var approverId = ctx.GetArgument<int>("approverId");
                 var vacations = ctx.GetArgument<List<int>>("vacations");
 
-
+            
                 var approverVacations = await uow.GenericRepository<ApproverVacation>()
                     .GetAsync(a => vacations.Contains(a.VacationId) && a.UserId == approverId
                     ,includeProperties:"Vacation.User");
-
-
+                        
+                
                 if (!approverVacations.Any())
                 {
                     throw new ValidationError("not found");

@@ -1,8 +1,15 @@
 import { Epic, ofType } from "redux-observable";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { catchError, map, mergeMap, Observable, of } from "rxjs";
-import { AddUserQuery, PasswordConfirmQuery, UserVerifyQuery  } from "../queries/userQueries";
-import { userAddFail, userAddSuccess, verifyFail, verifySuccess } from '../slices';
+import {AddUserQuery, FetchUserVacationDays, PasswordConfirmQuery, UserVerifyQuery} from "../queries/userQueries";
+import {
+    fetchVacationDaysFail,
+    fetchVacationDaysSuccess,
+    userAddFail,
+    userAddSuccess,
+    verifyFail,
+    verifySuccess
+} from '../slices';
 import { UserAddType } from "../types";
 
 export const addUserEpic: Epic = (action: Observable<PayloadAction<UserAddType>>, state) =>
@@ -69,3 +76,22 @@ export const passwordConfirmEpic: Epic = (action: Observable<PayloadAction<{ tok
                 ),
         )
     );
+
+export const fetchVacationDaysEpic:Epic = (action:Observable<PayloadAction<number>>,state)=>
+    action.pipe(
+        ofType("user/fetchVacationDays"),
+        mergeMap(action=> FetchUserVacationDays(action.payload)
+                .pipe(
+                    map(res=>{
+                        console.log(res);
+                        if (res.response.errors != null) {
+                            return fetchVacationDaysFail(res.response.errors[0].message)
+                        }
+                        return fetchVacationDaysSuccess(res.response.data.userQuery.user.vacationDays);
+                    }),
+                    catchError((e:Error)=>of(fetchVacationDaysFail("Error")))
+                ),
+        )
+    );
+
+export const userEpics = [fetchVacationDaysEpic,passwordConfirmEpic,userVerifyEpic,addUserEpic]
