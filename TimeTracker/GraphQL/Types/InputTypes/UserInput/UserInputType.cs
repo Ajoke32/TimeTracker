@@ -1,5 +1,4 @@
 ﻿using GraphQL.Types;
-using TimeTracker.Models;
 using TimeTracker.Models.Dtos;
 
 namespace TimeTracker.GraphQL.Types.InputTypes;

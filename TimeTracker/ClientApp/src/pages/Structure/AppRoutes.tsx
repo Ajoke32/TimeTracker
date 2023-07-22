@@ -1,25 +1,41 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { Home, Login, AddUser, Layout, UserVerify, Team, EditUser } from "..";
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { Home, Login, AddUser, Layout, UserVerify, Team, EditUser, ProtectedRoute } from "..";
 import { useTypedSelector } from '../../hooks';
-import {VacationsRequestTable} from "../../components/UI/Tables/VacationsRequestTable";
-import AddVacationForm from "../../components/AddVacationForm/AddVacationForm";
-import React from "react";
-
+import { VacationsRequestTable, AddVacationForm } from "../../components";
+import { Permission } from '../../redux';
 
 export const AppRoutes = () => {
-
+  const state = useTypedSelector((state) => state.auth);
 
   return (
     <Routes>
-      {useTypedSelector((state) => state.auth.status) ? (
+      {state.status ? (
         <>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
-            <Route path="/team" element={<Team />} />
-            <Route path="/team/adduser" element={<AddUser />} />
+            <Route path="/team" element={<Outlet />}>
+              <Route index element={<Team />} />
+              <Route
+                path="addUser"
+                element={
+                  <ProtectedRoute
+                    component={<AddUser />}
+                    permission={Permission.Create}
+                  />
+                }
+              />
+              <Route
+                path="editUser/:userId"
+                element={
+                  <ProtectedRoute
+                    component={<EditUser />}
+                    permission={Permission.Update}
+                  />
+                }
+              />
+            </Route>
             <Route path="/vacation/create" element={<AddVacationForm />} />
             <Route path="/vacation/requests" element={<VacationsRequestTable />} />
-            <Route path="/edit" element={<EditUser/>} />
             <Route path="*" element={<Navigate to="/" />} />
           </Route>
         </>

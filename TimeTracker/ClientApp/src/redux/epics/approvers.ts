@@ -1,7 +1,7 @@
 import { Epic, ofType } from "redux-observable";
 import { catchError, map, mergeMap, Observable, of } from "rxjs";
 import { PayloadAction } from "@reduxjs/toolkit";
-import { ApproversAddType, FetchApproversType } from "../types";
+import { ApproversAddType, FetchUsersType } from "../types";
 import { AddApproversQuery } from "../queries/approverQueries";
 import { FetchUsersQuery } from "../queries/userQueries";
 import { addApproversFail, addApproversSuccess, fetchApproversFail, fetchApproversSuccess } from "../slices/approversSlice";
@@ -27,7 +27,7 @@ export const addApproversEpic: Epic = (action: Observable<PayloadAction<Approver
         )
     );
 
-export const fetchApproversEpic: Epic = (action: Observable<PayloadAction<FetchApproversType>>, state) =>
+export const fetchApproversEpic: Epic = (action: Observable<PayloadAction<FetchUsersType>>, state) =>
     action.pipe(
         ofType("approvers/fetchApprovers"),
         mergeMap(action =>

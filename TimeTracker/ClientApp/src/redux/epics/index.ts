@@ -1,20 +1,17 @@
 import { combineEpics, Epic } from "redux-observable";
 import { catchError } from "rxjs";
 import { userLoginEpic } from './auth'
-//import {addUserEpic, fetchVacationDaysEpic, passwordConfirmEpic, userVerifyEpic} from './user'
-import {fetchUsersEpic} from "./users";
-import {addVacationEpic, updateVacationStateEpic} from "./vacation";
+
+import {addUserEpic, passwordConfirmEpic, fetchUserEpic, editUserEpic, fetchVacationDaysEpic} from './user'
+import { fetchUsersEpic } from "./users";
+import { addVacationEpic, updateVacationStateEpic } from "./vacation";
 import { addApproversEpic, fetchApproversEpic } from "./approvers";
-import {fetchVacationsRequestsEpic, updateApproversVacationsEpic, updateApproverVacationEpic} from "./approverVacation";
-import {userEpics} from './user'
+import { fetchVacationsRequestsEpic, updateApproversVacationsEpic, updateApproverVacationEpic } from "./approverVacation";
+
 
 export const rootEpic: Epic = (action$, store$, dependencies) =>
     combineEpics(
         userLoginEpic,
-        /*addUserEpic,
-        passwordConfirmEpic,
-        userVerifyEpic,*/
-        ...userEpics,
         fetchUsersEpic,
         addApproversEpic,
         addVacationEpic,
@@ -23,7 +20,9 @@ export const rootEpic: Epic = (action$, store$, dependencies) =>
         updateApproverVacationEpic,
         updateApproversVacationsEpic,
         updateVacationStateEpic,
-        //fetchVacationDaysEpic
+        fetchUserEpic,
+        editUserEpic,
+        fetchVacationDaysEpic
     )
         (action$, store$, dependencies).pipe(
             catchError((error, source) => {

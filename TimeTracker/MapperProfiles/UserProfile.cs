@@ -20,6 +20,19 @@ public class UserProfile:Profile
                     o.MapFrom(m =>
                         m.HoursPerMonth == User.FullTimeValue ? WorkType.FullTime : WorkType.PartTime));
 
+        CreateMap<UserUpdateDto, User>()
+            .ForMember(x => x.Permissions,
+                o =>
+                    o.MapFrom(dto => (Permissions)dto.Permissions))
+            .ForMember(x => x.HoursPerMonth, 
+                o => 
+                    o.MapFrom(dto => dto.HoursPerMonth))
+            .ForMember(x => x.WorkType,
+                o =>
+                    o.MapFrom(m =>
+                        m.HoursPerMonth == User.FullTimeValue ? WorkType.FullTime : WorkType.PartTime))
+            .ForAllMembers(o => o.UseDestinationValue());
+
         CreateMap<User, UserDisplayDto>()
             .ForMember(u => u.Permissions,
                 o =>

@@ -1,12 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import {User, UserSliceState} from '../intrerfaces';
+import { UserSliceState, User } from '../intrerfaces';
 import {
-    createPendingReducerWithPayload,
-    createSuccessReducerWithPayload,
-    createErrorReducer,
-    createSuccessReducerWithoutPayload,
-
+    defaultState, createPendingReducerWithPayload,
+    createSuccessReducerWithPayload, createErrorReducer,
+    createSuccessReducerWithoutPayload
 } from "./generic";
+
 import {
     addFailReducer, addReducer, addSuccessReducer,
     userVerifyReducer, emailVerifyReducer,
@@ -14,10 +13,9 @@ import {
 } from "./reducers";
 
 const initialState: UserSliceState = {
-    loading: false,
-    error: "",
-    vacationDays:0,
-    user:null
+    ...defaultState,
+    user: null,
+    vacationDays:0
 };
 
 const userSlice = createSlice({
@@ -27,10 +25,22 @@ const userSlice = createSlice({
         userAdd: addReducer,
         userAddSuccess: addSuccessReducer,
         userAddFail: addFailReducer,
+
         userVerify: userVerifyReducer,
-        emailVerify: emailVerifyReducer,
         verifySuccess: verifySuccessReducer,
         verifyFail: verifyFailReducer,
+
+        fetchUser: createPendingReducerWithPayload<UserSliceState, number>(),
+        fetchUserSuccess: createSuccessReducerWithPayload<UserSliceState, User>(
+            (state: UserSliceState, action: PayloadAction<User>) => {
+                state.user = action.payload;
+            }),
+        fetchUserFail: createErrorReducer(),
+
+        editUser: createPendingReducerWithPayload<UserSliceState, User>(),
+        editUserSuccess: createSuccessReducerWithoutPayload(),
+        editUserFail: createErrorReducer(),
+
 
         fetchVacationDays:createPendingReducerWithPayload<typeof initialState,number>(),
         fetchVacationDaysSuccess:createSuccessReducerWithPayload<typeof initialState,number>
@@ -38,18 +48,16 @@ const userSlice = createSlice({
             state.vacationDays=action.payload;
         }),
         fetchVacationDaysFail:createErrorReducer(),
-
-        editUser: createPendingReducerWithPayload<UserSliceState, User>(),
-        editUserSuccess: createSuccessReducerWithoutPayload(),
-        editUserFail: createErrorReducer()
     },
 });
 
 export const user = userSlice.reducer;
-export const { userAdd, userAddSuccess,
-    fetchVacationDays,fetchVacationDaysSuccess
-    ,fetchVacationDaysFail,
-    userAddFail, userVerify
-    , emailVerify, verifyFail
-    , verifySuccess,editUserSuccess,
-    editUserFail,editUser } = userSlice.actions;
+
+export const {
+    userAdd, userAddSuccess, userAddFail,
+    userVerify, verifyFail, verifySuccess,
+    fetchUser, fetchUserFail, fetchUserSuccess,
+    editUser, editUserFail, editUserSuccess,
+    fetchVacationDaysSuccess,fetchVacationDaysFail,fetchVacationDays
+} = userSlice.actions;
+

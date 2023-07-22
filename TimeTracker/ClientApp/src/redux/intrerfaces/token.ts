@@ -1,3 +1,5 @@
+import { WorkType } from "../enums"
+
 export interface TokenStructure {
     Id: string,
     Email: string,
@@ -5,6 +7,6 @@ export interface TokenStructure {
     LastName: string,
     Permissions: string,
     VacationDays: string,
-    WorkType: string,
+    WorkType: WorkType,
     exp: string 
 }
