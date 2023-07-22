@@ -44,6 +44,7 @@ public sealed class UserMutations:ObjectGraphType
                 return created;
             });//.AuthorizeWithPolicy("Create");
 
+        
         Field<bool>("update")
             .Argument<UpdateUserInputType>("user")
             .ResolveAsync(async ctx =>

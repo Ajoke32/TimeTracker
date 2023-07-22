@@ -8,9 +8,10 @@ interface CheckboxProps {
     isChecked: boolean,
     setSelected?: (value: number) => void
     onChange?: (value: number, checked: boolean) => void;
+    disabled?:boolean;
 }
 
-export const Checkbox = ({value, isChecked = false, optionName, onChange = () => {}}: CheckboxProps) => {
+export const Checkbox = ({value, isChecked = false, optionName, onChange = () => {},disabled}: CheckboxProps) => {
     const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { checked } = event.target;
         onChange(value, checked);
@@ -25,8 +26,9 @@ export const Checkbox = ({value, isChecked = false, optionName, onChange = () =>
                     value={value}
                     checked={isChecked}
                     onChange={handleCheckboxChange}
+                    disabled={disabled}
                 />
-                <div className="checkbox-checkmark" />
+                <div className={`checkbox-checkmark ${disabled&&"checkbox-checkmark-disabled"}`} />
                 <span>{optionName}</span>
             </label>
         </div>
