@@ -41,6 +41,10 @@
     opacity: .7;
 }
 
+.checkbox-checkmark-disabled{
+    background-color: #e9ecef;
+}
+
 .checkbox-inner input~.checkbox-checkmark {
     transition: all 0.2s;
     opacity: 1;

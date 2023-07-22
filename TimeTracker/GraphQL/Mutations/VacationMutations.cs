@@ -28,8 +28,13 @@ public sealed class VacationMutations:ObjectGraphType
                     throw new ValidationError("Vacation period invalid");
                 }
                 
-                var res = await uow.GenericRepository<Vacation>().CreateAsync(vacation);
+                user.VacationDays -= diff.Days;
+                
+                var res = await uow.GenericRepository<Vacation>()
+                    .CreateAsync(vacation);
+                
                 await uow.SaveAsync();
+                
                 return res;
             });
 
@@ -72,8 +77,17 @@ public sealed class VacationMutations:ObjectGraphType
     }
 
 
-    private bool IsVacationConfirmed(IEnumerable<ApproverVacation> av)
+    private bool? IsVacationConfirmed(IEnumerable<ApproverVacation> avs)
     {
-        return av.All(appVacation => appVacation.IsApproved ?? false);
+        foreach (var av in avs)
+        {
+            if (av.IsApproved == null)
+                return null;
+            
+            if(av.IsApproved == false)
+                return false;
+        }
+        
+        return true;
     }
 } 

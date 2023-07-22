@@ -70,22 +70,18 @@ export const VacationsRequestTable = () => {
                                   optionName={""}
                                   isChecked={selected.includes(a.vacation.id)}
                                   onChange={()=>{select(a.vacation.id)}}
+                                  disabled={a.isApproved!==null&&a.isApproved}
                               />
                               <span>{a.vacation.user.firstName} {a.vacation.user.lastName}</span>
                               <span>{a.vacation.user.email}</span>
-                              <span className={a.isApproved!==null?a.isApproved?"approved":"declined":"pending"}>
-                                  {a.isApproved!==null?a.isApproved?"Approved":"Declined":"Pending"}
-                              </span>
                               <div className="btn-group">
                                   {a.isApproved===null?
                                       <>
                                           <button onClick={()=>approve([a.vacation.id],false)} className="btn-base btn-decline">Decline</button>
                                           <button onClick={()=>approve([a.vacation.id],true)} className="btn-base btn-confirm">Approve</button>
-                                      </>
-                                      :a.isApproved?<button onClick={()=>approve([a.vacation.id],false)} className="btn-base btn-decline">Decline</button>:
-                                          <button onClick={()=>approve([a.vacation.id],true)} className="btn-base btn-confirm">Approve</button>
+                                      </>:<span className={a.isApproved?"approved":"declined"}>
+                                            {a.isApproved?"Approved":"Declined"}</span>
                                   }
-
                               </div>
                               <button className="btn-base btn-info more-btn">more</button>
                               <div className="more-info">
@@ -102,6 +98,8 @@ export const VacationsRequestTable = () => {
             }
 
             {/*!loading&&requests.length===0?<span>empty</span>:""*/}
+            {/*:a.isApproved?<button onClick={()=>approve([a.vacation.id],false)} className="btn-base btn-decline">Decline</button>:
+                                          <button onClick={()=>approve([a.vacation.id],true)} className="btn-base btn-confirm">Approve</button>*/}
 
         </div>
     );

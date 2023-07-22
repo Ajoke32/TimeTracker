@@ -1,12 +1,11 @@
-﻿using AutoMapper;
-using GraphQL;
+﻿using GraphQL;
 using GraphQL.Types;
 using GraphQL.Validation;
 using TimeTracker.Absctration;
 using TimeTracker.GraphQL.Types;
 using TimeTracker.GraphQL.Types.InputTypes.ApproveInput;
 using TimeTracker.Models;
-using TimeTracker.Models.Dtos;
+
 
 namespace TimeTracker.GraphQL.Mutations;
 

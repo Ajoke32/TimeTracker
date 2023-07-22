@@ -43,8 +43,8 @@ const AddVacationForm = () => {
     }
 
     return (
-        <div style={{display:"flex",alignItems:"center",justifyContent:"center",height:"100%"}}>
-            <form onSubmit={handleSubmit(onSubmit)} style={{display:"flex",gap:"10px",flexDirection:"column",marginBottom:"120px",width:"50%"}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"center",marginTop:'80px',height:"100%"}}>
+            <form onSubmit={handleSubmit(onSubmit)} style={{display:"flex",gap:"10px",flexDirection:"column",width:"50%"}}>
                 <H5 value={`Available vacation days ${user?.vacationDays}`} />
                 <div className="login-form__messages-wrapper">
                     {loading?<Loader/>:""}

@@ -46,8 +46,8 @@ public sealed class UserMutations:ObjectGraphType
                 await emailService.SendAccountRegistrationAsync(created.Id, created.Email);
                 return created.Id;
             });//.AuthorizeWithPolicy("Create");
-        
-        
+
+       
         Field<UserType>("update")
             .Argument<UpdateUserInputType>("user")
             .ResolveAsync(async ctx =>
