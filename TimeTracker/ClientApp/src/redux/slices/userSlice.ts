@@ -8,7 +8,7 @@ import {
 
 import {
     addFailReducer, addReducer, addSuccessReducer,
-    userVerifyReducer, emailVerifyReducer,
+    userVerifyReducer,
     verifyFailReducer, verifySuccessReducer
 } from "./reducers";
 

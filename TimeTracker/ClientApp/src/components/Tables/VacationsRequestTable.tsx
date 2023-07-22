@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import "./ApproversTable.css"
+import "./Table.css"
 import moment from "moment";
 import {useAppDispatch, useTypedSelector} from "../../hooks";
 import {fetchRequests, updateApproverVacationState, updateVacationState} from "../../redux";
@@ -51,7 +52,7 @@ export const VacationsRequestTable = () => {
         <div style={{display:"flex",justifyContent:"center",marginTop:"80px"}}>
             <span>{error&&error}</span>
             {loading&&vacationRequests.length===0?<Loader />:
-                <div className="requests-wrapper">
+                <div className="table-wrapper">
                     <div className="search-bar">
                         <input type="text" placeholder="search by email" className="input-search"/>
                         <span>{loading&&"Working on it..."}</span>
@@ -62,6 +63,7 @@ export const VacationsRequestTable = () => {
                                         disabled={selected.length===0} btnStyle={'decline'} />
                         </div>
                     </div>
+                    {vacationRequests.length===0&&<div className="empty info">You have no requests</div>}
                     {vacationRequests.map(a=>{
                         const diff = moment(a.vacation.endDate).diff(a.vacation.startDate);
                         return <div key={a.id} className="request-item">
@@ -70,7 +72,7 @@ export const VacationsRequestTable = () => {
                                 optionName={""}
                                 isChecked={selected.includes(a.vacation.id)}
                                 onChange={()=>{select(a.vacation.id)}}
-                                disabled={a.isApproved!==null&&a.isApproved}
+                                disabled={a.isApproved!==null&&true}
                             />
                             <span>{a.vacation.user.firstName} {a.vacation.user.lastName}</span>
                             <span>{a.vacation.user.email}</span>

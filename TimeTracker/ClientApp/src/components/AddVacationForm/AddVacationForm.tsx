@@ -24,7 +24,8 @@ export const AddVacationForm = () => {
         }
     });
     const user = useTypedSelector(u=>u.auth.user);
-    const days = useTypedSelector(s=>s.user.vacationDays);
+    const {vacationDays,loading:userLoading}
+        = useTypedSelector(s=>s.user);
     const {loading,error,created,createdId}
         = useTypedSelector(s=>s.vacations);
 
@@ -48,7 +49,7 @@ export const AddVacationForm = () => {
     return (
         <div style={{display:"flex",alignItems:"center",justifyContent:"center",marginTop:'80px',height:"100%"}}>
             <form onSubmit={handleSubmit(onSubmit)} style={{display:"flex",gap:"10px",flexDirection:"column",width:"50%"}}>
-                <H5 value={`Available vacation days ${days}`} />
+                <H5 value={`Available vacation days ${userLoading?"loading..":vacationDays}`} />
                 <div className="login-form__messages-wrapper">
                     {loading?<Loader/>:""}
                     <H5 value={error} />

@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { Home, Login, AddUser, Layout, UserVerify, Team, EditUser, ProtectedRoute } from "..";
 import { useTypedSelector } from '../../hooks';
-import { VacationsRequestTable, AddVacationForm } from "../../components";
+import { VacationsRequestTable, AddVacationForm,VacationsTable } from "../../components";
 import { Permission } from '../../redux';
 
 export const AppRoutes = () => {
@@ -36,6 +36,7 @@ export const AppRoutes = () => {
             </Route>
             <Route path="/vacation/create" element={<AddVacationForm />} />
             <Route path="/vacation/requests" element={<VacationsRequestTable />} />
+            <Route path="/vacations" element={<VacationsTable  />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Route>
         </>

@@ -6,7 +6,8 @@ export interface Vacation{
     startDate:Date,
     endDate:Date,
     message?:string,
-    user:User
+    user:User,
+    vacationState:null|boolean
 }
 
 export interface VacationInputType{

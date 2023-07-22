@@ -1,8 +1,9 @@
-import {UserApprover, VacationInputType} from "../types";
+import {UserApprover, Vacation, VacationInputType} from "../types";
 import {QueryStructure} from "../intrerfaces";
 import {AjaxQuery} from "./query";
 import {ReadCookie} from "../../utils";
 import {ApproverVacation} from "../types/approverVacationTypes";
+import {user} from "../slices";
 
 
 export function AddVacationQuery(vacation:VacationInputType) {
@@ -28,5 +29,13 @@ export function UpdateVacationState(ids:number[]){
     return AjaxQuery<QueryStructure<{ vacationMutation:{updateState:{id:number}  } }>>(
         'mutation UpdateVacationState($vacations:[Int!]!){vacationMutation{updateState(vacations:$vacations)}}',
         {vacations:ids},
+    )
+}
+
+export function FetchUserVacations(userId:number){
+
+    return AjaxQuery<QueryStructure<{ vacationQuery:{userVacations:Vacation[]} }>>(
+        'query GetUserVacations($id:Int!){vacationQuery{userVacations(userId:$id){vacationState,endDate,startDate,message}}}',
+        {id:userId}
     )
 }

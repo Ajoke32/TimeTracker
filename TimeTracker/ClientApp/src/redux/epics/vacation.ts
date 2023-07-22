@@ -2,10 +2,14 @@ import {Epic, ofType} from "redux-observable";
 import {catchError, map, mergeMap, Observable, of} from "rxjs";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {VacationInputType} from "../types";
-import {AddVacationQuery, UpdateVacationState} from "../queries/vacationQueries";
+import {AddVacationQuery, FetchUserVacations, UpdateVacationState} from "../queries/vacationQueries";
 import {
     createVacationFail,
-    createVacationSuccess, updateVacationStateFail, updateVacationStateSuccess,
+    createVacationSuccess,
+    fetchUserVacationsFail,
+    fetchUserVacationsSuccess,
+    updateVacationStateFail,
+    updateVacationStateSuccess,
 } from "../slices";
 
 
@@ -46,4 +50,24 @@ export const updateVacationStateEpic:Epic = (action: Observable<PayloadAction<nu
             )
         )
     );
+
+export const fetchUserVacationsEpic:Epic = (action:Observable<PayloadAction<number>>)=>
+    action.pipe(
+        ofType('vacation/fetchUserVacations'),
+        mergeMap(action=>
+            FetchUserVacations(action.payload)
+                .pipe(
+                    map(res=>{
+                        if (res.response.errors != null) {
+                            return fetchUserVacationsFail(res.response.errors[0].message)
+                        }
+                        return fetchUserVacationsSuccess(res.response.data.vacationQuery.userVacations);
+                    }),
+                    catchError((e: Error) => {
+                        console.log(e);
+                        return of(fetchUserVacationsFail("unexpected error"))
+                    })
+                )
+        )
+    )
 
