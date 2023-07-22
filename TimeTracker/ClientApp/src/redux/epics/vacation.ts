@@ -41,6 +41,7 @@ export const updateVacationStateEpic: Epic = (action: Observable<PayloadAction<n
                     return updateVacationStateSuccess();
                 }),
                 catchError((e: Error) => {
+                    console.log(e);
                     return of(updateVacationStateFail("unexpected error"))
                 })
             )

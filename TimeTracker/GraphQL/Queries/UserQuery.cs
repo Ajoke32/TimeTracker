@@ -125,6 +125,16 @@ public sealed class UserQuery : ObjectGraphType
                 return authService!.RefreshToken(user);
             });
 
+        Field<ListGraphType<UserType>>("usersByIds")
+            .Argument<List<int>>("ids")
+            .ResolveAsync(async _ =>
+            {
+                var ids = _.GetArgument<List<int>>("ids");
+                
+                return await uow.GenericRepository<User>()
+                    .GetAsync(u => ids.Contains(u.Id));
+            });
+
     }
 
     private async Task<string> AuthorizeConfirmedEmailAsync(User actualUser,string password,Authenticate authenticate)

@@ -75,6 +75,7 @@ export function FetchUsersQuery(data: FetchUsersType) {
   );
 }
 
+
 export function FetchUserQuery(userId: number) {
   return AjaxQuery<QueryStructure<{ userQuery: { user: User } }>>(
     `query GetUser($userId: Int!) {
@@ -111,3 +112,11 @@ export function EditUserQuery(user: User) {
     token
   )
 }
+
+export function FetchUserVacationDays(id:number){
+    return AjaxQuery<QueryStructure<{ userQuery:{user:{vacationDays:number}} }>>(
+        'query FetchUserVacationDays($id:Int!){userQuery{user(id:$id){vacationDays}}}',
+        {id:id}
+    )
+}
+

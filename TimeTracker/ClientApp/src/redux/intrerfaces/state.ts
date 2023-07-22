@@ -13,6 +13,7 @@ export interface AuthSliceState extends DefaultState {
 
 export interface UserSliceState extends DefaultState {
     user: User | null,
+    vacationDays?:number
 }
 
 export interface UsersSliceState extends DefaultState {

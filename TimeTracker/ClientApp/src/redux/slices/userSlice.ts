@@ -9,7 +9,8 @@ import {
 
 const initialState: UserSliceState = {
     ...defaultState,
-    user: null
+    user: null,
+    vacationDays:0
 };
 
 const userSlice = createSlice({
@@ -36,14 +37,25 @@ const userSlice = createSlice({
 
         editUser: createPendingReducerWithPayload<UserSliceState, User>(),
         editUserSuccess: createSuccessReducerWithoutPayload(),
-        editUserFail: createErrorReducer()
+        editUserFail: createErrorReducer(),
+
+
+        fetchVacationDays:createPendingReducerWithPayload<typeof initialState,number>(),
+        fetchVacationDaysSuccess:createSuccessReducerWithPayload<typeof initialState,number>
+        ((state:UserSliceState,action:PayloadAction<number>)=>{
+            state.vacationDays=action.payload;
+        }),
+        fetchVacationDaysFail:createErrorReducer(),
     },
 });
 
 export const user = userSlice.reducer;
+
 export const {
     userAdd, userAddSuccess, userAddFail,
     userVerify, verifyFail, verifySuccess,
     fetchUser, fetchUserFail, fetchUserSuccess,
-    editUser, editUserFail, editUserSuccess
+    editUser, editUserFail, editUserSuccess,
+    fetchVacationDaysSuccess,fetchVacationDaysFail,fetchVacationDays
 } = userSlice.actions;
+
