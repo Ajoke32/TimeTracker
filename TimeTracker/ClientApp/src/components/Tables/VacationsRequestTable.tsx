@@ -5,10 +5,6 @@ import {useAppDispatch, useTypedSelector} from "../../hooks";
 import {fetchRequests, updateApproverVacationState, updateVacationState} from "../../redux";
 import {BaseButton, Checkbox, Loader} from "../UI";
 
-
-
-
-
 export const VacationsRequestTable = () => {
 
     const dispatch = useAppDispatch()

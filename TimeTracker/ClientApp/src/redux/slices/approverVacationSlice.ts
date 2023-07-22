@@ -10,7 +10,7 @@ import {
     ApproverVacation, ApproverVacationUpdate,
     ApproverVacationUpdateMany,
     VacationApproverInput
-} from "../types/approverVacationTypes";
+} from "../types";
 
 interface VacationApproverState extends DefaultState{
     vacationRequests:ApproverVacation[],

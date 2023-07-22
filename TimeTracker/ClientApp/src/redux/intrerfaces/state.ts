@@ -2,7 +2,8 @@ import { User } from './'
 
 export interface DefaultState {
     loading: boolean,
-    error: string
+    error: string,
+    message: string
 }
 
 export interface AuthSliceState extends DefaultState {

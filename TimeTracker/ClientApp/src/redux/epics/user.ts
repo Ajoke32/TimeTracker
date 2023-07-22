@@ -3,7 +3,7 @@ import { PayloadAction } from "@reduxjs/toolkit";
 import { catchError, map, mergeMap, Observable, of } from "rxjs";
 
 import {
-    AddUserQuery, PasswordConfirmQuery, UserVerifyQuery,
+    AddUserQuery, PasswordConfirmQuery,
     FetchUserQuery, EditUserQuery, FetchUserVacationDays
 } from "../queries/userQueries";
 import {
@@ -14,23 +14,24 @@ import {
 } from '../slices';
 import { UserAddType } from "../types";
 import { User } from "../intrerfaces";
+import { GetErrorMessage } from "../../utils";
 
 export const addUserEpic: Epic = (action: Observable<PayloadAction<UserAddType>>, state) =>
     action.pipe(
         ofType("user/userAdd"),
         mergeMap(action =>
-            AddUserQuery(action.payload)
-                .pipe(
-                    map(resp => {
-                        if (resp.response.errors != null) {
-                            return userAddFail(resp.response.errors[0].message)
-                        }
-                        return userAddSuccess(resp.response.data.userMutation.create);
-                    }),
-                    catchError((e: Error) => {
-                        return of(userAddFail("Unexpected error"))
-                    })
-                ),
+            AddUserQuery(action.payload).pipe(
+                mergeMap(async resp => {
+                    if (resp.response.errors != null) {
+                        const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
+                        return userAddFail(errorMessage)
+                    }
+                    return userAddSuccess(resp.response.data.userMutation.create);
+                }),
+                catchError((e: Error) => {
+                    return of(userAddFail("Unexpected error"))
+                })
+            ),
         )
     );
 
@@ -38,22 +39,18 @@ export const passwordConfirmEpic: Epic = (action: Observable<PayloadAction<{ tok
     action.pipe(
         ofType("user/userVerify"),
         mergeMap(action =>
-            PasswordConfirmQuery(action.payload)
-                .pipe(
-                    map(resp => {
-                        console.log(resp.response)
-                        if (resp.response.errors != null) {
-                            return verifyFail(resp.response.errors[0].message)
-                        }
-                        if (!resp.response.data.userMutation.verifyUser)
-                            return verifyFail("failed 2")
-                        return verifySuccess();
-                    }),
-                    catchError((e: Error) => {
-                        console.log(e);
-                        return of(verifyFail("Unexpected error"))
-                    })
-                ),
+            PasswordConfirmQuery(action.payload).pipe(
+                mergeMap(async resp => {
+                    if (resp.response.errors != null) {
+                        const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
+                        return verifyFail(errorMessage)
+                    }
+                    return verifySuccess();
+                }),
+                catchError((e: Error) => {
+                    return of(verifyFail("Unexpected error"))
+                })
+            ),
         )
     );
 
@@ -61,21 +58,19 @@ export const fetchUserEpic: Epic = (action: Observable<PayloadAction<number>>, s
     action.pipe(
         ofType("user/fetchUser"),
         mergeMap(action =>
-            FetchUserQuery(action.payload)
-                .pipe(
-                    map(resp => {
-                        if (resp.response.errors != null) {
-                            return fetchUserFail(resp.response.errors[0].message)
-                        }
-                        if (!resp.response.data.userQuery.user)
-                            return fetchUserFail("failed 2")
-                        return fetchUserSuccess(resp.response.data.userQuery.user);
-                    }),
-                    catchError((e: Error) => {
-                        console.log(e);
-                        return of(verifyFail("Unexpected error"))
-                    })
-                ),
+            FetchUserQuery(action.payload).pipe(
+                mergeMap(async resp => {
+                    if (resp.response.errors != null) {
+                        const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
+                        return fetchUserFail(errorMessage)
+                    }
+                    return fetchUserSuccess(resp.response.data.userQuery.user);
+                }),
+                catchError((e: Error) => {
+                    console.log(e);
+                    return of(verifyFail("Unexpected error"))
+                })
+            ),
         )
     );
 
@@ -85,13 +80,13 @@ export const editUserEpic: Epic = (action: Observable<PayloadAction<User>>, stat
         mergeMap(action =>
             EditUserQuery(action.payload)
                 .pipe(
-                    map(resp => {
+                    mergeMap(async resp => {
                         if (resp.response.errors != null) {
-                            return editUserFail(resp.response.errors[0].message)
+                            const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
+                            return editUserFail(errorMessage)
                         }
-                        if (!resp.response.data.userMutation.update)
-                            return editUserFail("failed 2")
-                            console.log("successfully");
+                    
+                        console.log("successfully");
                         return editUserSuccess();
                     }),
                     catchError((e: Error) => {
