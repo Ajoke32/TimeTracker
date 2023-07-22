@@ -7,10 +7,6 @@ import {
 } from "./generic";
 import {DefaultState} from "../intrerfaces";
 import {VacationInputType} from "../types";
-import {ApproverVacation} from "../types/approverVacationTypes";
-
-
-
 
 
 interface VacationState extends DefaultState{

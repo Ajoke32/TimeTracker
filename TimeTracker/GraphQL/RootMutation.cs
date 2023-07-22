@@ -10,7 +10,7 @@ public sealed class RootMutation:ObjectGraphType
         Field<UserMutations>("userMutation")
             .Resolve(_ => new { });
 
-        Field<ApproverMutations>("approveMutation")
+        Field<ApproverMutations>("approverMutation")
             .Resolve(_=>new { });
 
         Field<VacationMutations>("vacationMutation")

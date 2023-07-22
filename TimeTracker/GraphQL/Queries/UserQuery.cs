@@ -11,6 +11,7 @@ using TimeTracker.Models;
 using TimeTracker.Models.Dtos;
 using TimeTracker.Utils.Auth;
 using TimeTracker.Utils.Email;
+using TimeTracker.Utils.Errors;
 
 
 namespace TimeTracker.GraphQL.Queries;
@@ -60,12 +61,10 @@ public sealed class UserQuery : ObjectGraphType
 
                 var include = _.GetArgument<string?>("include");
                 
-                
-                var user = await uow.GenericRepository<User>()
-                    .FindAsync(u=>u.Id==id,relatedData:include);
+                var user = await uow.GenericRepository<User>().FindAsync(u=>u.Id==id,relatedData:include)
+                            ?? throw new QueryError(Error.ERR_USER_NOT_FOUND);
 
                 return user;
-
             }).Description("gets user by id");
 
         Field<UserType>("userByEmail")
@@ -74,13 +73,13 @@ public sealed class UserQuery : ObjectGraphType
             {
                 var email = _.GetArgument<string>("email");
                
-                var user = await uow.GenericRepository<User>().FindAsync(u => u.Email == email);
+                var user = await uow.GenericRepository<User>().FindAsync(u => u.Email == email)
+                            ?? throw new QueryError(Error.ERR_USER_NOT_FOUND);
 
                 return user;
             });//.AuthorizeWithPolicy(policy:"LoggedIn");
 
-        
-        Field<LoginResponseType>("login")
+        Field<string>("login")
             .Argument<UserLoginInputType>("user")
             .ResolveAsync(async ctx =>
             {
@@ -91,17 +90,14 @@ public sealed class UserQuery : ObjectGraphType
                 
                 if (searchUser == null||searchUser.IsDeleted)
                 {
-                    throw new ValidationError("Wrong credentials!");
+                    throw new QueryError(Error.ERR_WRONG_CREDENTIALS);
                 }
-                
-                
-                if (!searchUser.IsEmailActivated) throw new ValidationError("Account is not activated!");
-                
-                
+                                
+                if (!searchUser.IsEmailActivated) throw new QueryError(Error.ERR_INACTIVE_ACCOUNT);
+                                
                 var authService = ctx.RequestServices?.GetRequiredService<Authenticate>();
                     
                 return await AuthorizeConfirmedEmailAsync(searchUser, args.Password, authService!);
-
             });
 
         Field<bool>("verifyUser")
@@ -111,14 +107,9 @@ public sealed class UserQuery : ObjectGraphType
                 var token = _.GetArgument<string>("token");
                 var authEmailService = _.RequestServices?.GetRequiredService<EmailTokenService>();
                 
-                var result =  await authEmailService!.VerifyUserToken(token, 18000); //5 hours
+                var result = await authEmailService!.VerifyUserToken(token, 18000); //5 hours
 
-                if (!result)
-                {
-                    throw new  ValidationError("Invalid token");
-                }
-
-                return true;
+                return result ? result : throw new QueryError(Error.ERR_INVALID_TOKEN);
             });
 
         Field<string>("refreshToken")
@@ -126,13 +117,9 @@ public sealed class UserQuery : ObjectGraphType
             .ResolveAsync(async _ =>
             {
                 var id = _.GetArgument<int>("userId");
-                var user = await _uow.GenericRepository<User>()
-                    .FindAsync(u => u.Id == id);
+                var user = await _uow.GenericRepository<User>().FindAsync(u => u.Id == id)
+                            ?? throw new QueryError(Error.ERR_USER_NOT_FOUND);
 
-                if (user == null)
-                {
-                    return "User not found";
-                }
                 var authService = _.RequestServices?.GetRequiredService<Authenticate>();
                 
                 return authService!.RefreshToken(user);
@@ -140,12 +127,11 @@ public sealed class UserQuery : ObjectGraphType
 
     }
 
-
-    private async Task<LoginResponse> AuthorizeConfirmedEmailAsync(User actualUser,string password,Authenticate authenticate)
+    private async Task<string> AuthorizeConfirmedEmailAsync(User actualUser,string password,Authenticate authenticate)
     {
         if (!BCrypt.Net.BCrypt.Verify(password, actualUser.Password))
         {
-            throw new ValidationError("Wrong credentials!");
+            throw new QueryError(Error.ERR_WRONG_CREDENTIALS);
         }
         
         var token = authenticate.GenerateToken(actualUser);
@@ -154,11 +140,7 @@ public sealed class UserQuery : ObjectGraphType
         actualUser.RefreshTokenExpiration = refToken.Expiration;
         await _uow.SaveAsync();
         
-        return new LoginResponse
-        {
-            Code = (int)AuthCode.Token,
-            Message = token
-        };
+        return token;
     }
 
 }

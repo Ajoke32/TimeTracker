@@ -1,12 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AuthSliceState, } from '../intrerfaces';
-import { GetUserFromToken, IsUserAuthenticated } from "../../utils";
-import { defaultState } from "./generic";
+import { UserLoginType } from "../types";
+import { DeleteCookie, GetUserFromToken, IsUserAuthenticated, SetCookie } from "../../utils";
 import {
-    logoutReducer, loginReducer,
-    loginSuccessReducer, loginFailReducer,
-} from './reducers'
-
+    createPendingReducer,
+    createPendingReducerWithPayload,
+    createSuccessReducerWithPayload,
+    defaultState
+} from "./generic";
 
 const initialState: AuthSliceState = {
     ...defaultState,
@@ -18,10 +19,27 @@ const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        logout: logoutReducer,
-        login: loginReducer,
-        loginSuccess: loginSuccessReducer,
-        loginFail: loginFailReducer,
+        logout: (state: AuthSliceState) => {
+            DeleteCookie('user');
+            state.status = false;
+            state.loading = false;
+            state.error = '';
+            state.message = '';
+        },
+        login: createPendingReducerWithPayload<AuthSliceState, UserLoginType>(),
+        loginSuccess: createSuccessReducerWithPayload<AuthSliceState, string>(
+            (state: AuthSliceState, action: PayloadAction<string>) => {
+                SetCookie('user', action.payload)
+                state.user = GetUserFromToken();
+                if (IsUserAuthenticated()) {
+                    state.status = true;
+                }
+            }),
+        loginFail: (state: AuthSliceState, action: PayloadAction<string>) => {
+            state.status = false;
+            state.loading = false;
+            state.error = action.payload;
+        },
     },
 });
 
