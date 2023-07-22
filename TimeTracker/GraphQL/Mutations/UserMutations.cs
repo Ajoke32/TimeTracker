@@ -48,7 +48,7 @@ public sealed class UserMutations:ObjectGraphType
             });//.AuthorizeWithPolicy("Create");
 
        
-        Field<UserType>("update")
+        Field<bool>("update")
             .Argument<UpdateUserInputType>("user")
             .ResolveAsync(async ctx =>
             {
@@ -57,7 +57,7 @@ public sealed class UserMutations:ObjectGraphType
 
                 var updated = await uow.GenericRepository<User>().UpdateAsync(user);
                 await uow.SaveAsync();
-                return updated;
+                return true;
             });
 
         Field<bool>("deleteById")

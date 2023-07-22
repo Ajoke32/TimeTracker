@@ -1,17 +1,23 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit"
-import { UserSliceState } from '../intrerfaces';
-import { addFailReducer, addReducer, addSuccessReducer, userVerifyReducer, emailVerifyReducer, verifyFailReducer, verifySuccessReducer } from "./reducers";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import {User, UserSliceState} from '../intrerfaces';
 import {
-    createErrorReducer,
     createPendingReducerWithPayload,
-    createSuccessReducerWithPayload
+    createSuccessReducerWithPayload,
+    createErrorReducer,
+    createSuccessReducerWithoutPayload,
+
 } from "./generic";
+import {
+    addFailReducer, addReducer, addSuccessReducer,
+    userVerifyReducer, emailVerifyReducer,
+    verifyFailReducer, verifySuccessReducer
+} from "./reducers";
 
 const initialState: UserSliceState = {
     loading: false,
     error: "",
-    userId: null,
-    vacationDays:0
+    vacationDays:0,
+    user:null
 };
 
 const userSlice = createSlice({
@@ -31,10 +37,19 @@ const userSlice = createSlice({
         ((state:UserSliceState,action:PayloadAction<number>)=>{
             state.vacationDays=action.payload;
         }),
-        fetchVacationDaysFail:createErrorReducer()
+        fetchVacationDaysFail:createErrorReducer(),
+
+        editUser: createPendingReducerWithPayload<UserSliceState, User>(),
+        editUserSuccess: createSuccessReducerWithoutPayload(),
+        editUserFail: createErrorReducer()
     },
 });
 
 export const user = userSlice.reducer;
 export const { userAdd, userAddSuccess,
-    fetchVacationDays,fetchVacationDaysSuccess,fetchVacationDaysFail, userAddFail, userVerify, emailVerify, verifyFail, verifySuccess } = userSlice.actions;
+    fetchVacationDays,fetchVacationDaysSuccess
+    ,fetchVacationDaysFail,
+    userAddFail, userVerify
+    , emailVerify, verifyFail
+    , verifySuccess,editUserSuccess,
+    editUserFail,editUser } = userSlice.actions;
