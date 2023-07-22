@@ -53,10 +53,6 @@
     z-index: -1;
 }
 
-.sidebar-list li:last-child {
-    position: absolute;
-    top: calc(100% + 3rem);
-}
 
 .sidebar-list li:last-child::before {
     background-color: rgba(216, 58, 82, .8);
