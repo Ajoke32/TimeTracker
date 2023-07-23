@@ -7,9 +7,6 @@ import {
 } from "./generic";
 import {DefaultState} from "../intrerfaces";
 import {Vacation, VacationInputType} from "../types";
-import {ApproverVacation} from "../types/approverVacationTypes";
-
-
 
 
 
@@ -50,14 +47,16 @@ const vacationsSlice = createSlice({
             state.vacations=action.payload;
         }),
         fetchUserVacationsFail:createErrorReducer()
-    },
+    }
 });
 
 
 export const vacation = vacationsSlice.reducer;
+
 export const  {createVacation,
     createVacationSuccess,
     createVacationFail,updateVacationStateFail,
     updateVacationStateSuccess,
-updateVacationState,fetchUserVacationsSuccess,fetchUserVacationsFail
-    ,fetchUserVacations} =  vacationsSlice.actions
+    updateVacationState,fetchUserVacationsSuccess
+    ,fetchUserVacationsFail
+    ,fetchUserVacations} =  vacationsSlice.actions;

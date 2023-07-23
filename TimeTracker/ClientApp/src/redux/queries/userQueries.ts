@@ -4,8 +4,8 @@ import { UserAddType, FetchUsersType } from '../types'
 import { ReadCookie } from '../../utils';
 
 export function UserLoginQuery(userData: { email: string, password: string }) {
-  return AjaxQuery<QueryStructure<{ userQuery: { login: { code: number, message: string } } }>>(
-    "query Login($user: UserLoginInputType!) {userQuery {login(user: $user) {message, code}}}",
+  return AjaxQuery<QueryStructure<{ userQuery: { login: string } }>>(
+    "query Login($user: UserLoginInputType!) {userQuery {login(user: $user)}}",
     { user: userData }
   );
 }
@@ -30,13 +30,6 @@ export function AddUserQuery(userData: UserAddType) {
         }`,
     { user: userData },
     token
-  )
-}
-
-export function UserVerifyQuery(token: string) {
-  return AjaxQuery<QueryStructure<{ userQuery: { verifyUser: boolean } }>>(
-    "query VerifyUser($token: String!){ userQuery { verifyUser(token: $token) } }",
-    { token: token },
   )
 }
 

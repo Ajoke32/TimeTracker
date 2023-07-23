@@ -7,4 +7,5 @@ export * from './AddUserPage/AddUser';
 export * from './UserVerifyPage/UserVerify'
 export * from './EditUserPage/EditUser'
 export * from './TeamPage/Team'
+export * from './VacationPage'
 

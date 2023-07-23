@@ -8,13 +8,14 @@ using TimeTracker.GraphQL.Types.InputTypes;
 using TimeTracker.Models;
 using TimeTracker.Models.Dtos;
 using TimeTracker.Utils.Email;
+using TimeTracker.Utils.Errors;
+using TimeTracker.Enums;
 
 namespace TimeTracker.GraphQL.Mutations;
 
 public sealed class UserMutations:ObjectGraphType
 {
    
-    
     public UserMutations(IMapper mapper,EmailService emailService,IUnitOfWorkRepository uow)
     {
 
@@ -51,9 +52,8 @@ public sealed class UserMutations:ObjectGraphType
             {
                 var editedUser = ctx.GetArgument<UserUpdateDto>("user");
 
-                var user = await uow.GenericRepository<User>()
-                                    .FindAsync(u => u.Id == editedUser.Id)
-                                    ?? throw new ValidationError("User not found!");                
+                var user = await uow.GenericRepository<User>().FindAsync(u => u.Id == editedUser.Id)
+                            ?? throw new ValidationError("User not found!");                
 
                 var updated = await uow.GenericRepository<User>()
                                        .UpdateAsync(mapper.Map<UserUpdateDto, User>(editedUser, user));
@@ -66,16 +66,15 @@ public sealed class UserMutations:ObjectGraphType
             .ResolveAsync(async ctx =>
             {
                 var id = ctx.GetArgument<int>("id");
-                var user = await uow.GenericRepository<User>().FindAsync(u=>u.Id==id);
+                var user = await uow.GenericRepository<User>().FindAsync(u=>u.Id==id)
+                            ?? throw new QueryError(Error.ERR_USER_NOT_FOUND);
                 
-                if (user == null) { return false;}
-                
-                var isDeleted = await uow.GenericRepository<User>()
-                    .DeleteAsync(user);
+                if(!await uow.GenericRepository<User>().DeleteAsync(user))
+                    throw new QueryError(Error.ERR_FAILED_TO_DELETE_USER);
                 
                 await uow.SaveAsync();
 
-                return isDeleted;
+                return true;
             });
 
         Field<bool>("delete")
@@ -83,9 +82,11 @@ public sealed class UserMutations:ObjectGraphType
             .ResolveAsync(async ctx =>
             {
                 var user = ctx.GetArgument<User>("user");
-                var isDeleted = await uow.GenericRepository<User>().DeleteAsync(user);
+                if(!await uow.GenericRepository<User>().DeleteAsync(user))
+                    throw new QueryError(Error.ERR_FAILED_TO_DELETE_USER);
+
                 await uow.SaveAsync();
-                return isDeleted;
+                return true;
             });
 
         Field<bool>("verifyUser")
@@ -102,7 +103,7 @@ public sealed class UserMutations:ObjectGraphType
                 var id = authEmailService.GetUserIdFromToken(token);
                 var user = await uow.GenericRepository<User>().FindAsync(u=>u.Id==id);
 
-                if(user is not null /*&& !user.IsEmailActivated*/)
+                if(user is not null && !user.IsEmailActivated)
                 {
                     var password = ctx.GetArgument<string>("password");
                     user.Password = BCrypt.Net.BCrypt.HashPassword(password);
@@ -112,7 +113,7 @@ public sealed class UserMutations:ObjectGraphType
                     return true;
                 }
             }
-            throw new  ValidationError("Invalid token");
+            throw new QueryError(Error.ERR_INVALID_TOKEN);
         });
         
     }

@@ -13,7 +13,6 @@ public class AppSchema:Schema
         RegisterTypeMapping(typeof(Vacation),typeof(VacationType));
         RegisterTypeMapping(typeof(UserApprover),typeof(ApproveType));
         RegisterTypeMapping(typeof(User),typeof(UserType));
-        RegisterTypeMapping(typeof(LoginResponse),typeof(LoginResponseType));
         RegisterTypeMapping(typeof(ApproverVacation),typeof(ApproverVacationType));
         Query = provider.GetRequiredService<RootQuery>();
         Mutation = provider.GetRequiredService<RootMutation>();

@@ -1,9 +1,9 @@
-import {UserApprover, Vacation, VacationInputType} from "../types";
+import {Vacation, VacationInputType} from "../types";
 import {QueryStructure} from "../intrerfaces";
 import {AjaxQuery} from "./query";
 import {ReadCookie} from "../../utils";
-import {ApproverVacation} from "../types/approverVacationTypes";
-import {user} from "../slices";
+import {ApproverVacation} from "../types";
+
 
 
 export function AddVacationQuery(vacation:VacationInputType) {

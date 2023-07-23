@@ -1,9 +1,10 @@
 import { Epic, ofType } from "redux-observable";
 import { catchError, map, mergeMap, Observable, of } from "rxjs";
 import { PayloadAction } from "@reduxjs/toolkit";
-import { FetchUsersQuery } from "../queries/userQueries";
+import { FetchUsersQuery } from "../queries";
 import { fetchUsersFail, fetchUsersSuccess } from "../slices";
 import { FetchUsersType } from "../types";
+import { GetErrorMessage } from "../../utils";
 
 export const fetchUsersEpic: Epic = (action: Observable<PayloadAction<FetchUsersType>>, state) =>
     action.pipe(
@@ -11,9 +12,10 @@ export const fetchUsersEpic: Epic = (action: Observable<PayloadAction<FetchUsers
         mergeMap(action =>
             FetchUsersQuery(action.payload)
                 .pipe(
-                    map(resp => {
+                    mergeMap(async resp => {
                         if (resp.response.errors != null) {
-                            return fetchUsersFail(resp.response.errors[0].message)
+                            const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
+                            return fetchUsersFail(errorMessage)
                         }
                         return fetchUsersSuccess(resp.response.data.userQuery.users);
                     }),

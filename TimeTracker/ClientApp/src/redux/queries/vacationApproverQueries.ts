@@ -1,6 +1,6 @@
 import {AjaxQuery} from "./query";
 import {QueryStructure} from "../intrerfaces";
-import {ApproverVacation, ApproverVacationUpdate, VacationApproverInput} from "../types/approverVacationTypes";
+import {ApproverVacation, ApproverVacationUpdate, VacationApproverInput} from "../types";
 
 
 

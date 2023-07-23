@@ -9,7 +9,7 @@ export function AddApproversQuery(data: ApproversAddType) {
     const { approvers, userId } = data;
 
     return AjaxQuery<QueryStructure<{ userMutation: { create: boolean } }>>(
-        "mutation AddApprovers($userId:Int!,$approvers:[Int!]){ approveMutation{create(userSenderId:$userId,approvers:$approvers)}}",
+        "mutation AddApprovers($userId:Int!,$approvers:[Int!]){ approverMutation{create(userSenderId:$userId,approvers:$approvers)}}",
         {
             approvers: approvers,
             userId: userId
