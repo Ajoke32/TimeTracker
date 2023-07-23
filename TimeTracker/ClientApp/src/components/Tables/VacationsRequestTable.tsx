@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import "./ApproversTable.css"
 import "./Table.css"
 import moment from "moment";

@@ -33,6 +33,13 @@ export const Sidebar = () => {
                     </li>
 
                     <li>
+                        <a href="/vacation/create" className="sidebar-list__link">
+                            <div className="sidebar-list__image-wrapper"><div className="timetracker-img__wrapper"></div></div>
+                            <span>Create vacation</span>
+                        </a>
+                    </li>
+
+                    <li>
                         <a href="" className="sidebar-list__link">
                             <div className="sidebar-list__image-wrapper"><div className="timetracker-img__wrapper"></div></div>
                             <span>Time Tracker</span>

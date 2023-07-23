@@ -45,7 +45,7 @@ export const EditUserForm = () => {
             }
         });
 
-    const onSubmit: SubmitHandler<Inputs> = (data) => {
+    const onSubmit: SubmitHandler<Inputs> = () => {
         const editedUser = {
             id: userState.user!.id,
             permissions: checkedOptions,

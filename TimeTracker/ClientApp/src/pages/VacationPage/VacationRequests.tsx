@@ -1,3 +1,4 @@
-import { AddVacationForm } from "../../components"
+import {VacationsRequestTable} from "../../components";
 
-export const VacationRequests = () =>  <AddVacationForm />
+
+export const VacationRequests = () =>  <VacationsRequestTable />

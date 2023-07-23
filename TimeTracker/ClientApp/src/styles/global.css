@@ -1,4 +1,4 @@
-﻿* {
+﻿*{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -32,7 +32,7 @@ p, input, a, button, span, option, select {
     font-weight: 500;
     font-size: 1rem;
     color: var(--color-black);
-    
+
 }
 
 label {
@@ -53,7 +53,7 @@ label {
     * {
         font-size: .85rem;
     }
-    
+
 }
 
 @media screen and (min-width: 920px) and (max-width: 1080px) {

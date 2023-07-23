@@ -2,7 +2,8 @@
 import { TextInputProps } from "./InputProps";
 import './inputs.css'
 import { ErrorTooltip } from "../Tooltips";
-
+import hidePasswordIcon from "../../../assets/images/hide_password_icon.png";
+import showPasswordIcon from "../../../assets/images/show_password_icon.png";
 
 export const PasswordInput = ({ name, placeholder, register, errors }: TextInputProps) => {
     const [showPassword, setPasswordVisible] = useState(false);
@@ -17,7 +18,7 @@ export const PasswordInput = ({ name, placeholder, register, errors }: TextInput
                 <input type={showPassword ? 'text' : 'password'} name={name} placeholder={placeholder} {...register} className="text-input" autoComplete='off'/>
 
                 <button type="button" className="password-input__toggle-btn" onClick={togglePasswordVisibility}>
-                    <img src={showPassword ? (require("../../../assets/images/hide_password_icon.png")) : require("../../../assets/images/show_password_icon.png")} alt="" />
+                    <img src={showPassword ? hidePasswordIcon : showPasswordIcon} alt="" />
                 </button>
             </div>
 
