@@ -6,7 +6,7 @@ import {
 } from "..";
 import { useTypedSelector } from '../../hooks';
 import { Permission } from '../../redux';
-import {VacationsTable} from "../../components";
+import {VacationsTable} from "@components/Tables";
 
 export const AppRoutes = () => {
   const state = useTypedSelector((state) => state.auth);
