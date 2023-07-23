@@ -8,10 +8,10 @@ import { User, fetchUsers } from "../../redux";
 export const Team = () => {
     const dispatch = useAppDispatch();
     const authState = useTypedSelector(state => state.auth);
-    const usersState = useTypedSelector(state => state.users);
+    const {loading,users} = useTypedSelector(state => state.users);
 
     const [fetched, setFetched] = useState<number>(0);
-    const [filteredUsers, setFilteredUsers] = useState<User[]>(usersState.users);
+    const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
 
     const loadMore = () => {
         dispatch(fetchUsers({ take: 5, skip: fetched, activated: false, userId: authState.user?.id! }));
@@ -22,9 +22,9 @@ export const Team = () => {
     }, [])
 
     useEffect(() => {
-        setFetched(usersState.users.length);
-        setFilteredUsers(usersState.users);
-    }, [usersState.users.length])
+        setFetched(users.length);
+        setFilteredUsers(users);
+    }, [users.length])
 
 
     return (
@@ -36,11 +36,11 @@ export const Team = () => {
 
                 <div className="team-menu__main">
                     <div className="users-table__wrapper">
-                        <UsersTableNavbar users={usersState.users} setFilteredUsers={setFilteredUsers} />
-                        {usersState.loading ? <Loader /> :
+                        <UsersTableNavbar users={users} setFilteredUsers={setFilteredUsers} />
+                        {loading&&users.length==0? <Loader /> :
                             <>
                                 <UsersTable users={filteredUsers} />
-                                <button onClick={() => { loadMore() }}>Load more</button>
+                                <button onClick={() => { loadMore() }}>{loading?"Loading..":"Load more"}</button>
                             </>
                         }
 
