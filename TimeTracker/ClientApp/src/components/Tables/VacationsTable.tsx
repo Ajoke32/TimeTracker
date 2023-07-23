@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import  {useEffect} from 'react';
 import {useAppDispatch, useTypedSelector} from "../../hooks";
 import {Loader} from "../UI";
 import './Table.css'

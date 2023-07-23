@@ -19,6 +19,8 @@ using TimeTracker.Utils.Auth;
 using TimeTracker.Utils.BackgroundTasks;
 using TimeTracker.Utils.Email;
 using TimeTracker.Utils.SoftDelete;
+using Vite.AspNetCore;
+using Vite.AspNetCore.Extensions;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -123,6 +125,23 @@ builder.Services.AddQuartz(q =>
 
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);*/
 
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddViteServices(options:new ViteOptions()
+    {
+        Server = new ViteServerOptions()
+        {
+            AutoRun = true,
+            Port = 5173,
+            ScriptName = "dev"
+        },
+        PackageDirectory = "ClientApp",
+    });
+}
+
+
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped<IRepositoryFactory, RepositoryFactory>();
@@ -165,6 +184,8 @@ app.UseAuthorization();
 
 app.UseSpaStaticFiles();
 
+
+
 app.UseGraphQL();
 
 app.UseGraphQLAltair();
@@ -174,10 +195,11 @@ app.UseSpa(spa =>
     spa.Options.SourcePath = "ClientApp";
     spa.Options.DefaultPageStaticFileOptions = new StaticFileOptions()
     {
+        
         OnPrepareResponse = ctx =>
         {
             var headers = ctx.Context.Response.GetTypedHeaders();
-
+            
             headers.CacheControl = new CacheControlHeaderValue()
             {
                  NoCache = true,
@@ -190,7 +212,7 @@ app.UseSpa(spa =>
     
     if (app.Environment.IsDevelopment())
     {
-        spa.UseReactDevelopmentServer(npmScript:"start");
+        app.UseViteDevMiddleware();
     }
 
 });
