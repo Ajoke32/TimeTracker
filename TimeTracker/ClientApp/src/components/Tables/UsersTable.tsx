@@ -4,7 +4,6 @@ import { useTypedSelector } from "../../hooks";
 import "./tables.css"
 
 export const UsersTable = ({ users }: { users: User[] }) => {
-    const usersState = useTypedSelector(state => state.users);
 
     const handleConfirmButtonClick = (value: number) => {
         console.log(value);

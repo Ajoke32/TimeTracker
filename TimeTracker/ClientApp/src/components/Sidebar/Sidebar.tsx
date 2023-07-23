@@ -19,6 +19,20 @@ export const Sidebar = () => {
                     </li>
 
                     <li>
+                        <a href="/vacation/requests" className="sidebar-list__link">
+                            <div className="sidebar-list__image-wrapper"><div className="timetracker-img__wrapper"></div></div>
+                            <span>Requests</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/vacation/all" className="sidebar-list__link">
+                            <div className="sidebar-list__image-wrapper"><div className="timetracker-img__wrapper"></div></div>
+                            <span>My vacations</span>
+                        </a>
+                    </li>
+
+                    <li>
                         <a href="" className="sidebar-list__link">
                             <div className="sidebar-list__image-wrapper"><div className="timetracker-img__wrapper"></div></div>
                             <span>Time Tracker</span>
@@ -42,7 +56,7 @@ export const Sidebar = () => {
                     </li>
 
                     <li>
-                        <a href="" className="sidebar-list__link">
+                        <a href="#" className="sidebar-list__link">
                             <div className="sidebar-list__image-wrapper"><div className="settings-img__wrapper"></div></div>
                             <span>Settings</span>
                         </a>

@@ -1,12 +1,4 @@
-.requests-wrapper{
-    border: 1px solid #3a506b;
-    padding: 25px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 1000px;
-    border-radius: 8px;
-}
+
 
 .request-item{
     position: relative;
@@ -110,16 +102,6 @@
   visibility: visible;
 }
 
-.declined{
-    color:#ef233c
-}
-.approved{
-    color: #70e000;
-}
-
-.pending{
-    color:#ffa200;
-}
 
 .neutral{
     color: #f6f6f6;

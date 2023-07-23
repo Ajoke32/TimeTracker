@@ -6,17 +6,20 @@ import {
     defaultState
 } from "./generic";
 import {DefaultState} from "../intrerfaces";
-import {VacationInputType} from "../types";
+import {Vacation, VacationInputType} from "../types";
+
 
 
 interface VacationState extends DefaultState{
   created:boolean,
-    createdId?:number
+    createdId?:number,
+    vacations:Vacation[]
 }
 
 const initialState:VacationState = {
     ...defaultState,
-    created:false
+    created:false,
+    vacations:[]
 }
 
 const vacationsSlice = createSlice({
@@ -36,14 +39,24 @@ const vacationsSlice = createSlice({
 
         updateVacationState:createPendingReducerWithPayload<typeof initialState,number[]>(),
         updateVacationStateSuccess:createSuccessReducerWithoutPayload(),
-        updateVacationStateFail:createErrorReducer()
-    },
+        updateVacationStateFail:createErrorReducer(),
+
+        fetchUserVacations:createPendingReducerWithPayload<typeof initialState,number>(),
+        fetchUserVacationsSuccess:createSuccessReducerWithPayload<typeof initialState,Vacation[]>
+        ((state:VacationState,action:PayloadAction<Vacation[]>)=>{
+            state.vacations=action.payload;
+        }),
+        fetchUserVacationsFail:createErrorReducer()
+    }
 });
 
 
 export const vacation = vacationsSlice.reducer;
+
 export const  {createVacation,
     createVacationSuccess,
     createVacationFail,updateVacationStateFail,
     updateVacationStateSuccess,
-updateVacationState} =  vacationsSlice.actions
+    updateVacationState,fetchUserVacationsSuccess
+    ,fetchUserVacationsFail
+    ,fetchUserVacations} =  vacationsSlice.actions;

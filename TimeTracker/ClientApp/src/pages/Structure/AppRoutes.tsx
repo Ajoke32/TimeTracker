@@ -7,6 +7,7 @@ import {
 } from "..";
 import { useTypedSelector } from '../../hooks';
 import { Permission } from '../../redux';
+import {VacationsTable} from "../../components";
 
 export const AppRoutes = () => {
   const state = useTypedSelector((state) => state.auth);
@@ -39,9 +40,10 @@ export const AppRoutes = () => {
               />
             </Route>
             <Route path="/vacation">
-              <Route index element={<Navigate to='/requests' />} /> // Add main page
+              <Route index element={<Navigate to='/requests' />} />
               <Route path="create" element={<CreateVacation />} />
               <Route path="requests" element={<VacationRequests />} />
+              <Route path="all" element={<VacationsTable />} />
             </Route>
             <Route path="*" element={<Navigate to="/" />} />
           </Route>
