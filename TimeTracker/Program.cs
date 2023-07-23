@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Quartz;
@@ -96,16 +97,6 @@ builder.Services.AddCors(options =>
         });
 });
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: "MyAllowSpecificOrigins",
-        policy =>
-        {
-            policy.AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
-        });
-});
 
 builder.Services.AddDataProtection();
 
@@ -128,13 +119,15 @@ builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);*/
 
 if (builder.Environment.IsDevelopment())
 {
+    
     builder.Services.AddViteServices(options:new ViteOptions()
     {
         Server = new ViteServerOptions()
         {
             AutoRun = true,
             Port = 5173,
-            ScriptName = "dev"
+            ScriptName = "dev",
+            TimeOut = 5
         },
         PackageDirectory = "ClientApp",
     });
@@ -185,21 +178,20 @@ app.UseAuthorization();
 app.UseSpaStaticFiles();
 
 
-
 app.UseGraphQL();
 
 app.UseGraphQLAltair();
+
+
 
 app.UseSpa(spa =>
 {
     spa.Options.SourcePath = "ClientApp";
     spa.Options.DefaultPageStaticFileOptions = new StaticFileOptions()
     {
-        
         OnPrepareResponse = ctx =>
         {
             var headers = ctx.Context.Response.GetTypedHeaders();
-            
             headers.CacheControl = new CacheControlHeaderValue()
             {
                  NoCache = true,
