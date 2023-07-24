@@ -28,9 +28,9 @@ export const VacationsTable = () => {
                         </div>
                     </div>
                     <div className="vacation-item head">
-                        <span>Start date</span>
-                        <span>End date</span>
-                        <span>State</span>
+                            <span>Start date</span>
+                            <span>End date</span>
+                            <span>State</span>
                     </div>
                     {vacations.map(v=>{
                         const style = v.vacationState==null?"pending":v.vacationState?"approved":"declined";
