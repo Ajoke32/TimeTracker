@@ -120,3 +120,11 @@ export function FetchUserVacationDays(id:number){
     )
 }
 
+export function DeleteUser(id:number){
+    return AjaxQuery<QueryStructure<{ userMutation:{deleteById:number} }>>(
+        'mutation DeleteUser($id:Int!){userMutation{deleteById(id:$id)}}',
+        {id:id}
+    )
+}
+
+

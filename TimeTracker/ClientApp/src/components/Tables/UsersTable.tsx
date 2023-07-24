@@ -1,15 +1,18 @@
-﻿import { User } from "../../redux";
-import { ProfileAvatar, ConfirmModal} from "../UI";
+﻿import {deleteUser, User} from "../../redux";
+import { ProfileAvatar} from "../UI";
 import "./tables.css"
+import {useAppDispatch} from "@hooks/customHooks.ts";
 
 
 export const UsersTable = ({ users }: { users: User[] }) => {
 
+    const dispatch = useAppDispatch()
+
     const handleConfirmButtonClick = (value: number) => {
-        console.log(value);
-        // setFilteredUsers((users) =>
-        //     users.filter((user) => user.id !== value)
-        // );
+        const conf = confirm("Are you sure?")
+        if(conf){
+            dispatch(deleteUser(value));
+        }
     };
     return (
         <div className="table-wrapper__inner">
@@ -49,13 +52,8 @@ export const UsersTable = ({ users }: { users: User[] }) => {
                                     <div className="users-table__actions-edit">
                                         <a href={`/team/edituser/${user.id}`} />
                                     </div>
-                                    <div className="users-table__actions-archieve">
-                                        <ConfirmModal
-                                            title="CONFIRM"
-                                            description={`Are you sure you want to deactivate ${user.firstName} ${user.lastName}?`}
-                                            value={user.id}
-                                            onConfirm={handleConfirmButtonClick}
-                                        />
+                                    <div className="users-table__actions-archieve" onClick={()=>handleConfirmButtonClick(user.id)}>
+
                                     </div>
 
                                 </div>

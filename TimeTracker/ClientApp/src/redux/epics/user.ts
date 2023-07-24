@@ -4,13 +4,13 @@ import { catchError, map, mergeMap, Observable, of } from "rxjs";
 
 import {
     AddUserQuery, PasswordConfirmQuery,
-    FetchUserQuery, EditUserQuery, FetchUserVacationDays
+    FetchUserQuery, EditUserQuery, FetchUserVacationDays, DeleteUser
 } from "../queries/userQueries";
 import {
     userAddFail, userAddSuccess,
     verifyFail, verifySuccess,
     fetchUserFail, fetchUserSuccess,
-    editUserFail, editUserSuccess, fetchVacationDaysFail, fetchVacationDaysSuccess
+    editUserFail, editUserSuccess, fetchVacationDaysFail, fetchVacationDaysSuccess, deleteUserFail, deleteUserSuccess
 } from '../slices';
 import { UserAddType } from "../types";
 import { User } from "../intrerfaces";
@@ -103,7 +103,6 @@ export const fetchVacationDaysEpic:Epic = (action:Observable<PayloadAction<numbe
         mergeMap(action=> FetchUserVacationDays(action.payload)
                 .pipe(
                     map(res=>{
-                        console.log(res);
                         if (res.response.errors != null) {
                             return fetchVacationDaysFail(res.response.errors[0].message)
                         }
@@ -114,4 +113,21 @@ export const fetchVacationDaysEpic:Epic = (action:Observable<PayloadAction<numbe
         )
     );
 
-export const userEpics = [fetchVacationDaysEpic,passwordConfirmEpic,addUserEpic]
+export const DeleteUserEpic:Epic=(action:Observable<PayloadAction<number>>)=>
+    action.pipe(
+        ofType('users/deleteUser'),
+        mergeMap(action=>
+            DeleteUser(action.payload)
+                .pipe(
+                    map(res=>{
+                        if (res.response.errors != null) {
+                            return deleteUserFail(res.response.errors[0].message)
+                        }
+                        return deleteUserSuccess(res.response.data.userMutation.deleteById);
+                    }),
+                    catchError((e:Error)=>of(deleteUserFail("error")))
+                )
+        )
+    )
+
+export const userEpics = [fetchVacationDaysEpic,passwordConfirmEpic,addUserEpic,DeleteUserEpic]
