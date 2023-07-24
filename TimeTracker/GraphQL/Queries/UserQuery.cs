@@ -135,6 +135,8 @@ public sealed class UserQuery : ObjectGraphType
                     .GetAsync(u => ids.Contains(u.Id));
             });
 
+       
+
     }
 
     private async Task<string> AuthorizeConfirmedEmailAsync(User actualUser,string password,Authenticate authenticate)
@@ -153,4 +155,7 @@ public sealed class UserQuery : ObjectGraphType
         return token;
     }
 
+   
+
 }
+

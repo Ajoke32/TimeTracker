@@ -1,7 +1,7 @@
 ﻿import { User } from "../../redux";
-import { ProfileAvatar, ConfirmModal, Loader } from "../UI";
-import { useTypedSelector } from "../../hooks";
+import { ProfileAvatar, ConfirmModal} from "../UI";
 import "./tables.css"
+
 
 export const UsersTable = ({ users }: { users: User[] }) => {
 

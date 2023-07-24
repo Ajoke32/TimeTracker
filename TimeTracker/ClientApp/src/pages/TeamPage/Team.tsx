@@ -3,7 +3,7 @@ import { H4, UsersTable, UsersTableNavbar, Loader } from "../../components";
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useTypedSelector } from "../../hooks";
 import { User, fetchUsers } from "../../redux";
-
+import "@components/UI/Buttons/buttons.css"
 
 export const Team = () => {
     const dispatch = useAppDispatch();
@@ -40,7 +40,7 @@ export const Team = () => {
                         {loading&&users.length==0? <Loader /> :
                             <>
                                 <UsersTable users={filteredUsers} />
-                                <button onClick={() => { loadMore() }}>{loading?"Loading..":"Load more"}</button>
+                                <button className="load-more" onClick={() => { loadMore() }}>{loading?"Loading..":"Load more"}</button>
                             </>
                         }
 

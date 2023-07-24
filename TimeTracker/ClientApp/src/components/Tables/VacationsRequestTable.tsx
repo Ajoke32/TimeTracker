@@ -27,12 +27,16 @@ export const VacationsRequestTable = () => {
     useEffect(()=>{
         if(updated){
             dispatch(updateVacationState(approves))
+            setSelected([]);
         }
     },[updated])
 
     function approve(ids:number[],state:boolean){
-        setApproveId(ids);
-        dispatch(updateApproverVacationState({id:ids,isApproved:state,approverId:userId!}))
+        const conf = confirm("Unreversible action,you definitely want to do it?")
+        if(conf) {
+            setApproveId(ids);
+            dispatch(updateApproverVacationState({id: ids, isApproved: state, approverId: userId!}))
+        }
     }
 
 
