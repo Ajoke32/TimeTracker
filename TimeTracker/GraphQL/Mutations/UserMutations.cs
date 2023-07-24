@@ -61,7 +61,7 @@ public sealed class UserMutations:ObjectGraphType
                 return true;
             });
 
-        Field<bool>("deleteById")
+        Field<int>("deleteById")
             .Argument<int>("id")
             .ResolveAsync(async ctx =>
             {
@@ -74,7 +74,7 @@ public sealed class UserMutations:ObjectGraphType
                 
                 await uow.SaveAsync();
 
-                return true;
+                return id;
             });
 
         Field<bool>("delete")

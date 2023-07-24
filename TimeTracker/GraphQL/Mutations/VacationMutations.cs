@@ -21,6 +21,11 @@ public sealed class VacationMutations:ObjectGraphType
                 var user = await uow.GenericRepository<User>()
                     .FindAsync(u => u.Id == vacation.UserId);
 
+                if (user!.VacationDays == 0)
+                {
+                    throw new ValidationError("The available days have expired");
+                }
+                
                 var diff = vacation.EndDate - vacation.StartDate;
                 
                 if (diff.Days > user!.VacationDays)

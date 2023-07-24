@@ -21,12 +21,13 @@ export const addVacationEpic: Epic = (action: Observable<PayloadAction<VacationI
             AddVacationQuery(action.payload).pipe(
                 mergeMap(async resp => {
                     if (resp.response.errors != null) {
-                        const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
+                        const errorMessage = resp.response.errors[0].message;
                         return createVacationFail(errorMessage)
                     }
                     return createVacationSuccess(resp.response.data.vacationMutation.create.id);
                 }),
                 catchError((e: Error) => {
+                    console.log(e);
                     return of(createVacationFail("unexpected error"))
                 })
             ),

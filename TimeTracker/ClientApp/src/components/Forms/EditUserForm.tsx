@@ -21,19 +21,19 @@ const options: Permission[] = [
 export const EditUserForm = () => {
     const { userId } = useParams();
     const dispatch = useAppDispatch();
-    const userState = useTypedSelector(state => state.user);
+    const {user,loading} = useTypedSelector(state => state.user);
 
     useEffect(() => {
         dispatch(fetchUser(parseInt(userId!)))
     }, []);
 
-    const [checkedOptions, setCheckedOptions] = useState<number>(userState.user ? userState.user!.permissions : 0);
-    const [hoursPerMonthValue, setHoursPerMonthValue] = useState<number>(userState.user ? userState.user!.permissions : 0);
+    const [checkedOptions, setCheckedOptions] = useState<number>(user ?user!.permissions : 0);
+    const [hoursPerMonthValue, setHoursPerMonthValue] = useState<number>(user ? user!.permissions : 0);
 
     useEffect(() => {
-        setCheckedOptions(userState.user ? userState.user!.permissions : 0);
-        setHoursPerMonthValue(userState.user ? userState.user!.hoursPerMonth : 0);
-    }, [userState.user])
+        setCheckedOptions(user ? user.permissions : 0);
+        setHoursPerMonthValue(user ? user!.hoursPerMonth : 0);
+    }, [user])
 
 
     const { register, handleSubmit,
@@ -47,7 +47,7 @@ export const EditUserForm = () => {
 
     const onSubmit: SubmitHandler<Inputs> = () => {
         const editedUser = {
-            id: userState.user!.id,
+            id: user!.id,
             permissions: checkedOptions,
             hoursPerMonth: parseInt((hoursPerMonthValue).toString())
         }
@@ -57,12 +57,12 @@ export const EditUserForm = () => {
     return (
         <div className="user-form__wrapper-inner edit-form__wrapper-inner">
             <form onSubmit={handleSubmit(onSubmit)}>
-                <span className="user-form__title">Edit user:</span>
-                <TextInput name="firstName" placeholder={userState.user?.firstName!} isDisabled={true} />
+                <span className="user-form__title">Edit user:{}</span>
+                <TextInput name="firstName" placeholder={user?.firstName!} isDisabled={true} />
 
-                <TextInput name="lastName" placeholder={userState.user?.lastName!} isDisabled={true} />
+                <TextInput name="lastName" placeholder={user?.lastName!} isDisabled={true} />
 
-                <TextInput name="email" placeholder={userState.user?.email!} isDisabled={true} />
+                <TextInput name="email" placeholder={user?.email!} isDisabled={true} />
 
                 <RangeInput title="Select working hours %:" minRange={25} maxRange={100} step={5} value={hoursPerMonthValue} onChange={setHoursPerMonthValue} />
 

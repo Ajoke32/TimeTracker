@@ -39,7 +39,7 @@ export const Team = () => {
                         <UsersTableNavbar users={users} setFilteredUsers={setFilteredUsers} />
                         {loading&&users.length==0? <Loader /> :
                             <>
-                                <UsersTable users={filteredUsers} />
+                                <UsersTable users={users} />
                                 <button className="load-more" onClick={() => { loadMore() }}>{loading?"Loading..":"Load more"}</button>
                             </>
                         }

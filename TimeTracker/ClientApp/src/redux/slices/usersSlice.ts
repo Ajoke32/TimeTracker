@@ -4,8 +4,8 @@ import {
     createSuccessReducerWithPayload,
     defaultState
 } from "./generic";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { DefaultState, User } from "../intrerfaces";
+import {createSlice, current, PayloadAction} from "@reduxjs/toolkit";
+import {DefaultState, User, UserSliceState} from "../intrerfaces";
 import { FetchUsersType } from "../types";
 
 interface UsersSliceState extends DefaultState {
@@ -26,10 +26,18 @@ const usersSlice = createSlice({
             (state: UsersSliceState, action: PayloadAction<User[]>) => {
                 state.users = [...state.users, ...action.payload];
             }),
-        fetchUsersFail: createErrorReducer()
+        fetchUsersFail: createErrorReducer(),
+
+        deleteUser:createPendingReducerWithPayload<typeof initialState,number>(),
+        deleteUserSuccess:createSuccessReducerWithPayload<typeof initialState,number>
+        ((state:UsersSliceState,action:PayloadAction<number>)=>{
+            state.users = state.users.filter(u=>u.id!==action.payload);
+        }),
+        deleteUserFail:createErrorReducer()
     },
 });
 
 export const users = usersSlice.reducer;
 export const { fetchUsersFail,
-    fetchUsersSuccess, fetchUsers } = usersSlice.actions;
+    fetchUsersSuccess, fetchUsers,deleteUserSuccess,
+    deleteUserFail,deleteUser } = usersSlice.actions;
