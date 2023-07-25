@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { UserSliceState, User } from '../intrerfaces';
-import { UserAddType } from "../types";
+import { UserAddType, UserEditType } from "../types";
 import {
     defaultState, createPendingReducerWithPayload,
     createSuccessReducerWithPayload, createErrorReducer,
@@ -35,7 +35,7 @@ const userSlice = createSlice({
             }),
         fetchUserFail: createErrorReducer(),
 
-        editUser: createPendingReducerWithPayload<UserSliceState, User>(),
+        editUser: createPendingReducerWithPayload<UserSliceState, UserEditType>(),
         editUserSuccess: createSuccessReducerWithoutPayload(),
         editUserFail: createErrorReducer(),
 

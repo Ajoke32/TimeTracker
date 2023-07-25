@@ -58,5 +58,10 @@ public class EmailService
         </div>";
 
         SendEmail(userEmail, body, "Account actions required.");
-    } 
+    }
+
+    // public async Task SendEmailConfirmationAsync(string userEmail)
+    // {
+
+    // }
 }

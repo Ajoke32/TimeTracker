@@ -6,20 +6,20 @@ import { useAppDispatch, useTypedSelector } from "../../hooks";
 
 import "./AddUserForms.css"
 
-const AddApproversForm = () => {
+export const AddApproversForm = ({ step }: { step?: number }) => {
     const dispatch = useAppDispatch();
-    const userState = useTypedSelector(state => state.user);
+    const { user } = useTypedSelector(state => state.user);
     const approversState = useTypedSelector(state => state.approvers);
-    
+
     const [approvers, setApprovers] = useState<number[]>([]);
     const [fetched, setFetched] = useState<number>(0);
 
     const handleClick = () => {
-        dispatch(addApprovers({approvers: approvers, userId: userState.user!.id!}))
+        dispatch(addApprovers({ approvers: approvers, userId: user!.id! }))
     }
 
     const loadMore = () => {
-        dispatch(fetchApprovers({ take: 5, skip: fetched, activated: true, userId: userState.user!.id!}));
+        dispatch(fetchApprovers({ take: 5, skip: fetched, activated: true, userId: user!.id! }));
     }
 
     useEffect(() => {
@@ -33,14 +33,14 @@ const AddApproversForm = () => {
     return (
         <div className="user-form__wrapper-inner">
             <form onSubmit={(e) => { e.preventDefault() }}>
-                <StepsElement title="Step 2/2" currentStep={2} />
-                
-                <span className="user-form__title">Select vacations approver(s) for {`${userState.user?.firstName} ${userState.user?.lastName}`}</span>
+                {step ? <StepsElement title="Step 2/2" currentStep={2} /> : <></>}
+
+                <span className="user-form__title">Select vacations approver(s) for {`${user?.firstName} ${user?.lastName}`}</span>
                 {approversState.loading ?
                     <Loader /> :
                     <>
                         <ApproversTable users={approversState.approversList} onChange={setApprovers} approvers={approvers} />
-                        <button onClick={()=>{loadMore()}}>Load more</button>
+                        <button onClick={() => { loadMore() }}>Load more</button>
                     </>
                 }
                 <div className="user-form__btn-wrapper">
@@ -51,5 +51,3 @@ const AddApproversForm = () => {
         </div>
     );
 };
-
-export default AddApproversForm;

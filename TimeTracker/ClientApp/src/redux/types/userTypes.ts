@@ -3,13 +3,17 @@ export type UserLoginType = {
     password: string
 }
 
-export type UserAddType = {
+export interface UserAddType {
     firstName: string,
     lastName: string,
     email: string,
     hoursPerMonth: number,
     permissions: number,
     vacationDays: number,
+}
+
+export interface UserEditType extends UserAddType {
+    id: number
 }
 
 export interface FetchUserType {

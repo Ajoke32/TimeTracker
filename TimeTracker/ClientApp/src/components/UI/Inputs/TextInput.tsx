@@ -1,4 +1,4 @@
-import {TextInputProps} from "./InputProps";
+import { TextInputProps } from "./InputProps";
 import './inputs.css'
 import { ErrorTooltip } from "../Tooltips";
 
@@ -7,8 +7,14 @@ export const TextInput = ({ name, placeholder, register, errors, isDisabled }: T
     return (
         <div>
 
-            <input type="text" name={name} placeholder={placeholder} {...register} className="text-input" autoComplete='off' disabled={isDisabled} />
-            
+            <input type="text"
+                name={name}
+                placeholder={placeholder}
+                className="text-input"
+                autoComplete='off'
+                disabled={isDisabled}
+                {...register} />
+
             <ErrorTooltip errors={errors} />
         </div>
     );

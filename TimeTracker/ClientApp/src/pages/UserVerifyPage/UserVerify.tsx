@@ -13,9 +13,7 @@ type Inputs = {
 export const UserVerify = () => {
 
     const dispatch = useAppDispatch();
-    const urlParams = new URLSearchParams(window.location.search)
-    const [param, setParam] = useState<string | null>(urlParams.get('verify'));
-
+    const param = window.location.search.substring("?verify=".length)
 
     const { register, handleSubmit,
         formState: { errors }, reset } = useForm<Inputs>({
@@ -26,7 +24,7 @@ export const UserVerify = () => {
         });
 
     const onSubmit: SubmitHandler<Inputs> = (data) => {
-        dispatch(userVerify({ token: param!, password: data.password }));
+        dispatch(userVerify({ token: param, password: data.password }));
         reset();
     }
 

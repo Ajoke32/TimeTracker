@@ -57,6 +57,11 @@ public sealed class UserMutations:ObjectGraphType
 
                 var updated = await uow.GenericRepository<User>()
                                        .UpdateAsync(mapper.Map<UserUpdateDto, User>(editedUser, user));
+
+                if(user.Email != updated.Email){
+                    // emailService.SendEmailConfirmationAsync(user.Email)
+                }
+
                 await uow.SaveAsync();
                 return true;
             });

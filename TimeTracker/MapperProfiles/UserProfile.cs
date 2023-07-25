@@ -31,6 +31,15 @@ public class UserProfile:Profile
                 o =>
                     o.MapFrom(m =>
                         m.HoursPerMonth == User.FullTimeValue ? WorkType.FullTime : WorkType.PartTime))
+            .ForMember(x => x.Email, 
+                o => 
+                    o.MapFrom(dto => dto.Email))
+            .ForMember(x => x.FirstName, 
+                o => 
+                    o.MapFrom(dto => dto.FirstName))
+            .ForMember(x => x.LastName, 
+                o => 
+                    o.MapFrom(dto => dto.LastName))
             .ForAllMembers(o => o.UseDestinationValue());
 
         CreateMap<User, UserDisplayDto>()

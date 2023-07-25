@@ -11,7 +11,7 @@ public sealed class UserInputType:InputObjectGraphType<UserInputDto>
 
         Field(x => x.FirstName).Description("user first name");
 
-        Field(x => x.LastName).Description("");
+        Field(x => x.LastName).Description("user last name");
 
         Field(x => x.Permissions).Description("user permissions");
 

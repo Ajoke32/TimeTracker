@@ -41,6 +41,7 @@ export const passwordConfirmEpic: Epic = (action: Observable<PayloadAction<{ tok
         mergeMap(action =>
             PasswordConfirmQuery(action.payload).pipe(
                 mergeMap(async resp => {
+                    console.log(resp)
                     if (resp.response.errors != null) {
                         const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
                         return verifyFail(errorMessage)
