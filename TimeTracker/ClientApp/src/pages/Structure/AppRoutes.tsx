@@ -7,16 +7,18 @@ import {
 import { useTypedSelector } from '../../hooks';
 import { Permission } from '../../redux';
 import {VacationsTable} from "@components/Tables";
+import {Tracker} from "../TrackerPage/Tracker";
 
 export const AppRoutes = () => {
   const state = useTypedSelector((state) => state.auth);
 
   return (
     <Routes>
-      {state.status ? (
+      {!state.status ? (
         <>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
+            <Route path="/tracker" element={<Tracker/>}/>
             <Route path="/team" element={<Outlet />}>
               <Route index element={<Team />} />
               <Route
