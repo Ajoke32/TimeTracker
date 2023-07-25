@@ -7,6 +7,8 @@ import {
 import { useTypedSelector } from '../../hooks';
 import { Permission } from '../../redux';
 import {VacationsTable} from "@components/Tables";
+import { NotFound } from '../ErrorPage/NotFound';
+import { AccessDenied } from '../ErrorPage/AccessDenied';
 
 export const AppRoutes = () => {
   const state = useTypedSelector((state) => state.auth);
@@ -54,6 +56,8 @@ export const AppRoutes = () => {
           <Route path="/*" element={<Navigate to="/login" />} />
         </>
       )}
+      <Route path="/notFound" element={<NotFound />}/>
+      <Route path="/accessDenied" element={<AccessDenied />}/>
     </Routes>
   );
 };
