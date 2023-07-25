@@ -15,26 +15,24 @@ import {
     updateApproverVacationStateStateSuccess
 } from "../slices";
 import {
-    ApproverVacationUpdateMany,
+    ApproverVacationUpdate,
     VacationApproverInput
 } from "../types";
 import { GetErrorMessage } from "../../utils";
 
-export const updateApproverVacationEpic: Epic = (action: Observable<PayloadAction<ApproverVacationUpdateMany>>, state) =>
+export const updateApproverVacationEpic: Epic = (action: Observable<PayloadAction<ApproverVacationUpdate>>, state) =>
     action.pipe(
         ofType("approverVacation/updateApproverVacationState"),
         mergeMap(action =>
-            UpdateApproverVacationState(action.payload.id, action.payload.isApproved, action.payload.approverId!)
+            UpdateApproverVacationState(action.payload.vacationId, action.payload.isApproved, action.payload.id!,action.payload.message)
                 .pipe(
                     mergeMap(async resp => {
                         if (resp.response.errors != null) {
-                            const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
-                            return updateApproverVacationStateStateFail(errorMessage)
+                            return updateApproverVacationStateStateFail(resp.response.errors[0].message)
                         }
                         return updateApproverVacationStateStateSuccess(resp.response.data.approverVacationMutation.updateState);
                     }),
                     catchError((e: Error) => {
-                        console.log(e);
                         return of(updateApproverVacationStateStateFail("unexpected error"))
                     })
                 ),
@@ -70,8 +68,7 @@ export const updateApproversVacationsEpic: Epic = (action: Observable<PayloadAct
                 .pipe(
                     mergeMap(async resp => {
                         if (resp.response.errors != null) {
-                            const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
-                            return updateApproversVacationsFail(errorMessage)
+                            return updateApproversVacationsFail(resp.response.errors[0].message)
                         }
                         return updateApproversVacationsSuccess();
                     }),

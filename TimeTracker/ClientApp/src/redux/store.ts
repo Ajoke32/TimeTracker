@@ -5,6 +5,7 @@ import { rootEpic } from "./epics"
 import { approvers } from "./slices";
 import {vacation} from "./slices";
 import {approverVacations} from "./slices";
+import {messageModalReducer} from "@redux/slices/messageModalSlice.ts";
 
 const middleware = createEpicMiddleware();
 
@@ -16,6 +17,7 @@ export const store = configureStore({
     approvers: approvers,
     vacations:vacation,
     approverVacations:approverVacations,
+    messageModal:messageModalReducer
   },
   middleware: [
     middleware

@@ -2,9 +2,11 @@
 using GraphQL.Types;
 using GraphQL.Validation;
 using TimeTracker.Absctration;
+using TimeTracker.Enums;
 using TimeTracker.GraphQL.Types;
 using TimeTracker.GraphQL.Types.InputTypes.VacationInput;
 using TimeTracker.Models;
+using TimeTracker.Utils.Errors;
 
 namespace TimeTracker.GraphQL.Mutations;
 
@@ -43,29 +45,21 @@ public sealed class VacationMutations:ObjectGraphType
                 return res;
             });
 
-        Field<bool>("updateState")
-            .Argument<List<int>>("vacations")
+        Field<bool?>("updateState",nullable:true)
+            .Argument<int>("vacationId")
             .ResolveAsync(async _ =>
             {
-                var id = _.GetArgument<List<int>>("vacations");
+                var id = _.GetArgument<int>("vacationId");
                 
-                var vacations = await uow.GenericRepository<Vacation>()
-                    .GetAsync(v => id.Contains(v.Id),includeProperties:"ApproverVacations");
-                
-                if (!vacations.Any())
-                {
-                    throw  new ValidationError("Vacations not found");
-                }
-                
-                
-                foreach (var vac in vacations)
-                {
-                    vac.VacationState = IsVacationConfirmed(vac.ApproverVacations);
-                }
+                var vacation = await uow.GenericRepository<Vacation>()
+                    .FindAsync(v => v.Id == id,relatedData:"ApproverVacations")??throw new ValidationError("Vacation not found");
+
+
+                vacation.VacationState = IsVacationConfirmed(vacation.ApproverVacations);
                 
                 await uow.SaveAsync();
                 
-                return true;
+                return vacation.VacationState;
             });
 
 

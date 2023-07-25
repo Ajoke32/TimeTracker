@@ -8,7 +8,6 @@ import {
 import {createSlice,  PayloadAction} from "@reduxjs/toolkit";
 import {
     ApproverVacation, ApproverVacationUpdate,
-    ApproverVacationUpdateMany,
     VacationApproverInput
 } from "../types";
 
@@ -27,16 +26,16 @@ const approverVacationsSlice = createSlice({
     name: 'approverVacation',
     initialState,
     reducers: {
-        updateApproverVacationState:createPendingReducerWithPayload<typeof initialState,ApproverVacationUpdateMany>
+        updateApproverVacationState:createPendingReducerWithPayload<typeof initialState,ApproverVacationUpdate>
         ((state:VacationApproverState)=>{
             state.updated=false;
         }),
-        updateApproverVacationStateStateSuccess:(state:VacationApproverState,action:PayloadAction<ApproverVacationUpdate[]>)=>{
+        updateApproverVacationStateStateSuccess:(state:VacationApproverState,action:PayloadAction<ApproverVacationUpdate>)=>{
             state.loading=false;
             state.vacationRequests.map(a=>{
-                const updated = action.payload.find(x=>
-                    x.vacationId===a.vacation.id);
-                if(updated){a.isApproved=updated.isApproved;}
+                if(a.vacation.id==action.payload.vacationId){
+                    a.isApproved = action.payload.isApproved
+                }
                 return a;
             });
             state.updated=true;
