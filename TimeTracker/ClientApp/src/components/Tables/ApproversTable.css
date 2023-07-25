@@ -3,7 +3,7 @@
 .request-item{
     position: relative;
     display: grid;
-    grid-template-columns: 20px 160px 1fr 1fr 100px;
+    grid-template-columns:160px 1fr 1fr 100px;
     align-items: center;
     gap: 20px;
     text-align: center;
