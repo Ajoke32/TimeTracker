@@ -6,6 +6,7 @@ export interface QueryStructure<T> {
 export interface ResponseError{
     message:string,
     extensions:{
-        code:string
+        code:string,
+        details:string
     }
 }

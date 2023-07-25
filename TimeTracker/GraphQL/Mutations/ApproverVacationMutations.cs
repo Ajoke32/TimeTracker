@@ -26,35 +26,30 @@ public sealed class ApproverVacationMutations:ObjectGraphType
                 return created;
             });
 
-        Field<ListGraphType<ApproverVacationType>>("updateState")
+        Field<ApproverVacationType>("updateState")
             .Argument<int>("approverId")
             .Argument<bool>("state",nullable:true)
-            .Argument<List<int>>("vacations")
+            .Argument<int>("vacationId")
+            .Argument<string>("message",nullable:true)
             .ResolveAsync(async ctx =>
             {
                 var state = ctx.GetArgument<bool>("state");
                 var approverId = ctx.GetArgument<int>("approverId");
-                var vacations = ctx.GetArgument<List<int>>("vacations");
-
+                var vacationId = ctx.GetArgument<int>("vacationId");
+                var message = ctx.GetArgument<string>("message");   
             
-                var approverVacations = await uow.GenericRepository<ApproverVacation>()
-                    .GetAsync(a => vacations.Contains(a.VacationId) && a.UserId == approverId
-                    ,includeProperties:"Vacation.User");
-                        
+                var approverVacation = await uow.GenericRepository<ApproverVacation>()
+                    .FindAsync(a => a.VacationId==vacationId && a.UserId == approverId
+                    ,relatedData:"Vacation.User")??throw new ValidationError("ApproverVacation not found");
                 
-                if (!approverVacations.Any())
-                {
-                    throw new ValidationError("not found");
-                }
-
-                foreach (var vac in approverVacations)
-                {
-                    vac.IsApproved = state;
-                }
+                
+                approverVacation.IsApproved = state;
+                approverVacation.Message = message;
+                
                 
                 await uow.SaveAsync();
                 
-                return approverVacations;
+                return approverVacation;
             });
 
         Field<bool>("updateApproversVacations")

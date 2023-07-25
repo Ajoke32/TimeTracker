@@ -5,7 +5,7 @@ import { catchError, map, mergeMap, Observable, of } from "rxjs";
 import {
     AddUserQuery, PasswordConfirmQuery,
     FetchUserQuery, EditUserQuery, FetchUserVacationDays, DeleteUser
-} from "../queries/userQueries";
+} from "@redux/queries";
 import {
     userAddFail, userAddSuccess,
     verifyFail, verifySuccess,

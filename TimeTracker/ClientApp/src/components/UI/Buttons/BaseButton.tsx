@@ -1,8 +1,9 @@
+
 interface BaseButtonProps {
     disabled: boolean,
     btnStyle: string,
     text: string,
-    onClick?: Function
+    onClick?: ()=>void
 }
 
 export const BaseButton = ({ disabled, btnStyle, text, onClick }: BaseButtonProps) => {
