@@ -15,8 +15,7 @@ export const UserVerify = () => {
     const dispatch = useAppDispatch();
     const urlParams = new URLSearchParams(window.location.search)
     const [param, setParam] = useState<string | null>(urlParams.get('verify'));
-
-
+    
     const { register, handleSubmit,
         formState: { errors }, reset } = useForm<Inputs>({
             mode: 'onBlur',

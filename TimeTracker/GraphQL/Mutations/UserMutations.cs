@@ -96,24 +96,20 @@ public sealed class UserMutations:ObjectGraphType
         {
             var token = ctx.GetArgument<string>("token");
             var authEmailService = ctx.RequestServices?.GetRequiredService<EmailTokenService>();
-                
             var valid = await authEmailService!.VerifyUserToken(token, 72000); // 20 hours
-            if(valid)
-            {
-                var id = authEmailService.GetUserIdFromToken(token);
-                var user = await uow.GenericRepository<User>().FindAsync(u=>u.Id==id);
+            
+            if (!valid) throw new QueryError(Error.ERR_INVALID_TOKEN);
+            
+            var id = authEmailService.GetUserIdFromToken(token);
+            var user = await uow.GenericRepository<User>().FindAsync(u=>u.Id==id);
 
-                if(user is not null && !user.IsEmailActivated)
-                {
-                    var password = ctx.GetArgument<string>("password");
-                    user.Password = BCrypt.Net.BCrypt.HashPassword(password);
-                    var updated = await uow.GenericRepository<User>().UpdateAsync(user);
-                    
-                    await uow.SaveAsync();
-                    return true;
-                }
-            }
-            throw new QueryError(Error.ERR_INVALID_TOKEN);
+            if (user is null || !user.IsEmailActivated) throw new QueryError(Error.ERR_INVALID_TOKEN);
+            
+            var password = ctx.GetArgument<string>("password");
+            user.Password = BCrypt.Net.BCrypt.HashPassword(password);
+            
+            await uow.SaveAsync();
+            return true;
         });
         
     }
