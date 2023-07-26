@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "react-beforeunload": "^2.6.0",
+    "redux-persist": "^6.0.0"
+  }
+}

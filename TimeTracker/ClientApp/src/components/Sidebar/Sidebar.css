@@ -89,7 +89,8 @@
 }
 
 .sidebar-list::-webkit-scrollbar {
-    width: .5rem;
+    width: .2rem;
+    
 }
 
 .sidebar-list::-webkit-scrollbar-thumb {
@@ -103,6 +104,14 @@
 
 .dashboard-img__wrapper {
     background: url("../../assets/images/dashboard_icon.svg");
+}
+
+.requests-img__wrapper {
+    background: url("../../assets/images/dashboard_request_icon.svg");
+}
+
+.vacations-img__wrapper {
+    background: url("../../assets/images/dashboard_vacations_icon.svg");
 }
 
 .timetracker-img__wrapper {
