@@ -1,9 +1,9 @@
 import { Navigate } from "react-router-dom"
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { useState, useEffect } from "react";
-import { H5, InputTooltip, Loader, PasswordInput, LargeButton } from "../../components";
-import { useTypedSelector, useAppDispatch } from "../../hooks";
-import { userVerify } from "../../redux";
+import { useState } from "react";
+import { PasswordInput, LargeButton } from "@components/UI";
+import { useAppDispatch } from "@hooks/customHooks";
+import { userVerify } from "@redux/slices";
 import "./UserVerify.css"
 
 type Inputs = {
@@ -31,7 +31,7 @@ export const UserVerify = () => {
 
     switch (param) {
         case null:
-            return (<Navigate to='/' />)
+            return (<Navigate to='/notFound' />)
         default:
             return (
                 <div className="user-verify-page-wrapper">

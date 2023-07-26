@@ -18,16 +18,16 @@ const options: Permission[] = [
     Permission.Read,
 ];
 
-export const EditUserForm = () => {
+const EditUserForm = () => {
     const { userId } = useParams();
     const dispatch = useAppDispatch();
-    const {user,loading} = useTypedSelector(state => state.user);
+    const { user, loading } = useTypedSelector(state => state.user);
 
     useEffect(() => {
         dispatch(fetchUser(parseInt(userId!)))
     }, []);
 
-    const [checkedOptions, setCheckedOptions] = useState<number>(user ?user!.permissions : 0);
+    const [checkedOptions, setCheckedOptions] = useState<number>(user ? user!.permissions : 0);
     const [hoursPerMonthValue, setHoursPerMonthValue] = useState<number>(user ? user!.permissions : 0);
 
     useEffect(() => {
@@ -57,12 +57,12 @@ export const EditUserForm = () => {
     return (
         <div className="user-form__wrapper-inner edit-form__wrapper-inner">
             <form onSubmit={handleSubmit(onSubmit)}>
-                <span className="user-form__title">Edit user:{}</span>
-                <TextInput name="firstName" placeholder={user?.firstName!} isDisabled={true} />
+                <span className="user-form__title">Edit user:{`${user?.firstName} ${user?.lastName}`}</span>
+                <TextInput name="firstName" placeholder={user?.firstName!} />
 
-                <TextInput name="lastName" placeholder={user?.lastName!} isDisabled={true} />
+                <TextInput name="lastName" placeholder={user?.lastName!} />
 
-                <TextInput name="email" placeholder={user?.email!} isDisabled={true} />
+                <TextInput name="email" placeholder={user?.email!} />
 
                 <RangeInput title="Select working hours %:" minRange={25} maxRange={100} step={5} value={hoursPerMonthValue} onChange={setHoursPerMonthValue} />
 

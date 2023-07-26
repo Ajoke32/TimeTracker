@@ -1,6 +1,5 @@
-import { useTypedSelector } from '../../hooks';
-import { Navigate } from 'react-router-dom';
-
+import { useTypedSelector } from '@hooks/customHooks';
+import { AccessDenied } from '..';
 
 interface ProtectedRouteProps {
     permission: number,
@@ -11,6 +10,6 @@ export const ProtectedRoute = ({ permission, component }: ProtectedRouteProps) =
     const state = useTypedSelector((state) => state.auth);
 
     return ((state.user!.permissions & permission) ?
-        component : <Navigate to='/'/>
+        component : <AccessDenied />
     );
 }
