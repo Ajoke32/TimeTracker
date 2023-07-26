@@ -1,6 +1,6 @@
 ﻿.layout-wrapper {
     display: grid;
-    grid-template-columns: 240px 100fr;
+    grid-template-columns: 210px 100fr;
     grid-template-rows: 8fr 100fr;
     grid-column-gap: 0;
     grid-row-gap: 0;
