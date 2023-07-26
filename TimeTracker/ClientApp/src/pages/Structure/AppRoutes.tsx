@@ -2,13 +2,13 @@ import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import {
   Home, Login, AddUser, Layout,
   UserVerify, Team, EditUser,
-  ProtectedRoute, CreateVacation, VacationRequests,
+  ProtectedRoute, CreateVacation, 
+  VacationRequests, NotFound,
+  EmailConfirm
 } from "..";
-import { useTypedSelector } from '../../hooks';
-import { Permission } from '../../redux';
-import {VacationsTable} from "@components/Tables";
-import { NotFound } from '../ErrorPage/NotFound';
-import { AccessDenied } from '../ErrorPage/AccessDenied';
+import { useTypedSelector } from '@hooks/customHooks';
+import { Permission } from '@redux/enums';
+import { VacationsTable } from "@components/Tables";
 
 export const AppRoutes = () => {
   const state = useTypedSelector((state) => state.auth);
@@ -46,18 +46,18 @@ export const AppRoutes = () => {
               <Route path="requests" element={<VacationRequests />} />
               <Route path="all" element={<VacationsTable />} />
             </Route>
-            <Route path="*" element={<Navigate to="/" />} />
+            <Route path="/login" element={<Navigate to="/" />} />
+            <Route path="*" element={<NotFound/>} />
           </Route>
         </>
       ) : (
         <>
           <Route path="/userVerify" element={<UserVerify />} />
+          <Route path="/emailConfirm" element={<EmailConfirm />} />
           <Route path="/login" element={<Login />} />
           <Route path="/*" element={<Navigate to="/login" />} />
         </>
       )}
-      <Route path="/notFound" element={<NotFound />}/>
-      <Route path="/accessDenied" element={<AccessDenied />}/>
     </Routes>
   );
 };

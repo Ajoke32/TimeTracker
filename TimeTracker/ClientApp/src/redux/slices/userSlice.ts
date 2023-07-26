@@ -46,6 +46,8 @@ const userSlice = createSlice({
             state.vacationDays=action.payload;
         }),
         fetchVacationDaysFail:createErrorReducer(),
+
+        emailVerify: createPendingReducerWithPayload<UserSliceState, string>(),
     },
 });
 
@@ -56,6 +58,7 @@ export const {
     userVerify, verifyFail, verifySuccess,
     fetchUser, fetchUserFail, fetchUserSuccess,
     editUser, editUserFail, editUserSuccess,
-    fetchVacationDaysSuccess,fetchVacationDaysFail,fetchVacationDays
+    fetchVacationDaysSuccess,fetchVacationDaysFail,
+    fetchVacationDays, emailVerify
 } = userSlice.actions;
 

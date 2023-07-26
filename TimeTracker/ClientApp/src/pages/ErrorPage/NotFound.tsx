@@ -1,5 +1,5 @@
 import './errorPages.css'
-import notFoundGif from "../../assets/images/page_not_found.gif";
+import notFoundGif from "../../assets/images/error_page.gif";
 import { H3 } from '@components/Headings';
 
 export const NotFound = () => {

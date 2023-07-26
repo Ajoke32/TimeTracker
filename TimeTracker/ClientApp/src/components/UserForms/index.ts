@@ -1,10 +1,10 @@
-import { UserAddType, UserEditType } from '@redux/types'
+import { UserAddType, UserEditType, UserType } from '@redux/types'
 
 export * from './UserForm'
 export * from './AddApproversForm'
 
 export interface UserFormProps {
-    formDataHandler: (data: UserEditType) => void,
+    formDataHandler: (data: UserAddType | UserEditType) => void,
     step?: number
 }
 
@@ -15,5 +15,4 @@ export type Inputs = {
     email: string,
     hoursPerMonth: number,
     permissions: number,
-    vacationDays: number,
 }

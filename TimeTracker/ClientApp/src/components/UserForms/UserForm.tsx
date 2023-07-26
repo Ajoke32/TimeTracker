@@ -1,4 +1,4 @@
-import { useAppDispatch, useTypedSelector } from "../../hooks";
+import { useAppDispatch, useTypedSelector } from "@hooks/customHooks";
 import { useEffect, useState } from 'react';
 import { TextInput, CheckboxInput, SmallButton, StepsElement, RangeInput } from "@components/UI";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -29,7 +29,6 @@ export const UserForm = ({ formDataHandler, step }: UserFormProps) => {
             defaultValues: {
                 hoursPerMonth: hoursPerMonthValue,
                 permissions: checkedOptions,
-                vacationDays: 30,
             }
         });
 

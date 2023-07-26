@@ -60,8 +60,18 @@ public class EmailService
         SendEmail(userEmail, body, "Account actions required.");
     }
 
-    // public async Task SendEmailConfirmationAsync(string userEmail)
-    // {
+    public async Task SendEmailConfirmationAsync(User user)
+    {
+        var confirmationLink = await _tokenService.GenerateUserEmailTokenAsync(user.Id);
 
-    // }
+        var body = $@"
+        <div style='width: 100%; font-family: Arial, Helvetica, sans-serif;font-size:22px; margin: 40px auto; text-align:center;'>
+            <h2 style='width:fit-content; margin: 15px auto;'>Your email was changed!</h2>
+            <p style='width:fit-content; margin: 15px auto; '>Dear {user.FirstName} {user.LastName}, you need to confirm your new email:</p>
+            <a style='display:block; width:fit-content; margin: auto; padding:10px 15px; background-color:#8ecae6; border-radius:5px; text-decoration:none; color:#14213d;'
+                href='https://timetrackerproject.azurewebsites.net/emailConfirm?confirm={confirmationLink}'>Confirm</a>
+        </div>";
+
+        SendEmail(user.Email, body, "Account credentials changed.");
+    }
 }

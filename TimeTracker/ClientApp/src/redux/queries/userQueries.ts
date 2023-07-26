@@ -46,7 +46,6 @@ export function PasswordConfirmQuery(data: { token: string, password: string }) 
       password: password
     },
   )
-
 }
 
 export function FetchUsersQuery(data: FetchUsersType) {
@@ -127,4 +126,15 @@ export function DeleteUser(id:number){
     )
 }
 
-
+export function EmailConfirmQuery(token: string) {
+  return AjaxQuery<QueryStructure<{ userMutation: { verifyUser: boolean } }>>(
+    `mutation emailVerify($token: String!) {
+            userMutation {
+              verifyEmail(token: $token)
+            }
+          }`,
+    {
+      token: token
+    },
+  )
+}
