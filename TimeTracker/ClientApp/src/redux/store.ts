@@ -5,7 +5,7 @@ import { rootEpic } from "./epics"
 import { approvers } from "./slices";
 import {vacation} from "./slices";
 import {approverVacations} from "./slices";
-import {messageModalReducer} from "@redux/slices/messageModalSlice.ts";
+import {messageModalReducer} from "./slices/messageModalSlice.ts";
 
 const middleware = createEpicMiddleware();
 

@@ -31,7 +31,6 @@
 
     <ItemGroup>
       <Folder Include="Utils\Filters\" />
-      <Folder Include="Validation\Errors\" />
       <Folder Include="wwwroot\" />
     </ItemGroup>
 

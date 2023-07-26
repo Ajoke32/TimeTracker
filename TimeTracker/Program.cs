@@ -19,6 +19,7 @@ using TimeTracker.Repositories;
 using TimeTracker.Utils.Auth;
 using TimeTracker.Utils.BackgroundTasks;
 using TimeTracker.Utils.Email;
+using TimeTracker.Utils.Environment;
 using TimeTracker.Utils.SoftDelete;
 using Vite.AspNetCore;
 using Vite.AspNetCore.Extensions;
@@ -26,10 +27,7 @@ using Vite.AspNetCore.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSpaStaticFiles(conf =>
-{
-    conf.RootPath = "ClientApp/build";
-});
+builder.Services.AddSpaStaticFiles(conf => { conf.RootPath = "ClientApp/build"; });
 
 
 builder.Services.AddAuthentication(conf =>
@@ -37,19 +35,18 @@ builder.Services.AddAuthentication(conf =>
     conf.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     conf.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
     conf.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    
 }).AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters()
     {
-         ValidateIssuer = false,
-         ValidateAudience = false,
-         ValidateLifetime = true,
-         IssuerSigningKey = new SymmetricSecurityKey(
-             Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
-         ValidateIssuerSigningKey = true,
-         RequireExpirationTime = true,
-         RequireSignedTokens = false
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
+        ValidateIssuerSigningKey = true,
+        RequireExpirationTime = true,
+        RequireSignedTokens = false
     };
 });
 
@@ -57,33 +54,20 @@ builder.Services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("LoggedIn", (a) =>
-    {
-        a.RequireAuthenticatedUser();
-    });
-    
-    options.AddPolicy("Read", p =>
-    {
-        p.Requirements.Add(new PermissionRequirement(Permissions.Read));
-    });
-    
-    
+    options.AddPolicy("LoggedIn", (a) => { a.RequireAuthenticatedUser(); });
+
+    options.AddPolicy("Read", p => { p.Requirements.Add(new PermissionRequirement(Permissions.Read)); });
+
+
     options.AddPolicy("AllRights", p =>
     {
-        p.Requirements.Add(new PermissionRequirement(Permissions.Create|Permissions.Read
-                                                                       |Permissions.Delete|Permissions.Update));
+        p.Requirements.Add(new PermissionRequirement(Permissions.Create | Permissions.Read
+                                                                        | Permissions.Delete | Permissions.Update));
     });
-    
-    options.AddPolicy("Create", p =>
-    {
-        p.Requirements.Add(new PermissionRequirement(Permissions.Create));
-    });
-    
-    options.AddPolicy("Delete", p =>
-    {
-        p.Requirements.Add(new PermissionRequirement(Permissions.Delete));
-    });
-    
+
+    options.AddPolicy("Create", p => { p.Requirements.Add(new PermissionRequirement(Permissions.Create)); });
+
+    options.AddPolicy("Delete", p => { p.Requirements.Add(new PermissionRequirement(Permissions.Delete)); });
 });
 
 builder.Services.AddCors(options =>
@@ -92,8 +76,8 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy.AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
+                .AllowAnyMethod()
+                .AllowAnyHeader();
         });
 });
 
@@ -117,10 +101,9 @@ builder.Services.AddQuartz(q =>
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);*/
 
 
-if (builder.Environment.IsDevelopment())
+if (builder.Environment.IsDevelopment() && !builder.Environment.IsGraphQl())
 {
-    
-    builder.Services.AddViteServices(options:new ViteOptions()
+    builder.Services.AddViteServices(options: new ViteOptions()
     {
         Server = new ViteServerOptions()
         {
@@ -134,7 +117,6 @@ if (builder.Environment.IsDevelopment())
 }
 
 
-
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped<IRepositoryFactory, RepositoryFactory>();
@@ -144,7 +126,7 @@ builder.Services.AddScoped<EmailTokenService>();
 
 builder.Services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
 
-builder.Services.AddDbContext<TimeTrackerContext>((serv,options) =>
+builder.Services.AddDbContext<TimeTrackerContext>((serv, options) =>
 {
     var config = serv.GetRequiredService<IConfiguration>();
     options.UseSqlServer(config.GetConnectionString("TimeTracker"));
@@ -171,7 +153,6 @@ var app = builder.Build();
 app.UseCors("MyAllowSpecificOrigins");
 
 
-
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -181,7 +162,6 @@ app.UseSpaStaticFiles();
 app.UseGraphQL();
 
 app.UseGraphQLAltair();
-
 
 
 app.UseSpa(spa =>
@@ -194,22 +174,18 @@ app.UseSpa(spa =>
             var headers = ctx.Context.Response.GetTypedHeaders();
             headers.CacheControl = new CacheControlHeaderValue()
             {
-                 NoCache = true,
-                 NoStore = true,
-                 MustRevalidate = true
+                NoCache = true,
+                NoStore = true,
+                MustRevalidate = true
             };
-
         }
     };
-    
+
     if (app.Environment.IsDevelopment())
     {
         app.UseViteDevMiddleware();
     }
-
 });
-
-
 
 
 app.Run();

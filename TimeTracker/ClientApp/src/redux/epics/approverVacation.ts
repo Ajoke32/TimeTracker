@@ -24,7 +24,7 @@ export const updateApproverVacationEpic: Epic = (action: Observable<PayloadActio
     action.pipe(
         ofType("approverVacation/updateApproverVacationState"),
         mergeMap(action =>
-            UpdateApproverVacationState(action.payload.vacationId, action.payload.isApproved, action.payload.id!,action.payload.message)
+            UpdateApproverVacationState(action.payload)
                 .pipe(
                     mergeMap(async resp => {
                         if (resp.response.errors != null) {
