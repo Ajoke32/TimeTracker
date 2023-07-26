@@ -16,9 +16,9 @@ const TimeTracker = () => {
         <div>
             <div className="tracker-wrapper">
                 {!switchAction ? (
-                    <TrackerTimer onSubmit={setWorkedTime}/>
+                    <TrackerTimer />
                 ) : (
-                    <TrackerSetHours onSubmit={setWorkedTime}/>
+                    <TrackerSetHours />
                 )}
                 <div className="tracker-actions__wrapper">
                     <div>
