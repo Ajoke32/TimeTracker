@@ -24,11 +24,11 @@ export function FetchVacationsRequest(id:number){
     )
 }
 
-export function UpdateVacationState(ids:number[]){
+export function UpdateVacationState(id:number){
 
     return AjaxQuery<QueryStructure<{ vacationMutation:{updateState:{id:number}  } }>>(
-        'mutation UpdateVacationState($vacations:[Int!]!){vacationMutation{updateState(vacations:$vacations)}}',
-        {vacations:ids},
+        'mutation UpdateState($id:Int!){vacationMutation{updateState(vacationId:$id)}}',
+        {id:id},
     )
 }
 
