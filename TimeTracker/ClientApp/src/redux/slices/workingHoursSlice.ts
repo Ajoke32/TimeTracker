@@ -24,8 +24,15 @@ const workingHoursSlice = createSlice({
             state.endTime = action.payload;
         },
         
+        setTotalWorkTime: (state) => {
+            const [hours, minutes] = state.startTime.split(":");
+            const [newHours, newMinutes] = state.endTime.split(":");
+            
+            state.timeDifference = ((parseInt(newHours, 10) * 60) + parseInt(newMinutes)) - ((parseInt(hours) * 60) + parseInt(minutes));
+        }
+        
     },
 });
 
-export const { setStartTime, setEndTime } = workingHoursSlice.actions;
+export const { setStartTime, setEndTime, setTotalWorkTime } = workingHoursSlice.actions;
 export const workingHours =  workingHoursSlice.reducer;

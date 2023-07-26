@@ -2,17 +2,19 @@ import React from 'react';
 import "./misc.css"
 
 interface TimerProps {
-    hours: string | number,
-    minutes: string | number,
-    seconds: string | number,
+    hours: number,
+    minutes: number,
+    seconds: number,
 }
+
+const padZero = (num: number) => (num < 10 ? `0${num}` : num);
 
 const Timer = ({hours, minutes, seconds} : TimerProps) => {
     return (
         <div className="timer-wrapper">
-            <span>{hours}</span>
-            <span>{minutes}</span>
-            <span>{seconds}</span>
+            <span>{padZero(hours)}</span>
+            <span>{padZero(minutes)}</span>
+            <span>{padZero(seconds)}</span>
         </div>
     );
 };

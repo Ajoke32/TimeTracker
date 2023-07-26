@@ -20,14 +20,14 @@ export const Sidebar = () => {
 
                     <li>
                         <a href="/vacation/requests" className="sidebar-list__link">
-                            <div className="sidebar-list__image-wrapper"><div className="timetracker-img__wrapper"></div></div>
+                            <div className="sidebar-list__image-wrapper"><div className="requests-img__wrapper"></div></div>
                             <span>Requests</span>
                         </a>
                     </li>
 
                     <li>
                         <a href="/vacation/all" className="sidebar-list__link">
-                            <div className="sidebar-list__image-wrapper"><div className="timetracker-img__wrapper"></div></div>
+                            <div className="sidebar-list__image-wrapper"><div className="vacations-img__wrapper"></div></div>
                             <span>My vacations</span>
                         </a>
                     </li>

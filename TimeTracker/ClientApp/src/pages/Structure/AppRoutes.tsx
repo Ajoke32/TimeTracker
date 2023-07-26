@@ -14,7 +14,7 @@ export const AppRoutes = () => {
 
   return (
     <Routes>
-      {!state.status ? (
+      {state.status ? (
         <>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />

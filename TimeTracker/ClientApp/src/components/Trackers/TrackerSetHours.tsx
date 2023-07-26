@@ -1,22 +1,21 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SmallButton} from "@components/UI";
 import {useTypedSelector} from "@hooks/customHooks";
-import {setStartTime, setEndTime} from "@redux/slices";
+import {setStartTime, setEndTime, setTotalWorkTime} from "@redux/slices";
 import {useDispatch} from "react-redux";
 import CurrentDateElement from "@components/UI/Misc/CurrentDateElement";
 
-export const SetHoursTracker = () => {
+export const TrackerSetHours = () => {
     const dispatch = useDispatch();
     const hours = useTypedSelector((state) => state.workingHours);
     const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
-
+    
     const handleShowDatePicker = () => {
         setShowDatePicker(!showDatePicker);
     }
     
     const handleCurrentTimeChange = (event: any) => {
         dispatch(setStartTime(event.target.value))
-        console.log(event.target.value)
     }
 
     const handleNewTimeChange = (event: any) => {
@@ -24,7 +23,7 @@ export const SetHoursTracker = () => {
     }
 
     const handleAddHoursButton = () => {
-        console.log(`${hours.startTime} - ${hours.endTime}`)
+        dispatch(setTotalWorkTime());
     }
     
     return (

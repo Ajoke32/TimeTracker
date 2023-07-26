@@ -7,23 +7,16 @@ import {useTypedSelector} from "../../hooks";
 import Timer from "@components/UI/Misc/Timer";
 import CurrentDateElement from "@components/UI/Misc/CurrentDateElement";
 
-const padZero = (num: number) => (num < 10 ? `0${num}` : num);
-
-
-
-export const TimerTracker = () => {
+export const TrackerTimer = () => {
     const dispatch = useDispatch();
     const timer = useTypedSelector((state) => state.timer);
-
+    
     useEffect(() => {
         const timerStateString = localStorage.getItem('timer');
         if (timerStateString) {
             const timerState = JSON.parse(timerStateString);
             dispatch(refreshTimer(timerState));
         }
-    }, [dispatch]);
-    
-    useEffect(() => {
         
         const intervalId = setInterval(() => {
             if (timer.isRunning)
@@ -33,19 +26,9 @@ export const TimerTracker = () => {
         if (timer.isRunning) {
             dispatch(updateTimerTime(new Date()));
         }
-
-        const handleBeforeUnload = () => {
-            if (timer.isRunning) {
-                const timerStateString = JSON.stringify(timer);
-                localStorage.setItem('timer', timerStateString);
-            }
-        };
-
-        window.addEventListener('beforeunload', handleBeforeUnload);
         
         return () => {
             clearInterval(intervalId);
-            window.removeEventListener('beforeunload', handleBeforeUnload);
         }
     }, [timer.isRunning, dispatch, timer]);
 
@@ -54,7 +37,7 @@ export const TimerTracker = () => {
             dispatch(startTimer());
         } else {
             dispatch(resetTimer());
-            localStorage.removeItem('timer');
+            localStorage.removeItem("timer")
         }
     };
     
@@ -66,9 +49,9 @@ export const TimerTracker = () => {
                 <div className="tracker-content__inner">
                         <div className="timer-tracker">
                             <Timer 
-                                hours={padZero(timer.hours)} 
-                                minutes={padZero(timer.minutes)} 
-                                seconds={padZero(timer.seconds)}
+                                hours={timer.hours} 
+                                minutes={timer.minutes} 
+                                seconds={timer.seconds}
                             />
                             <div className="tracker-btn__wrapper">
                                 <SmallButton type="button" value={timer.isRunning ? "Stop" : "Start"} handleClick={handleStartStopButton} />

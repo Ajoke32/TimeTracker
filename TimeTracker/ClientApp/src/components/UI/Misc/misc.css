@@ -55,6 +55,7 @@
 
 
 .timer-wrapper {
+    width: 40%;
     display: flex;
 }
 
@@ -79,6 +80,7 @@
 .current-date__wrapper {
     display: flex;
     width: 25%;
+    margin-left: 2rem;
     justify-content: center;
     flex-direction: column;
 }
