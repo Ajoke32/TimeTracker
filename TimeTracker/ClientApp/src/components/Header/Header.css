@@ -74,10 +74,24 @@
     font-size: 1.2rem;
 }
 
+.header-timer__inner {
+    display: flex;
+}
+
 .header-timer__wrapper {
     width: 50%;
     display: flex;
     align-items: center;
+}
+
+.header-timer__content {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.header .timer-wrapper {
+    width: auto;
 }
 
 .header .timer-wrapper > span{
@@ -88,4 +102,37 @@
 .header .timer-wrapper > span::after {
     font-size: 1rem;
     padding-bottom: 2px;
+}
+
+.timer-start-stop__btn {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.timer-start-stop__btn > div {
+    width: .8rem;
+    height: .8rem;
+    border: none;
+    cursor: pointer;
+    
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.timer-stop__icon {
+    background: url("../../assets/images/timer_pause_icon.svg");
+    opacity: .5;
+}
+
+.timer-start__icon {
+    background: url("../../assets/images/timer_start_icon.svg");
+    opacity: 1;
 }

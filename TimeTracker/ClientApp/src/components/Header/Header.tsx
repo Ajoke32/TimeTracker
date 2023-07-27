@@ -3,7 +3,7 @@ import { ProfileAvatar } from "../UI";
 import {useAppDispatch, useTypedSelector} from "../../hooks";
 import Timer from "@components/UI/Misc/Timer";
 import {useEffect} from "react";
-import {tick, updateTimerTime} from "@redux/slices";
+import {startTimer, stopTimer, tick, updateTimerTime} from "@redux/slices";
 import { useLocation } from 'react-router-dom'
 
 export const Header = () => {
@@ -12,30 +12,43 @@ export const Header = () => {
     const timer = useTypedSelector(state => state.timer);
     const isTrackerPage = (useLocation().pathname === '/tracker');
     
-    
-    
     useEffect(() => {
         if (!isTrackerPage) {
             const intervalId = setInterval(() => {
                 if (timer.isRunning)
                     dispatch(tick());
-
-                dispatch(updateTimerTime(new Date()));
             }, 1000);
 
-
+            
+            if (timer.isRunning)
+                dispatch(updateTimerTime());
+            
             return () => {
                 clearInterval(intervalId);
             }
         }
-    }, [dispatch]);
-    
+    }, [dispatch, timer.isRunning]);
+
+    const handleStartStopButton = () => {
+        if (!timer.isRunning) {
+            dispatch(startTimer());
+        } else {
+            dispatch(stopTimer());
+        }
+    };
     
     return (
         <header className="header">
             <div className="header-timer__wrapper">
-                {timer.isRunning && !isTrackerPage && (
-                    <Timer hours={timer.hours} minutes={timer.minutes} seconds={timer.seconds}/>
+                {!isTrackerPage && timer.startedAt &&  (
+                    <div className="header-timer__inner">
+                        <div className="header-timer__content" style={!timer.isRunning ? {opacity: '.5'} : {}}>
+                            <Timer hours={timer.hours} minutes={timer.minutes} seconds={timer.seconds}/>
+                        </div>
+                        <button className="timer-start-stop__btn" onClick={handleStartStopButton}>
+                            <div className={timer.isRunning ? "timer-stop__icon" : "timer-start__icon"}></div>
+                        </button>
+                    </div>
                 )}
             </div>
             

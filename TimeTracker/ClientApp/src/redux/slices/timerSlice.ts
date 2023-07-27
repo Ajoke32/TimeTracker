@@ -1,7 +1,8 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 interface TimerState {
-    startTime: string | null;
+    startedAt: Date | null;
+    pausedAt: Date | null;
     hours: number;
     minutes: number;
     seconds: number;
@@ -9,7 +10,8 @@ interface TimerState {
 }
 
 const initialState: TimerState = {
-    startTime: null,
+    startedAt: null,
+    pausedAt : null,
     hours: 0,
     minutes: 0,
     seconds: 0,
@@ -20,16 +22,19 @@ const timerSlice = createSlice({
     name: 'timer',
     initialState,
     reducers: {
-        resetTimer: (state) => { return initialState},
+        resetTimer: (state) => initialState,
         
         startTimer: (state) => {
             state.isRunning = true;
-            if (!state.startTime)
-                state.startTime = new Date().toISOString();
+            if (!state.startedAt)
+                state.startedAt = new Date();
+            
+            state.pausedAt = null;
         },
         
         stopTimer: (state) => {
             state.isRunning = false;
+            state.pausedAt = new Date();
         },
         
         tick: (state) => {
@@ -46,21 +51,20 @@ const timerSlice = createSlice({
             }
         },
         
-        updateTimerTime: (state, action: PayloadAction<Date>) => {
-            if (state.startTime && state.isRunning) {
+        updateTimerTime: (state) => {
+            if (state.startedAt && state.pausedAt) {
                 const elapsedTimeInSeconds = Math.floor(
-                    (action.payload.getTime() - new Date(state.startTime).getTime()) / 1000
+                (new Date(state.pausedAt).getTime() - new Date(state.startedAt).getTime()) / 1000
                 );
+                
                 state.hours = Math.floor(elapsedTimeInSeconds / 3600);
                 state.minutes = Math.floor((elapsedTimeInSeconds % 3600) / 60);
                 state.seconds = elapsedTimeInSeconds % 60;
             }
         },
-        
-        refreshTimer: (state, action: PayloadAction<TimerState>) => action.payload,
     },
 });
 
-export const { resetTimer, startTimer, tick, updateTimerTime, refreshTimer } = timerSlice.actions;
+export const { resetTimer, startTimer, tick, updateTimerTime, stopTimer } = timerSlice.actions;
 export const timer = timerSlice.reducer;
 

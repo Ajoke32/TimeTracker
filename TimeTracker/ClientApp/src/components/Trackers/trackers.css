@@ -96,15 +96,23 @@
 .tracker-btn__wrapper {
     display: flex;
     align-items: center;
-    width: 25%;
+    width: 30%;
     height: 100%;
 }
 
+.tracker-btn__wrapper > div:last-of-type {
+    margin-left: 5px;
+}
+
+.tracker-btn__wrapper > div:last-child > button {
+    background: var(--color-red);
+}
 
 .tracker-btn__wrapper > div,
 .tracker-btn__wrapper > div > button {
     width: 100%;
 }
+
 
 .tracker-actions__wrapper {
     height: 100%;

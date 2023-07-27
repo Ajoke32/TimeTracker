@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import { useDispatch } from 'react-redux';
-import {startTimer, resetTimer, tick, updateTimerTime, refreshTimer, store} from '../../redux';
+import {startTimer, resetTimer, tick, updateTimerTime, stopTimer} from '../../redux';
 import "./trackers.css";
 import {SmallButton} from "../UI";
 import {useTypedSelector} from "../../hooks";
@@ -15,23 +15,28 @@ export const TrackerTimer = () => {
         const intervalId = setInterval(() => {
             if (timer.isRunning)
                 dispatch(tick());
-
-            dispatch(updateTimerTime(new Date()));
         }, 1000);
+
+        if (timer.isRunning)
+            dispatch(updateTimerTime());
         
         return () => {
             clearInterval(intervalId);
         }
-    }, [dispatch]);
+    }, [dispatch, timer.isRunning]);
 
     const handleStartStopButton = () => {
         if (!timer.isRunning) {
             dispatch(startTimer());
         } else {
-            dispatch(resetTimer());
-            window.location.reload();
+            dispatch(stopTimer());
         }
     };
+    
+    const handleStopButton = () => {
+        dispatch(resetTimer());
+        window.location.reload();
+    }
     
     return (
         <div className="tracker-inner">
@@ -45,7 +50,8 @@ export const TrackerTimer = () => {
                                 seconds={timer.seconds}
                             />
                             <div className="tracker-btn__wrapper">
-                                <SmallButton type="button" value={timer.isRunning ? "Stop" : "Start"} handleClick={handleStartStopButton} />
+                                <SmallButton type="button" value={timer.isRunning ? "Pause" : "Start"} handleClick={handleStartStopButton} />
+                                <SmallButton type="button" value="Stop" handleClick={handleStopButton}/>
                             </div>
                         </div>
                 </div>
