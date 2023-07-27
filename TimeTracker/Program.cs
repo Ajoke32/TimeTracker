@@ -20,6 +20,7 @@ using TimeTracker.Utils.Auth;
 using TimeTracker.Utils.BackgroundTasks;
 using TimeTracker.Utils.Email;
 using TimeTracker.Utils.Environment;
+using TimeTracker.Utils.Filters;
 using TimeTracker.Utils.SoftDelete;
 using Vite.AspNetCore;
 using Vite.AspNetCore.Extensions;
@@ -162,7 +163,6 @@ app.UseSpaStaticFiles();
 app.UseGraphQL();
 
 app.UseGraphQLAltair();
-
 
 app.UseSpa(spa =>
 {
