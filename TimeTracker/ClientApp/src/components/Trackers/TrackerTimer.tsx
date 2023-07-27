@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { useDispatch } from 'react-redux';
-import { startTimer, resetTimer, tick, updateTimerTime, refreshTimer } from '../../redux';
+import {startTimer, resetTimer, tick, updateTimerTime, refreshTimer, store} from '../../redux';
 import "./trackers.css";
 import {SmallButton} from "../UI";
 import {useTypedSelector} from "../../hooks";
@@ -12,39 +12,30 @@ export const TrackerTimer = () => {
     const timer = useTypedSelector((state) => state.timer);
     
     useEffect(() => {
-        const timerStateString = localStorage.getItem('timer');
-        if (timerStateString) {
-            const timerState = JSON.parse(timerStateString);
-            dispatch(refreshTimer(timerState));
-        }
-        
         const intervalId = setInterval(() => {
             if (timer.isRunning)
                 dispatch(tick());
-        }, 1000);
 
-        if (timer.isRunning) {
             dispatch(updateTimerTime(new Date()));
-        }
+        }, 1000);
         
         return () => {
             clearInterval(intervalId);
         }
-    }, [timer.isRunning, dispatch, timer]);
+    }, [dispatch]);
 
     const handleStartStopButton = () => {
         if (!timer.isRunning) {
             dispatch(startTimer());
         } else {
             dispatch(resetTimer());
-            localStorage.removeItem("timer")
+            window.location.reload();
         }
     };
     
     return (
         <div className="tracker-inner">
             <CurrentDateElement date={new Date()}/>
-
             <div className="tracker-content__wrapper">
                 <div className="tracker-content__inner">
                         <div className="timer-tracker">

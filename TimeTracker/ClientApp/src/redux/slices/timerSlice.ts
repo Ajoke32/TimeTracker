@@ -20,7 +20,7 @@ const timerSlice = createSlice({
     name: 'timer',
     initialState,
     reducers: {
-        resetTimer: () => initialState,
+        resetTimer: (state) => { return initialState},
         
         startTimer: (state) => {
             state.isRunning = true;
