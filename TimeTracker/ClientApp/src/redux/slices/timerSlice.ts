@@ -1,8 +1,8 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface TimerState {
-    startedAt: Date | null;
-    pausedAt: Date | null;
+    startedAt: number | null;
+    pausedAt: number | null;
     hours: number;
     minutes: number;
     seconds: number;
@@ -11,7 +11,7 @@ interface TimerState {
 
 const initialState: TimerState = {
     startedAt: null,
-    pausedAt : null,
+    pausedAt: null,
     hours: 0,
     minutes: 0,
     seconds: 0,
@@ -22,41 +22,29 @@ const timerSlice = createSlice({
     name: 'timer',
     initialState,
     reducers: {
-        resetTimer: (state) => initialState,
-        
+        resetTimer: () => initialState,
+
         startTimer: (state) => {
-            state.isRunning = true;
-            if (!state.startedAt)
-                state.startedAt = new Date();
+            if (!state.startedAt) {
+                state.startedAt = Date.now();
+            } else if (state.pausedAt) {
+                const pausedDuration = state.pausedAt - state.startedAt;
+                state.startedAt = Date.now() - pausedDuration;
+            }
             
+            state.isRunning = true;
             state.pausedAt = null;
         },
-        
+
         stopTimer: (state) => {
             state.isRunning = false;
-            state.pausedAt = new Date();
+            state.pausedAt = Date.now();
         },
-        
+
         tick: (state) => {
-            state.seconds += 1;
-
-            if (state.seconds === 60) {
-                state.seconds = 0;
-                state.minutes += 1;
-            }
-
-            if (state.minutes === 60) {
-                state.minutes = 0;
-                state.hours += 1;
-            }
-        },
-        
-        updateTimerTime: (state) => {
-            if (state.startedAt && state.pausedAt) {
-                const elapsedTimeInSeconds = Math.floor(
-                (new Date(state.pausedAt).getTime() - new Date(state.startedAt).getTime()) / 1000
-                );
-                
+            if (state.startedAt && state.isRunning) {
+                const currentTime = Date.now();
+                const elapsedTimeInSeconds = Math.floor((currentTime - state.startedAt) / 1000);
                 state.hours = Math.floor(elapsedTimeInSeconds / 3600);
                 state.minutes = Math.floor((elapsedTimeInSeconds % 3600) / 60);
                 state.seconds = elapsedTimeInSeconds % 60;
@@ -65,6 +53,7 @@ const timerSlice = createSlice({
     },
 });
 
-export const { resetTimer, startTimer, tick, updateTimerTime, stopTimer } = timerSlice.actions;
+export const { resetTimer, startTimer, tick, stopTimer } = timerSlice.actions;
 export const timer = timerSlice.reducer;
+
 

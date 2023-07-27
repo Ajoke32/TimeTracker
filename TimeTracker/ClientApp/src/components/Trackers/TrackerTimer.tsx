@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import { useDispatch } from 'react-redux';
-import {startTimer, resetTimer, tick, updateTimerTime, stopTimer} from '../../redux';
+import {startTimer, resetTimer, tick, stopTimer} from '../../redux';
 import "./trackers.css";
 import {SmallButton} from "../UI";
 import {useTypedSelector} from "../../hooks";
@@ -13,17 +13,13 @@ export const TrackerTimer = () => {
     
     useEffect(() => {
         const intervalId = setInterval(() => {
-            if (timer.isRunning)
-                dispatch(tick());
+            dispatch(tick());
         }, 1000);
-
-        if (timer.isRunning)
-            dispatch(updateTimerTime());
         
         return () => {
             clearInterval(intervalId);
         }
-    }, [dispatch, timer.isRunning]);
+    }, [dispatch]);
 
     const handleStartStopButton = () => {
         if (!timer.isRunning) {
@@ -35,7 +31,6 @@ export const TrackerTimer = () => {
     
     const handleStopButton = () => {
         dispatch(resetTimer());
-        window.location.reload();
     }
     
     return (

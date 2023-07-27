@@ -3,7 +3,7 @@ import { ProfileAvatar } from "../UI";
 import {useAppDispatch, useTypedSelector} from "../../hooks";
 import Timer from "@components/UI/Misc/Timer";
 import {useEffect} from "react";
-import {startTimer, stopTimer, tick, updateTimerTime} from "@redux/slices";
+import {startTimer, stopTimer, tick} from "@redux/slices";
 import { useLocation } from 'react-router-dom'
 
 export const Header = () => {
@@ -15,19 +15,14 @@ export const Header = () => {
     useEffect(() => {
         if (!isTrackerPage) {
             const intervalId = setInterval(() => {
-                if (timer.isRunning)
-                    dispatch(tick());
+                dispatch(tick());
             }, 1000);
-
-            
-            if (timer.isRunning)
-                dispatch(updateTimerTime());
             
             return () => {
                 clearInterval(intervalId);
             }
         }
-    }, [dispatch, timer.isRunning]);
+    }, [dispatch]);
 
     const handleStartStopButton = () => {
         if (!timer.isRunning) {
