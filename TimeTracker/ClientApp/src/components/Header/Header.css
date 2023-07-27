@@ -1,6 +1,7 @@
 ﻿.header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     height: 100%;
     width: 100%;
     padding: 0 1vw;
@@ -80,18 +81,15 @@
 
 .header-timer__wrapper {
     width: 50%;
-    display: flex;
-    align-items: center;
 }
 
 .header-timer__content {
-    width: 100%;
     display: flex;
     align-items: center;
 }
 
 .header .timer-wrapper {
-    width: auto;
+    width: 7rem;
 }
 
 .header .timer-wrapper > span{

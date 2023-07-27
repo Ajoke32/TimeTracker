@@ -33,7 +33,7 @@
 .input-wrapper button {
     display: flex;
     position: absolute;
-    top: 34%;
+    top: .75rem;
     right: 3%;
     border: none;
     background: none;
@@ -90,7 +90,8 @@
 }
 
 .password-input__toggle-btn img {
-    height: 25%;
+    height: 1.5rem;
+    width: 1.5rem;
 }
 
 .range-input__wrapper {
