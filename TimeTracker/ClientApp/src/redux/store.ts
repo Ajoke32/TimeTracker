@@ -6,6 +6,7 @@ import { approvers } from "./slices";
 import {vacation} from "./slices";
 import {approverVacations} from "./slices";
 import {messageModalReducer} from "@redux/slices/messageModalSlice.ts";
+import {calendarEvent} from "@redux/slices/calendarEventSlice.ts";
 
 const middleware = createEpicMiddleware();
 
@@ -20,7 +21,7 @@ export const store = configureStore({
     messageModal:messageModalReducer,
     timer: timer,
     workingHours: workingHours,
-    
+    calendarEvent:calendarEvent
   },
   middleware: [
     middleware

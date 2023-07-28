@@ -1,0 +1,79 @@
+
+.calendar-wrapper-inner{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.calendar-wrapper{
+    display: grid;
+    place-items: center;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 110px 110px 110px 110px 110px;
+    width: 85%;
+    gap: 4px;
+}
+
+.calendar-wrapper .item{
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    padding: 5px;
+    overflow: auto;
+}
+
+.calendar-wrapper .item::-webkit-scrollbar {
+    width: 0;
+
+}
+
+.calendar-wrapper .item:hover{
+    box-shadow: 0 0 2px 0 #529bff;
+}
+.events-list{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.calendar-nav{
+    width: 85%;
+    justify-content: space-between;
+    display: flex;
+    gap: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 10px;
+}
+
+.calendar-nav button{
+    font-size: 25px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.calendar-nav button:hover{
+    background: rgb(143, 183, 250);
+}
+.inactive{
+    background-color: #e2eafc;
+}
+
+.active{
+    background-color: #fff;
+}
+.current-day{
+    background-color: #65afff;
+    font-weight: bold;
+}
+.days-of-week{
+    width: 85%;
+    display: grid;
+    place-items: center;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}

@@ -14,6 +14,7 @@ import { fetchUsersEpic } from "./users";
 import {addVacationEpic, fetchUserVacationsEpic, updateVacationStateEpic} from "./vacation";
 import { addApproversEpic, fetchApproversEpic } from "./approvers";
 import { fetchVacationsRequestsEpic, updateApproversVacationsEpic, updateApproverVacationEpic } from "./approverVacation";
+import {eventEpics} from "@redux/epics/calendarEvent.ts";
 
 
 
@@ -35,7 +36,8 @@ export const rootEpic: Epic = (action$, store$, dependencies) =>
         fetchVacationDaysEpic,
         fetchUserVacationsEpic,
         DeleteUserEpic,
-        emailConfirmEpic
+        emailConfirmEpic,
+        ...eventEpics
     )
         (action$, store$, dependencies).pipe(
             catchError((error, source) => {
