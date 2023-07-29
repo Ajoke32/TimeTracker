@@ -1,151 +1,159 @@
 import React, {useEffect, useState} from 'react';
 import './Calendar.css'
+import '../UI/Modals/CreateEventModal.css'
 import {useAppDispatch, useTypedSelector} from "@hooks/customHooks.ts";
 import {fetchEvents} from "@redux/slices/calendarEventSlice.ts";
-import CreateEventModal from "@components/UI/Modals/CreateEventModal.tsx";
 import {CalendarEvent} from "@redux/types/calendarEventTypes.ts";
+import {getMothDays, monthsMap} from "../../utils/calendarHelpers.ts";
+import CreateEventForm from "@components/CreateEventForm.tsx";
 
 
 
-export interface DayOfMoth{
-    day:number,
-    isCurrentMoth:boolean,
-    month?:number,
-    event?:string[],
-    year?:number
+export interface DayOfMoth {
+    day: number,
+    isCurrentMoth: boolean,
+    month?: number,
+    haveEvents?: boolean,
+    year?: number
 }
 
 const Calendar = () => {
     const dispatch = useAppDispatch();
-    const {events,loading,fetched} = useTypedSelector(s=>s.calendarEvent);
-    const [date,setDate] = useState<Date>(new Date());
+    const {events, loading, fetched} = useTypedSelector(s => s.calendarEvent);
+    const [date, setDate] = useState<Date>(new Date());
     const [arr, setArr] = useState<DayOfMoth[]>([]);
-    const [month,setMonth] = useState<number>(date.getMonth())
-    const [year,setYear] = useState<number>(date.getFullYear());
-    const [clikedDate,setCliked] = useState<number>();
+    const [month, setMonth] = useState<number>(date.getMonth())
+    const [year, setYear] = useState<number>(date.getFullYear());
+    const [dayEvents,setEvents] = useState<string[]>([]);
     const day = date.getDate();
-    const [isModalActive,setActive]  = useState<boolean>(false);
-    const months:string[] = ['January','February','March','April','May','June',
-        'July','August','September','October','November','December']
-
-    const [strMoth,setStrMoth] = useState<string>(months[date.getMonth()]);
+    const [clikedDate, setCliked] = useState<number>(day);
+    const [strMoth, setStrMoth] = useState<string>(monthsMap[date.getMonth()]);
 
     useEffect(() => {
-        if(!fetched) {
+        if (!fetched) {
             dispatch(fetchEvents());
-        }else{
+        } else {
+            updateEvents(month,year,day);
             updateCalendar();
         }
     }, [fetched]);
 
     useEffect(() => {
-        updateDateItems(date.getMonth(),date.getFullYear(),true);
+        updateDateItems(date.getMonth(), date.getFullYear(), true);
     }, [date]);
 
-    function updateCalendar() {
+    function updateEvents(month:number,year:number,day:number) {
+
+        const d = new Date(year!,month!,day);
+        const strEvents:string[] = [];
+        events.forEach(e=>{
+            const d2 = new Date(e.date);
+            const d3 = new Date(d2.getFullYear(), d2.getMonth(), d2.getDate());
+            if(d3.getTime()===d.getTime()){
+                strEvents.push(e.title);
+            }
+        });
+        setEvents([...strEvents]);
+    }
+
+    function updateCalendar(){
         const eventsMap = new Map();
         events.forEach((e) => {
             const key = new Date(e.date).getTime();
-            if(eventsMap.has(key)){
-                const val = eventsMap.get(key);
-                eventsMap.set(key, val.concat(e.title));
-            }else {
-                eventsMap.set(key, [e.title]);
-            }
+            eventsMap.set(key, true);
         });
         const updated = arr.map((i) => {
             const key = new Date(i.year!, i.month!, i.day).getTime();
-            i.event = eventsMap.get(key)||null;
+            i.haveEvents = eventsMap.get(key) || null;
             return i;
         });
         setArr([...updated])
     }
-    function getDaysInMonth(year:number, month:number):number {
-        return new Date(year, month+1, 0).getDate();
+
+    function fillDaysArray(year: number, month: number) {
+        setArr([...getMothDays(year, month)]);
     }
-    function fillDaysArray(year:number,month:number){
-        const daysOfMonth = getDaysInMonth(year,month);
-        const nextMonthDays = 7 * 5 - daysOfMonth;
-        for (let i = 0; i < daysOfMonth; i++) {
-            arr[i]= {day:i+1,isCurrentMoth:true,year:year,month:month};
-        }
-        for (let i=0;i<nextMonthDays;i++){
-            arr[daysOfMonth+i]={day:i+1,isCurrentMoth:false};
-        }
-        setArr([...arr]);
-    }
-    function onMonthChanged(e:React.MouseEvent<HTMLButtonElement>){
-        const compMonth = e.currentTarget.id==='next'?month+1:month-1;
-        if(compMonth>11||compMonth<0){
-            setDate(new Date(year,compMonth));
+
+    function onMonthChanged(e: React.MouseEvent<HTMLButtonElement>) {
+        const compMonth = e.currentTarget.id === 'next' ? month + 1 : month - 1;
+        if (compMonth > 11 || compMonth < 0) {
+            setDate(new Date(year, compMonth));
             return;
         }
-        updateDateItems(compMonth,year);
-        updateCalendar();
+        updateDateItems(compMonth, year);
+        updateEvents(compMonth,year,day);
     }
-    function updateDateItems(month:number,year:number,isNewYear?:boolean){
+
+    function updateDateItems(month: number, year: number, isNewYear?: boolean) {
         setMonth(month);
-        setStrMoth(months[month]);
-        fillDaysArray(year,month);
-        if(isNewYear){setYear(year)}
-    }
-    function onCreated(data:CalendarEvent){
-        const calendarDay = arr.find(e=>{
-           const d = new Date(e.year!,e.month!,e.day);
-           const d2 =  new Date(data.date);
-           const d3 = new Date(d2.getFullYear(),d2.getMonth(),d2.getDate());
-           return d.getTime()===d3.getTime();
-        });
-        if(calendarDay){
-            const updated = arr.map(d=>{
-                if(d===calendarDay){
-                    if(d.event) {
-                        d.event?.push(data.title);
-                    }else{
-                        d.event=[data.title];
-                    }
-                }
-                return d;
-            });
-            setArr([...updated]);
+        setStrMoth(monthsMap[month]);
+        fillDaysArray(year, month);
+        if (isNewYear) {
+            setYear(year)
         }
-        setActive(false);
     }
-    function handleDayClick(day:number){
+
+    function onCreated(data: CalendarEvent) {
+        const calendarDay = arr.find(e => {
+            const d = new Date(e.year!, e.month!, e.day);
+            const d2 = new Date(data.date);
+            const d3 = new Date(d2.getFullYear(), d2.getMonth(), d2.getDate());
+            return d.getTime() === d3.getTime();
+        });
+        if (calendarDay) {
+            setEvents([...dayEvents,data.title]);
+            updateCalendar();
+        }
+    }
+
+    function handleDayClick(day: number) {
         setCliked(day);
-        setActive(true);
+        updateEvents(month,year,day);
     }
-    function modalClose(){
-        setActive(false);
-    }
+
     return (
         <div className="calendar-wrapper-inner">
-            <CreateEventModal onClose={modalClose} isActive={isModalActive} created={onCreated} date={new Date(year,month,clikedDate)} />
-            <div className="calendar-nav">
-                <span>{day} {strMoth} {year}</span>
-                <div style={{display:'flex',gap:'5px'}}>
-                <button id="prev" onClick={(e)=>onMonthChanged(e)} >&larr;</button>
-                <button id="next" onClick={(e)=>onMonthChanged(e)}>&rarr;</button>
+
+            <div className="calendar">
+                <div className="calendar-nav">
+                    <button id="prev" className="arrow" onClick={(e) => onMonthChanged(e)}>&larr;</button>
+                    <span>{day} {strMoth} {year}</span>
+                    <button id="next" className="arrow" onClick={(e) => onMonthChanged(e)}>&rarr;</button>
+                </div>
+                <div className="days-of-week">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+                <div className="calendar-wrapper">
+                    {arr.map(i =>
+                        <div onClick={() => handleDayClick(i.day)}
+                             className={`item ${i.haveEvents&&'event-mark'} ${!i.isCurrentMoth ? 'inactive' : 'active'} ${(i.day === day && i.isCurrentMoth) && 'current-day'}`}
+                             key={Math.random()}>
+                            <span style={{color:`${!i.isCurrentMoth&&'#adb5bd'}`}}>{i.day}</span>
+                        </div>)}
                 </div>
             </div>
-            <div className="days-of-week">
-                <div>Sun</div>
-                <div>Mon</div>
-                <div>Tue</div>
-                <div>Wed</div>
-                <div>Thu</div>
-                <div>Fri</div>
-                <div>Sat</div>
+
+
+            <div className="day-events">
+                <div className="inner-events">
+                    <h2 style={{paddingTop:"10px"}}>Today events</h2>
+                    {dayEvents.map(i=>
+                        <div key={Math.random()} className="event">
+                            <span>{i}</span>
+                            {/*<div className="btn-group">
+                                <button className="btn-base btn-info">Edit</button>
+                                <button className="btn-base btn-decline">Delete</button>
+                            </div>*/}
+                        </div>)}
+                </div>
             </div>
-            <div className="calendar-wrapper">
-                {arr.map(i =>
-                    <div onClick={()=>handleDayClick(i.day)} className={`item ${!i.isCurrentMoth?'inactive':'active'} ${(i.day===day&&i.isCurrentMoth)&&'current-day'}`} key={Math.random()}>
-                        <span>{i.day}</span>
-                        <div className="events-list">
-                            {i?.event?.map(e=><span key={Math.random()}>{e}</span>)}
-                        </div>
-                    </div>)}
-            </div>
+            <CreateEventForm created={onCreated} date={new Date(year,month,clikedDate)} />
         </div>
     );
 };

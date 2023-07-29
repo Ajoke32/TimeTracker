@@ -19,8 +19,8 @@ export const AppRoutes = () => {
     <Routes>
       {state.status ? (
         <>
-          <Route path="/calendar" element={<Calendar />} />
           <Route path="/" element={<Layout />}>
+            <Route path="/calendar" element={<Calendar />} />
             <Route index element={<Home />} />
             <Route path="/tracker" element={<Tracker />} />
             <Route path="/team" element={<Outlet />}>
