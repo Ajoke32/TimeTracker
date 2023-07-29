@@ -13,14 +13,16 @@ export const TrackerTimer = () => {
     const {hours, minutes, seconds, isRunning} = useTypedSelector((state) => state.timer);
     
     useEffect(() => {
-        const intervalId = setInterval(() => {
-            dispatch(tick());
-        }, 1000);
-        
-        return () => {
-            clearInterval(intervalId);
+        if (timer.isRunning) {
+            const intervalId = setInterval(() => {
+                dispatch(tick());
+            }, 1000);
+
+            return () => {
+                clearInterval(intervalId);
+            }
         }
-    }, [dispatch]);
+    }, [dispatch, timer.isRunning]);
 
     const handleStartStopButton = () => {
         if (!isRunning) {

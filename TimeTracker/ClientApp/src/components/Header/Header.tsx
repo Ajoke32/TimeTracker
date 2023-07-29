@@ -22,7 +22,7 @@ export const Header = () => {
                 clearInterval(intervalId);
             }
         }
-    }, [dispatch]);
+    }, [dispatch, timer.isRunning]);
 
     const handleStartStopButton = () => {
         if (!timer.isRunning) {
