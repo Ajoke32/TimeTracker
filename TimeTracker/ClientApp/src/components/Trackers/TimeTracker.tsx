@@ -5,15 +5,13 @@ import {TrackerSetHours} from "@components/Trackers/TrackerSetHours";
 const TimeTracker = () => {
     const [switchAction, setSwitchAction] = useState<boolean>(false);
     const [workedTime, setWorkedTime] = useState<[]>([]);
-    console.log(workedTime);
+
     const handleSwitchActionButton = () => {
         setSwitchAction(!switchAction);
-    }
-    
+    } 
     
     
     return (
-        <div>
             <div className="tracker-wrapper">
                 {!switchAction ? (
                     <TrackerTimer />
@@ -27,9 +25,6 @@ const TimeTracker = () => {
                     </div>
                 </div>
             </div>
-            
-            
-        </div>
     );
 };
 

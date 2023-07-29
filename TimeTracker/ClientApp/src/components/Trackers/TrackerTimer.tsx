@@ -9,7 +9,8 @@ import CurrentDateElement from "@components/UI/Misc/CurrentDateElement";
 
 export const TrackerTimer = () => {
     const dispatch = useDispatch();
-    const timer = useTypedSelector((state) => state.timer);
+
+    const {hours, minutes, seconds, isRunning} = useTypedSelector((state) => state.timer);
     
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -22,7 +23,7 @@ export const TrackerTimer = () => {
     }, [dispatch]);
 
     const handleStartStopButton = () => {
-        if (!timer.isRunning) {
+        if (!isRunning) {
             dispatch(startTimer());
         } else {
             dispatch(stopTimer());
@@ -40,12 +41,12 @@ export const TrackerTimer = () => {
                 <div className="tracker-content__inner">
                         <div className="timer-tracker">
                             <Timer 
-                                hours={timer.hours} 
-                                minutes={timer.minutes} 
-                                seconds={timer.seconds}
+                                hours={hours} 
+                                minutes={minutes} 
+                                seconds={seconds}
                             />
                             <div className="tracker-btn__wrapper">
-                                <SmallButton type="button" value={timer.isRunning ? "Pause" : "Start"} handleClick={handleStartStopButton} />
+                                <SmallButton type="button" value={isRunning ? "Pause" : "Start"} handleClick={handleStartStopButton} />
                                 <SmallButton type="button" value="Stop" handleClick={handleStopButton}/>
                             </div>
                         </div>

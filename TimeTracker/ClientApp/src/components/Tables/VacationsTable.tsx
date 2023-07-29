@@ -25,6 +25,7 @@ export const VacationsTable = () => {
                     <div className="requests-wrapper">
                         <div className="search-bar">
                             <input type="text" placeholder="search by date" className="input-search"/>
+                            <a href="/vacation/create" className='btn-small'>Create vacation</a>
                         </div>
                     </div>
                     <div className="vacation-item head">

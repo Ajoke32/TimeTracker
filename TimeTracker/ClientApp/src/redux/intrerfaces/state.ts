@@ -19,3 +19,12 @@ export interface UserSliceState extends DefaultState {
 export interface UsersSliceState extends DefaultState {
     users: User[],
 }
+
+export interface TimerSliceState extends DefaultState{
+    startedAt: number | null;
+    pausedAt: number | null;
+    hours: number;
+    minutes: number;
+    seconds: number;
+    isRunning: boolean;
+}

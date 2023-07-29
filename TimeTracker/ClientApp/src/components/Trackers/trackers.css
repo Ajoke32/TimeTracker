@@ -1,3 +1,9 @@
+.tracker-page-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .tracker-wrapper {
     background: var(--color-white);
 }
@@ -216,4 +222,12 @@
 .action-active-btn {
     opacity: 1!important;
 
+}
+
+.trackers-separator__wrapper {
+    width: 90%;
+    height: 1.5rem;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto ;
 }

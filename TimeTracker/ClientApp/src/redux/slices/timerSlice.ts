@@ -1,15 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { TimerSliceState } from '..';
+import { defaultState } from './generic';
 
-interface TimerState {
-    startedAt: number | null;
-    pausedAt: number | null;
-    hours: number;
-    minutes: number;
-    seconds: number;
-    isRunning: boolean;
-}
-
-const initialState: TimerState = {
+const initialState: TimerSliceState = {
+    ...defaultState,
     startedAt: null,
     pausedAt: null,
     hours: 0,
@@ -36,7 +30,7 @@ const timerSlice = createSlice({
             state.pausedAt = null;
         },
 
-        stopTimer: (state) => {
+        stopTimer: (state: TimerSliceState) => {
             state.isRunning = false;
             state.pausedAt = Date.now();
         },

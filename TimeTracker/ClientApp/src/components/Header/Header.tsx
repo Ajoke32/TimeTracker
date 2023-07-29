@@ -13,7 +13,7 @@ export const Header = () => {
     const isTrackerPage = (useLocation().pathname === '/tracker');
     
     useEffect(() => {
-        if (!isTrackerPage) {
+        if (!isTrackerPage && timer.isRunning) {
             const intervalId = setInterval(() => {
                 dispatch(tick());
             }, 1000);
