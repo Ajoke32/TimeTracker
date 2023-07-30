@@ -16,10 +16,10 @@ public sealed class WorkedHoursMutations : ObjectGraphType
     public WorkedHoursMutations(IUnitOfWorkRepository uow, IMapper mapper)
     {
         Field<WorkedHour>("set")
-            .Argument<WorkedHourInputType>("workingHours")
+            .Argument<WorkedHourInputType>("workedHours")
             .ResolveAsync(async ctx =>
             {
-                var wh = ctx.GetArgument<WorkedHourInputDto>("workingHours");
+                var wh = ctx.GetArgument<WorkedHourInputDto>("workedHours");
 
                 var currentValue = await uow.GenericRepository<WorkedHour>().FindAsync(w =>
                            (w.UserId == wh.UserId && w.Date == wh.Date));
@@ -34,14 +34,15 @@ public sealed class WorkedHoursMutations : ObjectGraphType
             });
 
         Field<WorkedHour>("create")
-            .Argument<WorkedHourInputType>("workingHours")
+            .Argument<WorkedHourInputType>("workedHours")
             .ResolveAsync(async ctx =>
             {
-                var wh = ctx.GetArgument<WorkedHourInputDto>("workingHours");
+                var wh = ctx.GetArgument<WorkedHourInputDto>("workedHours");
 
-                var _ = await uow.GenericRepository<WorkedHour>().FindAsync(w =>
-                           (w.UserId == wh.UserId && w.Date == wh.Date))
-                            ?? throw new QueryError(Error.ERR_EMAIL_EXISTS); // Temp error
+                if(await uow.GenericRepository<WorkedHour>()
+                    .FindAsync(w =>
+                           (w.UserId == wh.UserId && w.Date == wh.Date)) is not null)
+                            throw new QueryError(Error.ERR_EMAIL_EXISTS); // Temp error
 
                 var created = await uow.GenericRepository<WorkedHour>().CreateAsync(mapper.Map<WorkedHour>(wh));
 
@@ -67,10 +68,10 @@ public sealed class WorkedHoursMutations : ObjectGraphType
             });
 
         Field<WorkedHour>("update")
-            .Argument<UpdateWorkedHourInputType>("workingHours")
+            .Argument<UpdateWorkedHourInputType>("workedHours")
             .ResolveAsync(async ctx =>
             {
-                var wh = ctx.GetArgument<WorkedHourUpdateDto>("workingHours");
+                var wh = ctx.GetArgument<WorkedHourUpdateDto>("workedHours");
 
                 var currentValue = await uow.GenericRepository<WorkedHour>().FindAsync(w => w.Id == wh.Id)
                             ?? throw new QueryError(Error.ERR_EMAIL_EXISTS); // Temp error

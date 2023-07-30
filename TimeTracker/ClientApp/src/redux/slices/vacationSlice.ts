@@ -5,16 +5,9 @@ import {
     createSuccessReducerWithoutPayload, createSuccessReducerWithPayload,
     defaultState
 } from "./generic";
-import {DefaultState} from "../intrerfaces";
+import {VacationState} from "../intrerfaces";
 import {Vacation, VacationInputType} from "../types";
 
-
-
-interface VacationState extends DefaultState{
-  created:boolean,
-    createdId?:number,
-    vacations:Vacation[]
-}
 
 const initialState:VacationState = {
     ...defaultState,

@@ -1,6 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TimerSliceState } from '..';
-import { defaultState } from './generic';
+import { SetWorkedHoursType, WorkedHour, WorkedTime } from '@redux/types';
+import {
+    createErrorReducer,
+    createPendingReducerWithPayload,
+    createSuccessReducerWithPayload,
+    defaultState
+} from "./generic";
 
 const initialState: TimerSliceState = {
     ...defaultState,
@@ -16,7 +22,18 @@ const timerSlice = createSlice({
     name: 'timer',
     initialState,
     reducers: {
-        resetTimer: () => initialState,
+        resetTimer: createPendingReducerWithPayload<TimerSliceState, SetWorkedHoursType>(),
+        resetTimerSuccess: createSuccessReducerWithPayload<TimerSliceState, WorkedHour>(
+            (state: TimerSliceState, action: PayloadAction<WorkedHour>) => {
+                state.startedAt = null,
+                state.pausedAt = null,
+                state.hours = 0,
+                state.minutes = 0,
+                state.seconds = 0,
+                state.isRunning = false
+            }
+        ),
+        resetTimerFail: createErrorReducer(),
 
         startTimer: (state) => {
             if (!state.startedAt) {
@@ -25,7 +42,7 @@ const timerSlice = createSlice({
                 const pausedDuration = state.pausedAt - state.startedAt;
                 state.startedAt = Date.now() - pausedDuration;
             }
-            
+
             state.isRunning = true;
             state.pausedAt = null;
         },
@@ -47,7 +64,7 @@ const timerSlice = createSlice({
     },
 });
 
-export const { resetTimer, startTimer, tick, stopTimer } = timerSlice.actions;
+export const { resetTimer, resetTimerSuccess, resetTimerFail, startTimer, tick, stopTimer } = timerSlice.actions;
 export const timer = timerSlice.reducer;
 
 

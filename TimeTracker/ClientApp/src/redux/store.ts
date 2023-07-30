@@ -1,11 +1,11 @@
-import {combineReducers, configureStore} from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { createEpicMiddleware } from 'redux-observable';
-import { user, auth, users, timer, workingHours } from './slices';
+import { 
+  user, auth, users, timer, 
+  workedHours, approvers, vacation, 
+  approverVacations, messageModalReducer 
+} from '@redux/slices';
 import { rootEpic } from "./epics"
-import { approvers } from "./slices";
-import {vacation} from "./slices";
-import {approverVacations} from "./slices";
-import {messageModalReducer} from "@redux/slices/messageModalSlice.ts";
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
@@ -26,7 +26,7 @@ const rootReducer = combineReducers( {
   approverVacations:approverVacations,
   messageModal:messageModalReducer,
   timer: timer,
-  workingHours: workingHours,
+  workedHours: workedHours,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

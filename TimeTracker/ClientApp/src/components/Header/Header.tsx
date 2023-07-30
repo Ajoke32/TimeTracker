@@ -1,7 +1,6 @@
 ﻿import "./Header.css"
-import { ProfileAvatar } from "../UI";
+import { ProfileAvatar, Timer } from "@components/UI";
 import {useAppDispatch, useTypedSelector} from "../../hooks";
-import Timer from "@components/UI/Misc/Timer";
 import {useEffect} from "react";
 import {startTimer, stopTimer, tick} from "@redux/slices";
 import { useLocation } from 'react-router-dom'
