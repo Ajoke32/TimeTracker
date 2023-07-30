@@ -141,7 +141,7 @@ const Calendar = () => {
                 <CalendarBody selectedDay={clikedDate} days={arr} handleDayClick={handleDayClick} currentDay={day} />
             </div>
 
-            <EventsWindow updateDayEvents={removeDayEvent} events={dayEvents} />
+            <EventsWindow selectedDay={clikedDate} loading={loading} updateDayEvents={removeDayEvent} events={dayEvents} />
             <CreateEventForm created={onCreated} date={new Date(year,month,clikedDate)} />
         </div>
     );
