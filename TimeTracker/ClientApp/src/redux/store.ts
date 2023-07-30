@@ -1,6 +1,6 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit'
 import { createEpicMiddleware } from 'redux-observable';
-import { user, auth, users, timer, workingHours } from './slices';
+import {user, auth, users, timer, workingHours, calendar} from './slices';
 import { rootEpic } from "./epics"
 import { approvers } from "./slices";
 import {vacation} from "./slices";
@@ -27,6 +27,7 @@ const rootReducer = combineReducers( {
   messageModal:messageModalReducer,
   timer: timer,
   workingHours: workingHours,
+  calendar: calendar,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

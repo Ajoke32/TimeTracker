@@ -16,13 +16,14 @@ const months = [
 ];
 
 
-const CurrentDateElement = ({date} : {date: Date}) => {
-
-    const currentDate = `${date.getDate()} ${months[date.getMonth()]}`;
+const CurrentDateElement = ({date, showFullDate} : {date: Date, showFullDate: boolean}) => {
+    
+    const currentDate = ((showFullDate))
+        ? `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
+        : `${months[date.getMonth()]} ${date.getFullYear()}`;
     
     return (
         <div className="current-date__wrapper">
-            <span>{(date.getDate() === new Date().getDate()) && (date.getMonth() === new Date().getMonth()) ? "Today" : ""}</span>
             <span>{currentDate}</span>
         </div>
     );

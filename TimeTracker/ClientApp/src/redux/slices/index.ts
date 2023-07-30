@@ -6,4 +6,5 @@ export * from './vacationSlice'
 export * from './approverVacationSlice'
 export * from './timerSlice'
 export * from './workingHoursSlice'
+export * from './calendarSlice'
 

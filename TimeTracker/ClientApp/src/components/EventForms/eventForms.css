@@ -1,0 +1,44 @@
+.event-form__inner {
+    width: 40%;
+    height: 40%;
+    
+    background: var(--color-white);
+    border-radius: 1rem;
+}
+
+.event-form__inner > form {
+    width: 100%;
+    height: 100%;
+    padding: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.event-form__inner > form > span:first-child {
+    font-size: 1.5rem;
+}
+
+.event-form__inner > form .show-datepicker__btn {
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: url("../../assets/images/dashboard_calendar_icon.svg");
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    position: relative;
+    opacity: .6;
+    margin-left: 1.5rem;
+}
+
+.event-form__inner > form .show-datepicker__btn {
+    margin-left: .5rem;
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.event-date-wrapper {
+    display: flex;
+}

@@ -9,7 +9,7 @@ interface TimerState {
     isRunning: boolean;
 }
 
-const initialState: TimerState = {
+const initialState : TimerState = {
     startedAt: null,
     pausedAt: null,
     hours: 0,

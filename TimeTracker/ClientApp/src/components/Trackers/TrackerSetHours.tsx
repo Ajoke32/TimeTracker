@@ -28,7 +28,7 @@ export const TrackerSetHours = () => {
     
     return (
         <div className="tracker-inner">
-            <CurrentDateElement date={new Date()}/>
+            <CurrentDateElement date={new Date()} showFullDate={true}/>
             <div className="set-hours-tracker">
                 <div className="time-range__wrapper">
                     <div className="time-range__inner">
@@ -57,7 +57,8 @@ export const TrackerSetHours = () => {
                         <input
                             type="date"
                             className="date-picker__input"
-                            style={!showDatePicker ? {display: 'none'} : {}}/>
+                            style={showDatePicker ? {display: 'none'} : {}}
+                        />
                     </button>
                 </div>
 
