@@ -3,7 +3,6 @@ import { AuthSliceState, } from '../intrerfaces';
 import { UserLoginType } from "../types";
 import { DeleteCookie, GetUserFromToken, IsUserAuthenticated, SetCookie } from "../../utils";
 import {
-    createPendingReducer,
     createPendingReducerWithPayload,
     createSuccessReducerWithPayload,
     defaultState
