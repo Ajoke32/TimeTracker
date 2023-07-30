@@ -3,7 +3,8 @@ export interface CalendarEvent{
     id:number,
     title:string,
     date:Date,
-    description?:string
+    description?:string,
+    dateOnly:string
 }
 
 export interface CalendarEventInput{

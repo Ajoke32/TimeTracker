@@ -40,6 +40,7 @@ const calendarEventSlice = createSlice({
         createEventSuccess:createSuccessReducerWithPayload<typeof initialState,CalendarEvent>
         ((state:CalendarEventState,action:PayloadAction<CalendarEvent>)=>{
             state.created=action.payload;
+            state.events.push(action.payload);
         }),
         createEventFail:createErrorReducer()
     }

@@ -1,7 +1,8 @@
 import {DayOfMoth} from "@components/Calendar/Calendar.tsx";
 
 
-export function getMothDays(year: number, month: number) {
+
+export function getMothDays(year: number, month: number):DayOfMoth[] {
     const arr:DayOfMoth[] =[];
     const daysOfMonth = getDaysInMonth(year, month);
     const nextMonthDays = 7 * 5 - daysOfMonth;
@@ -11,6 +12,7 @@ export function getMothDays(year: number, month: number) {
     for (let i = 0; i < nextMonthDays; i++) {
         arr[daysOfMonth + i] = {day: i + 1, isCurrentMoth: false};
     }
+
     return arr;
 }
 

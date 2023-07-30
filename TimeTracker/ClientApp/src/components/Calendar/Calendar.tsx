@@ -4,8 +4,11 @@ import '../UI/Modals/CreateEventModal.css'
 import {useAppDispatch, useTypedSelector} from "@hooks/customHooks.ts";
 import {fetchEvents} from "@redux/slices/calendarEventSlice.ts";
 import {CalendarEvent} from "@redux/types/calendarEventTypes.ts";
-import {getMothDays, monthsMap} from "../../utils/calendarHelpers.ts";
+import {getDaysInMonth, getMothDays, monthsMap} from "../../utils/calendarHelpers.ts";
 import CreateEventForm from "@components/CreateEventForm.tsx";
+import EventsWindow from "@components/Calendar/EventsWindow.tsx";
+import CalendarNav from "@components/Calendar/CalendarNav.tsx";
+import CalendarBody from "@components/Calendar/CalendarBody.tsx";
 
 
 
@@ -24,17 +27,18 @@ const Calendar = () => {
     const [arr, setArr] = useState<DayOfMoth[]>([]);
     const [month, setMonth] = useState<number>(date.getMonth())
     const [year, setYear] = useState<number>(date.getFullYear());
-    const [dayEvents,setEvents] = useState<string[]>([]);
+    const [dayEvents,setEvents] = useState<CalendarEvent[]>([]);
     const day = date.getDate();
     const [clikedDate, setCliked] = useState<number>(day);
     const [strMoth, setStrMoth] = useState<string>(monthsMap[date.getMonth()]);
+    const [daysUpdated,setDaysUpdated] = useState<boolean>(false);
 
     useEffect(() => {
         if (!fetched) {
             dispatch(fetchEvents());
         } else {
-            updateEvents(month,year,day);
             updateCalendar();
+            updateEventsWindow(day)
         }
     }, [fetched]);
 
@@ -42,15 +46,20 @@ const Calendar = () => {
         updateDateItems(date.getMonth(), date.getFullYear(), true);
     }, [date]);
 
-    function updateEvents(month:number,year:number,day:number) {
+    useEffect(() => {
+        if(daysUpdated) {
+            updateCalendar();
+            setDaysUpdated(false);
+        }
+    }, [daysUpdated]);
 
-        const d = new Date(year!,month!,day);
-        const strEvents:string[] = [];
+    function updateEventsWindow(day:number) {
+        const d = new Date(year,month,day);
+        const strEvents:CalendarEvent[] = [];
         events.forEach(e=>{
-            const d2 = new Date(e.date);
-            const d3 = new Date(d2.getFullYear(), d2.getMonth(), d2.getDate());
-            if(d3.getTime()===d.getTime()){
-                strEvents.push(e.title);
+            const d2 = new Date(e.dateOnly);
+            if(d2.getTime()===d.getTime()){
+                strEvents.push(e);
             }
         });
         setEvents([...strEvents]);
@@ -59,10 +68,10 @@ const Calendar = () => {
     function updateCalendar(){
         const eventsMap = new Map();
         events.forEach((e) => {
-            const key = new Date(e.date).getTime();
+            const key = new Date(e.dateOnly).getTime();
             eventsMap.set(key, true);
         });
-        const updated = arr.map((i) => {
+        const updated= arr.map((i) => {
             const key = new Date(i.year!, i.month!, i.day).getTime();
             i.haveEvents = eventsMap.get(key) || null;
             return i;
@@ -72,6 +81,7 @@ const Calendar = () => {
 
     function fillDaysArray(year: number, month: number) {
         setArr([...getMothDays(year, month)]);
+        setDaysUpdated(true);
     }
 
     function onMonthChanged(e: React.MouseEvent<HTMLButtonElement>) {
@@ -81,7 +91,6 @@ const Calendar = () => {
             return;
         }
         updateDateItems(compMonth, year);
-        updateEvents(compMonth,year,day);
     }
 
     function updateDateItems(month: number, year: number, isNewYear?: boolean) {
@@ -96,30 +105,25 @@ const Calendar = () => {
     function onCreated(data: CalendarEvent) {
         const calendarDay = arr.find(e => {
             const d = new Date(e.year!, e.month!, e.day);
-            const d2 = new Date(data.date);
-            const d3 = new Date(d2.getFullYear(), d2.getMonth(), d2.getDate());
-            return d.getTime() === d3.getTime();
+            const d2 = new Date(data.dateOnly);
+            return d.getTime() === d2.getTime();
         });
         if (calendarDay) {
-            setEvents([...dayEvents,data.title]);
+            setEvents([...dayEvents,data]);
             updateCalendar();
         }
     }
 
     function handleDayClick(day: number) {
         setCliked(day);
-        updateEvents(month,year,day);
+        updateEventsWindow(day);
     }
 
     return (
         <div className="calendar-wrapper-inner">
-
             <div className="calendar">
-                <div className="calendar-nav">
-                    <button id="prev" className="arrow" onClick={(e) => onMonthChanged(e)}>&larr;</button>
-                    <span>{day} {strMoth} {year}</span>
-                    <button id="next" className="arrow" onClick={(e) => onMonthChanged(e)}>&rarr;</button>
-                </div>
+                <h1>{arr[0]?.month}</h1>
+                <CalendarNav monthChanged={onMonthChanged} day={day} month={strMoth} year={year} />
                 <div className="days-of-week">
                     <div>Sun</div>
                     <div>Mon</div>
@@ -129,30 +133,10 @@ const Calendar = () => {
                     <div>Fri</div>
                     <div>Sat</div>
                 </div>
-                <div className="calendar-wrapper">
-                    {arr.map(i =>
-                        <div onClick={() => handleDayClick(i.day)}
-                             className={`item ${i.haveEvents&&'event-mark'} ${!i.isCurrentMoth ? 'inactive' : 'active'} ${(i.day === day && i.isCurrentMoth) && 'current-day'}`}
-                             key={Math.random()}>
-                            <span style={{color:`${!i.isCurrentMoth&&'#adb5bd'}`}}>{i.day}</span>
-                        </div>)}
-                </div>
+                <CalendarBody selectedDay={clikedDate} days={arr} handleDayClick={handleDayClick} currentDay={day} />
             </div>
 
-
-            <div className="day-events">
-                <div className="inner-events">
-                    <h2 style={{paddingTop:"10px"}}>Today events</h2>
-                    {dayEvents.map(i=>
-                        <div key={Math.random()} className="event">
-                            <span>{i}</span>
-                            {/*<div className="btn-group">
-                                <button className="btn-base btn-info">Edit</button>
-                                <button className="btn-base btn-decline">Delete</button>
-                            </div>*/}
-                        </div>)}
-                </div>
-            </div>
+            <EventsWindow events={dayEvents} />
             <CreateEventForm created={onCreated} date={new Date(year,month,clikedDate)} />
         </div>
     );

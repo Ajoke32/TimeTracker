@@ -180,9 +180,31 @@
     background-color: #f3f1fc;
     padding: 13px;
     display: flex;
-    align-items: center;
+    gap: 10px;
     justify-content: space-between;
     border-radius: 20px;
     width: 90%;
     word-break: break-all;
+}
+
+.event-img{
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 10px;
+}
+.event-img:hover{
+    background-color: lightblue;
+}
+
+.event-txt{
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.selected{
+    box-shadow: rgba(0, 0, 0, 0.1) 0 0 5px 0, rgba(0, 0, 0, 0.1) 0 0 1px 0;
+    background-color: #bde0fe;
 }

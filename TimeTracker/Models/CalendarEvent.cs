@@ -12,4 +12,7 @@ public class CalendarEvent
     
     [Column(TypeName = "date")]
     public DateTime Date { get; set; }
+
+    public string DateOnly => Date.ToShortDateString();
+    
 }

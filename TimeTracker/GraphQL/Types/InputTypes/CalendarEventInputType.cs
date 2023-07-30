@@ -1,9 +1,10 @@
 ﻿using GraphQL.Types;
 using TimeTracker.Models;
+using TimeTracker.Models.Dtos;
 
 namespace TimeTracker.GraphQL.Types.InputTypes;
 
-public sealed class CalendarEventInputType:InputObjectGraphType<CalendarEvent>
+public sealed class CalendarEventInputType:InputObjectGraphType<CalendarEventInputDto>
 {
     public CalendarEventInputType()
     {
