@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {
     createErrorReducer,
-    createPendingReducer, createPendingReducerWithPayload,
+    createPendingReducer, createPendingReducerWithPayload, createSuccessReducerWithoutPayload,
     createSuccessReducerWithPayload,
     defaultState
 } from "@redux/slices/generic";
@@ -13,12 +13,14 @@ interface CalendarEventState extends DefaultState{
     events:CalendarEvent[],
     fetched:boolean,
     created?:CalendarEvent,
+    deleted:boolean
 }
 
 const initialState:CalendarEventState = {
     events:[],
     ...defaultState,
     fetched:false,
+    deleted:false
 }
 
 
@@ -42,11 +44,24 @@ const calendarEventSlice = createSlice({
             state.created=action.payload;
             state.events.push(action.payload);
         }),
-        createEventFail:createErrorReducer()
+        createEventFail:createErrorReducer(),
+
+        deleteEvent:createPendingReducerWithPayload<typeof initialState,number>
+        ((state:CalendarEventState)=>{
+            state.deleted=false;
+        }),
+        deleteEventFail:createErrorReducer(),
+        deleteEventSuccess:createSuccessReducerWithPayload<typeof initialState,number>
+        ((state:CalendarEventState,action:PayloadAction<number>)=>{
+            state.events=state.events.filter(e=>e.id!==action.payload);
+            state.deleted=true;
+        })
     }
 });
 
 export const calendarEvent = calendarEventSlice.reducer;
 export const {fetchEvents,
     fetchEventsSuccess,fetchEventsFail,
-createEventSuccess,createEventFail,createEvent} = calendarEventSlice.actions;
+createEventSuccess,
+    createEventFail,createEvent,
+deleteEvent,deleteEventSuccess,deleteEventFail} = calendarEventSlice.actions;

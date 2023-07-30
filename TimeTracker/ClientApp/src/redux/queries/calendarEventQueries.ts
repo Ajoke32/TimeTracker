@@ -20,3 +20,11 @@ export function FetchCalendarEvents(){
         "query{calendarEventQuery{calendarEvents{id,date,title,description,dateOnly}}}",
     )
 }
+
+
+export function DeleteCalendarEvent(id:number){
+    return AjaxQuery<QueryStructure<{ calendarEventMutation: { deleteEventById: number } }>>(
+        "mutation DeleteEvent($id:Int!){calendarEventMutation{deleteEventById(id:$id)}}",
+        {id:id}
+    )
+}

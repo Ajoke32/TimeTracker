@@ -87,6 +87,8 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         }
     }
 
+    
+
     public async Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> func, string? relatedData = null)
     {
         try

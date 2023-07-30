@@ -10,7 +10,7 @@ interface CreateEventProps{
 const CreateEventForm = ({created,date}:CreateEventProps) => {
 
     const dispatch = useAppDispatch();
-    const {created:createdEvent} = useTypedSelector(s=>s.calendarEvent);
+    const {created:createdEvent,events} = useTypedSelector(s=>s.calendarEvent);
     const [title,setTitle] = useState<string>("");
     const [desc,setDesc] = useState<string>("");
 

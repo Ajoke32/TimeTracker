@@ -2,10 +2,10 @@ import {Epic, ofType} from "redux-observable";
 
 import {PayloadAction} from "@reduxjs/toolkit";
 import {catchError, map, mergeMap, Observable, of} from "rxjs";
-import {CreateCalendarEvent, FetchCalendarEvents} from "@redux/queries/calendarEventQueries.ts";
+import {CreateCalendarEvent, DeleteCalendarEvent, FetchCalendarEvents} from "@redux/queries/calendarEventQueries.ts";
 import {
     createEventFail,
-    createEventSuccess,
+    createEventSuccess, deleteEventFail, deleteEventSuccess,
     fetchEventsFail,
     fetchEventsSuccess
 } from "@redux/slices/calendarEventSlice.ts";
@@ -34,7 +34,7 @@ export const addCalendarEventEpic: Epic = (action: Observable<PayloadAction<Cale
         )
     );
 
-export const fetchCalendarEvents: Epic = (action: Observable<PayloadAction<CalendarEvent>>, state) =>
+export const fetchCalendarEventsEpic: Epic = (action: Observable<PayloadAction<CalendarEvent>>, state) =>
     action.pipe(
         ofType("calendarEvent/fetchEvents"),
         mergeMap(() =>
@@ -52,4 +52,22 @@ export const fetchCalendarEvents: Epic = (action: Observable<PayloadAction<Calen
             )
         ))
 
-export const eventEpics = [fetchCalendarEvents,addCalendarEventEpic]
+export const deleteCalendarEventEpic: Epic = (action: Observable<PayloadAction<number>>, state) =>
+    action.pipe(
+        ofType("calendarEvent/deleteEvent"),
+        mergeMap((action) =>
+            DeleteCalendarEvent(action.payload).pipe(
+                map(res=>{
+                    if (res.response.errors != null) {
+                        return deleteEventFail(res.response.errors[0].message);
+                    }
+                    return deleteEventSuccess(res.response.data.calendarEventMutation.deleteEventById);
+                }),
+                catchError((e: Error) => {
+                    console.log(e);
+                    return of(deleteEventFail("Something wrong..."))
+                })
+            )
+        ))
+
+export const eventEpics = [fetchCalendarEventsEpic,addCalendarEventEpic,deleteCalendarEventEpic]

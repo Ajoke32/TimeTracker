@@ -4,8 +4,8 @@ import '../UI/Modals/CreateEventModal.css'
 import {useAppDispatch, useTypedSelector} from "@hooks/customHooks.ts";
 import {fetchEvents} from "@redux/slices/calendarEventSlice.ts";
 import {CalendarEvent} from "@redux/types/calendarEventTypes.ts";
-import {getDaysInMonth, getMothDays, monthsMap} from "../../utils/calendarHelpers.ts";
-import CreateEventForm from "@components/CreateEventForm.tsx";
+import {getMothDays, monthsMap} from "../../utils/calendarHelpers.ts";
+import CreateEventForm from "@components/Calendar/CreateEventForm.tsx";
 import EventsWindow from "@components/Calendar/EventsWindow.tsx";
 import CalendarNav from "@components/Calendar/CalendarNav.tsx";
 import CalendarBody from "@components/Calendar/CalendarBody.tsx";
@@ -79,6 +79,12 @@ const Calendar = () => {
         setArr([...updated])
     }
 
+    function removeDayEvent(eventId:number){
+        const upd=dayEvents.filter(e=>e.id!==eventId);
+        setEvents([...upd]);
+        updateCalendar();
+    }
+
     function fillDaysArray(year: number, month: number) {
         setArr([...getMothDays(year, month)]);
         setDaysUpdated(true);
@@ -122,7 +128,6 @@ const Calendar = () => {
     return (
         <div className="calendar-wrapper-inner">
             <div className="calendar">
-                <h1>{arr[0]?.month}</h1>
                 <CalendarNav monthChanged={onMonthChanged} day={day} month={strMoth} year={year} />
                 <div className="days-of-week">
                     <div>Sun</div>
@@ -136,7 +141,7 @@ const Calendar = () => {
                 <CalendarBody selectedDay={clikedDate} days={arr} handleDayClick={handleDayClick} currentDay={day} />
             </div>
 
-            <EventsWindow events={dayEvents} />
+            <EventsWindow updateDayEvents={removeDayEvent} events={dayEvents} />
             <CreateEventForm created={onCreated} date={new Date(year,month,clikedDate)} />
         </div>
     );

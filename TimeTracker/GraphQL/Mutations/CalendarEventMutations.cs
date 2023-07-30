@@ -26,6 +26,36 @@ public sealed class CalendarEventMutations:ObjectGraphType
 
                 return created;
             });
-        
+
+        Field<int>("deleteEventById")
+            .Argument<int>("id")
+            .ResolveAsync(async context =>
+            {
+                var id = context.GetArgument<int>("id");
+                var searchEvent = await uow.GenericRepository<CalendarEvent>()
+                    .FindAsync(u => u.Id == id);
+                
+                if (searchEvent == null)
+                {
+                    throw new ArgumentException("not found");
+                }
+                
+                await uow.GenericRepository<CalendarEvent>()
+                    .DeleteAsync(searchEvent);
+                
+                await uow.SaveAsync();
+
+                return searchEvent.Id;
+            });
+
+        Field<CalendarEventType>("updateEvent")
+            .Argument<CalendarEventUpdateType>("calendarEvent")
+            .ResolveAsync(async context =>
+            {
+                var calendarEvent = context.GetArgument<CalendarEvent>("calendarEvent");
+                
+                return await uow.GenericRepository<CalendarEvent>()
+                    .UpdateAsync(calendarEvent);
+            });
     }
 }
