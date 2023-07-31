@@ -24,22 +24,10 @@ public class UserProfile:Profile
             .ForMember(x => x.Permissions,
                 o =>
                     o.MapFrom(dto => (Permissions)dto.Permissions))
-            .ForMember(x => x.HoursPerMonth, 
-                o => 
-                    o.MapFrom(dto => dto.HoursPerMonth))
             .ForMember(x => x.WorkType,
                 o =>
                     o.MapFrom(m =>
                         m.HoursPerMonth == User.FullTimeValue ? WorkType.FullTime : WorkType.PartTime))
-            .ForMember(x => x.Email, 
-                o => 
-                    o.MapFrom(dto => dto.Email))
-            .ForMember(x => x.FirstName, 
-                o => 
-                    o.MapFrom(dto => dto.FirstName))
-            .ForMember(x => x.LastName, 
-                o => 
-                    o.MapFrom(dto => dto.LastName))
             .ForAllMembers(o => o.UseDestinationValue());
 
         CreateMap<User, UserDisplayDto>()
@@ -49,6 +37,8 @@ public class UserProfile:Profile
             .ForMember(u => u.WorkType,
                 o =>
                     o.MapFrom(m => (int)m.WorkType));
+
+        CreateMap<CalendarEventInputDto, CalendarEvent>();
 
         CreateMap<ApproverVacation, ApproverVacationInputDto>();
     }
