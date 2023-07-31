@@ -1,4 +1,4 @@
-import { DefaultState, User } from "../intrerfaces";
+import { User, ApproversState } from "../intrerfaces";
 import {
     createErrorReducer,
     createPendingReducerWithPayload,
@@ -10,10 +10,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ApproversAddType, FetchUsersType } from "../types";
 
 
-interface ApproversState extends DefaultState {
-    userApprovers: number[],
-    approversList: User[]
-}
 
 const initialState: ApproversState = {
     ...defaultState,

@@ -1,4 +1,4 @@
-import {DefaultState} from "../intrerfaces";
+import { VacationApproverState } from "../intrerfaces";
 import {
     createErrorReducer,
     createPendingReducerWithPayload, createSuccessReducerWithoutPayload,
@@ -11,10 +11,6 @@ import {
     VacationApproverInput
 } from "../types";
 
-interface VacationApproverState extends DefaultState{
-    vacationRequests:ApproverVacation[],
-    updated:boolean
-}
 
 const initialState:VacationApproverState = {
     ...defaultState,

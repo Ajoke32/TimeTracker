@@ -50,7 +50,7 @@
 
 
 .btn-decline{
-  background-color: #ff0a54;
+  background-color: var(--color-red);
 }
 
 .btn-decline:hover{
@@ -59,12 +59,12 @@
 }
 
 .btn-info:hover{
-    background-color: #397cf8;
+    background-color: var(--color-blue);
     box-shadow: 0 0 5px 0 rgba(72, 181, 239, 0.96);
 }
 
 .btn-info{
-    background-color: #4895ef;
+    background-color: var(--color-cyan);
 }
 
 .btn-group{
@@ -77,7 +77,7 @@
     width: 250px;
     right: 110px;
     top: 0;
-    background-color: #14213d;
+    background-color: var(--color-blue);
     position: absolute;
     display: flex;
     flex-direction: column;

@@ -14,6 +14,7 @@ public class AppSchema:Schema
         RegisterTypeMapping(typeof(UserApprover),typeof(ApproveType));
         RegisterTypeMapping(typeof(User),typeof(UserType));
         RegisterTypeMapping(typeof(ApproverVacation),typeof(ApproverVacationType));
+        RegisterTypeMapping(typeof(WorkedHour), typeof(WorkedHourType));
         Query = provider.GetRequiredService<RootQuery>();
         Mutation = provider.GetRequiredService<RootMutation>();
     }

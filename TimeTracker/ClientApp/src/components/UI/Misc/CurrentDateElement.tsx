@@ -1,4 +1,3 @@
-import React from 'react';
 
 const months = [
     "January",
@@ -16,7 +15,7 @@ const months = [
 ];
 
 
-const CurrentDateElement = ({date} : {date: Date}) => {
+export const CurrentDateElement = ({date} : {date: Date}) => {
 
     const currentDate = `${date.getDate()} ${months[date.getMonth()]}`;
     
@@ -27,5 +26,3 @@ const CurrentDateElement = ({date} : {date: Date}) => {
         </div>
     );
 };
-
-export default CurrentDateElement;
