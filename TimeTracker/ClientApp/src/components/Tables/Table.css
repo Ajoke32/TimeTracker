@@ -1,5 +1,5 @@
 .table-wrapper{
-    border: 1px solid #3a506b;
+    border: 1px solid var(--color-stroke-gray);
     padding: 25px;
     display: flex;
     flex-direction: column;
@@ -9,7 +9,7 @@
 }
 
 .declined{
-    color:#ef233c
+    color:var(--color-red)
 }
 .approved{
     color: #70e000;

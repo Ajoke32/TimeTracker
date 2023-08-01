@@ -20,6 +20,10 @@ public sealed class RootQuery:ObjectGraphType
             .Name("vacationQuery")
             .Resolve(_ => new { });
         
+        Field<WorkedHourQuery>()
+            .Name("workedHourQuery")
+            .Resolve(_ => new { });
+
         Field<CalendarEventQuery>()
             .Name("calendarEventQuery")
             .Resolve(_ => new { });

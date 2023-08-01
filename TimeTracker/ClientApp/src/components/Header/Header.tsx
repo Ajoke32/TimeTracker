@@ -1,43 +1,51 @@
 ﻿import "./Header.css"
-import { ProfileAvatar } from "../UI";
+import { ProfileAvatar, Timer } from "@components/UI";
 import {useAppDispatch, useTypedSelector} from "../../hooks";
-import Timer from "@components/UI/Misc/Timer";
 import {useEffect} from "react";
-import {refreshTimer, startTimer, tick, updateTimerTime} from "@redux/slices";
+import {startTimer, stopTimer, tick} from "@redux/slices";
+import { useLocation } from 'react-router-dom'
 
 export const Header = () => {
     const dispatch = useAppDispatch();
     const authState = useTypedSelector(state => state.auth);
-    const timer = useTypedSelector(state => state.timer)
-
-    useEffect(() => {
-        const timerStateString = localStorage.getItem('timer');
-        if (timerStateString) {
-            const timerState = JSON.parse(timerStateString);
-            dispatch(refreshTimer(timerState));
-            dispatch(startTimer());
-        }
-
-        const intervalId = setInterval(() => {
-            if (timer.isRunning)
-                dispatch(tick());
-        }, 1000);
-
-        if (timer.isRunning) {
-            dispatch(updateTimerTime(new Date()));
-        }
-        
-        return () => {
-            clearInterval(intervalId);
-        }
-    }, [timer.isRunning, dispatch, timer]);
+    const timer = useTypedSelector(state => state.timer);
+    const isTrackerPage = (useLocation().pathname === '/tracker');
     
+    useEffect(() => {
+        if (!isTrackerPage && timer.isRunning) {
+            const intervalId = setInterval(() => {
+                dispatch(tick());
+            }, 1000);
+            
+            return () => {
+                clearInterval(intervalId);
+            }
+        }
+    }, [dispatch, timer.isRunning]);
+
+    const handleStartStopButton = () => {
+        if (!timer.isRunning) {
+            dispatch(startTimer());
+        } else {
+            dispatch(stopTimer());
+        }
+    };
     
     return (
-        <header className="header" style={timer.isRunning ? {justifyContent: 'space-between'}: {justifyContent: 'flex-end'}}>
-            {timer.isRunning ? (
-                <Timer hours={timer?.hours} minutes={timer?.minutes} seconds={timer?.seconds}/>
-            ) : (<div style={{display: 'none'}}></div>)}
+        <header className="header">
+            <div className="header-timer__wrapper">
+                {!isTrackerPage && timer.startedAt &&  (
+                    <div className="header-timer__inner">
+                        <div className="header-timer__content" style={!timer.isRunning ? {opacity: '.5'} : {}}>
+                            <Timer hours={timer.hours} minutes={timer.minutes} seconds={timer.seconds}/>
+                        </div>
+                        <button className="timer-start-stop__btn" onClick={handleStartStopButton}>
+                            <div className={timer.isRunning ? "timer-stop__icon" : "timer-start__icon"}></div>
+                        </button>
+                    </div>
+                )}
+            </div>
+            
             <div className="header-profile__wrapper">
                 <div className="header-profile__notifications">
                     <div className="header-profile__notifications-inner">
@@ -48,7 +56,6 @@ export const Header = () => {
                 <div className="header-profile__name">
                     <span>{`${authState.user?.firstName} ${authState.user?.lastName}`}</span>
                 </div>
-
                 <ProfileAvatar initials={`${authState.user?.firstName[0]}${authState.user?.lastName[0]}`}/>
             </div>
         </header>

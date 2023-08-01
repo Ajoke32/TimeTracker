@@ -1,15 +1,17 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { TimerSliceState } from '..';
+import { SetWorkedHoursType, WorkedHour, WorkedTime } from '@redux/types';
+import {
+    createErrorReducer,
+    createPendingReducerWithPayload,
+    createSuccessReducerWithPayload,
+    defaultState
+} from "./generic";
 
-interface TimerState {
-    startTime: string | null;
-    hours: number;
-    minutes: number;
-    seconds: number;
-    isRunning: boolean;
-}
-
-const initialState: TimerState = {
-    startTime: null,
+const initialState: TimerSliceState = {
+    ...defaultState,
+    startedAt: null,
+    pausedAt: null,
     hours: 0,
     minutes: 0,
     seconds: 0,
@@ -20,47 +22,49 @@ const timerSlice = createSlice({
     name: 'timer',
     initialState,
     reducers: {
-        resetTimer: () => initialState,
-        
+        resetTimer: createPendingReducerWithPayload<TimerSliceState, SetWorkedHoursType>(),
+        resetTimerSuccess: createSuccessReducerWithPayload<TimerSliceState, WorkedHour>(
+            (state: TimerSliceState, action: PayloadAction<WorkedHour>) => {
+                state.startedAt = null,
+                state.pausedAt = null,
+                state.hours = 0,
+                state.minutes = 0,
+                state.seconds = 0,
+                state.isRunning = false
+            }
+        ),
+        resetTimerFail: createErrorReducer(),
+
         startTimer: (state) => {
+            if (!state.startedAt) {
+                state.startedAt = Date.now();
+            } else if (state.pausedAt) {
+                const pausedDuration = state.pausedAt - state.startedAt;
+                state.startedAt = Date.now() - pausedDuration;
+            }
+
             state.isRunning = true;
-            if (!state.startTime)
-                state.startTime = new Date().toISOString();
+            state.pausedAt = null;
         },
-        
-        stopTimer: (state) => {
+
+        stopTimer: (state: TimerSliceState) => {
             state.isRunning = false;
+            state.pausedAt = Date.now();
         },
-        
+
         tick: (state) => {
-            state.seconds += 1;
-
-            if (state.seconds === 60) {
-                state.seconds = 0;
-                state.minutes += 1;
-            }
-
-            if (state.minutes === 60) {
-                state.minutes = 0;
-                state.hours += 1;
-            }
-        },
-        
-        updateTimerTime: (state, action: PayloadAction<Date>) => {
-            if (state.startTime && state.isRunning) {
-                const elapsedTimeInSeconds = Math.floor(
-                    (action.payload.getTime() - new Date(state.startTime).getTime()) / 1000
-                );
+            if (state.startedAt && state.isRunning) {
+                const currentTime = Date.now();
+                const elapsedTimeInSeconds = Math.floor((currentTime - state.startedAt) / 1000);
                 state.hours = Math.floor(elapsedTimeInSeconds / 3600);
                 state.minutes = Math.floor((elapsedTimeInSeconds % 3600) / 60);
                 state.seconds = elapsedTimeInSeconds % 60;
             }
         },
-        
-        refreshTimer: (state, action: PayloadAction<TimerState>) => action.payload,
     },
 });
 
-export const { resetTimer, startTimer, tick, updateTimerTime, refreshTimer } = timerSlice.actions;
+export const { resetTimer, resetTimerSuccess, resetTimerFail, startTimer, tick, stopTimer } = timerSlice.actions;
 export const timer = timerSlice.reducer;
+
 
