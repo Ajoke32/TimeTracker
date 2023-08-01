@@ -45,7 +45,7 @@ public sealed class VacationMutations:ObjectGraphType
                 return res;
             });
 
-        Field<bool?>("updateState",nullable:true)
+        Field<VacationType>("updateState")
             .Argument<int>("vacationId")
             .ResolveAsync(async _ =>
             {
@@ -55,11 +55,11 @@ public sealed class VacationMutations:ObjectGraphType
                     .FindAsync(v => v.Id == id,relatedData:"ApproverVacations")??throw new ValidationError("Vacation not found");
 
 
-                vacation.VacationState = IsVacationConfirmed(vacation.ApproverVacations);
+                vacation.VacationState = GetVacationState(vacation.ApproverVacations);
                 
                 await uow.SaveAsync();
                 
-                return vacation.VacationState;
+                return vacation;
             });
 
 
@@ -73,29 +73,40 @@ public sealed class VacationMutations:ObjectGraphType
                 await uow.SaveAsync();
                 return updated;
             });
+
+        Field<VacationType>("changeState")
+            .Argument<int>("vacationId")
+            .Argument<VacationState>("state")
+            .ResolveAsync(async _ =>
+            {
+                var id = _.GetArgument<int>("vacationId");
+                var state = _.GetArgument<VacationState>("state");
+                
+                var vacation = await uow.GenericRepository<Vacation>()
+                    .FindAsync(v => v.Id == id);
+                
+                if (vacation == null) { return null; }
+                
+                vacation.VacationState = state;
+                await uow.SaveAsync();
+                return vacation;
+            });
     }
 
 
-    private bool? IsVacationConfirmed(List<ApproverVacation> avs)
+    private VacationState GetVacationState(List<ApproverVacation> avs)
     {
-        int approvals=0, rejections=0, pending=0;
+        var approvals=0;
         
         foreach (var av in avs)
         {
             if (av.IsApproved == false)
-                return false;
+                return VacationState.Declined;
             
             if (av.IsApproved == true)
                 approvals++;
-            else
-                pending++;
-        }
-
-        if (pending > 0)
-        {
-            return null;
         }
         
-        return approvals==avs.Count;
+        return approvals == avs.Count ? VacationState.Approved : VacationState.Pending;
     }
 } 

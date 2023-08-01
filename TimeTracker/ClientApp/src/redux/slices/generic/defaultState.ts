@@ -18,7 +18,7 @@ export function createErrorReducer<T extends DefaultState>(callback:Function|nul
     }
 }
 
-export function createSuccessReducerWithPayload<T extends DefaultState,V>(callback:Function|null=null){
+export function createSuccessReducerWithPayload<T extends DefaultState,V>(callback:(state:T,action:PayloadAction<V>)=>void=()=>{}){
     return (state: T, action: PayloadAction<V>):void => {
         state.loading=false;
         state.error=null;

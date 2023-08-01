@@ -3,10 +3,12 @@ import "./ApproversTable.css"
 import "./Table.css"
 import moment from "moment";
 import {useAppDispatch, useTypedSelector} from "../../hooks";
-import {fetchRequests, updateApproverVacationState, updateVacationState} from "../../redux";
+import {fetchRequests, updateVacationState} from "../../redux";
 import { Loader} from "../UI";
 import MessageModal from "@components/UI/Modals/MessageModal.tsx";
-import {modalClose, modalOpen} from "@redux/slices/messageModalSlice.ts";
+import {modalOpen} from "@redux/slices/messageModalSlice.ts";
+import {AiOutlineCheck,AiOutlineClose} from  "react-icons/ai";
+import {getStringVacationState} from "../../utils/vacationHelper.ts";
 
 
 export const VacationsRequestTable = () => {
@@ -56,14 +58,16 @@ export const VacationsRequestTable = () => {
                             <span>{a.vacation.user.firstName} {a.vacation.user.lastName}</span>
                             <span>{a.vacation.user.email}</span>
                             <div className="btn-group">
-                                {a.isApproved===null?
-                                    <>
-                                        <button onClick={()=>approve(a.vacation.id,false)} className="btn-base btn-decline">Decline</button>
-                                        <button onClick={()=>approve(a.vacation.id,true)} className="btn-base btn-confirm">Approve</button>
-                                    </>:<span className={a.isApproved?"approved":"declined"}>
-                                            {a.isApproved?"Approved":"Declined"}</span>
-                                }
+                                        <button onClick={()=>approve(a.vacation.id,false)} className="btn-base btn-decline">
+                                            Decline
+                                        </button>
+                                        <button onClick={()=>approve(a.vacation.id,true)} className="btn-base btn-confirm">
+                                            Approve
+                                        </button>
                             </div>
+                            <span className={getStringVacationState(a.vacation.vacationState)}>
+                                        {getStringVacationState(a.vacation.vacationState)}
+                                    </span>
                             <button className="btn-base btn-info more-btn">more</button>
                             <div className="more-info">
                                 <span>Vacation for: {moment(diff).format("D")} days</span>

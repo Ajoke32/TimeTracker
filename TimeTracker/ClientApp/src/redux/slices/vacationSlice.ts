@@ -6,7 +6,7 @@ import {
     defaultState
 } from "./generic";
 import {VacationState} from "../intrerfaces";
-import {Vacation, VacationInputType} from "../types";
+import {Vacation, VacationChangeType, VacationInputType} from "../types";
 
 
 const initialState:VacationState = {
@@ -39,7 +39,33 @@ const vacationsSlice = createSlice({
         ((state:VacationState,action:PayloadAction<Vacation[]>)=>{
             state.vacations=action.payload;
         }),
-        fetchUserVacationsFail:createErrorReducer()
+        fetchUserVacationsFail:createErrorReducer(),
+
+        changeVacationState:createPendingReducerWithPayload<typeof initialState,VacationChangeType>(),
+        changeVacationSateSuccess:createSuccessReducerWithPayload<typeof initialState,Vacation>
+        ((state:VacationState,action:PayloadAction<Vacation>)=>{
+            const updated = action.payload;
+           state.vacations = state.vacations.map(v=>{
+                if(v.id===updated.id){
+                    v.vacationState=updated.vacationState;
+                }
+               return v;
+           });
+        }),
+        changeVacationStateFail:createErrorReducer(),
+
+        updateVacation:createPendingReducerWithPayload<typeof initialState,Vacation>(),
+        updateVacationSuccess:createSuccessReducerWithPayload<typeof initialState,Vacation>
+        ((state, action)=>{
+            const upd = action.payload;
+            state.vacations=state.vacations.map(v=>{
+                if(v.id===upd.id){
+                    v=upd;
+                }
+                return v;
+            });
+        }),
+        updateVacationFail:createErrorReducer()
     }
 });
 
@@ -52,4 +78,6 @@ export const  {createVacation,
     updateVacationStateSuccess,
     updateVacationState,fetchUserVacationsSuccess
     ,fetchUserVacationsFail
-    ,fetchUserVacations} =  vacationsSlice.actions;
+    ,fetchUserVacations,changeVacationState
+    ,changeVacationStateFail
+    ,changeVacationSateSuccess,updateVacationSuccess,updateVacationFail,updateVacation} =  vacationsSlice.actions;

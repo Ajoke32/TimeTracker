@@ -1,13 +1,22 @@
 import {User} from "../intrerfaces";
 
 
+export enum VacationStateEnum{
+    Approved='APPROVED',
+    Declined='DECLINED',
+    Pending='PENDING',
+    Canceled='CANCELED',
+    Edited='EDITED'
+}
+
 export interface Vacation{
     id:number,
     startDate:Date,
     endDate:Date,
     message?:string,
     user:User,
-    vacationState:null|boolean
+    vacationState:VacationStateEnum,
+    userId:number
 }
 
 export interface VacationInputType{
@@ -17,9 +26,8 @@ export interface VacationInputType{
     message?:string
 }
 
-export interface UserApprover{
+export interface VacationChangeType{
     id:number,
-    user:User,
-    approver:User,
-    isApproved:boolean
+    state:VacationStateEnum
 }
+

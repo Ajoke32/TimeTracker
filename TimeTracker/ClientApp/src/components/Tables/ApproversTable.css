@@ -3,7 +3,7 @@
 .request-item{
     position: relative;
     display: grid;
-    grid-template-columns:160px 1fr 1fr 100px;
+    grid-template-columns:160px 1fr 1fr 100px 100px;
     align-items: center;
     gap: 20px;
     text-align: center;
@@ -19,9 +19,9 @@
 }
 
 .btn-base{
-    padding: 10px 15px;
+    padding: 8px 15px;
     border: none;
-    border-radius: 8px;
+    border-radius: 20px;
     color: #f6f6f6;
     cursor: pointer;
     transition: 0.2s;

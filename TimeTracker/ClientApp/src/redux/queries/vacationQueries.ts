@@ -1,8 +1,9 @@
-import {Vacation, VacationInputType} from "../types";
+import {Vacation, VacationChangeType, VacationInputType} from "../types";
 import {QueryStructure} from "../intrerfaces";
 import {AjaxQuery} from "./query";
 import {ReadCookie} from "../../utils";
 import {ApproverVacation} from "../types";
+import moment from "moment";
 
 
 
@@ -35,7 +36,23 @@ export function UpdateVacationState(id:number){
 export function FetchUserVacations(userId:number){
 
     return AjaxQuery<QueryStructure<{ vacationQuery:{userVacations:Vacation[]} }>>(
-        'query GetUserVacations($id:Int!){vacationQuery{userVacations(userId:$id){vacationState,endDate,startDate,message}}}',
+        'query GetUserVacations($id:Int!){vacationQuery{userVacations(userId:$id){id,vacationState,endDate,startDate,message}}}',
         {id:userId}
+    )
+}
+
+export function ChangeVacationState(vac:VacationChangeType){
+    return AjaxQuery<QueryStructure<{ vacationMutation:{changeState:Vacation} }>>(
+        'mutation ChangeState($id:Int!,$state:VacationState!){vacationMutation{changeState(vacationId:$id,state:$state){id,vacationState}}}',
+        {id:vac.id,state:vac.state}
+    )
+}
+
+export function UpdateVacation(vacation:Vacation){
+    return AjaxQuery<QueryStructure<{ vacationMutation:{update:Vacation} }>>(
+        'mutation UpdateVacation($vacation:VacationInputType!){vacationMutation{update(vacation:$vacation){id,startDate,endDate,vacationState}}}',
+        {vacation:{...vacation,
+                startDate:moment(vacation.startDate).format("YYYY-MM-DD"),
+                endDate:moment(vacation.endDate).format("YYYY-MM-DD")}}
     )
 }

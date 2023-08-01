@@ -1,20 +1,28 @@
 import { Epic, ofType } from "redux-observable";
 import { catchError, map, mergeMap, Observable, of } from "rxjs";
 import { PayloadAction } from "@reduxjs/toolkit";
-import { VacationInputType } from "../types";
-import {AddVacationQuery, FetchUserVacations, UpdateVacationState} from "../queries";
+import {Vacation, VacationChangeType, VacationInputType} from "../types";
+import {
+    AddVacationQuery,
+    ChangeVacationState,
+    FetchUserVacations,
+    UpdateVacation,
+    UpdateVacationState
+} from "../queries";
 
 import {
+    changeVacationSateSuccess,
+    changeVacationStateFail,
     createVacationFail,
     createVacationSuccess,
     fetchUserVacationsFail,
-    fetchUserVacationsSuccess,
+    fetchUserVacationsSuccess, updateVacationFail,
     updateVacationStateFail,
-    updateVacationStateSuccess,
+    updateVacationStateSuccess, updateVacationSuccess,
 } from "../slices";
 import { GetErrorMessage } from "../../utils";
 
-export const addVacationEpic: Epic = (action: Observable<PayloadAction<VacationInputType>>, state) =>
+const addVacationEpic: Epic = (action: Observable<PayloadAction<VacationInputType>>, state) =>
     action.pipe(
         ofType("vacation/createVacation"),
         mergeMap(action =>
@@ -34,7 +42,7 @@ export const addVacationEpic: Epic = (action: Observable<PayloadAction<VacationI
         )
     );
 
-export const updateVacationStateEpic: Epic = (action: Observable<PayloadAction<number>>, state) =>
+const updateVacationStateEpic: Epic = (action: Observable<PayloadAction<number>>, state) =>
     action.pipe(
         ofType("vacation/updateVacationState"),
         mergeMap(action =>
@@ -54,7 +62,7 @@ export const updateVacationStateEpic: Epic = (action: Observable<PayloadAction<n
         )
     );
 
-export const fetchUserVacationsEpic:Epic = (action:Observable<PayloadAction<number>>)=>
+const fetchUserVacationsEpic:Epic = (action:Observable<PayloadAction<number>>)=>
     action.pipe(
         ofType('vacation/fetchUserVacations'),
         mergeMap(action=>
@@ -74,3 +82,44 @@ export const fetchUserVacationsEpic:Epic = (action:Observable<PayloadAction<numb
         )
     )
 
+const changeVacationStateEpic:Epic = (action$:Observable<PayloadAction<VacationChangeType>>)=>
+    action$.pipe(
+        ofType('vacation/changeVacationState'),
+        mergeMap(action=>
+            ChangeVacationState(action.payload)
+                .pipe(
+                    map(res=>{
+                        if (res.response.errors != null) {
+                            return changeVacationStateFail(res.response.errors[0].message)
+                        }
+                        return changeVacationSateSuccess(res.response.data.vacationMutation.changeState);
+                    }),
+                    catchError((e: Error) => {
+                        console.log(e);
+                        return of(changeVacationStateFail("unexpected error"))
+                    })
+                )
+        )
+    )
+
+const updateVacationEpic:Epic=(action$:Observable<PayloadAction<Vacation>>)=>
+    action$.pipe(
+        ofType('vacation/updateVacation'),
+        mergeMap(action=>
+            UpdateVacation(action.payload)
+                .pipe(
+                    map(res=>{
+                        if (res.response.errors != null) {
+                            return updateVacationFail(res.response.errors[0].message)
+                        }
+                        return updateVacationSuccess(res.response.data.vacationMutation.update);
+                    }),
+                    catchError((e: Error) => {
+                        console.log(e);
+                        return of(updateVacationFail("unexpected error"))
+                    })
+                )
+        )
+    )
+
+export const vacationEpics = [updateVacationEpic,changeVacationStateEpic,fetchUserVacationsEpic,updateVacationStateEpic,addVacationEpic]

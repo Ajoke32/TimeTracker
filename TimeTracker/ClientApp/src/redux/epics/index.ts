@@ -11,7 +11,7 @@ import {
     emailConfirmEpic
 } from './user'
 import { fetchUsersEpic } from "./users";
-import {addVacationEpic, fetchUserVacationsEpic, updateVacationStateEpic} from "./vacation";
+import {vacationEpics} from "./vacation";
 import { addApproversEpic, fetchApproversEpic } from "./approvers";
 import { fetchVacationsRequestsEpic, updateApproversVacationsEpic, updateApproverVacationEpic } from "./approverVacation";
 import { fetchWorkedHoursEpic, editWorkedHourEpic, setWorkedHourEpic, deleteWorkedHourEpic, createWorkedHourEpic } from "./timeTracker";
@@ -26,16 +26,13 @@ export const rootEpic: Epic = (action$, store$, dependencies) =>
         passwordConfirmEpic,
         fetchUsersEpic,
         addApproversEpic,
-        addVacationEpic,
         fetchVacationsRequestsEpic,
         fetchApproversEpic,
         updateApproverVacationEpic,
         updateApproversVacationsEpic,
-        updateVacationStateEpic,
         fetchUserEpic,
         editUserEpic,
         fetchVacationDaysEpic,
-        fetchUserVacationsEpic,
         DeleteUserEpic,
         emailConfirmEpic,
         fetchWorkedHoursEpic,
@@ -43,7 +40,8 @@ export const rootEpic: Epic = (action$, store$, dependencies) =>
         setWorkedHourEpic,
         deleteWorkedHourEpic,
         createWorkedHourEpic,
-        ...eventEpics
+        ...eventEpics,
+        ...vacationEpics
     )
         (action$, store$, dependencies).pipe(
             catchError((error, source) => {
