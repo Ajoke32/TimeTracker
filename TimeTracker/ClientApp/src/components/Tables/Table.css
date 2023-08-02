@@ -8,23 +8,7 @@
     border-radius: 8px;
 }
 
-.declined{
-    color:var(--color-red)
-}
-.approved{
-    color: #70e000;
-}
 
-.pending{
-    color:#ffa200;
-}
-
-.canceled{
-    color: #ff0000;
-}
-.edited{
-    color: #0aa9ff;
-}
 
 .head{
     background-color: #caf0f8;
@@ -48,17 +32,3 @@
     padding: 10px;
 }
 
-/*
-.icon-approve{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    font-size: 20px;
-    padding: 5px;
-}
-.icon-approve:hover{
-    transition: 0.2s;
-    color:#70e000;
-    background-color: rgb(167, 223, 250);
-}*/

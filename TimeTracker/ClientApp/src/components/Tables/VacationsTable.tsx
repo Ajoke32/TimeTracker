@@ -60,10 +60,15 @@ export const VacationsTable = () => {
                         <div key={v.id} className="vacation-item">
                             <span>{moment(v.startDate).format("M/D/Y")}</span>
                             <span>{moment(v.endDate).format("M/D/Y")}</span>
-                            <span className={v.vacationState.toLowerCase()}>{getStringVacationState(v.vacationState)}</span>
-                            <button onClick={()=>handleSelect(v)} style={{marginRight:"5px"}} className="btn-base btn-decline">
-                                Cancel
-                            </button>
+                            <span className={v.vacationState===VacationStateEnum.Edited?"pending":v.vacationState.toLowerCase()}>
+                                {v.vacationState===VacationStateEnum.Edited?"Pending":getStringVacationState(v.vacationState)}
+                            </span>
+                            {v.vacationState===VacationStateEnum.Canceled||v.haveAnswer?
+                                <span className={"neutral"}>No action</span>
+                               : <button onClick={() => handleSelect(v)} style={{marginRight: "5px"}}
+                                         className="btn-base btn-decline">
+                                    Cancel
+                                </button>}
                         </div>
                         )
                     })}

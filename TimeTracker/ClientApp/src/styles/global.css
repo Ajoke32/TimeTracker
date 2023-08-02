@@ -72,3 +72,21 @@ label {
 .pointer{
     cursor: pointer;
 }
+
+.declined{
+    color:var(--color-red)
+}
+.approved{
+    color: #70e000;
+}
+
+.pending{
+    color:#ffa200;
+}
+
+.canceled{
+    color: #ff0000;
+}
+.edited{
+    color: #0aa9ff;
+}

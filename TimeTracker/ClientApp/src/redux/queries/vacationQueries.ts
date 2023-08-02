@@ -36,7 +36,7 @@ export function UpdateVacationState(id:number){
 export function FetchUserVacations(userId:number){
 
     return AjaxQuery<QueryStructure<{ vacationQuery:{userVacations:Vacation[]} }>>(
-        'query GetUserVacations($id:Int!){vacationQuery{userVacations(userId:$id){id,vacationState,endDate,startDate,message}}}',
+        'query GetUserVacations($id:Int!){vacationQuery{userVacations(userId:$id){id,vacationState,haveAnswer,endDate,startDate,message}}}',
         {id:userId}
     )
 }
@@ -54,5 +54,12 @@ export function UpdateVacation(vacation:Vacation){
         {vacation:{...vacation,
                 startDate:moment(vacation.startDate).format("YYYY-MM-DD"),
                 endDate:moment(vacation.endDate).format("YYYY-MM-DD")}}
+    )
+}
+
+export function DeleteVacation(vacation:Vacation){
+    return AjaxQuery<QueryStructure<{ vacationMutation:{delete:Vacation} }>>(
+        'mutation ArchiveVacation($vacation:VacationInputType!){vacationMutation{delete(vacation:$vacation){id}}}',
+        {vacation:vacation}
     )
 }

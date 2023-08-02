@@ -4,7 +4,7 @@ import { PayloadAction } from "@reduxjs/toolkit";
 import {Vacation, VacationChangeType, VacationInputType} from "../types";
 import {
     AddVacationQuery,
-    ChangeVacationState,
+    ChangeVacationState, DeleteVacation,
     FetchUserVacations,
     UpdateVacation,
     UpdateVacationState
@@ -14,7 +14,7 @@ import {
     changeVacationSateSuccess,
     changeVacationStateFail,
     createVacationFail,
-    createVacationSuccess,
+    createVacationSuccess, deleteVacationFail, deleteVacationSuccess,
     fetchUserVacationsFail,
     fetchUserVacationsSuccess, updateVacationFail,
     updateVacationStateFail,
@@ -121,5 +121,23 @@ const updateVacationEpic:Epic=(action$:Observable<PayloadAction<Vacation>>)=>
                 )
         )
     )
-
-export const vacationEpics = [updateVacationEpic,changeVacationStateEpic,fetchUserVacationsEpic,updateVacationStateEpic,addVacationEpic]
+const deleteVacationEpic:Epic=(action$:Observable<PayloadAction<Vacation>>)=>
+    action$.pipe(
+        ofType('vacation/deleteVacation'),
+        mergeMap(action$=>
+            DeleteVacation(action$.payload)
+                .pipe(
+                    map(res=>{
+                        if (res.response.errors != null) {
+                            return deleteVacationFail(res.response.errors[0].message)
+                        }
+                        return deleteVacationSuccess(res.response.data.vacationMutation.delete);
+                    }),
+                    catchError((e: Error) => {
+                        console.log(e);
+                        return of(deleteVacationFail("unexpected error"))
+                    })
+                )
+        )
+    )
+export const vacationEpics = [deleteVacationEpic,updateVacationEpic,changeVacationStateEpic,fetchUserVacationsEpic,updateVacationStateEpic,addVacationEpic]

@@ -12,8 +12,10 @@ namespace TimeTracker.GraphQL.Mutations;
 
 public sealed class VacationMutations:ObjectGraphType
 {
+    private readonly IGenericRepository<Vacation> _repos;
     public VacationMutations(IUnitOfWorkRepository uow)
     {
+        _repos = uow.GenericRepository<Vacation>();
         Field<VacationType>("create")
             .Argument<VacationInputType>("vacation")
             .ResolveAsync(async _ =>
@@ -56,7 +58,7 @@ public sealed class VacationMutations:ObjectGraphType
 
 
                 vacation.VacationState = GetVacationState(vacation.ApproverVacations);
-                
+                vacation.HaveAnswer = true;
                 await uow.SaveAsync();
                 
                 return vacation;
@@ -89,6 +91,36 @@ public sealed class VacationMutations:ObjectGraphType
                 
                 vacation.VacationState = state;
                 await uow.SaveAsync();
+                return vacation;
+            });
+
+        Field<VacationType>("deleteById")
+            .Argument<int>("vacationId")
+            .ResolveAsync(async _ =>
+            {
+                var id = _.GetArgument<int>("vacationId");
+                var vacation = await _repos.FindAsync(v => v.Id == id);
+                if (vacation == null)
+                {
+                    return null;
+                }
+                await _repos.DeleteAsync(vacation);
+                
+                await uow.SaveAsync();
+                
+                return vacation;
+            });
+
+        Field<VacationType>("delete")
+            .Argument<VacationInputType>("vacation")
+            .ResolveAsync(async _ =>
+            {
+                var vacation = _.GetArgument<Vacation>("vacation");
+                
+                await _repos.DeleteAsync(vacation);
+
+                await uow.SaveAsync();
+
                 return vacation;
             });
     }

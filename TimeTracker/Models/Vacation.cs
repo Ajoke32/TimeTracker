@@ -2,11 +2,12 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using TimeTracker.Enums;
 using TimeTracker.Models.Dtos;
+using TimeTracker.Utils.SoftDelete;
 
 
 namespace TimeTracker.Models;
 
-public class Vacation
+public class Vacation:SoftDeleteBase
 {
     public int Id { get; set; }
      
@@ -23,6 +24,8 @@ public class Vacation
     
     [Required]
     public DateTime EndDate { get; set; }
+    
+    public bool HaveAnswer { get; set; }
 
     public List<ApproverVacation> ApproverVacations { get; set; } = new();
 

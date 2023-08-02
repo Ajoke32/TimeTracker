@@ -16,7 +16,8 @@ export interface Vacation{
     message?:string,
     user:User,
     vacationState:VacationStateEnum,
-    userId:number
+    userId:number,
+    haveAnswer:boolean
 }
 
 export interface VacationInputType{

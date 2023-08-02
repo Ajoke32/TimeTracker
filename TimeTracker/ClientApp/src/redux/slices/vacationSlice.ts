@@ -65,7 +65,14 @@ const vacationsSlice = createSlice({
                 return v;
             });
         }),
-        updateVacationFail:createErrorReducer()
+        updateVacationFail:createErrorReducer(),
+
+        deleteVacation:createPendingReducerWithPayload<typeof initialState,Vacation>(),
+        deleteVacationSuccess:createSuccessReducerWithPayload<typeof initialState,Vacation>
+        ((state,action)=>{
+            state.vacations=state.vacations.filter(v=>v.id!==action.payload.id);
+        }),
+        deleteVacationFail:createErrorReducer()
     }
 });
 
@@ -80,4 +87,6 @@ export const  {createVacation,
     ,fetchUserVacationsFail
     ,fetchUserVacations,changeVacationState
     ,changeVacationStateFail
-    ,changeVacationSateSuccess,updateVacationSuccess,updateVacationFail,updateVacation} =  vacationsSlice.actions;
+    ,changeVacationSateSuccess,
+    updateVacationSuccess,updateVacationFail
+    ,updateVacation,deleteVacationSuccess,deleteVacationFail,deleteVacation} =  vacationsSlice.actions;

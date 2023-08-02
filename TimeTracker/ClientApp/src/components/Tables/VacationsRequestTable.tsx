@@ -4,12 +4,12 @@ import "./Table.css"
 import moment from "moment";
 import {useAppDispatch, useTypedSelector} from "../../hooks";
 import {fetchRequests, updateVacationState} from "../../redux";
-import { Loader} from "../UI";
+import {Loader} from "../UI";
 import MessageModal from "@components/UI/Modals/MessageModal.tsx";
 import {modalOpen} from "@redux/slices/messageModalSlice.ts";
-import {AiOutlineCheck,AiOutlineClose} from  "react-icons/ai";
 import {getStringVacationState} from "../../utils/vacationHelper.ts";
-
+import {VacationStateEnum} from "@redux/types";
+import {BsThreeDots} from 'react-icons/bs'
 
 export const VacationsRequestTable = () => {
 
@@ -57,15 +57,22 @@ export const VacationsRequestTable = () => {
                         return <div key={a.id} className="request-item">
                             <span>{a.vacation.user.firstName} {a.vacation.user.lastName}</span>
                             <span>{a.vacation.user.email}</span>
-                            <div className="btn-group">
+                            {a.vacation.vacationState!==VacationStateEnum.Canceled?
+                                <div className="btn-group">
                                         <button onClick={()=>approve(a.vacation.id,false)} className="btn-base btn-decline">
                                             Decline
                                         </button>
                                         <button onClick={()=>approve(a.vacation.id,true)} className="btn-base btn-confirm">
                                             Approve
                                         </button>
-                            </div>
-                            <span className={getStringVacationState(a.vacation.vacationState)}>
+                                </div>
+                            :<div className="btn-group">
+                                    <button style={{width:"180px"}} onClick={()=>approve(a.vacation.id,true)}
+                                            className="btn-base btn-decline">
+                                        Archive
+                                    </button>
+                                </div>}
+                            <span className={a.vacation.vacationState.toLowerCase()}>
                                         {getStringVacationState(a.vacation.vacationState)}
                                     </span>
                             <button className="btn-base btn-info more-btn">more</button>
