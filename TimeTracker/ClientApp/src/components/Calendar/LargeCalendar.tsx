@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import "./calendars.css"
-import CurrentDateElement from "@components/UI/Misc/CurrentDateElement";
+import { CurrentDateElement } from '..';
 import {useAppDispatch, useTypedSelector} from "@hooks/customHooks";
 import {setDefault, setNextMonth, setPreviousMonth} from "@redux/slices";
 import {Permission} from "@redux/enums";
@@ -57,7 +57,7 @@ const LargeCalendar = () => {
             </div>}
             
             <div className="calendar-header__wrapper">
-                <div className="calendar-date__wrapper"><CurrentDateElement date={calendar.currentDate} showFullDate={false} /></div>
+                <div className="calendar-date__wrapper"><CurrentDateElement date={calendar.currentDate} /></div>
                 <div className="calendar-actions">
                     <div>
                         <button onClick={handlePrevMonthButton}></button>

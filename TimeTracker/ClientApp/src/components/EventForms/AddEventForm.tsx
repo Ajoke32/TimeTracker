@@ -3,8 +3,7 @@ import {useForm} from "react-hook-form";
 import {Inputs} from "@components/EventForms";
 import {LargeButton, TextInput} from "@components/UI";
 import "./eventForms.css"
-import CurrentDateElement from "@components/UI/Misc/CurrentDateElement";
-
+import { CurrentDateElement } from '@components/UI';
 const AddEventForm = () => {
     const [showDateMenu, setShowDateMenu] = useState<boolean>(false);
     const [currentDate, setCurrentDate] = useState<Date>(new Date());
@@ -34,7 +33,7 @@ const AddEventForm = () => {
             <form>
                 <span>Add event for</span>
                 <div className="event-date-wrapper">
-                    <CurrentDateElement date={currentDate} showFullDate={true}/>
+                    <CurrentDateElement date={currentDate} />
                     <button  type="button" onClick={handleShowDateMenu} className="show-datepicker__btn">
                         <input
                             type="date"
