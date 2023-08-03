@@ -1,7 +1,9 @@
 export interface WorkedHour {
     id: number,
     userId: number,
-    workedTime: string
+    startTime: string,
+    endTime: string,
+    totalTime: string,
     date: Date,
 }
 
@@ -11,13 +13,15 @@ export interface WorkedTime {
     seconds: number
 }
 
-export interface SetWorkedHoursType {
+export interface CreateWorkedHourType {
     userId: number,
     date: string,
-    workedTime: string
+    startTime: string,
+    endTime: string,
 }
 
-export interface UpdateWorkedHoursType {
+export interface UpdateWorkedHourType {
     id: number,
-    workedTime: string
+    startTime: string,
+    endTime: string,
 }

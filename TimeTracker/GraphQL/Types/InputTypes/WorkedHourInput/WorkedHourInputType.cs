@@ -11,6 +11,8 @@ public sealed class WorkedHourInputType: InputObjectGraphType<WorkedHourInputDto
 
         Field(x => x.Date).Description("working date");
 
-        Field(x => x.WorkedTime).Description("user's worked time");
+        Field(x => x.StartTime).Description("start time");
+
+        Field(x => x.EndTime).Description("end time");
     }
 }

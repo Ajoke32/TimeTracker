@@ -6,5 +6,9 @@ public class WorkedHourInputDto
 
     public DateOnly Date { get; set; }
 
-    public TimeOnly WorkedTime { get; set; }
+    public TimeOnly StartTime { get; set; }
+    
+    public TimeOnly EndTime { get; set; }
+
+    public TimeOnly TotalTime { get; set; }
 }

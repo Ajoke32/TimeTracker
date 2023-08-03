@@ -75,6 +75,11 @@
     display: flex;
 }
 
+.worked-time-range__wrapper {
+    width: 30%;
+    display: flex;
+}
+
 .time-range__inner{
     width: 50%;
     display: flex;
@@ -121,6 +126,10 @@
 
 .tracker-btn__wrapper > div:last-child > button {
     background: var(--color-red);
+}
+
+.tracker-btn__wrapper > div:first-child > button {
+    background: var(--color-cyan);
 }
 
 .tracker-btn__wrapper > div,
@@ -194,7 +203,7 @@
     height: 24px;
 }
 
-.time-range__date-wrapper div {
+.time-range__date-wrapper button {
     width: 100%;
     height: 100%;
     border: none;
