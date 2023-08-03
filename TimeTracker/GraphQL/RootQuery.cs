@@ -23,9 +23,5 @@ public sealed class RootQuery:ObjectGraphType
         Field<WorkedHourQuery>()
             .Name("workedHourQuery")
             .Resolve(_ => new { });
-
-        Field<CalendarEventQuery>()
-            .Name("calendarEventQuery")
-            .Resolve(_ => new { });
     }
 }
