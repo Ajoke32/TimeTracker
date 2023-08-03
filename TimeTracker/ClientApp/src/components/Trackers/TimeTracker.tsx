@@ -18,7 +18,7 @@ const TimeTracker = ({ workedHour }: { workedHour?: WorkedHour }) => {
                 {switchAction ? (
                     <TrackerTimer workedHour={workedHour} />
                 ) : (
-                    <TrackerSetHours id={workedHour ? workedHour.id : undefined} />
+                    <TrackerSetHours workedHour={workedHour} />
                 )}
             </div>
             <div className="tracker-actions__wrapper">

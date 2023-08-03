@@ -54,7 +54,21 @@ public class TimeTrackerContext:DbContext
             );
         
         modelBuilder.Entity<WorkedHour>()
-            .Property(a => a.WorkedTime)
+            .Property(a => a.StartTime)
+            .HasConversion(
+                v => v.ToTimeSpan(),
+                v => TimeOnly.FromTimeSpan(v)
+            );
+        
+        modelBuilder.Entity<WorkedHour>()
+            .Property(a => a.EndTime)
+            .HasConversion(
+                v => v.ToTimeSpan(),
+                v => TimeOnly.FromTimeSpan(v)
+            );
+
+        modelBuilder.Entity<WorkedHour>()
+            .Property(a => a.TotalTime)
             .HasConversion(
                 v => v.ToTimeSpan(),
                 v => TimeOnly.FromTimeSpan(v)

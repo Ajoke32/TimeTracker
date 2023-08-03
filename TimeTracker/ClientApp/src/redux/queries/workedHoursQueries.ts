@@ -1,85 +1,72 @@
 import { AjaxQuery } from './query';
 import { QueryStructure } from '../intrerfaces';
-import { WorkedHour, SetWorkedHoursType, UpdateWorkedHoursType } from '@redux/types';
-
-export function SetWorkedHoursQuery(workedHours: SetWorkedHoursType) {
-    //const token = ReadCookie('user');
-
-    return AjaxQuery<QueryStructure<{ workedHoursMutations: { set: WorkedHour } }>>(
-        `mutation SetWorkedHours($workedHours: WorkedHourInputType!) {
-        workedHoursMutations {
-          set(workedHours: $workedHours) {
-            id
-            userId
-            workedTime
-            date
-          }
-        }
-      }`,
-        { workedHours: workedHours },
-        //token
-    )
-}
-
+import { WorkedHour, CreateWorkedHourType, UpdateWorkedHourType } from '@redux/types';
+import { createWorkedHourEpic, fetchWorkedHoursEpic } from '@redux/epics/timeTracker';
 
 export function FetchWorkedHoursQuery(userId: number) {
-    return AjaxQuery<QueryStructure<{ workedHourQuery: { workedHours: WorkedHour[] } }>>(
-        `query GetUserWorkingHours($userId: Int!) {
-            workedHourQuery {
-              workedHours(userId: $userId) {
-                id
-                userId
-                date
-                workedTime
-              }
-            }
-          }`,
-        { userId: userId },
-    );
+  return AjaxQuery<QueryStructure<{ workedHourQuery: { workedHours: WorkedHour[] } }>>(
+    `query GetUserWorkedHours($userId: Int!) {
+      workedHourQuery {
+        workedHours(userId: $userId) {
+          id
+          userId
+          date
+          startTime
+          endTime
+          totalTime
+        }
+      }
+    }`,
+    { userId: userId },
+  );
 }
 
-export function UpdateWorkedHoursQuery(workedHours: UpdateWorkedHoursType) {
-    return AjaxQuery<QueryStructure<{ workedHoursMutations: { update: WorkedHour } }>>(
-        `mutation UpdateWorkedHours($workedHours: UpdateWorkedHourInputType!) {
-            workedHoursMutations {
-              update(workedHours: $workedHours) {
-                id
-                userId
-                workedTime
-                date
-              }
-            }
-          }`,
-        { workedHours: workedHours },
-    );
+export function UpdateWorkedHoursQuery(workedHour: UpdateWorkedHourType) {
+  return AjaxQuery<QueryStructure<{ workedHourMutations: { update: WorkedHour } }>>(
+    `mutation UpdateWorkedHours($workedHour: UpdateWorkedHourInputType!) {
+      workedHourMutations {
+        update(workedHour: $workedHour) {
+          id
+          userId
+          startTime
+          endTime
+          totalTime
+          date
+        }
+      }
+    }`,
+    { workedHour: workedHour },
+  );
 }
 
 export function DeleteWorkedHoursQuery(id: number) {
-    return AjaxQuery<QueryStructure<{ workedHoursMutations: { delete: boolean } }>>(
-        `mutation DeleteWorkingHours($id : Int!){
-            workedHoursMutations{
-              delete(id: $id)
-            }
-          }`,
-        { id: id },
-    );
+  return AjaxQuery<QueryStructure<{ workedHourMutations: { delete: number } }>>(
+    `mutation DeleteWorkedHours($id: Int!) {
+      workedHourMutations {
+        delete(id: $id)
+      }
+    }`,
+    { id: id },
+  );
 }
 
-export function CreateWorkedHoursQuery(workedHours: SetWorkedHoursType) {
+export function CreateWorkedHoursQuery(workedHour: CreateWorkedHourType) {
   //const token = ReadCookie('user');
 
-  return AjaxQuery<QueryStructure<{ workedHoursMutations: { create: WorkedHour } }>>(
-      `mutation CreateWorkedHours($workedHours: WorkedHourInputType!) {
-        workedHoursMutations {
-          create(workedHours: $workedHours) {
-            id
-            userId
-            workedTime
-            date
-          }
+  return AjaxQuery<QueryStructure<{ workedHourMutations: { create: WorkedHour } }>>(
+    `mutation CreateWorkedHour($workedHour: WorkedHourInputType!) {
+      workedHourMutations {
+        create(workedHour: $workedHour) {
+          id
+          userId
+          startTime
+          endTime
+          totalTime
+          date
         }
-      }`,
-      { workedHours: workedHours },
-      //token
+      }
+    }`,
+    { workedHour: workedHour },
+    //token
   )
 }
