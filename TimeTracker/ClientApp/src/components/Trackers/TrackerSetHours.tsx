@@ -1,71 +1,129 @@
-import React, {useEffect, useState} from 'react';
-import {SmallButton} from "@components/UI";
-import {useTypedSelector} from "@hooks/customHooks";
-import {setStartTime, setEndTime, setTotalWorkTime} from "@redux/slices";
-import {useDispatch} from "react-redux";
-import CurrentDateElement from "@components/UI/Misc/CurrentDateElement";
+import React, { useState } from 'react';
+import { SmallButton, SelectedDateElement, CurrentDateElement } from "@components/UI";
+import { useTypedSelector } from "@hooks/customHooks";
+import { useDispatch } from "react-redux";
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { createWorkedHour, deleteWorkedHour, deleteWorkedHourFail, editWorkedHour } from '@redux/slices';
+import { WorkedHour, UpdateWorkedHourType, CreateWorkedHourType } from '@redux/types';
+import { GetFormattedDateString, GetFormattedUTCDateString, GetFormattedUTCTimeString } from '../../utils';
 
-export const TrackerSetHours = () => {
+type Inputs = {
+    startTime: string
+    endTime: string
+    date: string
+}
+
+interface TimeInputs {
+    startTime: string
+    endTime: string
+}
+
+export const TrackerSetHours = ({ workedHour }: { workedHour?: WorkedHour }) => {
+    const defaultValues: TimeInputs = {
+        startTime: workedHour ? workedHour.startTime.slice(0, 5) : '08:00',
+        endTime: workedHour ? workedHour.endTime.slice(0, 5) : '18:00',
+    }
+
+    const [showDatePicker, setShowDatePicker] = useState<boolean>(true);
+    const [selectedDate, setSelectedDate] = useState<string>(GetFormattedDateString(new Date));
+    const [timeInputs, setTimeInputs] = useState<TimeInputs>(defaultValues);
+
     const dispatch = useDispatch();
-    const hours = useTypedSelector((state) => state.workingHours);
-    const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
-    
-    const handleShowDatePicker = () => {
+    const { user } = useTypedSelector(state => state.auth)
+
+    const handleShowDatePicker = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setShowDatePicker(!showDatePicker);
     }
-    
-    const handleCurrentTimeChange = (event: any) => {
-        dispatch(setStartTime(event.target.value))
+
+    const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSelectedDate(event.target.value);
+        setShowDatePicker(!showDatePicker);
     }
 
-    const handleNewTimeChange = (event: any) => {
-        dispatch(setEndTime(event.target.value))
+    const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { value, name } = event.target;
+        setTimeInputs({ ...timeInputs, [name]: value });
     }
 
-    const handleAddHoursButton = () => {
-        dispatch(setTotalWorkTime());
+    const handleDelete = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        dispatch(deleteWorkedHour(workedHour!.id));
     }
-    
+
+    const { register, handleSubmit,
+        formState: { errors }, reset } = useForm<Inputs>({
+            mode: 'onBlur',
+            defaultValues: {
+                date: workedHour ? GetFormattedDateString(workedHour.date) : undefined
+            }
+        });
+
+    const onSubmit: SubmitHandler<Inputs> = (data) => {
+
+        if (workedHour)
+            dispatch(editWorkedHour({
+                id: workedHour.id,
+                startTime: GetFormattedUTCTimeString(data.startTime, data.date),
+                endTime: GetFormattedUTCTimeString(data.endTime, data.date),
+            } as UpdateWorkedHourType))
+        else {
+            data.date = selectedDate;
+            dispatch(createWorkedHour({
+                userId: user!.id,
+                startTime: GetFormattedUTCTimeString(data.startTime, data.date),
+                endTime: GetFormattedUTCTimeString(data.endTime, data.date),
+                date: GetFormattedUTCDateString(new Date(data.date))
+            } as CreateWorkedHourType))
+        }
+    }
     return (
-        <div className="tracker-inner">
-            <CurrentDateElement date={new Date()} showFullDate={true}/>
+        <>
+            {workedHour ? <CurrentDateElement date={workedHour.date} /> : <SelectedDateElement date={selectedDate} />}
+
             <div className="set-hours-tracker">
-                <div className="time-range__wrapper">
-                    <div className="time-range__inner">
-                        <input
-                            type="time"
-                            value={hours.startTime}
-                            onChange={handleCurrentTimeChange}
-                            className="time-input"
-                        />
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className="time-range__wrapper">
+                        <div className="time-range__inner">
+                            <input
+                                type="time"
+                                className="time-input"
+                                value={timeInputs.startTime}
+                                {...register("startTime")}
+                                onChange={handleTimeChange}
+                            />
+                        </div>
+                        <div className="time-range__separator">
+                            <span>-</span>
+                        </div>
+                        <div className="time-range__inner">
+                            <input
+                                type="time"
+                                className="time-input"
+                                value={timeInputs.endTime}
+                                {...register("endTime")}
+                                onChange={handleTimeChange}
+                            />
+                        </div>
                     </div>
-                    <div className="time-range__separator">
-                        <span>-</span>
-                    </div>
-                    <div className="time-range__inner">
-                        <input
-                            type="time"
-                            value={hours.endTime}
-                            className="time-input"
-                            onChange={handleNewTimeChange}
-                        />
-                    </div>
-                </div>
 
-                <div className="time-range__date-wrapper">
-                    <button onClick={handleShowDatePicker}>
-                        <input
-                            type="date"
-                            className="date-picker__input"
-                            style={showDatePicker ? {display: 'none'} : {}}
-                        />
-                    </button>
-                </div>
+                    {!workedHour ? <div className="time-range__date-wrapper">
+                        <button type='button' onClick={handleShowDatePicker}>
+                            <input
+                                type="date"
+                                className="date-picker__input"
+                                value={selectedDate}
+                                {...register("date")}
+                                onChange={handleDateChange}
+                                style={!showDatePicker ? { display: 'none' } : {}} />
+                        </button>
+                    </div> : <></>}
 
-                <div className="tracker-btn__wrapper">
-                    <SmallButton type="button" value="Add" handleClick={handleAddHoursButton}/>
-                </div>
+
+                    <div className="tracker-btn__wrapper">
+                        <SmallButton type="submit" value={workedHour ? "Change" : "Add"} />
+                        {workedHour ? <SmallButton type="button" value="Delete" handleClick={handleDelete}/> : <></>}
+                    </div>
+                </form>
             </div>
-        </div>
+        </>
     );
 };

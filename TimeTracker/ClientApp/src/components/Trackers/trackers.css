@@ -1,5 +1,12 @@
+.tracker-page-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .tracker-wrapper {
     background: var(--color-white);
+    margin-top: 20px;
 }
 
 .tracker-inner {
@@ -27,6 +34,14 @@
 .set-hours-tracker{
     display: flex;
     align-items: center;
+}
+
+.set-hours-tracker > form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    justify-content: space-evenly;
 }
 
 .timer-tracker {
@@ -58,6 +73,11 @@
 
 .time-range__wrapper {
     width: 50%;
+    display: flex;
+}
+
+.worked-time-range__wrapper {
+    width: 30%;
     display: flex;
 }
 
@@ -107,6 +127,10 @@
 
 .tracker-btn__wrapper > div:last-child > button {
     background: var(--color-red);
+}
+
+.tracker-btn__wrapper > div:first-child > button {
+    background: var(--color-cyan);
 }
 
 .tracker-btn__wrapper > div,
@@ -217,4 +241,12 @@
 .action-active-btn {
     opacity: 1!important;
 
+}
+
+.trackers-separator__wrapper {
+    width: 90%;
+    height: 1.5rem;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto -20px auto ;
 }

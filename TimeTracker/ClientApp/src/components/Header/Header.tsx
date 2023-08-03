@@ -1,52 +1,73 @@
 ﻿import "./Header.css"
-import { ProfileAvatar } from "../UI";
-import {useAppDispatch, useTypedSelector} from "../../hooks";
-import Timer from "@components/UI/Misc/Timer";
-import {useEffect} from "react";
-import {startTimer, stopTimer, tick} from "@redux/slices";
+import { ProfileAvatar, Timer } from "@components/UI";
+import { useAppDispatch, useTypedSelector } from "../../hooks";
+import { useEffect } from "react";
+import { startTimer, resetTimer, tick } from "@redux/slices";
 import { useLocation } from 'react-router-dom'
+import { WorkedTime } from "@redux/types";
+import { GetFormattedUTCDateString, GetFormattedTimeString } from "../../utils";
 
 export const Header = () => {
     const dispatch = useAppDispatch();
-    const authState = useTypedSelector(state => state.auth);
-    const timer = useTypedSelector(state => state.timer);
+    const { user } = useTypedSelector(state => state.auth);
+    const { isRunning, startedAt, hours, minutes, seconds } = useTypedSelector(state => state.timer);
     const isTrackerPage = (useLocation().pathname === '/tracker');
-    
+
     useEffect(() => {
-        if (!isTrackerPage && timer.isRunning) {
+        if (!isTrackerPage && isRunning) {
             const intervalId = setInterval(() => {
                 dispatch(tick());
             }, 1000);
-            
+
             return () => {
                 clearInterval(intervalId);
             }
         }
-    }, [dispatch, timer.isRunning]);
+    }, [dispatch, isRunning]);
 
     const handleStartStopButton = () => {
-        if (!timer.isRunning) {
+        if (!isRunning) {
             dispatch(startTimer());
         } else {
-            dispatch(stopTimer());
+            const startDate = new Date(startedAt!);
+            const stopDate = new Date();
+
+            const startTime: WorkedTime = {
+                hours: startDate.getUTCHours(),
+                minutes: startDate.getUTCMinutes(),
+                seconds: startDate.getUTCSeconds()
+            }
+
+            const endTime: WorkedTime = {
+                hours: stopDate.getUTCHours(),
+                minutes: stopDate.getUTCMinutes(),
+                seconds: stopDate.getUTCSeconds()
+            }
+
+            dispatch(resetTimer({
+                userId: user!.id,
+                date: GetFormattedUTCDateString(stopDate),
+                startTime: GetFormattedTimeString(startTime),
+                endTime: GetFormattedTimeString(endTime)
+            }));
         }
     };
-    
+
     return (
         <header className="header">
             <div className="header-timer__wrapper">
-                {!isTrackerPage && timer.startedAt &&  (
+                {!isTrackerPage && startedAt && (
                     <div className="header-timer__inner">
-                        <div className="header-timer__content" style={!timer.isRunning ? {opacity: '.5'} : {}}>
-                            <Timer hours={timer.hours} minutes={timer.minutes} seconds={timer.seconds}/>
+                        <div className="header-timer__content" style={!isRunning ? { opacity: '.5' } : {}}>
+                            <Timer hours={hours} minutes={minutes} seconds={seconds} />
                         </div>
                         <button className="timer-start-stop__btn" onClick={handleStartStopButton}>
-                            <div className={timer.isRunning ? "timer-stop__icon" : "timer-start__icon"}></div>
+                            <div className={isRunning ? "timer-stop__icon" : "timer-start__icon"}></div>
                         </button>
                     </div>
                 )}
             </div>
-            
+
             <div className="header-profile__wrapper">
                 <div className="header-profile__notifications">
                     <div className="header-profile__notifications-inner">
@@ -55,9 +76,9 @@ export const Header = () => {
                 </div>
 
                 <div className="header-profile__name">
-                    <span>{`${authState.user?.firstName} ${authState.user?.lastName}`}</span>
+                    <span>{`${user?.firstName} ${user?.lastName}`}</span>
                 </div>
-                <ProfileAvatar initials={`${authState.user?.firstName[0]}${authState.user?.lastName[0]}`}/>
+                <ProfileAvatar initials={`${user?.firstName[0]}${user?.lastName[0]}`} />
             </div>
         </header>
 

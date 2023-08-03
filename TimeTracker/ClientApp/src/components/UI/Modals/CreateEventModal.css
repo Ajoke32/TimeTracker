@@ -1,0 +1,27 @@
+
+
+
+.create-event-modal{
+    position: absolute;
+    background-color: #edf2fb;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.input-default{
+    padding: 5px;
+    border-radius: 8px;
+    width: 400px;
+    border: 1px solid lightblue;
+}
+.input-base{
+    height: 40px;
+}
+.text-area-base{
+    height: 200px;
+}
