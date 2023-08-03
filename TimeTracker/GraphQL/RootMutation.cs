@@ -21,8 +21,5 @@ public sealed class RootMutation:ObjectGraphType
 
         Field<WorkedHourMutations>("workedHourMutations")
             .Resolve(_ => new { });
-        
-        Field<CalendarEventMutations>("calendarEventMutation")
-            .Resolve(_ => new { });
     }
 }

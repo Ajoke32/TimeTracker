@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { TrackerTimer } from "@components/Trackers/TrackerTimer";
 import { TrackerSetHours } from "@components/Trackers/TrackerSetHours";
-import { CurrentDateElement } from '..';
 import { WorkedHour } from '@redux/types';
 
 const TimeTracker = ({ workedHour }: { workedHour?: WorkedHour }) => {

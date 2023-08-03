@@ -18,8 +18,6 @@ public class TimeTrackerContext:DbContext
     public DbSet<Vacation> Vacations { get; set; }
     
     public DbSet<UserApprover> Approvers { get; set; }
-    
-    public DbSet<CalendarEvent> CalendarEvents { get; set; }
 
     public DbSet<ApproverVacation> ApproversVacation { get; set; }
 
