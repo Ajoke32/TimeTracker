@@ -1,4 +1,4 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createReducer, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {
     createErrorReducer,
     createPendingReducerWithPayload,
@@ -6,13 +6,14 @@ import {
     defaultState
 } from "./generic";
 import {VacationState} from "../intrerfaces";
-import {Vacation, VacationInputType} from "../types";
+import {Vacation, VacationChangeType, VacationInputType} from "../types";
 
 
 const initialState:VacationState = {
     ...defaultState,
     created:false,
-    vacations:[]
+    vacations:[],
+    vacation:null
 }
 
 const vacationsSlice = createSlice({
@@ -39,7 +40,41 @@ const vacationsSlice = createSlice({
         ((state:VacationState,action:PayloadAction<Vacation[]>)=>{
             state.vacations=action.payload;
         }),
-        fetchUserVacationsFail:createErrorReducer()
+        fetchUserVacationsFail:createErrorReducer(),
+
+        changeVacationState:createPendingReducerWithPayload<typeof initialState,VacationChangeType>(),
+        changeVacationSateSuccess:createSuccessReducerWithPayload<typeof initialState,Vacation>
+        ((state,action)=>{
+           state.vacation=action.payload;
+        }),
+        changeVacationStateFail:createErrorReducer(),
+
+        updateVacation:createPendingReducerWithPayload<typeof initialState,Vacation>(),
+        updateVacationSuccess:createSuccessReducerWithPayload<typeof initialState,Vacation>
+        ((state, action)=>{
+            const upd = action.payload;
+            state.vacations=state.vacations.map(v=>{
+                if(v.id===upd.id){
+                    v=upd;
+                }
+                return v;
+            });
+        }),
+        updateVacationFail:createErrorReducer(),
+
+        deleteVacation:createPendingReducerWithPayload<typeof initialState,Vacation>(),
+        deleteVacationSuccess:createSuccessReducerWithPayload<typeof initialState,Vacation>
+        ((state,action)=>{
+            state.vacations=state.vacations.filter(v=>v.id!==action.payload.id);
+        }),
+        deleteVacationFail:createErrorReducer(),
+
+        fetchVacationById:createPendingReducerWithPayload<typeof initialState,number>(),
+        fetchVacationByIdSuccess:createSuccessReducerWithPayload<typeof initialState,Vacation>
+        ((state,action)=>{
+            state.vacation=action.payload;
+        }),
+        fetchVacationByIdFail:createErrorReducer()
     }
 });
 
@@ -52,4 +87,11 @@ export const  {createVacation,
     updateVacationStateSuccess,
     updateVacationState,fetchUserVacationsSuccess
     ,fetchUserVacationsFail
-    ,fetchUserVacations} =  vacationsSlice.actions;
+    ,fetchUserVacations,changeVacationState
+    ,changeVacationStateFail
+    ,changeVacationSateSuccess,
+    updateVacationSuccess,updateVacationFail
+    ,updateVacation
+    ,deleteVacationSuccess,fetchVacationById,
+    deleteVacationFail,fetchVacationByIdFail,
+    deleteVacation,fetchVacationByIdSuccess} =  vacationsSlice.actions;

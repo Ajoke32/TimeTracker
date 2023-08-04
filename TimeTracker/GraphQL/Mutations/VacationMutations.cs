@@ -12,31 +12,21 @@ namespace TimeTracker.GraphQL.Mutations;
 
 public sealed class VacationMutations:ObjectGraphType
 {
+    private readonly IGenericRepository<Vacation> _repos;
     public VacationMutations(IUnitOfWorkRepository uow)
     {
+        _repos = uow.GenericRepository<Vacation>();
         Field<VacationType>("create")
             .Argument<VacationInputType>("vacation")
             .ResolveAsync(async _ =>
             {
                 var vacation = _.GetArgument<Vacation>("vacation");
-
-                var user = await uow.GenericRepository<User>()
-                    .FindAsync(u => u.Id == vacation.UserId);
-
-                if (user!.VacationDays == 0)
-                {
-                    throw new ValidationError("The available days have expired");
-                }
                 
-                var diff = vacation.EndDate - vacation.StartDate;
-                
-                if (diff.Days > user!.VacationDays)
+                if (vacation.StartDate>DateTime.Now)
                 {
                     throw new ValidationError("Vacation period invalid");
                 }
-                
-                user.VacationDays -= diff.Days;
-                
+
                 var res = await uow.GenericRepository<Vacation>()
                     .CreateAsync(vacation);
                 
@@ -45,7 +35,7 @@ public sealed class VacationMutations:ObjectGraphType
                 return res;
             });
 
-        Field<bool?>("updateState",nullable:true)
+        Field<VacationType>("updateState")
             .Argument<int>("vacationId")
             .ResolveAsync(async _ =>
             {
@@ -55,11 +45,11 @@ public sealed class VacationMutations:ObjectGraphType
                     .FindAsync(v => v.Id == id,relatedData:"ApproverVacations")??throw new ValidationError("Vacation not found");
 
 
-                vacation.VacationState = IsVacationConfirmed(vacation.ApproverVacations);
-                
+                vacation.VacationState = GetVacationState(vacation.ApproverVacations);
+                vacation.HaveAnswer = true;
                 await uow.SaveAsync();
                 
-                return vacation.VacationState;
+                return vacation;
             });
 
 
@@ -73,29 +63,70 @@ public sealed class VacationMutations:ObjectGraphType
                 await uow.SaveAsync();
                 return updated;
             });
+
+        Field<VacationType>("changeState")
+            .Argument<int>("vacationId")
+            .Argument<VacationState>("state")
+            .ResolveAsync(async _ =>
+            {
+                var id = _.GetArgument<int>("vacationId");
+                var state = _.GetArgument<VacationState>("state");
+                
+                var vacation = await uow.GenericRepository<Vacation>()
+                    .FindAsync(v => v.Id == id);
+                
+                if (vacation == null) { return null; }
+                
+                vacation.VacationState = state;
+                await uow.SaveAsync();
+                return vacation;
+            });
+
+        Field<VacationType>("deleteById")
+            .Argument<int>("vacationId")
+            .ResolveAsync(async _ =>
+            {
+                var id = _.GetArgument<int>("vacationId");
+                var vacation = await _repos.FindAsync(v => v.Id == id);
+                if (vacation == null)
+                {
+                    return null;
+                }
+                await _repos.DeleteAsync(vacation);
+                
+                await uow.SaveAsync();
+                
+                return vacation;
+            });
+
+        Field<VacationType>("delete")
+            .Argument<VacationInputType>("vacation")
+            .ResolveAsync(async _ =>
+            {
+                var vacation = _.GetArgument<Vacation>("vacation");
+                
+                await _repos.DeleteAsync(vacation);
+
+                await uow.SaveAsync();
+
+                return vacation;
+            });
     }
 
 
-    private bool? IsVacationConfirmed(List<ApproverVacation> avs)
+    private VacationState GetVacationState(List<ApproverVacation> avs)
     {
-        int approvals=0, rejections=0, pending=0;
+        var approvals=0;
         
         foreach (var av in avs)
         {
             if (av.IsApproved == false)
-                return false;
+                return VacationState.Declined;
             
             if (av.IsApproved == true)
                 approvals++;
-            else
-                pending++;
-        }
-
-        if (pending > 0)
-        {
-            return null;
         }
         
-        return approvals==avs.Count;
+        return approvals == avs.Count ? VacationState.Approved : VacationState.Pending;
     }
 } 

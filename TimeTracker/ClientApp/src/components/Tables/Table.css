@@ -8,16 +8,7 @@
     border-radius: 8px;
 }
 
-.declined{
-    color:var(--color-red)
-}
-.approved{
-    color: #70e000;
-}
 
-.pending{
-    color:#ffa200;
-}
 
 .head{
     background-color: #caf0f8;
@@ -40,3 +31,4 @@
     border-radius: 8px;
     padding: 10px;
 }
+

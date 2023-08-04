@@ -1,4 +1,5 @@
 ﻿using GraphQL.Types;
+using TimeTracker.Enums;
 using TimeTracker.Models;
 
 namespace TimeTracker.GraphQL.Types.InputTypes.VacationInput;
@@ -7,8 +8,8 @@ public sealed class VacationInputType: InputObjectGraphType<Vacation>
 {
     public VacationInputType()
     {
-        Field(v => v.UserId).Description("user sender id");
-
+        Field(x=>x.Id).Description("vacation id");
+        Field(x=>x.UserId).Description("vacation user id");
         Field(v => v.StartDate)
             .Type(new DateGraphType())
             .Description("vacation start date");
@@ -20,7 +21,11 @@ public sealed class VacationInputType: InputObjectGraphType<Vacation>
         Field(v=>v.Message,nullable:true).Description("vacation message");
 
         Field(v => v.VacationState, nullable: true)
-            .DefaultValue(null)
+            .DefaultValue(VacationState.Pending)
             .Description("vacation state");
+
+        Field(x => x.IsDeleted,nullable:true);
+        Field(x => x.DeletedAt,nullable:true);
+        Field(x => x.HaveAnswer,nullable:true);
     }
 }

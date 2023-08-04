@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-size: 16px;
+    /*font-size: 16px;*/
 }
 
 #root {
@@ -71,4 +71,24 @@ label {
 
 .pointer{
     cursor: pointer;
+}
+
+.declined{
+    color:var(--color-red)
+}
+.approved{
+    color: #70e000;
+}
+
+.pending{
+    color:#ffa200;
+}
+.archived{
+    color: #dc6161;
+}
+.canceled{
+    color: #ff0000;
+}
+.edited{
+    color: #0aa9ff;
 }
