@@ -1,44 +1,24 @@
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import "./ApproversTable.css"
 import "./Table.css"
-import moment from "moment";
 import {useAppDispatch, useTypedSelector} from "../../hooks";
-import {fetchRequests, updateVacationState} from "../../redux";
+import {fetchRequests} from "../../redux";
 import {Loader} from "../UI";
 import MessageModal from "@components/UI/Modals/MessageModal.tsx";
-import {modalOpen} from "@redux/slices/messageModalSlice.ts";
-import {getStringVacationState} from "../../utils/vacationHelper.ts";
-import {VacationStateEnum} from "@redux/types";
-import {BsThreeDots} from 'react-icons/bs'
+import {getApproverVacationString, getStringVacationState, isVacationAnswered} from "../../utils/vacationHelper.ts";
 
 export const VacationsRequestTable = () => {
 
     const dispatch = useAppDispatch()
 
-    const [approveId,setApproveId] = useState<number>();
-
-    const {vacationRequests,updated,error,loading} =
+    const {vacationRequests,error,loading} =
         useTypedSelector(s=>s.approverVacations);
-
     const userId =
         useTypedSelector(s=>s.auth.user?.id);
 
     useEffect(()=>{
         dispatch(fetchRequests(userId!))
     },[])
-
-    useEffect(()=>{
-        if(updated){
-            dispatch(updateVacationState(approveId!));
-        }
-    },[updated])
-
-
-    function approve(id:number,state:boolean){
-        setApproveId(id);
-        dispatch(modalOpen({userId:userId!,vacationId:id,state:state}));
-    }
-
 
 
     return (
@@ -53,35 +33,16 @@ export const VacationsRequestTable = () => {
                     </div>
                     {vacationRequests.length===0&&<div className="empty info">You have no requests</div>}
                     {vacationRequests.map(a=>{
-                        const diff = moment(a.vacation.endDate).diff(a.vacation.startDate);
                         return <div key={a.id} className="request-item">
                             <span>{a.vacation.user.firstName} {a.vacation.user.lastName}</span>
                             <span>{a.vacation.user.email}</span>
-                            {a.vacation.vacationState!==VacationStateEnum.Canceled?
-                                <div className="btn-group">
-                                        <button onClick={()=>approve(a.vacation.id,false)} className="btn-base btn-decline">
-                                            Decline
-                                        </button>
-                                        <button onClick={()=>approve(a.vacation.id,true)} className="btn-base btn-confirm">
-                                            Approve
-                                        </button>
-                                </div>
-                            :<div className="btn-group">
-                                    <button style={{width:"180px"}} onClick={()=>approve(a.vacation.id,true)}
-                                            className="btn-base btn-decline">
-                                        Archive
-                                    </button>
-                                </div>}
-                            <span className={a.vacation.vacationState.toLowerCase()}>
-                                        {getStringVacationState(a.vacation.vacationState)}
+                            <span className={a.isDeleted?"archived":getApproverVacationString(a.isApproved!,'pending')}>
+                                        {!a.isDeleted?getApproverVacationString(a.isApproved!,'Pending',true):"Archived"}
                                     </span>
-                            <button className="btn-base btn-info more-btn">more</button>
-                            <div className="more-info">
-                                <span>Vacation for: {moment(diff).format("D")} days</span>
-                                <span>Start date: {moment(a.vacation.startDate).format("M/D/Y")}</span>
-                                <span>End date: {moment(a.vacation.endDate).format("M/D/Y")}</span>
-                                <span>Message: {a.vacation.message}</span>
-                            </div>
+                            <a style={{textDecoration:"none"}} className="btn-base btn-info more-btn"
+                               href={`/vacation/details/${a.id}`}>
+                                Details
+                            </a>
                         </div>
                     })}
 

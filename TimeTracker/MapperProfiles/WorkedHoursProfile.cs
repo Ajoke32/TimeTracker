@@ -12,10 +12,7 @@ public class WorkedHourProfile : Profile
         CreateMap<WorkedHourInputDto, WorkedHour>()
             .ForMember(x => x.WorkedTime,
                 o =>
-                    o.MapFrom((src, dest) =>
-                    {
-                        return dest.WorkedTime.Add(src.WorkedTime.ToTimeSpan());
-                    }))
+                    o.MapFrom((src, dest) => dest.WorkedTime.Add(src.WorkedTime.ToTimeSpan())))
             .ForAllMembers(o => o.UseDestinationValue());
 
         CreateMap<WorkedHourUpdateDto, WorkedHour>()

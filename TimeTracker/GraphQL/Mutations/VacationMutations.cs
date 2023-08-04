@@ -21,24 +21,12 @@ public sealed class VacationMutations:ObjectGraphType
             .ResolveAsync(async _ =>
             {
                 var vacation = _.GetArgument<Vacation>("vacation");
-
-                var user = await uow.GenericRepository<User>()
-                    .FindAsync(u => u.Id == vacation.UserId);
-
-                if (user!.VacationDays == 0)
-                {
-                    throw new ValidationError("The available days have expired");
-                }
                 
-                var diff = vacation.EndDate - vacation.StartDate;
-                
-                if (diff.Days > user!.VacationDays)
+                if (vacation.StartDate>DateTime.Now)
                 {
                     throw new ValidationError("Vacation period invalid");
                 }
-                
-                user.VacationDays -= diff.Days;
-                
+
                 var res = await uow.GenericRepository<Vacation>()
                     .CreateAsync(vacation);
                 

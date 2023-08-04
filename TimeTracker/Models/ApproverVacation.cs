@@ -1,6 +1,8 @@
-﻿namespace TimeTracker.Models;
+﻿using TimeTracker.Utils.SoftDelete;
 
-public class ApproverVacation
+namespace TimeTracker.Models;
+
+public class ApproverVacation:SoftDeleteBase
 {
     public int Id { get; set; }
 

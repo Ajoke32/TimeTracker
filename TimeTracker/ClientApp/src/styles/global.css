@@ -83,7 +83,9 @@ label {
 .pending{
     color:#ffa200;
 }
-
+.archived{
+    color: #dc6161;
+}
 .canceled{
     color: #ff0000;
 }

@@ -5,7 +5,7 @@ import {Vacation, VacationChangeType, VacationInputType} from "../types";
 import {
     AddVacationQuery,
     ChangeVacationState, DeleteVacation,
-    FetchUserVacations,
+    FetchUserVacations, FetchVacationById,
     UpdateVacation,
     UpdateVacationState
 } from "../queries";
@@ -16,11 +16,12 @@ import {
     createVacationFail,
     createVacationSuccess, deleteVacationFail, deleteVacationSuccess,
     fetchUserVacationsFail,
-    fetchUserVacationsSuccess, updateVacationFail,
+    fetchUserVacationsSuccess, fetchVacationByIdFail, fetchVacationByIdSuccess, updateVacationFail,
     updateVacationStateFail,
     updateVacationStateSuccess, updateVacationSuccess,
 } from "../slices";
 import { GetErrorMessage } from "../../utils";
+import {act} from "react-dom/test-utils";
 
 const addVacationEpic: Epic = (action: Observable<PayloadAction<VacationInputType>>, state) =>
     action.pipe(
@@ -56,6 +57,7 @@ const updateVacationStateEpic: Epic = (action: Observable<PayloadAction<number>>
                 }),
                 catchError((e: Error) => {
                     console.log(e);
+                    console.log("errr");
                     return of(updateVacationStateFail("unexpected error"))
                 })
             )
@@ -140,4 +142,25 @@ const deleteVacationEpic:Epic=(action$:Observable<PayloadAction<Vacation>>)=>
                 )
         )
     )
-export const vacationEpics = [deleteVacationEpic,updateVacationEpic,changeVacationStateEpic,fetchUserVacationsEpic,updateVacationStateEpic,addVacationEpic]
+
+const fetchVacationByIdEpic:Epic=(action$:Observable<PayloadAction<number>>)=>
+    action$.pipe(
+        ofType('vacation/fetchVacationById'),
+        mergeMap(action$=>
+            FetchVacationById(action$.payload)
+                .pipe(
+                    map(res=>{
+                        if (res.response.errors != null) {
+                            return fetchVacationByIdFail(res.response.errors[0].message)
+                        }
+                        return fetchVacationByIdSuccess(res.response.data.vacationQuery.vacation);
+                    }),
+                    catchError((e: Error) => {
+                        console.log(e);
+                        return of(fetchVacationByIdFail("unexpected error"))
+                    })
+                )
+        )
+    )
+export const vacationEpics = [deleteVacationEpic,updateVacationEpic,
+    changeVacationStateEpic,fetchVacationByIdEpic,fetchUserVacationsEpic,updateVacationStateEpic,addVacationEpic]

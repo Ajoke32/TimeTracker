@@ -1,4 +1,4 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createReducer, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {
     createErrorReducer,
     createPendingReducerWithPayload,
@@ -12,7 +12,8 @@ import {Vacation, VacationChangeType, VacationInputType} from "../types";
 const initialState:VacationState = {
     ...defaultState,
     created:false,
-    vacations:[]
+    vacations:[],
+    vacation:null
 }
 
 const vacationsSlice = createSlice({
@@ -43,14 +44,8 @@ const vacationsSlice = createSlice({
 
         changeVacationState:createPendingReducerWithPayload<typeof initialState,VacationChangeType>(),
         changeVacationSateSuccess:createSuccessReducerWithPayload<typeof initialState,Vacation>
-        ((state:VacationState,action:PayloadAction<Vacation>)=>{
-            const updated = action.payload;
-           state.vacations = state.vacations.map(v=>{
-                if(v.id===updated.id){
-                    v.vacationState=updated.vacationState;
-                }
-               return v;
-           });
+        ((state,action)=>{
+           state.vacation=action.payload;
         }),
         changeVacationStateFail:createErrorReducer(),
 
@@ -72,7 +67,14 @@ const vacationsSlice = createSlice({
         ((state,action)=>{
             state.vacations=state.vacations.filter(v=>v.id!==action.payload.id);
         }),
-        deleteVacationFail:createErrorReducer()
+        deleteVacationFail:createErrorReducer(),
+
+        fetchVacationById:createPendingReducerWithPayload<typeof initialState,number>(),
+        fetchVacationByIdSuccess:createSuccessReducerWithPayload<typeof initialState,Vacation>
+        ((state,action)=>{
+            state.vacation=action.payload;
+        }),
+        fetchVacationByIdFail:createErrorReducer()
     }
 });
 
@@ -89,4 +91,7 @@ export const  {createVacation,
     ,changeVacationStateFail
     ,changeVacationSateSuccess,
     updateVacationSuccess,updateVacationFail
-    ,updateVacation,deleteVacationSuccess,deleteVacationFail,deleteVacation} =  vacationsSlice.actions;
+    ,updateVacation
+    ,deleteVacationSuccess,fetchVacationById,
+    deleteVacationFail,fetchVacationByIdFail,
+    deleteVacation,fetchVacationByIdSuccess} =  vacationsSlice.actions;

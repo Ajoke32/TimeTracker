@@ -23,8 +23,8 @@ export const VacationsTable = () => {
     },[]);
 
     function handleSelect(vacation:Vacation){
-        setIsOpen(true);
         setClicked(vacation);
+        setIsOpen(true);
     }
     function handleCancel(){
         dispatch(changeVacationState({id:clicked?.id!,state:VacationStateEnum.Canceled}));
@@ -39,7 +39,7 @@ export const VacationsTable = () => {
 
     return (
         <div style={{display:"flex",justifyContent:"center",marginTop:"80px"}}>
-            <CancelVacationModal setVacation={setClicked} vacation={clicked!} onEdit={handleVacationEdit} onSuccess={handleCancel} isOpen={isOpen} />
+            <CancelVacationModal clicked={clicked!} setIsOpen={setIsOpen} setVacation={setClicked} vacation={clicked!} onEdit={handleVacationEdit} onSuccess={handleCancel} isOpen={isOpen} />
             <span>{error&&error}</span>
             {loading?<Loader/>:
                 <div className="table-wrapper">
@@ -63,7 +63,7 @@ export const VacationsTable = () => {
                             <span className={v.vacationState===VacationStateEnum.Edited?"pending":v.vacationState.toLowerCase()}>
                                 {v.vacationState===VacationStateEnum.Edited?"Pending":getStringVacationState(v.vacationState)}
                             </span>
-                            {v.vacationState===VacationStateEnum.Canceled||v.haveAnswer?
+                            {(v.haveAnswer||v.vacationState===VacationStateEnum.Canceled)?
                                 <span className={"neutral"}>No action</span>
                                : <button onClick={() => handleSelect(v)} style={{marginRight: "5px"}}
                                          className="btn-base btn-decline">

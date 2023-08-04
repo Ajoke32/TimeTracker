@@ -23,5 +23,9 @@ public sealed class VacationInputType: InputObjectGraphType<Vacation>
         Field(v => v.VacationState, nullable: true)
             .DefaultValue(VacationState.Pending)
             .Description("vacation state");
+
+        Field(x => x.IsDeleted,nullable:true);
+        Field(x => x.DeletedAt,nullable:true);
+        Field(x => x.HaveAnswer,nullable:true);
     }
 }

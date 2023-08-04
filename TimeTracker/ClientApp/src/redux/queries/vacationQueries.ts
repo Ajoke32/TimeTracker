@@ -20,7 +20,7 @@ export function AddVacationQuery(vacation:VacationInputType) {
 
 export function FetchVacationsRequest(id:number){
     return AjaxQuery<QueryStructure<{ approverVacationQuery: { requests:ApproverVacation[]}}>>(
-        'query GetRequests($userId:Int!){approverVacationQuery{requests(userId:$userId){id,isApproved,vacation{vacationState,id,endDate,message,startDate,user{firstName,lastName,email}}}}}',
+        'query GetRequests($userId:Int!){approverVacationQuery{requests(userId:$userId){id,isApproved,isDeleted,vacation{vacationState,id,endDate,message,startDate,user{firstName,lastName,email}}}}}',
         {userId:id}
     )
 }
@@ -28,7 +28,7 @@ export function FetchVacationsRequest(id:number){
 export function UpdateVacationState(id:number){
 
     return AjaxQuery<QueryStructure<{ vacationMutation:{updateState:{id:number}  } }>>(
-        'mutation UpdateState($id:Int!){vacationMutation{updateState(vacationId:$id)}}',
+        'mutation UpdateState($id:Int!){vacationMutation{updateState(vacationId:$id){id}}}',
         {id:id},
     )
 }
@@ -36,7 +36,7 @@ export function UpdateVacationState(id:number){
 export function FetchUserVacations(userId:number){
 
     return AjaxQuery<QueryStructure<{ vacationQuery:{userVacations:Vacation[]} }>>(
-        'query GetUserVacations($id:Int!){vacationQuery{userVacations(userId:$id){id,vacationState,haveAnswer,endDate,startDate,message}}}',
+        'query GetUserVacations($id:Int!){vacationQuery{userVacations(userId:$id){id,vacationState,deletedAt,isDeleted,haveAnswer,endDate,startDate,message}}}',
         {id:userId}
     )
 }
@@ -61,5 +61,12 @@ export function DeleteVacation(vacation:Vacation){
     return AjaxQuery<QueryStructure<{ vacationMutation:{delete:Vacation} }>>(
         'mutation ArchiveVacation($vacation:VacationInputType!){vacationMutation{delete(vacation:$vacation){id}}}',
         {vacation:vacation}
+    )
+}
+
+export function FetchVacationById(id:number){
+    return AjaxQuery<QueryStructure<{ vacationQuery:{vacation:Vacation} }>>(
+        'query VacationById($id:Int!){vacationQuery{vacation(id:$id){id,startDate,endDate,vacationState,message,user{firstName,lastName,email,vacationDays}}}}',
+        {id:id}
     )
 }

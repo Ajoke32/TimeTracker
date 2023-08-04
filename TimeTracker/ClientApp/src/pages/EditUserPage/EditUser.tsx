@@ -1,5 +1,5 @@
 ﻿import { UserForm, Inputs } from "@components/UserForms";
-import { useAppDispatch, useTypedSelector } from "@hooks/customHooks";
+import { useAppDispatch } from "@hooks/customHooks";
 import { useEffect } from "react";
 import { editUser, fetchUser } from "@redux/slices";
 import { UserEditType, UserType } from "@redux/types";
