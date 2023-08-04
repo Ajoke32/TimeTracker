@@ -10,15 +10,15 @@ public class WorkedHourProfile : Profile
     public WorkedHourProfile()
     {
         CreateMap<WorkedHourInputDto, WorkedHour>()
-            .ForMember(x => x.WorkedTime,
-                o =>
-                    o.MapFrom((src, dest) => dest.WorkedTime.Add(src.WorkedTime.ToTimeSpan())))
-            .ForAllMembers(o => o.UseDestinationValue());
+            .ForMember(x => x.TotalTime,
+            o =>
+                o.MapFrom(src => TimeOnly.FromTimeSpan(src.EndTime - src.StartTime)));
 
         CreateMap<WorkedHourUpdateDto, WorkedHour>()
-            .ForMember(x => x.WorkedTime,
-                o =>
-                    o.MapFrom(dto => dto.WorkedTime))
-            .ForAllMembers(o => o.UseDestinationValue());
+            .ForMember(x => x.Id,
+                o => o.UseDestinationValue())
+            .ForMember(x => x.TotalTime,
+            o =>
+                o.MapFrom(src => TimeOnly.FromTimeSpan(src.EndTime - src.StartTime)));
     }
 }

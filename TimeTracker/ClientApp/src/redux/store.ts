@@ -3,12 +3,12 @@ import { createEpicMiddleware } from 'redux-observable';
 import {
   user, auth, users, timer,
   workedHours, approvers, vacation,
-  approverVacations, messageModalReducer
+  approverVacations, messageModalReducer,
+  calendar
 } from '@redux/slices';
 import { rootEpic } from "./epics"
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { calendarEvent } from "@redux/slices/calendarEventSlice.ts";
 
 const middleware = createEpicMiddleware();
 
@@ -27,8 +27,8 @@ const rootReducer = combineReducers({
   approverVacations: approverVacations,
   messageModal: messageModalReducer,
   timer: timer,
-  workedHours: workedHours,
-  calendarEvent: calendarEvent
+  calendar: calendar,
+  workedHours: workedHours
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

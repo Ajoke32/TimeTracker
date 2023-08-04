@@ -23,12 +23,15 @@ export const Tracker = () => {
                     <hr className="horizontal-line " />
                 </div>
                 {loading
-                    ? <Loader />
+                    ?
+                    <div className="loader-wrapper">
+                        <Loader />
+                    </div>
                     : workedHours.map((wh) => (
-                        <TimeTracker workedHour={wh} key={wh.id}/>
+                        <TimeTracker workedHour={wh} key={wh.id} />
                     ))
                 }
             </div>
-        </div>
+        </div >
     );
 };

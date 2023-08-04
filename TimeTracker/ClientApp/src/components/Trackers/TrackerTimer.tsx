@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { startTimer, resetTimer, tick, stopTimer } from '../../redux';
+import { startTimer, resetTimer, tick, resetTimerSuccess } from '../../redux';
 import "./trackers.css";
-import { SmallButton, CurrentDateElement, Timer } from "@components/UI";
+import { SmallButton, CurrentDateElement, Timer, WorkedHours } from "@components/UI";
 import { useTypedSelector } from "@hooks/customHooks";
-import { GetFormattedDateString, GetFormattedTimeString, GetTimeFromString } from '../../utils/dateTimeHelpers';
-import { WorkedHour } from '@redux/types';
+import { GetFormattedUTCDateString, GetFormattedTimeString, GetTimeFromString } from '../../utils';
+import { WorkedHour, WorkedTime } from '@redux/types';
 
 export const TrackerTimer = ({ workedHour }: { workedHour?: WorkedHour }) => {
-    
+
     if (workedHour) {
-        const time = GetTimeFromString(workedHour.workedTime);
+        const time = GetTimeFromString(workedHour.totalTime);
 
         return (
             <>
@@ -19,6 +19,7 @@ export const TrackerTimer = ({ workedHour }: { workedHour?: WorkedHour }) => {
                     <div className="tracker-content__inner">
                         <div className="timer-tracker">
                             <Timer hours={time.hours} minutes={time.minutes} seconds={time.seconds} />
+                            <WorkedHours workedHour={workedHour} />
                         </div>
                     </div>
                 </div>
@@ -28,7 +29,7 @@ export const TrackerTimer = ({ workedHour }: { workedHour?: WorkedHour }) => {
 
     const dispatch = useDispatch();
 
-    const { hours, minutes, seconds, isRunning } = useTypedSelector((state) => state.timer);
+    const { hours, minutes, seconds, isRunning, startedAt } = useTypedSelector((state) => state.timer);
     const { user } = useTypedSelector(state => state.auth)
 
     useEffect(() => {
@@ -43,40 +44,57 @@ export const TrackerTimer = ({ workedHour }: { workedHour?: WorkedHour }) => {
         }
     }, [dispatch, isRunning]);
 
-    const handleStartStopButton = () => {
+    const handleStartButton = () => {
         if (!isRunning) {
             dispatch(startTimer());
-        } else {
-            dispatch(stopTimer());
         }
     };
 
     const handleStopButton = () => {
+        const startDate = new Date(startedAt!);
+        const stopDate = new Date();
+
+        const startTime: WorkedTime = {
+            hours: startDate.getUTCHours(),
+            minutes: startDate.getUTCMinutes(),
+            seconds: startDate.getUTCSeconds()
+        }
+
+        const endTime: WorkedTime = {
+            hours: stopDate.getUTCHours(),
+            minutes: stopDate.getUTCMinutes(),
+            seconds: stopDate.getUTCSeconds()
+        }
+
         dispatch(resetTimer({
             userId: user!.id,
-            date: GetFormattedDateString(new Date()),
-            workedTime: GetFormattedTimeString({ hours, minutes, seconds })
+            date: GetFormattedUTCDateString(stopDate),
+            startTime: GetFormattedTimeString(startTime),
+            endTime: GetFormattedTimeString(endTime)
         }));
+      
     }
 
     return (
         <>
             <CurrentDateElement date={new Date()} />
             <div className="tracker-content__wrapper">
-            <div className="tracker-content__inner">
-                <div className="timer-tracker">
-                    <Timer
-                        hours={hours}
-                        minutes={minutes}
-                        seconds={seconds}
-                    />
-                    <div className="tracker-btn__wrapper">
-                        <SmallButton type="button" value={isRunning ? "Pause" : "Start"} handleClick={handleStartStopButton} />
-                        <SmallButton type="button" value="Stop" handleClick={handleStopButton} />
+                <div className="tracker-content__inner">
+                    <div className="timer-tracker">
+                        <Timer
+                            hours={hours}
+                            minutes={minutes}
+                            seconds={seconds}
+                        />
+                        <div className="tracker-btn__wrapper">
+                            {isRunning
+                                ? <SmallButton type="button" value="Stop" handleClick={handleStopButton} />
+                                : <SmallButton type="button" value="Run" handleClick={handleStartButton} />
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         </>
     );
 };

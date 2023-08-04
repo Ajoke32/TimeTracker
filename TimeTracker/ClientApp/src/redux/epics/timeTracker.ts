@@ -1,10 +1,10 @@
 import { Epic, ofType } from "redux-observable";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { catchError, map, mergeMap, Observable, of } from "rxjs";
-import { SetWorkedHoursType, UpdateWorkedHoursType } from '@redux/types';
+import { CreateWorkedHourType, UpdateWorkedHourType, WorkedHour } from '@redux/types';
 import {
-    SetWorkedHoursQuery, UpdateWorkedHoursQuery,
-    FetchWorkedHoursQuery, DeleteWorkedHoursQuery, CreateWorkedHoursQuery
+    UpdateWorkedHoursQuery, FetchWorkedHoursQuery,
+    DeleteWorkedHoursQuery, CreateWorkedHoursQuery
 } from "@redux/queries";
 import {
     createWorkedHourFail,
@@ -20,7 +20,7 @@ import {
 } from '../slices';
 import { GetErrorMessage } from "../../utils";
 
-export const createWorkedHourEpic: Epic = (action: Observable<PayloadAction<SetWorkedHoursType>>, state) =>
+export const createWorkedHourEpic: Epic = (action: Observable<PayloadAction<CreateWorkedHourType>>, state) =>
     action.pipe(
         ofType("workedHours/createWorkedHour"),
         mergeMap(action =>
@@ -30,8 +30,7 @@ export const createWorkedHourEpic: Epic = (action: Observable<PayloadAction<SetW
                         const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
                         return createWorkedHourFail(errorMessage)
                     }
-                    console.log(resp.response)
-                    return createWorkedHourSuccess(resp.response.data.workedHoursMutations.create);
+                    return createWorkedHourSuccess(resp.response.data.workedHourMutations.create);
                 }),
                 catchError((e: Error) => {
                     console.log(e)
@@ -41,26 +40,34 @@ export const createWorkedHourEpic: Epic = (action: Observable<PayloadAction<SetW
         )
     );
 
-export const setWorkedHourEpic: Epic = (action: Observable<PayloadAction<SetWorkedHoursType>>, state) =>
+export const resetTimerEpic: Epic = (action: Observable<PayloadAction<CreateWorkedHourType>>, state) =>
     action.pipe(
         ofType("timer/resetTimer"),
         mergeMap(action =>
-            SetWorkedHoursQuery(action.payload).pipe(
+            CreateWorkedHoursQuery(action.payload).pipe(
                 mergeMap(async resp => {
+
                     if (resp.response.errors != null) {
                         const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
                         return resetTimerFail(errorMessage)
                     }
-                    console.log(resp.response)
-                    return resetTimerSuccess(resp.response.data.workedHoursMutations.set);
+                    return resetTimerSuccess(resp.response.data.workedHourMutations.create);
                 }),
                 catchError((e: Error) => {
+                    console.log(e)
                     return of(resetTimerFail("Unexpected error"))
                 })
             ),
         )
     );
 
+export const resetTimerSuccessEpic: Epic = (action: Observable<PayloadAction<WorkedHour>>, state) =>
+action.pipe(
+    ofType("timer/resetTimerSuccess"),
+    mergeMap(action => {
+        return of(createWorkedHourSuccess(action.payload));
+    })
+)
 
 export const fetchWorkedHoursEpic: Epic = (action: Observable<PayloadAction<number>>, state) =>
     action.pipe(
@@ -82,7 +89,7 @@ export const fetchWorkedHoursEpic: Epic = (action: Observable<PayloadAction<numb
         )
     );
 
-export const editWorkedHourEpic: Epic = (action: Observable<PayloadAction<UpdateWorkedHoursType>>, state) =>
+export const editWorkedHourEpic: Epic = (action: Observable<PayloadAction<UpdateWorkedHourType>>, state) =>
     action.pipe(
         ofType("workedHours/editWorkedHour"),
         mergeMap(action =>
@@ -93,9 +100,7 @@ export const editWorkedHourEpic: Epic = (action: Observable<PayloadAction<Update
                             const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
                             return editWorkedHourFail(errorMessage)
                         }
-                        console.log("successfully");
-                        console.log(resp.response)
-                        return editWorkedHourSuccess();
+                        return editWorkedHourSuccess(resp.response.data.workedHourMutations.update);
                     }),
                     catchError((e: Error) => {
                         console.log(e);
@@ -116,10 +121,11 @@ export const deleteWorkedHourEpic: Epic = (action: Observable<PayloadAction<numb
                         if (res.response.errors != null) {
                             return deleteWorkedHourFail(res.response.errors[0].message)
                         }
-                        console.log(res.response)
-                        return deleteWorkedHourSuccess();
+                        return deleteWorkedHourSuccess(res.response.data.workedHourMutations.delete);
                     }),
                     catchError((e: Error) => of(deleteWorkedHourFail("error")))
                 )
         )
     )
+
+export const workedHourEpics = [fetchWorkedHoursEpic, createWorkedHourEpic, editWorkedHourEpic, deleteWorkedHourEpic, resetTimerEpic, resetTimerSuccessEpic]

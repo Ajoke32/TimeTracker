@@ -18,8 +18,6 @@ public class TimeTrackerContext:DbContext
     public DbSet<Vacation> Vacations { get; set; }
     
     public DbSet<UserApprover> Approvers { get; set; }
-    
-    public DbSet<CalendarEvent> CalendarEvents { get; set; }
 
     public DbSet<ApproverVacation> ApproversVacation { get; set; }
 
@@ -54,7 +52,21 @@ public class TimeTrackerContext:DbContext
             );
         
         modelBuilder.Entity<WorkedHour>()
-            .Property(a => a.WorkedTime)
+            .Property(a => a.StartTime)
+            .HasConversion(
+                v => v.ToTimeSpan(),
+                v => TimeOnly.FromTimeSpan(v)
+            );
+        
+        modelBuilder.Entity<WorkedHour>()
+            .Property(a => a.EndTime)
+            .HasConversion(
+                v => v.ToTimeSpan(),
+                v => TimeOnly.FromTimeSpan(v)
+            );
+
+        modelBuilder.Entity<WorkedHour>()
+            .Property(a => a.TotalTime)
             .HasConversion(
                 v => v.ToTimeSpan(),
                 v => TimeOnly.FromTimeSpan(v)
