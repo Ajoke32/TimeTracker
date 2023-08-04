@@ -11,6 +11,7 @@ import { Permission } from '@redux/enums';
 import { VacationsTable } from "@components/Tables";
 import { Tracker } from "../TrackerPage/Tracker";
 import Calendar from "../CalendarPage/Calendar";
+import VacationDetails from "@components/Cards/VacationDetails.tsx";
 
 export const AppRoutes = () => {
   const state = useTypedSelector((state) => state.auth);
