@@ -55,7 +55,6 @@
 
 
 .timer-wrapper {
-    width: 40%;
     display: flex;
 }
 
@@ -79,16 +78,11 @@
 
 .current-date__wrapper {
     display: flex;
-    width: 25%;
-    margin-left: 2rem;
     justify-content: center;
     flex-direction: column;
 }
 
-.current-date__wrapper > span:first-child {
-    font-size: .9rem;
-    font-weight: 400;
-    opacity: .8;
-    margin-bottom: 5px;
+.current-date__wrapper > span {
+    text-wrap: none;
 }
 

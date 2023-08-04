@@ -23,7 +23,6 @@ export interface UsersSliceState extends DefaultState {
 
 export interface TimerSliceState extends DefaultState {
     startedAt: number | null;
-    pausedAt: number | null;
     hours: number;
     minutes: number;
     seconds: number;

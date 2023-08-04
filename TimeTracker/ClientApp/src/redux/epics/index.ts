@@ -14,8 +14,7 @@ import { fetchUsersEpic } from "./users";
 import {addVacationEpic, fetchUserVacationsEpic, updateVacationStateEpic} from "./vacation";
 import { addApproversEpic, fetchApproversEpic } from "./approvers";
 import { fetchVacationsRequestsEpic, updateApproversVacationsEpic, updateApproverVacationEpic } from "./approverVacation";
-import { fetchWorkedHoursEpic, editWorkedHourEpic, setWorkedHourEpic, deleteWorkedHourEpic, createWorkedHourEpic } from "./timeTracker";
-import {eventEpics} from "@redux/epics/calendarEvent.ts";
+import { workedHourEpics } from "./timeTracker";
 
 
 
@@ -38,12 +37,7 @@ export const rootEpic: Epic = (action$, store$, dependencies) =>
         fetchUserVacationsEpic,
         DeleteUserEpic,
         emailConfirmEpic,
-        fetchWorkedHoursEpic,
-        editWorkedHourEpic,
-        setWorkedHourEpic,
-        deleteWorkedHourEpic,
-        createWorkedHourEpic,
-        ...eventEpics
+        ...workedHourEpics
     )
         (action$, store$, dependencies).pipe(
             catchError((error, source) => {
