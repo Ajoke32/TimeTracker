@@ -1,9 +1,10 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Loader, SmallButton, TextInput} from "../UI";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {useAppDispatch, useTypedSelector} from "../../hooks";
 import {H5} from "../Headings";
 import {createVacation, fetchVacationDays, updateApproversVacations} from "../../redux";
+import {openInfoModal} from "@redux/slices/stateInfoModalSlice.ts";
 
 
 interface VacationInput{
@@ -29,9 +30,9 @@ export const AddVacationForm = () => {
     const {loading,error,created,createdId}
         = useTypedSelector(s=>s.vacations);
 
-
-
     const dispatch = useAppDispatch();
+
+
 
     useEffect(()=>{
         dispatch(fetchVacationDays(user?.id!))
@@ -42,7 +43,7 @@ export const AddVacationForm = () => {
 
 
     const onSubmit: SubmitHandler<VacationInput> = (data) => {
-        dispatch(createVacation({...data,userId:user?.id!}))
+        dispatch(createVacation({...data,userId:user?.id!}));
         reset()
     }
 
@@ -50,16 +51,13 @@ export const AddVacationForm = () => {
         <div style={{display:"flex",alignItems:"center",justifyContent:"center",marginTop:'80px',height:"100%"}}>
             <form onSubmit={handleSubmit(onSubmit)} style={{display:"flex",gap:"10px",flexDirection:"column",width:"50%"}}>
                 <H5 value={`Available vacation days ${userLoading?"loading..":vacationDays}`} />
-                <div className="login-form__messages-wrapper">
-                    {loading?<Loader/>:""}
-                    {error ? <H5 value={error} />: ""}
-                </div>
                 <label style={{marginLeft:"5px"}}>Start date</label>
                 <input {...register("startDate")} name="startDate" className="text-input" type="date" placeholder="Start date"/>
                 <label style={{marginLeft:"5px"}}>End date</label>
                 <input {...register("endDate")} name="endDate" className="text-input" type="date" placeholder="End date"/>
                 <TextInput name="message" register={register("message")} placeholder="Message"/>
                 <SmallButton type="submit" value="Create vacation"/>
+
             </form>
         </div>
     );
