@@ -20,7 +20,6 @@ public sealed class VacationMutations:ObjectGraphType
             .Argument<VacationInputType>("vacation")
             .ResolveAsync(async _ =>
             {
-                await Task.Delay(3000);
                 var vacation = _.GetArgument<Vacation>("vacation");
                 
                 if (vacation.StartDate.Date<DateTime.Now.Date)
