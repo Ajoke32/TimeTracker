@@ -4,7 +4,7 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {useAppDispatch, useTypedSelector} from "../../hooks";
 import {H5} from "../Headings";
 import {createVacation, fetchVacationDays, updateApproversVacations} from "../../redux";
-import {openInfoModal} from "@redux/slices/stateInfoModalSlice.ts";
+
 
 
 interface VacationInput{
