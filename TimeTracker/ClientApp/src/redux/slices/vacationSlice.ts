@@ -45,7 +45,12 @@ const vacationsSlice = createSlice({
         changeVacationState:createPendingReducerWithPayload<typeof initialState,VacationChangeType>(),
         changeVacationSateSuccess:createSuccessReducerWithPayload<typeof initialState,Vacation>
         ((state,action)=>{
-           state.vacation=action.payload;
+           state.vacations = state.vacations.map(v=>{
+               if(v.id===action.payload.id){
+                   v =action.payload;
+               }
+               return v;
+           });
         }),
         changeVacationStateFail:createErrorReducer(),
 

@@ -57,7 +57,6 @@ const updateVacationStateEpic: Epic = (action: Observable<PayloadAction<number>>
                 }),
                 catchError((e: Error) => {
                     console.log(e);
-                    console.log("errr");
                     return of(updateVacationStateFail("unexpected error"))
                 })
             )
@@ -111,6 +110,7 @@ const updateVacationEpic:Epic=(action$:Observable<PayloadAction<Vacation>>)=>
             UpdateVacation(action.payload)
                 .pipe(
                     map(res=>{
+                        console.log(res.response.errors);
                         if (res.response.errors != null) {
                             return updateVacationFail(res.response.errors[0].message)
                         }

@@ -22,16 +22,15 @@ public sealed class VacationMutations:ObjectGraphType
             {
                 var vacation = _.GetArgument<Vacation>("vacation");
                 
-                if (vacation.StartDate>DateTime.Now)
+                if (vacation.StartDate.Date<DateTime.Now.Date)
                 {
-                    throw new ValidationError("Vacation period invalid");
+                    throw new ValidationError("Vacation start date invalid");
                 }
 
                 var res = await uow.GenericRepository<Vacation>()
                     .CreateAsync(vacation);
                 
                 await uow.SaveAsync();
-                
                 return res;
             });
 
@@ -43,8 +42,7 @@ public sealed class VacationMutations:ObjectGraphType
                 
                 var vacation = await uow.GenericRepository<Vacation>()
                     .FindAsync(v => v.Id == id,relatedData:"ApproverVacations")??throw new ValidationError("Vacation not found");
-
-
+                
                 vacation.VacationState = GetVacationState(vacation.ApproverVacations);
                 vacation.HaveAnswer = true;
                 await uow.SaveAsync();
@@ -55,10 +53,15 @@ public sealed class VacationMutations:ObjectGraphType
 
         Field<VacationType>("update")
             .Argument<VacationInputType>("vacation")
-            .ResolveAsync(async _ =>
+            .ResolveAsync(async ctx =>
             {
-                var vacation = _.GetArgument<Vacation>("vacation");
-
+                var vacation = ctx.GetArgument<Vacation>("vacation");
+               
+                if (vacation.StartDate.Date<=DateTime.Now.Date)
+                {
+                    throw new ValidationError("Vacation start date invalid");
+                }
+                
                 var updated = await uow.GenericRepository<Vacation>().UpdateAsync(vacation);
                 await uow.SaveAsync();
                 return updated;
@@ -77,6 +80,13 @@ public sealed class VacationMutations:ObjectGraphType
                 
                 if (vacation == null) { return null; }
                 
+                if (state == VacationState.Canceled&&vacation.VacationState==VacationState.Approved)
+                {
+                    if (vacation.StartDate.Date <= DateTime.Now.Date)
+                    {
+                        throw new ValidationError("vacation days have already begun");
+                    }
+                }
                 vacation.VacationState = state;
                 await uow.SaveAsync();
                 return vacation;

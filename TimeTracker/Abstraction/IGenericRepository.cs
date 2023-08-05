@@ -10,7 +10,8 @@ public interface IGenericRepository<TEntity> where TEntity:class
 
     public ValueTask<TEntity> CreateAsync(TEntity entity);
     
-    public Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> func, string? relatedData = null);
+    public Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> func,
+        string? relatedData = null,bool asNoTracking=false);
 
     public Task<bool> DeleteAsync(TEntity entity);
 

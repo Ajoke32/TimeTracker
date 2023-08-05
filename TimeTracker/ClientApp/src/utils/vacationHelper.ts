@@ -18,6 +18,7 @@ export function vacationNotEqual(state:VacationStateEnum,vacationState:VacationS
 export function getApproverVacationString(isApproved:boolean|null,defaultValue:string,capitalize=false):string{
 
     const res = isApproved!==null?isApproved?'approved':'declined':defaultValue;
+
     if(capitalize){
         return res.charAt(0).toUpperCase() + res.slice(1);
     }
