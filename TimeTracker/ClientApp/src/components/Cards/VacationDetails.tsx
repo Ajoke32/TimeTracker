@@ -35,7 +35,7 @@ const VacationDetails = () => {
         if(updated){
             dispatch(updateVacationState(approveId!));
         }
-    },[updated,deleted])
+    },[updated])
 
     useEffect(() => {
         notFound();

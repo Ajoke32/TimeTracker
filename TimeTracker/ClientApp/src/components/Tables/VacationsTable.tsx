@@ -63,12 +63,12 @@ export const VacationsTable = () => {
                             <span className={v.vacationState===VacationStateEnum.Edited?"pending":v.vacationState.toLowerCase()}>
                                 {v.vacationState===VacationStateEnum.Edited?"Pending":getStringVacationState(v.vacationState)}
                             </span>
-                            {(v.haveAnswer||v.vacationState===VacationStateEnum.Canceled)?
-                                <span className={"neutral"}>No action</span>
-                               : <button onClick={() => handleSelect(v)} style={{marginRight: "5px"}}
+                            {v.vacationState!==VacationStateEnum.Declined
+                                ?<button onClick={() => handleSelect(v)} style={{marginRight: "5px"}}
                                          className="btn-base btn-decline">
                                     Cancel
-                                </button>}
+                                </button>
+                                :<span className="neutral">No action</span>}
                         </div>
                         )
                     })}
