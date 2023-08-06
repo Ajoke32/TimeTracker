@@ -24,10 +24,12 @@ export function UpdateApproverVacationState(id:number,state:boolean,approverId:n
                   isApproved,
                   vacation{
                     vacationState,
+                    message
                     user{
                       firstName,
                       lastName,
-                      email
+                      email,
+                      vacationDays
                      }
                   }
                 }

@@ -63,7 +63,6 @@ const CancelVacationModal = ({isOpen,onSuccess,onEdit,vacation,setVacation,click
                    <input value={startDate} className="w-90 btn-base" style={{color:"black"}} onChange={(e)=>handleStartDateInput(e)} type="date"/>
                    <input value={endDate} className="w-90 btn-base" style={{color:"black"}} onChange={(e)=>handleEndDateInput(e)} type="date"/>
                 </div>
-                <span>{error}</span>
                 <div className="btn-group-left">
                     <button className="btn-base btn-confirm" onClick={onEdit}>Yes,save</button>
                     <button className=" btn-base btn-decline" onClick={onSuccess}>No,cancel it</button>

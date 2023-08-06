@@ -43,7 +43,7 @@ export function FetchUserVacations(userId:number){
 
 export function ChangeVacationState(vac:VacationChangeType){
     return AjaxQuery<QueryStructure<{ vacationMutation:{changeState:Vacation} }>>(
-        'mutation ChangeState($id:Int!,$state:VacationState!){vacationMutation{changeState(vacationId:$id,state:$state){id,vacationState}}}',
+        'mutation ChangeState($id:Int!,$state:VacationState!){vacationMutation{changeState(vacationId:$id,state:$state){id,startDate,endDate,vacationState}}}',
         {id:vac.id,state:vac.state}
     )
 }

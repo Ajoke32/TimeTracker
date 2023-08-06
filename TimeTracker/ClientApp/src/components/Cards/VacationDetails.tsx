@@ -7,7 +7,6 @@ import {
     updateApproverVacationState,
     updateVacationState
 } from "@redux/slices";
-import {Loader} from "@components/UI";
 import './VacationDetails.css'
 import moment from "moment";
 import {VacationStateEnum} from "@redux/types";
@@ -59,8 +58,7 @@ const VacationDetails = () => {
 
     return (
         <>
-            {loading?<Loader/>
-                :<div className="vacation-card-wrapper">
+            {<div className="vacation-card-wrapper">
                     <div className="vacation-card">
                         <div className="user-info">
                             <div className="vacation-days">
@@ -82,7 +80,7 @@ const VacationDetails = () => {
                             <span>Message: {av?.vacation?.message===''?"empty":av?.vacation?.message}</span>
                             <span>Available vacation days: {av?.vacation?.user.vacationDays}</span>
                         </div>
-                        {(av?.isApproved===null&&!av.isDeleted)&&
+                        {(av?.isApproved===null&&!av.isDeleted&&av.vacation.vacationState!==VacationStateEnum.Declined)&&
                           <>
                               <textarea value={message} onChange={messageInputHandle} style={{height:"150px"}} placeholder="Message"></textarea>
                               <span>{error}</span>

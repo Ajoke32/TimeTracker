@@ -40,7 +40,6 @@ export const VacationsTable = () => {
     return (
         <div style={{display:"flex",justifyContent:"center",marginTop:"80px"}}>
             <CancelVacationModal clicked={clicked!} setIsOpen={setIsOpen} setVacation={setClicked} vacation={clicked!} onEdit={handleVacationEdit} onSuccess={handleCancel} isOpen={isOpen} />
-            <span>{error&&error}</span>
             {loading?<Loader/>:
                 <div className="table-wrapper">
                     <div className="requests-wrapper">

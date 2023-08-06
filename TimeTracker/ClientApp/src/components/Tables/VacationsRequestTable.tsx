@@ -5,7 +5,8 @@ import {useAppDispatch, useTypedSelector} from "../../hooks";
 import {fetchRequests} from "../../redux";
 import {Loader} from "../UI";
 import MessageModal from "@components/UI/Modals/MessageModal.tsx";
-import {getApproverVacationString, getStringVacationState, isVacationAnswered} from "../../utils/vacationHelper.ts";
+import {getApproverVacationString} from "../../utils/vacationHelper.ts";
+import {VacationStateEnum} from "@redux/types";
 
 export const VacationsRequestTable = () => {
 
@@ -36,8 +37,12 @@ export const VacationsRequestTable = () => {
                         return <div key={a.id} className="request-item">
                             <span>{a.vacation.user.firstName} {a.vacation.user.lastName}</span>
                             <span>{a.vacation.user.email}</span>
-                            <span className={a.isDeleted?"archived":getApproverVacationString(a.isApproved!,'pending')}>
-                                        {!a.isDeleted?getApproverVacationString(a.isApproved!,'Pending',true):"Archived"}
+                            <span className={a.isDeleted?"archived"
+                                :a.vacation.vacationState==VacationStateEnum.Declined
+                                    ?'declined':getApproverVacationString(a.isApproved!,'pending')}>
+                                        {(!a.isDeleted&&a.vacation.vacationState!==VacationStateEnum.Declined)
+                                            ?getApproverVacationString(a.isApproved!,'Pending',true)
+                                            :a.vacation.vacationState==VacationStateEnum.Declined?"Declined":"Archived"}
                                     </span>
                             <a style={{textDecoration:"none"}} className="btn-base btn-info more-btn"
                                href={`/vacation/details/${a.id}`}>
