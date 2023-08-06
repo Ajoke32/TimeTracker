@@ -6,7 +6,7 @@ import {
     createVacationFail,
     createVacationSuccess
 } from "@redux/slices/vacationSlice.ts";
-import {addGenericCase} from "@redux/slices/generic/addModalCase.ts";
+import {addGenericCase, addOnlyErrorCase} from "@redux/slices/generic/addModalCase.ts";
 import {
     deleteByVacationId, deleteByVacationIdFail, deleteByVacationIdSuccess,
 } from "@redux/slices/approverVacationSlice.ts";
@@ -39,14 +39,12 @@ const infoModalSlice = createSlice({
     extraReducers:(builder)=>{
         addGenericCase({success:createVacationSuccess,fail:createVacationFail,
             trigger:createVacation,builder:builder});
-        addGenericCase({
-            success:changeVacationSateSuccess,
+        addOnlyErrorCase({
             trigger:changeVacationState,
             fail:changeVacationStateFail,
             builder:builder
         });
-        addGenericCase({
-            success:deleteByVacationIdSuccess,
+        addOnlyErrorCase({
             trigger:deleteByVacationId,
             fail:deleteByVacationIdFail,
             builder:builder

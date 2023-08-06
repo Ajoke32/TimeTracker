@@ -42,16 +42,15 @@ const vacationsSlice = createSlice({
         }),
         fetchUserVacationsFail:createErrorReducer(),
 
-        changeVacationState:createPendingReducerWithPayload<typeof initialState,VacationChangeType>(),
-        changeVacationSateSuccess:createSuccessReducerWithPayload<typeof initialState,Vacation>
-        ((state,action)=>{
-           state.vacations = state.vacations.map(v=>{
-               if(v.id===action.payload.id){
-                   v =action.payload;
-               }
-               return v;
-           });
-        }),
+        changeVacationState:(state:VacationState,action:PayloadAction<VacationChangeType>)=>{},
+        changeVacationSateSuccess:(state:VacationState,action:PayloadAction<Vacation>)=>{
+            state.vacations = state.vacations.map(v=>{
+                if(v.id===action.payload.id){
+                    v =action.payload;
+                }
+                return v;
+            });
+        },
         changeVacationStateFail:createErrorReducer(),
 
         updateVacation:createPendingReducerWithPayload<typeof initialState,Vacation>(),

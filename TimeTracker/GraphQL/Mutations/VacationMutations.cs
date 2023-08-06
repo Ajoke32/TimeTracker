@@ -21,7 +21,10 @@ public sealed class VacationMutations:ObjectGraphType
             .ResolveAsync(async _ =>
             {
                 var vacation = _.GetArgument<Vacation>("vacation");
-                
+                if(vacation.EndDate.Date<vacation.StartDate.Date)
+                {
+                    throw new ValidationError("Vacation period invalid");
+                }
                 if (vacation.StartDate.Date<DateTime.Now.Date)
                 {
                     throw new ValidationError("Vacation start date invalid");

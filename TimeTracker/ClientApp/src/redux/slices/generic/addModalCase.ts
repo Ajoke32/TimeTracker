@@ -2,13 +2,18 @@ import {ActionReducerMapBuilder, TypedActionCreator} from "@reduxjs/toolkit/dist
 import {InfoModalState} from "@redux/slices/stateInfoModalSlice.ts";
 import {ActionCreatorWithPayload} from "@reduxjs/toolkit";
 
-
-export function addGenericCase({success, fail, trigger, builder}: {
-    success: TypedActionCreator<string>,
-    fail: ActionCreatorWithPayload<string>,
-    trigger: TypedActionCreator<string>,
+interface CasePropsBase{
     builder: ActionReducerMapBuilder<InfoModalState>
-}){
+}
+interface OnlyErrorCaseProps extends CasePropsBase{
+    fail:ActionCreatorWithPayload<string>,
+    trigger: TypedActionCreator<string>,
+}
+interface CaseProps extends OnlyErrorCaseProps{
+    success: TypedActionCreator<string>,
+}
+
+export function addGenericCase({success, fail, trigger, builder}: CaseProps){
 
     builder.addCase(success,(state:InfoModalState)=>{
         state.isOpen=true;
@@ -24,5 +29,16 @@ export function addGenericCase({success, fail, trigger, builder}: {
         state.loading=true;
         state.message=null;
         state.animate=true;
+    });
+}
+
+export function addOnlyErrorCase({fail,trigger,builder}:OnlyErrorCaseProps){
+    builder.addCase(fail,(state,action)=>{
+        state.message=action.payload;
+        state.isOpen=true;
+        state.animate=true;
+    });
+    builder.addCase(trigger,(state:InfoModalState)=>{
+        state.message=null;
     });
 }
