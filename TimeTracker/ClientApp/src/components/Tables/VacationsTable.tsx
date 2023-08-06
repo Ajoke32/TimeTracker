@@ -3,7 +3,7 @@ import {useAppDispatch, useTypedSelector} from "../../hooks";
 import {Loader} from "../UI";
 import './Table.css'
 import './VacationsTable.css'
-import {changeVacationState, fetchUserVacations, updateVacation} from "../../redux";
+import {changeVacationState, fetchUserVacations, updateToDefault, updateVacation} from "../../redux";
 import moment from "moment/moment";
 import {getStringVacationState} from "../../utils/vacationHelper.ts";
 import {Vacation, VacationStateEnum} from "@redux/types";
@@ -12,7 +12,8 @@ import CancelVacationModal from "@components/UI/Modals/CancelVacationModal.tsx";
 
 export const VacationsTable = () => {
 
-    const {error,loading,vacations} = useTypedSelector(s=>s.vacations);
+    const {error,updated,loading,vacations}
+        = useTypedSelector(s=>s.vacations);
     const dispatch = useAppDispatch();
     const userId = useTypedSelector(u=>u.auth.user?.id);
     const [isOpen,setIsOpen]=useState<boolean>(false);
@@ -21,7 +22,11 @@ export const VacationsTable = () => {
     useEffect(()=>{
         dispatch(fetchUserVacations(userId!))
     },[]);
-
+    useEffect(() => {
+        if(updated){
+            dispatch(updateToDefault(clicked?.id!));
+        }
+    }, [updated]);
     function handleSelect(vacation:Vacation){
         setClicked(vacation);
         setIsOpen(true);

@@ -4,11 +4,11 @@ import {
     changeVacationState, changeVacationStateFail,
     createVacation,
     createVacationFail,
-    createVacationSuccess
+    createVacationSuccess, updateVacation, updateVacationFail
 } from "@redux/slices/vacationSlice.ts";
 import {addGenericCase, addOnlyErrorCase} from "@redux/slices/generic/addModalCase.ts";
 import {
-    deleteByVacationId, deleteByVacationIdFail, deleteByVacationIdSuccess,
+    deleteByVacationId, deleteByVacationIdFail
 } from "@redux/slices/approverVacationSlice.ts";
 
 
@@ -49,6 +49,11 @@ const infoModalSlice = createSlice({
             fail:deleteByVacationIdFail,
             builder:builder
         });
+        addOnlyErrorCase({
+            trigger:updateVacation,
+            fail:updateVacationFail,
+            builder:builder
+        })
     }
 });
 

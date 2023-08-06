@@ -20,7 +20,8 @@ const VacationDetails = () => {
     const [error,setError]= useState<string>("");
     const [approveId,setApproveId] = useState<number>();
     const userId = useTypedSelector(s=>s.auth.user?.id);
-    const {updated,deleted,approverVacation:av,loading} = useTypedSelector(s=>s.approverVacations);
+    const {updated,deleted,approverVacation:av,loading}
+        = useTypedSelector(s=>s.approverVacations);
     function notFound(){
         if(!id){
             return <Navigate to="/notFound" />

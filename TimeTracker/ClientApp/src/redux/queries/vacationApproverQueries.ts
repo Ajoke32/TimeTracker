@@ -69,3 +69,10 @@ export function FetchApproverVacationById(id:number){
         {id:id}
     )
 }
+
+export function UpdateApproverVacationToDefault(vacationId:number){
+    return AjaxQuery<QueryStructure<{approverVacationMutation:{stateToDefault:boolean}}>>(
+        'mutation StateToDefault($id:Int!){approverVacationMutation{stateToDefault(vacationId:$id)}}',
+        {id:vacationId}
+    )
+}

@@ -13,7 +13,8 @@ const initialState:VacationState = {
     ...defaultState,
     created:false,
     vacations:[],
-    vacation:null
+    vacation:null,
+    updated:null
 }
 
 const vacationsSlice = createSlice({
@@ -42,7 +43,9 @@ const vacationsSlice = createSlice({
         }),
         fetchUserVacationsFail:createErrorReducer(),
 
-        changeVacationState:(state:VacationState,action:PayloadAction<VacationChangeType>)=>{},
+        changeVacationState:(state:VacationState,action:PayloadAction<VacationChangeType>)=>{
+            state.updated=null;
+        },
         changeVacationSateSuccess:(state:VacationState,action:PayloadAction<Vacation>)=>{
             state.vacations = state.vacations.map(v=>{
                 if(v.id===action.payload.id){
@@ -50,6 +53,7 @@ const vacationsSlice = createSlice({
                 }
                 return v;
             });
+            state.updated=action.payload;
         },
         changeVacationStateFail:createErrorReducer(),
 
