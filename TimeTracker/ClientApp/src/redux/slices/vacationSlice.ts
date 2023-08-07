@@ -13,7 +13,8 @@ const initialState:VacationState = {
     ...defaultState,
     created:false,
     vacations:[],
-    vacation:null
+    vacation:null,
+    updated:null
 }
 
 const vacationsSlice = createSlice({
@@ -42,16 +43,18 @@ const vacationsSlice = createSlice({
         }),
         fetchUserVacationsFail:createErrorReducer(),
 
-        changeVacationState:createPendingReducerWithPayload<typeof initialState,VacationChangeType>(),
-        changeVacationSateSuccess:createSuccessReducerWithPayload<typeof initialState,Vacation>
-        ((state,action)=>{
-           state.vacations = state.vacations.map(v=>{
-               if(v.id===action.payload.id){
-                   v =action.payload;
-               }
-               return v;
-           });
-        }),
+        changeVacationState:(state:VacationState,action:PayloadAction<VacationChangeType>)=>{
+            state.updated=null;
+        },
+        changeVacationSateSuccess:(state:VacationState,action:PayloadAction<Vacation>)=>{
+            state.vacations = state.vacations.map(v=>{
+                if(v.id===action.payload.id){
+                    v =action.payload;
+                }
+                return v;
+            });
+            state.updated=action.payload;
+        },
         changeVacationStateFail:createErrorReducer(),
 
         updateVacation:createPendingReducerWithPayload<typeof initialState,Vacation>(),

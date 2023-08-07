@@ -32,10 +32,11 @@ export const AddVacationForm = () => {
 
     const dispatch = useAppDispatch();
 
-
+    useEffect(() => {
+        dispatch(fetchVacationDays(user?.id!));
+    }, []);
 
     useEffect(()=>{
-        dispatch(fetchVacationDays(user?.id!))
         if(created){
             dispatch(updateApproversVacations({vacationId:createdId!,userId:user?.id!}))
         }
@@ -50,7 +51,7 @@ export const AddVacationForm = () => {
     return (
         <div style={{display:"flex",alignItems:"center",justifyContent:"center",marginTop:'80px',height:"100%"}}>
             <form onSubmit={handleSubmit(onSubmit)} style={{display:"flex",gap:"10px",flexDirection:"column",width:"50%"}}>
-                <H5 value={`Available vacation days ${userLoading?"loading..":vacationDays}`} />
+                <h2 style={{textAlign:"center"}}>Available vacation days {vacationDays}</h2>
                 <label style={{marginLeft:"5px"}}>Start date</label>
                 <input {...register("startDate")} name="startDate" className="text-input" type="date" placeholder="Start date"/>
                 <label style={{marginLeft:"5px"}}>End date</label>

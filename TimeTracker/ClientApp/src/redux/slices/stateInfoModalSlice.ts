@@ -1,7 +1,15 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {DefaultState} from "@redux/intrerfaces";
-import {createVacation, createVacationFail, createVacationSuccess} from "@redux/slices/vacationSlice.ts";
-import {addGenericCase} from "@redux/slices/generic/addModalCase.ts";
+import {createSlice} from "@reduxjs/toolkit";
+import {
+    changeVacationSateSuccess,
+    changeVacationState, changeVacationStateFail,
+    createVacation,
+    createVacationFail,
+    createVacationSuccess, updateVacation, updateVacationFail
+} from "@redux/slices/vacationSlice.ts";
+import {addGenericCase, addOnlyErrorCase} from "@redux/slices/generic/addModalCase.ts";
+import {
+    deleteByVacationId, deleteByVacationIdFail
+} from "@redux/slices/approverVacationSlice.ts";
 
 
 export interface InfoModalState{
@@ -31,6 +39,21 @@ const infoModalSlice = createSlice({
     extraReducers:(builder)=>{
         addGenericCase({success:createVacationSuccess,fail:createVacationFail,
             trigger:createVacation,builder:builder});
+        addOnlyErrorCase({
+            trigger:changeVacationState,
+            fail:changeVacationStateFail,
+            builder:builder
+        });
+        addOnlyErrorCase({
+            trigger:deleteByVacationId,
+            fail:deleteByVacationIdFail,
+            builder:builder
+        });
+        addOnlyErrorCase({
+            trigger:updateVacation,
+            fail:updateVacationFail,
+            builder:builder
+        })
     }
 });
 

@@ -23,8 +23,7 @@ const StateInfoModal = () => {
         <div className={`state-info-modal ${animate&&'animate'} ${message!==null?message!=='success'?'err':'success':''}`}
              style={{display:`${loading||isOpen?'flex':'none'}`}}>
             {loading&&<Loader/>}
-
-            <span>{message&&<H5 value={message} />}</span>
+            <h4 style={{fontSize:"25px",fontFamily:"sans-serif",textAlign:"center"}}>{message&&message}</h4>
         </div>
     );
 };

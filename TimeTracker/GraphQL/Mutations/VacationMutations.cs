@@ -21,7 +21,10 @@ public sealed class VacationMutations:ObjectGraphType
             .ResolveAsync(async _ =>
             {
                 var vacation = _.GetArgument<Vacation>("vacation");
-                
+                if(vacation.EndDate.Date<vacation.StartDate.Date)
+                {
+                    throw new ValidationError("Vacation period invalid");
+                }
                 if (vacation.StartDate.Date<DateTime.Now.Date)
                 {
                     throw new ValidationError("Vacation start date invalid");
@@ -56,11 +59,21 @@ public sealed class VacationMutations:ObjectGraphType
             .ResolveAsync(async ctx =>
             {
                 var vacation = ctx.GetArgument<Vacation>("vacation");
-               
+                
                 if (vacation.StartDate.Date<=DateTime.Now.Date)
                 {
                     throw new ValidationError("Vacation start date invalid");
                 }
+
+                var currentVacation = await uow.GenericRepository<Vacation>()
+                    .FindAsync(v => v.Id == vacation.Id,asNoTracking:true);
+
+                if (currentVacation!.StartDate.Date<=DateTime.Now.Date
+                    &&vacation.StartDate.Date>currentVacation.StartDate.Date)
+                {
+                    throw new ValidationError("Vacation days have already begun");
+                }
+
                 
                 var updated = await uow.GenericRepository<Vacation>().UpdateAsync(vacation);
                 await uow.SaveAsync();
@@ -84,7 +97,7 @@ public sealed class VacationMutations:ObjectGraphType
                 {
                     if (vacation.StartDate.Date <= DateTime.Now.Date)
                     {
-                        throw new ValidationError("vacation days have already begun");
+                        throw new ValidationError("Vacation days have already begun");
                     }
                 }
                 vacation.VacationState = state;

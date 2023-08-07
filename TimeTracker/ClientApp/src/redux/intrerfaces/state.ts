@@ -45,7 +45,8 @@ export interface VacationState extends DefaultState {
     created: boolean,
     createdId?: number,
     vacations: Vacation[],
-    vacation:Vacation|null
+    vacation:Vacation|null,
+    updated:Vacation|null
 }
 
 export interface WorkedHoursSlice extends DefaultState {

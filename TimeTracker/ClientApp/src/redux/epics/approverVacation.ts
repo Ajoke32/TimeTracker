@@ -6,7 +6,7 @@ import {
     UpdateApproverVacationState,
     FetchVacationsRequest,
     DeleteApproverVacationByVacationId,
-    FetchApproverVacationById
+    FetchApproverVacationById, UpdateApproverVacationToDefault
 } from "../queries";
 import {
     deleteByVacationIdFail,
@@ -17,8 +17,8 @@ import {
     fetchRequestsSuccess,
     updateApproversVacationsFail,
     updateApproversVacationsSuccess,
-    updateApproverVacationStateStateFail,
-    updateApproverVacationStateStateSuccess
+    updateApproverVacationStateStateFail, updateApproverVacationStateSuccess,
+    updateToDefaultFail, updateToDefaultSuccess
 } from "../slices";
 import {
     ApproverVacationUpdate,
@@ -36,7 +36,7 @@ const updateApproverVacationEpic: Epic = (action: Observable<PayloadAction<Appro
                         if (resp.response.errors != null) {
                             return updateApproverVacationStateStateFail(resp.response.errors[0].message)
                         }
-                        return updateApproverVacationStateStateSuccess(resp.response.data.approverVacationMutation.updateState);
+                        return updateApproverVacationStateSuccess(resp.response.data.approverVacationMutation.updateState);
                     }),
                     catchError((e: Error) => {
                         return of(updateApproverVacationStateStateFail("unexpected error"))
@@ -123,6 +123,26 @@ const fetchApproverVacationByIdEpic:Epic=(action$:Observable<PayloadAction<numbe
         )
     )
 
+const updateApproverVacationsStateToDefaultEpic:Epic=(action$:Observable<PayloadAction<number>>)=>
+    action$.pipe(
+        ofType('approverVacation/updateToDefault'),
+        mergeMap(action$=>
+            UpdateApproverVacationToDefault(action$.payload)
+                .pipe(
+                    map(res=>{
+                        console.log(res.response.errors);
+                        if (res.response.errors != null) {
+                            return updateToDefaultFail(res.response.errors[0].message)
+                        }
+                        return updateToDefaultSuccess();
+                    }),
+                    catchError((e: Error) => {
+                        console.log(e);
+                        return of(updateToDefaultFail("unexpected error"))
+                    })
+                )
+        )
+    )
 
 export const vacationApproverEpics = [deleteApproverVacationByVacationIdEpic,updateApproversVacationsEpic,
-    fetchVacationsRequestsEpic,updateApproverVacationEpic,fetchApproverVacationByIdEpic]
+    fetchVacationsRequestsEpic,updateApproverVacationEpic,fetchApproverVacationByIdEpic,updateApproverVacationsStateToDefaultEpic]

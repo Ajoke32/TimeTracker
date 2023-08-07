@@ -24,10 +24,12 @@ export function UpdateApproverVacationState(id:number,state:boolean,approverId:n
                   isApproved,
                   vacation{
                     vacationState,
+                    message
                     user{
                       firstName,
                       lastName,
-                      email
+                      email,
+                      vacationDays
                      }
                   }
                 }
@@ -65,5 +67,12 @@ export function FetchApproverVacationById(id:number){
     return AjaxQuery<QueryStructure<{approverVacationQuery:{approverVacation:ApproverVacation}}>>(
         'query FetchById($id:Int!){approverVacationQuery{approverVacation(id:$id){isApproved,isDeleted,id,vacation{id,vacationState,startDate,message,endDate,user{firstName,lastName,email,vacationDays}}}}}',
         {id:id}
+    )
+}
+
+export function UpdateApproverVacationToDefault(vacationId:number){
+    return AjaxQuery<QueryStructure<{approverVacationMutation:{stateToDefault:boolean}}>>(
+        'mutation StateToDefault($id:Int!){approverVacationMutation{stateToDefault(vacationId:$id)}}',
+        {id:vacationId}
     )
 }
