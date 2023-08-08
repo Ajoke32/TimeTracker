@@ -152,7 +152,7 @@ const Scheduler = ({date} : {date: Date}) => {
                 ) : (
                     <div 
                         className="working-hours__content" 
-                        style={{ gridTemplateRows: `repeat(${workedHours.length < 7 ? 7 : workedHours.length}, 1fr)` }}
+                        style={{ gridTemplateRows: `repeat(${filteredWorkedHours.length < 7 ? 7 : filteredWorkedHours.length}, 1fr)` }}
                     >
                             {filteredWorkedHours.map((item, index) => (
                                 <div className="content-row" key={index}>
