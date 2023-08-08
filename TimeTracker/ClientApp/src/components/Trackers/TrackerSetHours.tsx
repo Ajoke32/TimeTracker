@@ -77,7 +77,7 @@ export const TrackerSetHours = ({ workedHour }: { workedHour?: WorkedHour }) => 
     }
     return (
         <>
-            {workedHour ? <CurrentDateElement date={workedHour.date} /> : <SelectedDateElement date={selectedDate} />}
+            {workedHour ? <CurrentDateElement date={workedHour.date} showFullDate={true}/> : <SelectedDateElement date={selectedDate} />}
 
             <div className="set-hours-tracker">
                 <form onSubmit={handleSubmit(onSubmit)}>
