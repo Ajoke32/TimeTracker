@@ -3,7 +3,7 @@
 .request-item{
     position: relative;
     display: grid;
-    grid-template-columns:160px 1fr 1fr 100px;
+    grid-template-columns:1fr 1fr 1fr 1fr;
     align-items: center;
     gap: 20px;
     text-align: center;
@@ -19,10 +19,10 @@
 }
 
 .btn-base{
-    padding: 10px 15px;
+    padding: 8px 15px;
     border: none;
-    border-radius: 8px;
-    color: #f6f6f6;
+    border-radius: 20px;
+    color: #fff;
     cursor: pointer;
     transition: 0.2s;
 }
@@ -53,6 +53,10 @@
   background-color: var(--color-red);
 }
 
+.bth-archive{
+    background-color: #ff0a8d;
+}
+
 .btn-decline:hover{
     background-color: #ff0a27;
     box-shadow: 0 0 5px 0 #ff0a8d;
@@ -71,6 +75,12 @@
     display: flex;
     gap: 15px;
     justify-content: center;
+}
+.btn-group-left{
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    width: 90%;
 }
 
 .more-info{
@@ -106,5 +116,5 @@
 
 
 .neutral{
-    color: #f6f6f6;
+    color: rgba(185, 185, 185, 0.81);
 }

@@ -2,18 +2,18 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import {create} from "domain";
 
 interface CalendarSlice {
-    previousDates: number[],
-    currentDates: number[],
-    nextDates: number[],
+    previousDates: Date[],
+    currentDates: Date[],
+    nextDates: Date[],
     currentDate: Date;
 }
 
-const initialState : CalendarSlice = {
+const initialState: CalendarSlice = {
     previousDates: setPrevMonthDates(new Date()),
     currentDates: setCurrentMonthDates(new Date()),
-    nextDates:  setNextMonthDates(new Date()),
+    nextDates: setNextMonthDates(new Date()),
     currentDate: new Date(),
-}
+};
 
 const calendarSlice = createSlice({
     name: 'calendar',
@@ -62,40 +62,42 @@ export const {setDate, setPreviousMonth, setNextMonth,   setDefault} = calendarS
 export const calendar = calendarSlice.reducer;
 
 function setPrevMonthDates(date: Date) {
-    if (date.getDay() != 1) {
-        const dates = [];
+    if (date.getDay() !== 1) {
+        const dates: Date[] = [];
         const day = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
         let lastDateOfMonth = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
-        
-        if (day != 0) {
-            for (let i = 1; i < day; i++)
-                dates.push(lastDateOfMonth--);
+
+        if (day !== 0) {
+            for (let i = 1; i < day; i++) {
+                dates.push(new Date(date.getFullYear(), date.getMonth() - 1, lastDateOfMonth));
+                lastDateOfMonth--;
+            }
         }
-        
-    return dates.reverse();
+
+        return dates.reverse();
     }
-    
+
     return [];
 }
 
 function setCurrentMonthDates(date: Date) {
-    const dates = [];
+    const dates: Date[] = [];
     const lastDateOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-    
-    for (let i = 1; i <= lastDateOfMonth; i++)
-        dates.push(i);
-    
+
+    for (let i = 1; i <= lastDateOfMonth; i++) {
+        dates.push(new Date(date.getFullYear(), date.getMonth(), i));
+    }
+
     return dates;
 }
 
 function setNextMonthDates(date: Date) {
-    const dates = [];
+    const dates: Date[] = [];
     const lastDateOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
     let day = new Date(date.getFullYear(), date.getMonth(), lastDateOfMonth).getDay();
 
- 
     for (let i = 1; day < 14; i++) {
-        dates.push(i);
+        dates.push(new Date(date.getFullYear(), date.getMonth() + 1, i));
         day++;
     }
 

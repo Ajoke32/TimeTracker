@@ -57,7 +57,7 @@ const LargeCalendar = () => {
             </div>}
             
             <div className="calendar-header__wrapper">
-                <div className="calendar-date__wrapper"><CurrentDateElement date={calendar.currentDate} /></div>
+                <div className="calendar-date__wrapper"><CurrentDateElement date={calendar.currentDate} showFullDate={false}/></div>
                 <div className="calendar-actions">
                     <div>
                         <button onClick={handlePrevMonthButton}></button>
@@ -84,18 +84,18 @@ const LargeCalendar = () => {
                     ))}
                 </div>
                 <div className="calendar-dates">
-                    {calendar.previousDates.map((day, index) => (
+                    {calendar.previousDates.map((date, index) => (
                         <div key={index} className="calendar-date__grey">
                           <span className="calendar-prev__month-date">
-                            {day}
+                            {date.getDate()}
                           </span>
                         </div>
                     ))}
                     
-                    {calendar.currentDates.map((day, index) => (
-                        <div key={index} className={(day === calendar.currentDate.getDate() && isCurrentMonth) ? "dates-today__date" : ""}>
+                    {calendar.currentDates.map((date, index) => (
+                        <div key={index} className={(date.getDate() === calendar.currentDate.getDate() && isCurrentMonth) ? "dates-today__date" : ""}>
                             <span>
-                                {day}
+                                {date.getDate()}
                             </span>
                             {(authState.user!.permissions & Permission.Create)
                                 ? <button type="button" className="calendar-event__btn" onClick={handleAddEventButton}></button>
@@ -104,10 +104,10 @@ const LargeCalendar = () => {
                     ))}
                     
                     {calendar.nextDates.slice(0, calendarCellsCount - (calendar.previousDates.length + calendar.currentDates.length))
-                        .map((day, index) => (
+                        .map((date, index) => (
                             <div key={index} className="calendar-date__grey">
                           <span className="calendar-prev__month-date">
-                            {day}
+                            {date.getDate()}
                           </span>
                             </div>
                         ))}
