@@ -3,15 +3,15 @@ import { DefaultState } from "../../intrerfaces";
 
 export const defaultState: DefaultState = {
     loading: false,
-    error: "",
-    message: ""
+    error: null,
+    message: null
 }
 
 export function createErrorReducer<T extends DefaultState>(callback:Function|null=null){
     return (state: T, action: PayloadAction<string>):void => {
         state.loading=false;
         state.error=action.payload;
-        state.message='';
+        state.message=null;
         if(callback!==null)
             callback(state);
 
@@ -21,8 +21,8 @@ export function createErrorReducer<T extends DefaultState>(callback:Function|nul
 export function createSuccessReducerWithPayload<T extends DefaultState,V>(callback:Function|null=null){
     return (state: T, action: PayloadAction<V>):void => {
         state.loading=false;
-        state.error='';
-        state.message='';
+        state.error=null;
+        state.message=null;
         if(callback!==null)
             callback(state,action);
     }
@@ -31,8 +31,8 @@ export function createSuccessReducerWithPayload<T extends DefaultState,V>(callba
 export function createSuccessReducerWithoutPayload<T extends DefaultState>(callback:Function|null=null){
     return (state: T):void => {
         state.loading=false;
-        state.error='';
-        state.message='';
+        state.error=null;
+        state.message=null;
         if(callback!==null)
             callback(state);
     }
@@ -41,8 +41,8 @@ export function createSuccessReducerWithoutPayload<T extends DefaultState>(callb
 export function createPendingReducer<T extends DefaultState>(callback:Function|null=null){
     return (state: T):void => {
         state.loading=true;
-        state.error='';
-        state.message='';
+        state.error=null;
+        state.message=null;
         if(callback!==null)
             callback(state);
     }
@@ -51,8 +51,8 @@ export function createPendingReducer<T extends DefaultState>(callback:Function|n
 export function createPendingReducerWithPayload<T extends DefaultState,V>(callback:Function|null=null){
     return (state:T,action:PayloadAction<V>)=>{
         state.loading=true;
-        state.error='';
-        state.message='';
+        state.error=null;
+        state.message=null;
         if(callback!==null)
             callback(state,action);
     }

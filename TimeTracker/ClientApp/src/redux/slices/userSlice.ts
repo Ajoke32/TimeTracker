@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { UserSliceState, User } from '../intrerfaces';
-import { UserAddType } from "../types";
+import { UserAddType, UserEditType } from "../types";
 import {
     defaultState, createPendingReducerWithPayload,
     createSuccessReducerWithPayload, createErrorReducer,
@@ -35,7 +35,7 @@ const userSlice = createSlice({
             }),
         fetchUserFail: createErrorReducer(),
 
-        editUser: createPendingReducerWithPayload<UserSliceState, User>(),
+        editUser: createPendingReducerWithPayload<UserSliceState, UserEditType>(),
         editUserSuccess: createSuccessReducerWithoutPayload(),
         editUserFail: createErrorReducer(),
 
@@ -46,6 +46,8 @@ const userSlice = createSlice({
             state.vacationDays=action.payload;
         }),
         fetchVacationDaysFail:createErrorReducer(),
+
+        emailVerify: createPendingReducerWithPayload<UserSliceState, string>(),
     },
 });
 
@@ -56,6 +58,7 @@ export const {
     userVerify, verifyFail, verifySuccess,
     fetchUser, fetchUserFail, fetchUserSuccess,
     editUser, editUserFail, editUserSuccess,
-    fetchVacationDaysSuccess,fetchVacationDaysFail,fetchVacationDays
+    fetchVacationDaysSuccess,fetchVacationDaysFail,
+    fetchVacationDays, emailVerify
 } = userSlice.actions;
 

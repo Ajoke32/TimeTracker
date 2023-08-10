@@ -2,11 +2,15 @@ import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import {
   Home, Login, AddUser, Layout,
   UserVerify, Team, EditUser,
-  ProtectedRoute, CreateVacation, VacationRequests,
+  ProtectedRoute, CreateVacation,
+  VacationRequests, NotFound,
+  EmailConfirm
 } from "..";
-import { useTypedSelector } from '../../hooks';
-import { Permission } from '../../redux';
-import {VacationsTable} from "@components/Tables";
+import { useTypedSelector } from '@hooks/customHooks';
+import { Permission } from '@redux/enums';
+import { VacationsTable } from "@components/Tables";
+import { Tracker } from "../TrackerPage/Tracker";
+import Calendar from "../CalendarPage/Calendar";
 
 export const AppRoutes = () => {
   const state = useTypedSelector((state) => state.auth);
@@ -16,11 +20,13 @@ export const AppRoutes = () => {
       {state.status ? (
         <>
           <Route path="/" element={<Layout />}>
+            <Route path="/calendar" element={<Calendar />} />
             <Route index element={<Home />} />
+            <Route path="/tracker" element={<Tracker />} />
+            <Route path="/calendar" element={<Calendar/>}/>
             <Route path="/team" element={<Outlet />}>
               <Route index element={<Team />} />
-              <Route
-                path="addUser"
+              <Route path="addUser"
                 element={
                   <ProtectedRoute
                     component={<AddUser />}
@@ -28,8 +34,7 @@ export const AppRoutes = () => {
                   />
                 }
               />
-              <Route
-                path="editUser/:userId"
+              <Route path="editUser/:userId"
                 element={
                   <ProtectedRoute
                     component={<EditUser />}
@@ -44,12 +49,14 @@ export const AppRoutes = () => {
               <Route path="requests" element={<VacationRequests />} />
               <Route path="all" element={<VacationsTable />} />
             </Route>
-            <Route path="*" element={<Navigate to="/" />} />
+            <Route path="/login" element={<Navigate to="/" />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
         </>
       ) : (
         <>
           <Route path="/userVerify" element={<UserVerify />} />
+          <Route path="/emailConfirm" element={<EmailConfirm />} />
           <Route path="/login" element={<Login />} />
           <Route path="/*" element={<Navigate to="/login" />} />
         </>

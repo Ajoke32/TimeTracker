@@ -74,12 +74,9 @@ export const VacationsRequestTable = () => {
                         </div>
                     })}
 
-
                 </div>
             }
 
         </div>
     );
 };
-
-

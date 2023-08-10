@@ -15,13 +15,7 @@ export interface ApproverVacationUpdate{
     message?:string
 }
 
-
-
-
-
 export interface VacationApproverInput{
     vacationId:number,
     userId:number,
 }
-
-

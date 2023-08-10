@@ -1,12 +1,73 @@
 ﻿import "./Header.css"
-import { ProfileAvatar } from "../UI";
-import { useTypedSelector } from "../../hooks";
+import { ProfileAvatar, Timer } from "@components/UI";
+import { useAppDispatch, useTypedSelector } from "../../hooks";
+import { useEffect } from "react";
+import { startTimer, resetTimer, tick } from "@redux/slices";
+import { useLocation } from 'react-router-dom'
+import { WorkedTime } from "@redux/types";
+import { GetFormattedUTCDateString, GetFormattedTimeString } from "../../utils";
 
 export const Header = () => {
-    const authState = useTypedSelector(state => state.auth);
+    const dispatch = useAppDispatch();
+    const { user } = useTypedSelector(state => state.auth);
+    const { isRunning, startedAt, hours, minutes, seconds } = useTypedSelector(state => state.timer);
+    const isTrackerPage = (useLocation().pathname === '/tracker');
+
+    useEffect(() => {
+        if (!isTrackerPage && isRunning) {
+            const intervalId = setInterval(() => {
+                dispatch(tick());
+            }, 1000);
+
+            return () => {
+                clearInterval(intervalId);
+            }
+        }
+    }, [dispatch, isRunning]);
+
+    const handleStartStopButton = () => {
+        if (!isRunning) {
+            dispatch(startTimer());
+        } else {
+            const startDate = new Date(startedAt!);
+            const stopDate = new Date();
+
+            const startTime: WorkedTime = {
+                hours: startDate.getUTCHours(),
+                minutes: startDate.getUTCMinutes(),
+                seconds: startDate.getUTCSeconds()
+            }
+
+            const endTime: WorkedTime = {
+                hours: stopDate.getUTCHours(),
+                minutes: stopDate.getUTCMinutes(),
+                seconds: stopDate.getUTCSeconds()
+            }
+
+            dispatch(resetTimer({
+                userId: user!.id,
+                date: GetFormattedUTCDateString(stopDate),
+                startTime: GetFormattedTimeString(startTime),
+                endTime: GetFormattedTimeString(endTime)
+            }));
+        }
+    };
 
     return (
         <header className="header">
+            <div className="header-timer__wrapper">
+                {!isTrackerPage && startedAt && (
+                    <div className="header-timer__inner">
+                        <div className="header-timer__content" style={!isRunning ? { opacity: '.5' } : {}}>
+                            <Timer hours={hours} minutes={minutes} seconds={seconds} />
+                        </div>
+                        <button className="timer-start-stop__btn" onClick={handleStartStopButton}>
+                            <div className={isRunning ? "timer-stop__icon" : "timer-start__icon"}></div>
+                        </button>
+                    </div>
+                )}
+            </div>
+
             <div className="header-profile__wrapper">
                 <div className="header-profile__notifications">
                     <div className="header-profile__notifications-inner">
@@ -15,10 +76,9 @@ export const Header = () => {
                 </div>
 
                 <div className="header-profile__name">
-                    <span>{`${authState.user?.firstName} ${authState.user?.lastName}`}</span>
+                    <span>{`${user?.firstName} ${user?.lastName}`}</span>
                 </div>
-
-                <ProfileAvatar initials={`${authState.user?.firstName[0]}${authState.user?.lastName[0]}`}/>
+                <ProfileAvatar initials={`${user?.firstName[0]}${user?.lastName[0]}`} />
             </div>
         </header>
 

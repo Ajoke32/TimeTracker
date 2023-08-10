@@ -9,7 +9,7 @@ public class User:SoftDeleteBase
 {
     public int Id { get; set; }
     
-    public int? WorkedHours { get; set; }
+    // public int? WorkedHours { get; set; }
     public static int FullTimeValue => 100;
 
     [Required] public string FirstName { get; set; } = string.Empty;
@@ -43,11 +43,13 @@ public class User:SoftDeleteBase
 
     public List<ApproverVacation> ApproverVacations { get; } = new();
 
+    public List<WorkedHour> WorkedHours { get; } = new();
+
     public User()
     {
         VacationDays = 30;
         IsDeleted = false;
         Permissions = Permissions.None;
-        WorkedHours = 0;
+        // WorkedHours = 0;
     }
 }

@@ -53,10 +53,22 @@ public sealed class UserMutations:ObjectGraphType
                 var editedUser = ctx.GetArgument<UserUpdateDto>("user");
 
                 var user = await uow.GenericRepository<User>().FindAsync(u => u.Id == editedUser.Id)
-                            ?? throw new ValidationError("User not found!");                
+                            ?? throw new QueryError(Error.ERR_USER_NOT_FOUND);
+
+                var oldEmail = user.Email;
 
                 var updated = await uow.GenericRepository<User>()
                                        .UpdateAsync(mapper.Map<UserUpdateDto, User>(editedUser, user));
+
+                if (oldEmail != updated.Email)
+                {
+                    if (await uow.GenericRepository<User>().FindAsync(u => u.Email == updated.Email) is not null)
+                        throw new QueryError(Error.ERR_EMAIL_EXISTS);
+
+                    updated.IsEmailActivated = false;
+                    await emailService.SendEmailConfirmationAsync(updated);
+                }
+
                 await uow.SaveAsync();
                 return true;
             });
@@ -107,6 +119,27 @@ public sealed class UserMutations:ObjectGraphType
             
             var password = ctx.GetArgument<string>("password");
             user.Password = BCrypt.Net.BCrypt.HashPassword(password);
+            
+            await uow.SaveAsync();
+            return true;
+        });
+
+        Field<bool>("verifyEmail")
+        .Argument<string>("token")
+        .ResolveAsync(async ctx =>
+        {
+            var token = ctx.GetArgument<string>("token");
+            var authEmailService = ctx.RequestServices?.GetRequiredService<EmailTokenService>();
+            var valid = await authEmailService!.VerifyUserToken(token, 72000); // 20 hours
+            
+            if (!valid) throw new QueryError(Error.ERR_INVALID_TOKEN);
+            
+            var id = authEmailService.GetUserIdFromToken(token);
+            var user = await uow.GenericRepository<User>().FindAsync(u=>u.Id==id);
+
+            if (user is null || !user.IsEmailActivated) throw new QueryError(Error.ERR_INVALID_TOKEN);
+            
+            user.IsEmailActivated = true;
             
             await uow.SaveAsync();
             return true;

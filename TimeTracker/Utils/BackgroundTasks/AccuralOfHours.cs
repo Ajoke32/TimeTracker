@@ -17,10 +17,10 @@ public class AccuralOfHours:IJob
         var fullTimers = await _uow.GenericRepository<User>()
             .GetAsync(u => u.WorkType == WorkType.FullTime);
 
-        foreach (var user in fullTimers)
-        {
-            user.WorkedHours += 8;
-        }
+        // foreach (var user in fullTimers)
+        // {
+        //     user.WorkedHours += 8;
+        // }
 
         await _uow.SaveAsync();
     }

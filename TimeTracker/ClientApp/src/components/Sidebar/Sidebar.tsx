@@ -11,6 +11,21 @@ export const Sidebar = () => {
         <div className="sidebar-wrapper">
             <nav>
                 <ul className="sidebar-list">
+
+                    <li>
+                        <a href="/tracker" className="sidebar-list__link">
+                            <div className="sidebar-list__image-wrapper"><div className="timetracker-img__wrapper"></div></div>
+                            <span>Time Tracker</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/calendar" className="sidebar-list__link">
+                            <div className="sidebar-list__image-wrapper"><div className="calendar-img__wrapper"></div></div>
+                            <span>Calendar</span>
+                        </a>
+                    </li>
+
                     <li>
                         <a href="/" className="sidebar-list__link">
                             <div className="sidebar-list__image-wrapper"><div className="dashboard-img__wrapper"></div></div>
@@ -20,36 +35,15 @@ export const Sidebar = () => {
 
                     <li>
                         <a href="/vacation/requests" className="sidebar-list__link">
-                            <div className="sidebar-list__image-wrapper"><div className="timetracker-img__wrapper"></div></div>
+                            <div className="sidebar-list__image-wrapper"><div className="requests-img__wrapper"></div></div>
                             <span>Requests</span>
                         </a>
                     </li>
 
                     <li>
                         <a href="/vacation/all" className="sidebar-list__link">
-                            <div className="sidebar-list__image-wrapper"><div className="timetracker-img__wrapper"></div></div>
+                            <div className="sidebar-list__image-wrapper"><div className="vacations-img__wrapper"></div></div>
                             <span>My vacations</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="/vacation/create" className="sidebar-list__link">
-                            <div className="sidebar-list__image-wrapper"><div className="timetracker-img__wrapper"></div></div>
-                            <span>Create vacation</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="" className="sidebar-list__link">
-                            <div className="sidebar-list__image-wrapper"><div className="timetracker-img__wrapper"></div></div>
-                            <span>Time Tracker</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="" className="sidebar-list__link">
-                            <div className="sidebar-list__image-wrapper"><div className="calendar-img__wrapper"></div></div>
-                            <span>Calendar</span>
                         </a>
                     </li>
 
@@ -68,15 +62,13 @@ export const Sidebar = () => {
                             <span>Settings</span>
                         </a>
                     </li>
-                    
-                    
 
-                <li className="sidebar-list__logout-link">
-                    <button onClick={() => { dispatch(logout()); }} className="sidebar-list__link sidebar-logout__btn">
-                        <div className="sidebar-list__image-wrapper"><div className="logout-img__wrapper"></div></div>
-                        <span>Log out</span>
-                    </button>
-                </li>
+                    <li className="sidebar-list__logout-link">
+                        <button onClick={() => { dispatch(logout()); }} className="sidebar-list__link sidebar-logout__btn">
+                            <div className="sidebar-list__image-wrapper"><div className="logout-img__wrapper"></div></div>
+                            <span>Log out</span>
+                        </button>
+                    </li>
                 </ul>
             </nav>
         </div>

@@ -7,12 +7,14 @@ import {
     fetchVacationDaysEpic,
     passwordConfirmEpic,
     addUserEpic,
-    DeleteUserEpic
+    DeleteUserEpic,
+    emailConfirmEpic
 } from './user'
 import { fetchUsersEpic } from "./users";
 import {addVacationEpic, fetchUserVacationsEpic, updateVacationStateEpic} from "./vacation";
 import { addApproversEpic, fetchApproversEpic } from "./approvers";
 import { fetchVacationsRequestsEpic, updateApproversVacationsEpic, updateApproverVacationEpic } from "./approverVacation";
+import { workedHourEpics } from "./timeTracker";
 
 
 
@@ -33,7 +35,9 @@ export const rootEpic: Epic = (action$, store$, dependencies) =>
         editUserEpic,
         fetchVacationDaysEpic,
         fetchUserVacationsEpic,
-        DeleteUserEpic
+        DeleteUserEpic,
+        emailConfirmEpic,
+        ...workedHourEpics
     )
         (action$, store$, dependencies).pipe(
             catchError((error, source) => {

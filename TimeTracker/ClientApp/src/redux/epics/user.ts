@@ -4,7 +4,8 @@ import { catchError, map, mergeMap, Observable, of } from "rxjs";
 
 import {
     AddUserQuery, PasswordConfirmQuery,
-    FetchUserQuery, EditUserQuery, FetchUserVacationDays, DeleteUser
+    FetchUserQuery, EditUserQuery, FetchUserVacationDays, 
+    DeleteUser, EmailConfirmQuery
 } from "@redux/queries";
 import {
     userAddFail, userAddSuccess,
@@ -41,6 +42,7 @@ export const passwordConfirmEpic: Epic = (action: Observable<PayloadAction<{ tok
         mergeMap(action =>
             PasswordConfirmQuery(action.payload).pipe(
                 mergeMap(async resp => {
+                    console.log(resp)
                     if (resp.response.errors != null) {
                         const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
                         return verifyFail(errorMessage)
@@ -85,7 +87,6 @@ export const editUserEpic: Epic = (action: Observable<PayloadAction<User>>, stat
                             const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
                             return editUserFail(errorMessage)
                         }
-                    
                         console.log("successfully");
                         return editUserSuccess();
                     }),
@@ -97,37 +98,57 @@ export const editUserEpic: Epic = (action: Observable<PayloadAction<User>>, stat
         )
     );
 
-export const fetchVacationDaysEpic:Epic = (action:Observable<PayloadAction<number>>,state)=>
+export const fetchVacationDaysEpic: Epic = (action: Observable<PayloadAction<number>>, state) =>
     action.pipe(
         ofType("user/fetchVacationDays"),
-        mergeMap(action=> FetchUserVacationDays(action.payload)
-                .pipe(
-                    map(res=>{
-                        if (res.response.errors != null) {
-                            return fetchVacationDaysFail(res.response.errors[0].message)
-                        }
-                        return fetchVacationDaysSuccess(res.response.data.userQuery.user.vacationDays);
-                    }),
-                    catchError((e:Error)=>of(fetchVacationDaysFail("Error")))
-                ),
+        mergeMap(action => FetchUserVacationDays(action.payload)
+            .pipe(
+                map(res => {
+                    if (res.response.errors != null) {
+                        return fetchVacationDaysFail(res.response.errors[0].message)
+                    }
+                    return fetchVacationDaysSuccess(res.response.data.userQuery.user.vacationDays);
+                }),
+                catchError((e: Error) => of(fetchVacationDaysFail("Error")))
+            ),
         )
     );
 
-export const DeleteUserEpic:Epic=(action:Observable<PayloadAction<number>>)=>
+export const DeleteUserEpic: Epic = (action: Observable<PayloadAction<number>>) =>
     action.pipe(
         ofType('users/deleteUser'),
-        mergeMap(action=>
+        mergeMap(action =>
             DeleteUser(action.payload)
                 .pipe(
-                    map(res=>{
+                    map(res => {
                         if (res.response.errors != null) {
                             return deleteUserFail(res.response.errors[0].message)
                         }
                         return deleteUserSuccess(res.response.data.userMutation.deleteById);
                     }),
-                    catchError((e:Error)=>of(deleteUserFail("error")))
+                    catchError((e: Error) => of(deleteUserFail("error")))
                 )
         )
     )
 
-export const userEpics = [fetchVacationDaysEpic,passwordConfirmEpic,addUserEpic,DeleteUserEpic]
+export const emailConfirmEpic: Epic = (action: Observable<PayloadAction<string>>, state) =>
+    action.pipe(
+        ofType("user/emailVerify"),
+        mergeMap(action =>
+            EmailConfirmQuery(action.payload).pipe(
+                mergeMap(async resp => {
+                    console.log(resp)
+                    if (resp.response.errors != null) {
+                        const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
+                        return verifyFail(errorMessage)
+                    }
+                    return verifySuccess();
+                }),
+                catchError((e: Error) => {
+                    return of(verifyFail("Unexpected error"))
+                })
+            ),
+        )
+    );
+
+export const userEpics = [fetchVacationDaysEpic, passwordConfirmEpic, addUserEpic, DeleteUserEpic, emailConfirmEpic]

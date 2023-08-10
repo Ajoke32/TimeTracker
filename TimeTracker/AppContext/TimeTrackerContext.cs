@@ -18,8 +18,10 @@ public class TimeTrackerContext:DbContext
     public DbSet<Vacation> Vacations { get; set; }
     
     public DbSet<UserApprover> Approvers { get; set; }
-    
+
     public DbSet<ApproverVacation> ApproversVacation { get; set; }
+
+    public DbSet<WorkedHour> WorkedHours { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserApprover>()
@@ -36,6 +38,39 @@ public class TimeTrackerContext:DbContext
 
         modelBuilder.Entity<User>()
             .HasQueryFilter(u => !u.IsDeleted);
+
+        modelBuilder.Entity<WorkedHour>()
+            .HasOne(a => a.User)
+            .WithMany(u => u.WorkedHours)
+            .HasForeignKey(a => a.UserId);
+        
+        modelBuilder.Entity<WorkedHour>()
+            .Property(a => a.Date)
+            .HasConversion(
+                v => v.ToDateTime(new TimeOnly()),
+                v => DateOnly.FromDateTime(v)
+            );
+        
+        modelBuilder.Entity<WorkedHour>()
+            .Property(a => a.StartTime)
+            .HasConversion(
+                v => v.ToTimeSpan(),
+                v => TimeOnly.FromTimeSpan(v)
+            );
+        
+        modelBuilder.Entity<WorkedHour>()
+            .Property(a => a.EndTime)
+            .HasConversion(
+                v => v.ToTimeSpan(),
+                v => TimeOnly.FromTimeSpan(v)
+            );
+
+        modelBuilder.Entity<WorkedHour>()
+            .Property(a => a.TotalTime)
+            .HasConversion(
+                v => v.ToTimeSpan(),
+                v => TimeOnly.FromTimeSpan(v)
+            );
         
         base.OnModelCreating(modelBuilder);
     }

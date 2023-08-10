@@ -24,9 +24,6 @@ public class UserProfile:Profile
             .ForMember(x => x.Permissions,
                 o =>
                     o.MapFrom(dto => (Permissions)dto.Permissions))
-            .ForMember(x => x.HoursPerMonth, 
-                o => 
-                    o.MapFrom(dto => dto.HoursPerMonth))
             .ForMember(x => x.WorkType,
                 o =>
                     o.MapFrom(m =>

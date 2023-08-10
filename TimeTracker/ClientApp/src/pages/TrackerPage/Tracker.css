@@ -1,0 +1,13 @@
+.tracker-wrapper {
+    width: 90%;
+    height: 6rem;
+    display: flex;
+    margin: auto;
+    justify-content: space-between;
+    border: 1px solid var(--color-stroke-gray);
+    border-radius: 15px;
+}
+
+.loader-wrapper {
+    margin-top: 30px;
+}

@@ -4,4 +4,7 @@ export * from './usersSlice'
 export * from './approversSlice'
 export * from './vacationSlice'
 export * from './approverVacationSlice'
-
+export * from './timerSlice'
+export * from './calendarSlice'
+export * from './workedHoursSlice'
+export * from './messageModalSlice'

@@ -1,9 +1,10 @@
 import { User } from './'
+import { ApproverVacation, Vacation, WorkedHour } from '@redux/types';
 
 export interface DefaultState {
     loading: boolean,
-    error: string,
-    message: string
+    error: string | null,
+    message: string | null
 }
 
 export interface AuthSliceState extends DefaultState {
@@ -13,9 +14,37 @@ export interface AuthSliceState extends DefaultState {
 
 export interface UserSliceState extends DefaultState {
     user: User | null,
-    vacationDays?:number
+    vacationDays?: number
 }
 
 export interface UsersSliceState extends DefaultState {
     users: User[],
+}
+
+export interface TimerSliceState extends DefaultState {
+    startedAt: number | null;
+    hours: number;
+    minutes: number;
+    seconds: number;
+    isRunning: boolean;
+}
+
+export interface ApproversState extends DefaultState {
+    userApprovers: number[],
+    approversList: User[]
+}
+
+export interface VacationApproverState extends DefaultState {
+    vacationRequests: ApproverVacation[],
+    updated: boolean
+}
+
+export interface VacationState extends DefaultState {
+    created: boolean,
+    createdId?: number,
+    vacations: Vacation[]
+}
+
+export interface WorkedHoursSlice extends DefaultState {
+    workedHours: WorkedHour[]
 }

@@ -22,7 +22,7 @@ export const Layout = () => {
                 <Sidebar/>
             </div>
             <div className="layout-content__wrapper">
-                <main className="App">
+                <main>
                     <Outlet />
                 </main>
             </div>
