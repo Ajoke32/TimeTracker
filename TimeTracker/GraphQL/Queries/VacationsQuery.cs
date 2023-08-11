@@ -6,7 +6,7 @@ using TimeTracker.Models;
 
 namespace TimeTracker.GraphQL.Queries;
 
-public class VacationsQuery:ObjectGraphType
+public sealed class VacationsQuery:ObjectGraphType
 {
     public VacationsQuery(IUnitOfWorkRepository uow)
     {
@@ -18,6 +18,15 @@ public class VacationsQuery:ObjectGraphType
                 
                 return await uow.GenericRepository<Vacation>()
                     .GetAsync(x => x.UserId == id);
+            });
+
+        Field<VacationType>("vacation")
+            .Argument<int>("id")
+            .ResolveAsync(async _ =>
+            {
+                var id = _.GetArgument<int>("id");
+                return await uow.GenericRepository<Vacation>()
+                    .FindAsync(v => v.Id == id,relatedData:"User");
             });
     }
 }

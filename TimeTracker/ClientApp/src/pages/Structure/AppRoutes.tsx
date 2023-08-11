@@ -11,6 +11,7 @@ import { Permission } from '@redux/enums';
 import { VacationsTable } from "@components/Tables";
 import { Tracker } from "../TrackerPage/Tracker";
 import Calendar from "../CalendarPage/Calendar";
+import VacationDetails from "@components/Cards/VacationDetails.tsx";
 
 export const AppRoutes = () => {
   const state = useTypedSelector((state) => state.auth);
@@ -48,6 +49,7 @@ export const AppRoutes = () => {
               <Route path="create" element={<CreateVacation />} />
               <Route path="requests" element={<VacationRequests />} />
               <Route path="all" element={<VacationsTable />} />
+              <Route path="details/:id" element={<VacationDetails />} />
             </Route>
             <Route path="/login" element={<Navigate to="/" />} />
             <Route path="*" element={<NotFound />} />

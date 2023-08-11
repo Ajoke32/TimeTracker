@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import {Header, Sidebar} from "../../components/";
 import "./Layout.css"
+import StateInfoModal from "@components/UI/Modals/StateInfoModal.tsx";
 
 
 
@@ -26,6 +27,7 @@ export const Layout = () => {
                     <Outlet />
                 </main>
             </div>
+            <StateInfoModal />
         </div>
     )
 };

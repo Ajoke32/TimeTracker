@@ -5,7 +5,9 @@ export interface ApproverVacation{
     id:number,
     approver:User[],
     vacation:Vacation,
-    isApproved?:boolean|null
+    isApproved?:boolean|null,
+    isDeleted:boolean,
+    deletedAt:Date|null
 }
 
 export interface ApproverVacationUpdate{

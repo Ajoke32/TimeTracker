@@ -4,15 +4,21 @@ import { PayloadAction } from "@reduxjs/toolkit";
 import {
     UpdateApproverVacations,
     UpdateApproverVacationState,
-    FetchVacationsRequest
+    FetchVacationsRequest,
+    DeleteApproverVacationByVacationId,
+    FetchApproverVacationById, UpdateApproverVacationToDefault
 } from "../queries";
 import {
+    deleteByVacationIdFail,
+    deleteByVacationIdSuccess,
+    fetchApproverVacationByIdFail,
+    fetchApproverVacationByIdSuccess,
     fetchRequestsFail,
     fetchRequestsSuccess,
     updateApproversVacationsFail,
     updateApproversVacationsSuccess,
-    updateApproverVacationStateStateFail,
-    updateApproverVacationStateStateSuccess
+    updateApproverVacationStateStateFail, updateApproverVacationStateSuccess,
+    updateToDefaultFail, updateToDefaultSuccess
 } from "../slices";
 import {
     ApproverVacationUpdate,
@@ -20,7 +26,7 @@ import {
 } from "../types";
 import { GetErrorMessage } from "../../utils";
 
-export const updateApproverVacationEpic: Epic = (action: Observable<PayloadAction<ApproverVacationUpdate>>, state) =>
+const updateApproverVacationEpic: Epic = (action: Observable<PayloadAction<ApproverVacationUpdate>>, state) =>
     action.pipe(
         ofType("approverVacation/updateApproverVacationState"),
         mergeMap(action =>
@@ -30,7 +36,7 @@ export const updateApproverVacationEpic: Epic = (action: Observable<PayloadActio
                         if (resp.response.errors != null) {
                             return updateApproverVacationStateStateFail(resp.response.errors[0].message)
                         }
-                        return updateApproverVacationStateStateSuccess(resp.response.data.approverVacationMutation.updateState);
+                        return updateApproverVacationStateSuccess(resp.response.data.approverVacationMutation.updateState);
                     }),
                     catchError((e: Error) => {
                         return of(updateApproverVacationStateStateFail("unexpected error"))
@@ -39,7 +45,7 @@ export const updateApproverVacationEpic: Epic = (action: Observable<PayloadActio
         )
     );
 
-export const fetchVacationsRequestsEpic: Epic = (action: Observable<PayloadAction<number>>, state) =>
+const fetchVacationsRequestsEpic: Epic = (action: Observable<PayloadAction<number>>, state) =>
     action.pipe(
         ofType("approverVacation/fetchRequests"),
         mergeMap(action =>
@@ -60,7 +66,7 @@ export const fetchVacationsRequestsEpic: Epic = (action: Observable<PayloadActio
         )
     );
 
-export const updateApproversVacationsEpic: Epic = (action: Observable<PayloadAction<VacationApproverInput>>, state) =>
+const updateApproversVacationsEpic: Epic = (action: Observable<PayloadAction<VacationApproverInput>>, state) =>
     action.pipe(
         ofType("approverVacation/updateApproversVacations"),
         mergeMap(action =>
@@ -78,3 +84,65 @@ export const updateApproversVacationsEpic: Epic = (action: Observable<PayloadAct
                 ),
         )
     );
+
+const deleteApproverVacationByVacationIdEpic:Epic  = (action$:Observable<PayloadAction<number>>)=>
+    action$.pipe(
+        ofType('approverVacation/deleteByVacationId'),
+        mergeMap(action$=>
+            DeleteApproverVacationByVacationId(action$.payload)
+                .pipe(
+                    map(res=>{
+                        if (res.response.errors != null) {
+                            return deleteByVacationIdFail(res.response.errors[0].message)
+                        }
+                        return deleteByVacationIdSuccess(res.response.data.approverVacationMutation.deleteByVacationId);
+                    }),
+                    catchError((e: Error) => {
+                        return of(deleteByVacationIdFail("unexpected error"))
+                    })
+                ))
+        )
+
+const fetchApproverVacationByIdEpic:Epic=(action$:Observable<PayloadAction<number>>)=>
+    action$.pipe(
+        ofType('approverVacation/fetchApproverVacationById'),
+        mergeMap(action$=>
+            FetchApproverVacationById(action$.payload)
+                .pipe(
+                    map(res=>{
+                        if (res.response.errors != null) {
+                            return fetchApproverVacationByIdFail(res.response.errors[0].message)
+                        }
+                        return fetchApproverVacationByIdSuccess(res.response.data.approverVacationQuery.approverVacation);
+                    }),
+                    catchError((e: Error) => {
+                        console.log(e);
+                        return of(fetchApproverVacationByIdFail("unexpected error"))
+                    })
+                )
+        )
+    )
+
+const updateApproverVacationsStateToDefaultEpic:Epic=(action$:Observable<PayloadAction<number>>)=>
+    action$.pipe(
+        ofType('approverVacation/updateToDefault'),
+        mergeMap(action$=>
+            UpdateApproverVacationToDefault(action$.payload)
+                .pipe(
+                    map(res=>{
+                        console.log(res.response.errors);
+                        if (res.response.errors != null) {
+                            return updateToDefaultFail(res.response.errors[0].message)
+                        }
+                        return updateToDefaultSuccess();
+                    }),
+                    catchError((e: Error) => {
+                        console.log(e);
+                        return of(updateToDefaultFail("unexpected error"))
+                    })
+                )
+        )
+    )
+
+export const vacationApproverEpics = [deleteApproverVacationByVacationIdEpic,updateApproversVacationsEpic,
+    fetchVacationsRequestsEpic,updateApproverVacationEpic,fetchApproverVacationByIdEpic,updateApproverVacationsStateToDefaultEpic]

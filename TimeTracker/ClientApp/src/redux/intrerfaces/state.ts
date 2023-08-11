@@ -36,13 +36,17 @@ export interface ApproversState extends DefaultState {
 
 export interface VacationApproverState extends DefaultState {
     vacationRequests: ApproverVacation[],
-    updated: boolean
+    updated: boolean,
+    approverVacation:ApproverVacation|null,
+    deleted:boolean
 }
 
 export interface VacationState extends DefaultState {
     created: boolean,
     createdId?: number,
-    vacations: Vacation[]
+    vacations: Vacation[],
+    vacation:Vacation|null,
+    updated:Vacation|null
 }
 
 export interface WorkedHoursSlice extends DefaultState {
