@@ -20,7 +20,7 @@ public sealed class RootMutation:ObjectGraphType
             .Resolve(_ => new { });
         
 
-        Field<WorkedHourMutations>("WorkedHoursMutations")
+        Field<WorkedHourMutations>("workedHourMutations")
             .Resolve(_ => new { });
 
         /*Field<CalendarEventMutations>("calendarEventMutation");*/
