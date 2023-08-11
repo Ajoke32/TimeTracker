@@ -19,7 +19,7 @@ public sealed class RootMutation:ObjectGraphType
         Field<ApproverVacationMutations>("approverVacationMutation")
             .Resolve(_ => new { });
         
-        Field<WorkedHourMutations>("WorkedHoursMutations")
+        Field<WorkedHourMutations>("workedHourMutations")
             .Resolve(_ => new { });
     }
 }
