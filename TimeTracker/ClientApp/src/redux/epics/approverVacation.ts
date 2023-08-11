@@ -1,12 +1,12 @@
-import { Epic, ofType } from "redux-observable";
-import { catchError, map, mergeMap, Observable, of } from "rxjs";
-import { PayloadAction } from "@reduxjs/toolkit";
+import {Epic, ofType} from "redux-observable";
+import {catchError, map, mergeMap, Observable, of} from "rxjs";
+import {PayloadAction} from "@reduxjs/toolkit";
 import {
-    UpdateApproverVacations,
-    UpdateApproverVacationState,
-    FetchVacationsRequest,
     DeleteApproverVacationByVacationId,
-    FetchApproverVacationById, UpdateApproverVacationToDefault
+    FetchApproverVacationById,
+    FetchVacationsRequest,
+    UpdateApproverVacations,
+    UpdateApproverVacationState, UpdateApproverVacationToDefault
 } from "../queries";
 import {
     deleteByVacationIdFail,
@@ -17,14 +17,12 @@ import {
     fetchRequestsSuccess,
     updateApproversVacationsFail,
     updateApproversVacationsSuccess,
-    updateApproverVacationStateStateFail, updateApproverVacationStateSuccess,
-    updateToDefaultFail, updateToDefaultSuccess
+    updateApproverVacationStateStateFail,
+    updateApproverVacationStateSuccess, updateToDefaultFail, updateToDefaultSuccess
 } from "../slices";
-import {
-    ApproverVacationUpdate,
-    VacationApproverInput
-} from "../types";
-import { GetErrorMessage } from "../../utils";
+import {ApproverVacationUpdate, VacationApproverInput} from "../types";
+import {GetErrorMessage} from "../../utils";
+
 
 const updateApproverVacationEpic: Epic = (action: Observable<PayloadAction<ApproverVacationUpdate>>, state) =>
     action.pipe(
@@ -85,6 +83,7 @@ const updateApproversVacationsEpic: Epic = (action: Observable<PayloadAction<Vac
         )
     );
 
+
 const deleteApproverVacationByVacationIdEpic:Epic  = (action$:Observable<PayloadAction<number>>)=>
     action$.pipe(
         ofType('approverVacation/deleteByVacationId'),
@@ -122,15 +121,13 @@ const fetchApproverVacationByIdEpic:Epic=(action$:Observable<PayloadAction<numbe
                 )
         )
     )
-
-const updateApproverVacationsStateToDefaultEpic:Epic=(action$:Observable<PayloadAction<number>>)=>
+export const updateApproverVacationsStateToDefaultEpic: Epic = (action$: Observable<PayloadAction<number>>) =>
     action$.pipe(
         ofType('approverVacation/updateToDefault'),
-        mergeMap(action$=>
+        mergeMap(action$ =>
             UpdateApproverVacationToDefault(action$.payload)
                 .pipe(
-                    map(res=>{
-                        console.log(res.response.errors);
+                    map(res => {
                         if (res.response.errors != null) {
                             return updateToDefaultFail(res.response.errors[0].message)
                         }
@@ -143,6 +140,5 @@ const updateApproverVacationsStateToDefaultEpic:Epic=(action$:Observable<Payload
                 )
         )
     )
-
 export const vacationApproverEpics = [deleteApproverVacationByVacationIdEpic,updateApproversVacationsEpic,
-    fetchVacationsRequestsEpic,updateApproverVacationEpic,fetchApproverVacationByIdEpic,updateApproverVacationsStateToDefaultEpic]
+    fetchVacationsRequestsEpic,updateApproverVacationEpic,fetchApproverVacationByIdEpic,updateApproverVacationsStateToDefaultEpic];

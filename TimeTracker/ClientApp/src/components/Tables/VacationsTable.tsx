@@ -23,7 +23,7 @@ export const VacationsTable = () => {
         dispatch(fetchUserVacations(userId!))
     },[]);
     useEffect(() => {
-        if(updated){
+        if(updated!==null){
             dispatch(updateToDefault(clicked?.id!));
         }
     }, [updated]);
@@ -68,6 +68,7 @@ export const VacationsTable = () => {
                                 {v.vacationState===VacationStateEnum.Edited?"Pending":getStringVacationState(v.vacationState)}
                             </span>
                             {v.vacationState!==VacationStateEnum.Declined
+                            &&v.vacationState!==VacationStateEnum.Canceled
                                 ?<button onClick={() => handleSelect(v)} style={{marginRight: "5px"}}
                                          className="btn-base btn-decline">
                                     Cancel

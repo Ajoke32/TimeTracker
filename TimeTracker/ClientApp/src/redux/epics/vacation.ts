@@ -11,7 +11,7 @@ import {
 } from "../queries";
 
 import {
-    changeVacationSateSuccess,
+    changeVacationStateSuccess,
     changeVacationStateFail,
     createVacationFail,
     createVacationSuccess, deleteVacationFail, deleteVacationSuccess,
@@ -21,7 +21,7 @@ import {
     updateVacationStateSuccess, updateVacationSuccess,
 } from "../slices";
 import { GetErrorMessage } from "../../utils";
-import {act} from "react-dom/test-utils";
+
 
 const addVacationEpic: Epic = (action: Observable<PayloadAction<VacationInputType>>, state) =>
     action.pipe(
@@ -49,6 +49,7 @@ const updateVacationStateEpic: Epic = (action: Observable<PayloadAction<number>>
         mergeMap(action =>
             UpdateVacationState(action.payload).pipe(
                 mergeMap(async resp => {
+                    console.log(resp.response);
                     if (resp.response.errors != null) {
                         const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
                         return updateVacationStateFail(errorMessage)
@@ -93,7 +94,7 @@ const changeVacationStateEpic:Epic = (action$:Observable<PayloadAction<VacationC
                         if (res.response.errors != null) {
                             return changeVacationStateFail(res.response.errors[0].message)
                         }
-                        return changeVacationSateSuccess(res.response.data.vacationMutation.changeState);
+                        return changeVacationStateSuccess(res.response.data.vacationMutation.changeState);
                     }),
                     catchError((e: Error) => {
                         console.log(e);
@@ -110,7 +111,6 @@ const updateVacationEpic:Epic=(action$:Observable<PayloadAction<Vacation>>)=>
             UpdateVacation(action.payload)
                 .pipe(
                     map(res=>{
-                        console.log(res.response.errors);
                         if (res.response.errors != null) {
                             return updateVacationFail(res.response.errors[0].message)
                         }
