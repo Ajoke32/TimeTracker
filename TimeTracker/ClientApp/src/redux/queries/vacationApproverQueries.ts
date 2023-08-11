@@ -1,45 +1,13 @@
 import {AjaxQuery} from "./query";
 import {QueryStructure} from "../intrerfaces";
-import {ApproverVacation, Vacation, VacationApproverInput} from "../types";
+import {ApproverVacation, ApproverVacationUpdate, Vacation, VacationApproverInput} from "../types";
 
 
 
 
-export function UpdateApproverVacationState(id:number,state:boolean,approverId:number,message?:string){
-    return AjaxQuery<QueryStructure<{ approverVacationMutation: { updateState:ApproverVacation}}>>(
-        `mutation UpdateState(
-              $state: Boolean!
-              $vacationId: Int!
-              $approverId: Int!
-              $message: String
-            ) {
-              approverVacationMutation {
-                updateState(
-                  state: $state
-                  vacationId: $vacationId
-                  approverId: $approverId
-                  message: $message
-                ) {
-                  id
-                  vacationId
-                  isApproved,
-                  vacation{
-                    vacationState,
-                    message
-                    user{
-                      firstName,
-                      lastName,
-                      email,
-                      vacationDays
-                     }
-                  }
-                }
-              }
-            }
-`,
-        {vacationId:id,state:state,approverId:approverId,message:message}
-    )
-}
+
+
+
 
 export function CreateApproverVacation(approverVacation:VacationApproverInput){
 
@@ -76,4 +44,39 @@ export function UpdateApproverVacationToDefault(vacationId:number){
         'mutation StateToDefault($id:Int!){approverVacationMutation{stateToDefault(vacationId:$id)}}',
         {id:vacationId}
     )
+}
+
+export function UpdateApproverVacationState(av:ApproverVacationUpdate){
+    return AjaxQuery<QueryStructure<{ approverVacationMutation: { updateState:ApproverVacation}}>>(
+        `mutation UpdateState(
+              $state: Boolean!
+              $vacationId: Int!
+              $approverId: Int!
+              $message: String
+            ) {
+              approverVacationMutation {
+                updateState(
+                  state: $state
+                  vacationId: $vacationId
+                  approverId: $approverId
+                  message: $message
+                ) {
+                  id
+                  vacationId
+                  isApproved,
+                  vacation{
+                    vacationState,
+                    message
+                    user{
+                      firstName,
+                      lastName,
+                      email,
+                      vacationDays
+                     }
+                  }
+                }
+              }
+            }
+        `        ,
+        {vacationId:av.vacationId,state:av.isApproved,approverId:av.approverId,message:av.message})
 }
