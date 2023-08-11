@@ -26,33 +26,26 @@ public sealed class UserQuery : ObjectGraphType
     public UserQuery(IUnitOfWorkRepository uow,IMapper mapper)
     {
         _uow = uow;
-        
+
         Field<ListGraphType<UserType>>("users")
-            .Argument<string>("include",nullable:true,configure:c=>c.DefaultValue="")
-            .Argument<int>("take", nullable: true)
-            .Argument<int>("skip", nullable: true)
-            .Argument<int>("userId", nullable: true)
-            .Argument<bool>("onlyActivated", nullable: false)
+            .Argument<string>("include", nullable: true, configure: c => c.DefaultValue = "")
             .ResolveAsync(async ctx =>
             {
                 var include = ctx.GetArgument<string>("include");
-                var activated = ctx.GetArgument<bool>("onlyActivated");
-                var userId = ctx.GetArgument<int>("userId");
+                var take = ctx.GetArgument<int?>("take");
+                var skip = ctx.GetArgument<int?>("skip");
 
-                var take = ctx.GetArgument<int>("take");
-                var skip = ctx.GetArgument<int>("skip");
-                
                 
                 var users = await uow.GenericRepository<User>().GetAsync(
-                    includeProperties: include, 
-                    take: take, 
-                    skip: skip, 
-                    filter: activated ? (u => u.IsEmailActivated && u.Id != userId) : (u => u.Id != userId)
+                    includeProperties: include,
+                    take: take,
+                    skip: skip
                 );
                 return users.ApplyGraphQlFilters(ctx);
             })
             .Description("gets all users")
-            .UseFiltering(typeof(User));
+            .UseFiltering()
+            .UsePaging();
 
         Field<UserType>("user")
             .Argument<int>("id")
