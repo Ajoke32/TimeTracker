@@ -44,7 +44,8 @@ public sealed class VacationMutations:ObjectGraphType
                 var id = _.GetArgument<int>("vacationId");
                 
                 var vacation = await uow.GenericRepository<Vacation>()
-                    .FindAsync(v => v.Id == id,relatedData:"ApproverVacations")??throw new ValidationError("Vacation not found");
+                    .FindAsync(v => v.Id == id,relatedData:"ApproverVacations")
+                               ??throw new ValidationError("Vacation not found");
                 
                 vacation.VacationState = GetVacationState(vacation.ApproverVacations);
                 vacation.HaveAnswer = true; 
@@ -69,7 +70,8 @@ public sealed class VacationMutations:ObjectGraphType
                     .FindAsync(v => v.Id == vacation.Id,asNoTracking:true);
 
                 if (currentVacation!.StartDate.Date<=DateTime.Now.Date
-                    &&vacation.StartDate.Date>currentVacation.StartDate.Date)
+                    &&vacation.StartDate.Date>currentVacation.StartDate.Date
+                    &&currentVacation.VacationState==VacationState.Approved)
                 {
                     throw new ValidationError("Vacation days have already begun");
                 }
