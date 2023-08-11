@@ -1,56 +1,35 @@
-﻿using System.Linq.Expressions;
-using GraphQL;
-using GraphQL.Builders;
-using GraphQL.Instrumentation;
+﻿using GraphQL.Builders;
 using GraphQL.Types;
-using TimeTracker.Models;
+using TimeTracker.Utils.Filters.ExpressionTypes.GraphTypes;
+
 
 namespace TimeTracker.Utils.Filters;
 
 public static class GraphQlBuilderExtensions
 {
-    public static void UseFiltering<T, V>(this FieldBuilder<T, V> builder, Type entityType)
+    public static FieldBuilder<T, V> UseFiltering<T, V>(this FieldBuilder<T, V> builder)
     {
-        builder.Argument<WhereGraphType>("where");
+        builder
+            .Argument<WhereGraphType>("where",
+                configure: c =>c.DefaultValue = null)
+            .Argument<ListGraphType<WhereGraphType>>("group");
+
+        return builder;
     }
 
-
-    public static IEnumerable<T> ApplyGraphQlFilters<T>(this IQueryable<T> q, IResolveFieldContext context)
+    public static FieldBuilder<T, V>  UsePaging<T, V>(this FieldBuilder<T, V> builder)
     {
-        var expression = context.GetArgument<WhereExpression>("where");
+        builder.Argument<int>("take", nullable: true,configure:c=>c.DefaultValue=null)
+            .Argument<int>("skip", nullable: true,configure:c=>c.DefaultValue=null);
 
-        if (expression == null)
-        {
-            throw new Exception("filters absent");
-        }
-        
-        var parameter = Expression.Parameter(typeof(T), "f");
-        var property = Expression.Property(parameter, expression.PropertyName);
-        
-        var constant = Expression.Constant(expression.CompareValue);
-        
-        var body = Expression.Equal(property, constant);
-        
-        var lambda = Expression.Lambda<Func<T, bool>>(body, parameter);
-  
-        return q.Where(lambda);
+        return builder;
+    }
+
+    public static FieldBuilder<T, V> UseOrdering<T,V>(this FieldBuilder<T, V> builder)
+    {
+        builder.Argument<OrderByGraphType>("orderBy");
+        return builder;
     }
 }
 
-public sealed class WhereGraphType : InputObjectGraphType<WhereExpression>
-{
-    public WhereGraphType()
-    {
-        Field(x => x.PropertyName).Name("property");
-        Field(x => x.Operator).Name("operator");
-        Field(x => x.CompareValue).Name("value");
-    }
-}
 
-public class WhereExpression
-{
-    public string Operator { get; set; } = string.Empty;
-    public string PropertyName { get; set; } = string.Empty;
-
-    public string CompareValue { get; set; } = string.Empty;
-}

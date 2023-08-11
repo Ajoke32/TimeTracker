@@ -7,6 +7,8 @@ import {ApproverVacation, ApproverVacationUpdate, Vacation, VacationApproverInpu
 
 
 
+
+
 export function CreateApproverVacation(approverVacation:VacationApproverInput){
 
     return AjaxQuery<QueryStructure<{ approverVacationMutation: { createApproverVacation:VacationApproverInput}}>>(
