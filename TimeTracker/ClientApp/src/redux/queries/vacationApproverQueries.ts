@@ -1,6 +1,6 @@
 import {AjaxQuery} from "./query";
 import {QueryStructure} from "../intrerfaces";
-import {ApproverVacation, Vacation, VacationApproverInput} from "../types";
+import {ApproverVacation, ApproverVacationUpdate, Vacation, VacationApproverInput} from "../types";
 
 
 
@@ -44,7 +44,7 @@ export function UpdateApproverVacationToDefault(vacationId:number){
     )
 }
 
-export function UpdateApproverVacationState(id:number,state:boolean,approverId:number,message?:string){
+export function UpdateApproverVacationState(av:ApproverVacationUpdate){
     return AjaxQuery<QueryStructure<{ approverVacationMutation: { updateState:ApproverVacation}}>>(
         `mutation UpdateState(
               $state: Boolean!
@@ -76,5 +76,5 @@ export function UpdateApproverVacationState(id:number,state:boolean,approverId:n
               }
             }
         `        ,
-        {vacationId:id,state:state,approverId:approverId,message:message})
+        {vacationId:av.vacationId,state:av.isApproved,approverId:av.approverId,message:av.message})
 }
