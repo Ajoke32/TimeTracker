@@ -5,6 +5,7 @@ using TimeTracker.Absctration;
 using TimeTracker.GraphQL.Types;
 using TimeTracker.GraphQL.Types.InputTypes.ApproveInput;
 using TimeTracker.Models;
+using TimeTracker.Models.Dtos;
 
 
 namespace TimeTracker.GraphQL.Mutations;
@@ -51,24 +52,20 @@ public sealed class ApproverVacationMutations:ObjectGraphType
         
         
         Field<ApproverVacationType>("updateState")
-            .Argument<int>("approverId")
-            .Argument<bool>("state", nullable: true)
-            .Argument<int>("vacationId")
-            .Argument<string>("message", nullable: true)
+            .Argument<ApproverVacationUpdateType>("approverVacation")
             .ResolveAsync(async ctx =>
             {
-                var state = ctx.GetArgument<bool>("state");
-                var approverId = ctx.GetArgument<int>("approverId");
-                var vacationId = ctx.GetArgument<int>("vacationId");
-                var message = ctx.GetArgument<string>("message");
-
+                var av = ctx.GetArgument<ApproverVacationUpdateDto>("approverVacation");
+            
                 var approverVacation = await uow.GenericRepository<ApproverVacation>()
-                    .FindAsync(a => a.VacationId == vacationId && a.UserId == approverId
-                        , relatedData: "Vacation.User") ?? throw new ValidationError("ApproverVacation not found");
+                    .FindAsync(a => a.VacationId==av.VacationId && a.UserId == av.ApproverId
+                    ,relatedData:"Vacation.User")??throw new ValidationError("ApproverVacation not found");
                 
-                approverVacation.IsApproved = state;
-                approverVacation.Message = message;
-
+                
+                approverVacation.IsApproved = av.IsApproved;
+                approverVacation.Message = av.Message;
+                
+                
                 await uow.SaveAsync();
 
                 return approverVacation;

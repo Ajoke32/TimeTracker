@@ -49,7 +49,9 @@ const VacationDetails = () => {
             setError("message field required")
             return;
         }
-        dispatch(updateApproverVacationState({id:userId!,vacationId:av?.vacation.id!,isApproved:state!,message:message}));
+        dispatch(updateApproverVacationState({
+            approverId:userId!,vacationId:av?.vacation.id!,
+            isApproved:state!,message:message}));
         setMessage("");
     }
 

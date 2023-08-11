@@ -49,7 +49,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
             {
                 query = query.Take((int)take);
             }
-
+            
             return query;
         }
         catch (Exception e)
@@ -130,6 +130,5 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         _context.Entry(model).State = EntityState.Modified;
         return new ValueTask<TEntity>(entity.Entity);
     }
-    
     
 }

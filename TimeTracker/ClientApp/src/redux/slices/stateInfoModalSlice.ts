@@ -1,6 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {
-    changeVacationSateSuccess,
     changeVacationState, changeVacationStateFail,
     createVacation,
     createVacationFail,

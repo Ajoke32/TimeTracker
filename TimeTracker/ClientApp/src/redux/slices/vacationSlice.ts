@@ -1,4 +1,4 @@
-import {createReducer, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import { createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {
     createErrorReducer,
     createPendingReducerWithPayload,
@@ -46,7 +46,7 @@ const vacationsSlice = createSlice({
         changeVacationState:(state:VacationState,action:PayloadAction<VacationChangeType>)=>{
             state.updated=null;
         },
-        changeVacationSateSuccess:(state:VacationState,action:PayloadAction<Vacation>)=>{
+        changeVacationStateSuccess:(state:VacationState,action:PayloadAction<Vacation>)=>{
             state.vacations = state.vacations.map(v=>{
                 if(v.id===action.payload.id){
                     v =action.payload;
@@ -57,7 +57,10 @@ const vacationsSlice = createSlice({
         },
         changeVacationStateFail:createErrorReducer(),
 
-        updateVacation:createPendingReducerWithPayload<typeof initialState,Vacation>(),
+        updateVacation:createPendingReducerWithPayload<typeof initialState,Vacation>
+        ((state,action)=>{
+            state.updated=null;
+        }),
         updateVacationSuccess:createSuccessReducerWithPayload<typeof initialState,Vacation>
         ((state, action)=>{
             const upd = action.payload;
@@ -67,6 +70,7 @@ const vacationsSlice = createSlice({
                 }
                 return v;
             });
+            state.updated=upd;
         }),
         updateVacationFail:createErrorReducer(),
 
@@ -97,7 +101,7 @@ export const  {createVacation,
     ,fetchUserVacationsFail
     ,fetchUserVacations,changeVacationState
     ,changeVacationStateFail
-    ,changeVacationSateSuccess,
+    ,changeVacationStateSuccess,
     updateVacationSuccess,updateVacationFail
     ,updateVacation
     ,deleteVacationSuccess,fetchVacationById,
