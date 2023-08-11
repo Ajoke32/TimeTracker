@@ -4,6 +4,7 @@ import {ApproverVacation, Vacation, VacationApproverInput} from "../types";
 
 
 
+
 export function UpdateApproverVacationState(id:number,state:boolean,approverId:number,message?:string){
     return AjaxQuery<QueryStructure<{ approverVacationMutation: { updateState:ApproverVacation}}>>(
         `mutation UpdateState(

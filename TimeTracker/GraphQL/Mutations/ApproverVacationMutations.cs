@@ -5,6 +5,7 @@ using TimeTracker.Absctration;
 using TimeTracker.GraphQL.Types;
 using TimeTracker.GraphQL.Types.InputTypes.ApproveInput;
 using TimeTracker.Models;
+using TimeTracker.Models.Dtos;
 
 
 namespace TimeTracker.GraphQL.Mutations;
@@ -68,7 +69,7 @@ public sealed class ApproverVacationMutations:ObjectGraphType
                 
                 approverVacation.IsApproved = state;
                 approverVacation.Message = message;
-
+                
                 await uow.SaveAsync();
 
                 return approverVacation;

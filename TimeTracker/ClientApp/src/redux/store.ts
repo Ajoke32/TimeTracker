@@ -11,6 +11,7 @@ import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import {infoModalReducer} from "@redux/slices/stateInfoModalSlice.ts";
 
+
 const middleware = createEpicMiddleware();
 
 export const persistConfig = {

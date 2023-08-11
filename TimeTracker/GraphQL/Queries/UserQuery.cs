@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 using GraphQL;
 using GraphQL.Execution;
 using GraphQL.Types;
@@ -12,6 +13,7 @@ using TimeTracker.Models.Dtos;
 using TimeTracker.Utils.Auth;
 using TimeTracker.Utils.Email;
 using TimeTracker.Utils.Errors;
+using TimeTracker.Utils.Filters;
 
 
 namespace TimeTracker.GraphQL.Queries;
@@ -24,33 +26,29 @@ public sealed class UserQuery : ObjectGraphType
     public UserQuery(IUnitOfWorkRepository uow,IMapper mapper)
     {
         _uow = uow;
-        
+
         Field<ListGraphType<UserType>>("users")
-            .Argument<string>("include",nullable:true,configure:c=>c.DefaultValue="")
-            .Argument<int>("take", nullable: true)
-            .Argument<int>("skip", nullable: true)
-            .Argument<int>("userId", nullable: true)
-            .Argument<bool>("onlyActivated", nullable: false)
+            .Argument<string>("include", nullable: true, configure: c => c.DefaultValue = "")
             .ResolveAsync(async ctx =>
             {
                 var include = ctx.GetArgument<string>("include");
-                var activated = ctx.GetArgument<bool>("onlyActivated");
-                var userId = ctx.GetArgument<int>("userId");
+                var take = ctx.GetArgument<int?>("take");
+                var skip = ctx.GetArgument<int?>("skip");
 
-                var take = ctx.GetArgument<int>("take");
-                var skip = ctx.GetArgument<int>("skip");
-                
                 
                 var users = await uow.GenericRepository<User>().GetAsync(
-                    includeProperties: include, 
-                    take: take, 
-                    skip: skip, 
-                    filter: activated ? (u => u.IsEmailActivated && u.Id != userId) : (u => u.Id != userId)
+                    includeProperties: include,
+                    take: take,
+                    skip: skip
                 );
-
-                return users;
+                
+                return users.ApplyGraphQlFilters(ctx)
+                    .ApplyGraphQlOrdering(ctx);
             })
-            .Description("gets all users");
+            .Description("gets all users")
+            .UseFiltering()
+            .UsePaging()
+            .UseOrdering();
 
         Field<UserType>("user")
             .Argument<int>("id")
@@ -124,12 +122,13 @@ public sealed class UserQuery : ObjectGraphType
                 
                 return authService!.RefreshToken(user);
             });
-
+        
         Field<ListGraphType<UserType>>("usersByIds")
             .Argument<List<int>>("ids")
             .ResolveAsync(async _ =>
             {
                 var ids = _.GetArgument<List<int>>("ids");
+                
                 
                 return await uow.GenericRepository<User>()
                     .GetAsync(u => ids.Contains(u.Id));
