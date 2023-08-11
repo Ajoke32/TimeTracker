@@ -1,0 +1,164 @@
+{
+  "index.css": {
+    "file": "assets/index-e741d74a.css",
+    "src": "index.css"
+  },
+  "index.html": {
+    "assets": [
+      "assets/error_page-354f63f8.gif",
+      "assets/arrow_right-da484258.svg",
+      "assets/edit_user_icon-8e10addc.png",
+      "assets/archieve_user_icon-bc7aecc2.png",
+      "assets/login_page_picture-bf63b357.png",
+      "assets/login_page_vector_top-9948d669.svg",
+      "assets/login_page_vector_bottom-5401f95b.svg",
+      "assets/timetracker_header_logo-837d464c.svg",
+      "assets/notifications_icon_empty-ecde77ec.svg",
+      "assets/timer_pause_icon-3cd4ec93.svg",
+      "assets/timer_start_icon-bb720dca.svg",
+      "assets/dashboard_icon-cef258d8.svg",
+      "assets/dashboard_request_icon-aeb50aa2.svg",
+      "assets/dashboard_vacations_icon-0c440bd9.svg",
+      "assets/dashboard_clock_icon-d532ebe7.svg",
+      "assets/dashboard_calendar_icon-b38073a7.svg",
+      "assets/dashboard_team_icon-e663a3d4.svg",
+      "assets/dashboard_settings_icon-541a3408.svg",
+      "assets/dashboard_log-out_icon-fa53ac0f.svg",
+      "assets/timetracker_timer-40d605fc.svg",
+      "assets/timetracker_add_hours-b689a886.svg",
+      "assets/calendar_arrow_icon-c64dc47d.png",
+      "assets/calendar_add_event_icon-a30e082b.png",
+      "assets/Montserrat-Regular-dcfe8df2.ttf",
+      "assets/Montserrat-Medium-20ebfd65.ttf",
+      "assets/Montserrat-SemiBold-1418bd4d.ttf",
+      "assets/Montserrat-Bold-189aeb28.ttf",
+      "assets/MontserratAlternates-SemiBold-2a7aa31a.ttf"
+    ],
+    "css": [
+      "assets/index-e741d74a.css"
+    ],
+    "dynamicImports": [
+      "src/redux/errors/en.json"
+    ],
+    "file": "assets/index-a87bdb26.js",
+    "isEntry": true,
+    "src": "index.html"
+  },
+  "src/assets/images/archieve_user_icon.png": {
+    "file": "assets/archieve_user_icon-bc7aecc2.png",
+    "src": "src/assets/images/archieve_user_icon.png"
+  },
+  "src/assets/images/arrow_right.svg": {
+    "file": "assets/arrow_right-da484258.svg",
+    "src": "src/assets/images/arrow_right.svg"
+  },
+  "src/assets/images/calendar_add_event_icon.png": {
+    "file": "assets/calendar_add_event_icon-a30e082b.png",
+    "src": "src/assets/images/calendar_add_event_icon.png"
+  },
+  "src/assets/images/calendar_arrow_icon.png": {
+    "file": "assets/calendar_arrow_icon-c64dc47d.png",
+    "src": "src/assets/images/calendar_arrow_icon.png"
+  },
+  "src/assets/images/dashboard_calendar_icon.svg": {
+    "file": "assets/dashboard_calendar_icon-b38073a7.svg",
+    "src": "src/assets/images/dashboard_calendar_icon.svg"
+  },
+  "src/assets/images/dashboard_clock_icon.svg": {
+    "file": "assets/dashboard_clock_icon-d532ebe7.svg",
+    "src": "src/assets/images/dashboard_clock_icon.svg"
+  },
+  "src/assets/images/dashboard_icon.svg": {
+    "file": "assets/dashboard_icon-cef258d8.svg",
+    "src": "src/assets/images/dashboard_icon.svg"
+  },
+  "src/assets/images/dashboard_log-out_icon.svg": {
+    "file": "assets/dashboard_log-out_icon-fa53ac0f.svg",
+    "src": "src/assets/images/dashboard_log-out_icon.svg"
+  },
+  "src/assets/images/dashboard_request_icon.svg": {
+    "file": "assets/dashboard_request_icon-aeb50aa2.svg",
+    "src": "src/assets/images/dashboard_request_icon.svg"
+  },
+  "src/assets/images/dashboard_settings_icon.svg": {
+    "file": "assets/dashboard_settings_icon-541a3408.svg",
+    "src": "src/assets/images/dashboard_settings_icon.svg"
+  },
+  "src/assets/images/dashboard_team_icon.svg": {
+    "file": "assets/dashboard_team_icon-e663a3d4.svg",
+    "src": "src/assets/images/dashboard_team_icon.svg"
+  },
+  "src/assets/images/dashboard_vacations_icon.svg": {
+    "file": "assets/dashboard_vacations_icon-0c440bd9.svg",
+    "src": "src/assets/images/dashboard_vacations_icon.svg"
+  },
+  "src/assets/images/edit_user_icon.png": {
+    "file": "assets/edit_user_icon-8e10addc.png",
+    "src": "src/assets/images/edit_user_icon.png"
+  },
+  "src/assets/images/error_page.gif": {
+    "file": "assets/error_page-354f63f8.gif",
+    "src": "src/assets/images/error_page.gif"
+  },
+  "src/assets/images/login_page_picture.png": {
+    "file": "assets/login_page_picture-bf63b357.png",
+    "src": "src/assets/images/login_page_picture.png"
+  },
+  "src/assets/images/login_page_vector_bottom.svg": {
+    "file": "assets/login_page_vector_bottom-5401f95b.svg",
+    "src": "src/assets/images/login_page_vector_bottom.svg"
+  },
+  "src/assets/images/login_page_vector_top.svg": {
+    "file": "assets/login_page_vector_top-9948d669.svg",
+    "src": "src/assets/images/login_page_vector_top.svg"
+  },
+  "src/assets/images/notifications_icon_empty.svg": {
+    "file": "assets/notifications_icon_empty-ecde77ec.svg",
+    "src": "src/assets/images/notifications_icon_empty.svg"
+  },
+  "src/assets/images/timer_pause_icon.svg": {
+    "file": "assets/timer_pause_icon-3cd4ec93.svg",
+    "src": "src/assets/images/timer_pause_icon.svg"
+  },
+  "src/assets/images/timer_start_icon.svg": {
+    "file": "assets/timer_start_icon-bb720dca.svg",
+    "src": "src/assets/images/timer_start_icon.svg"
+  },
+  "src/assets/images/timetracker_add_hours.svg": {
+    "file": "assets/timetracker_add_hours-b689a886.svg",
+    "src": "src/assets/images/timetracker_add_hours.svg"
+  },
+  "src/assets/images/timetracker_header_logo.svg": {
+    "file": "assets/timetracker_header_logo-837d464c.svg",
+    "src": "src/assets/images/timetracker_header_logo.svg"
+  },
+  "src/assets/images/timetracker_timer.svg": {
+    "file": "assets/timetracker_timer-40d605fc.svg",
+    "src": "src/assets/images/timetracker_timer.svg"
+  },
+  "src/redux/errors/en.json": {
+    "file": "assets/en-5575afc5.js",
+    "isDynamicEntry": true,
+    "src": "src/redux/errors/en.json"
+  },
+  "src/styles/fonts/Montserrat-Bold.ttf": {
+    "file": "assets/Montserrat-Bold-189aeb28.ttf",
+    "src": "src/styles/fonts/Montserrat-Bold.ttf"
+  },
+  "src/styles/fonts/Montserrat-Medium.ttf": {
+    "file": "assets/Montserrat-Medium-20ebfd65.ttf",
+    "src": "src/styles/fonts/Montserrat-Medium.ttf"
+  },
+  "src/styles/fonts/Montserrat-Regular.ttf": {
+    "file": "assets/Montserrat-Regular-dcfe8df2.ttf",
+    "src": "src/styles/fonts/Montserrat-Regular.ttf"
+  },
+  "src/styles/fonts/Montserrat-SemiBold.ttf": {
+    "file": "assets/Montserrat-SemiBold-1418bd4d.ttf",
+    "src": "src/styles/fonts/Montserrat-SemiBold.ttf"
+  },
+  "src/styles/fonts/MontserratAlternates-SemiBold.ttf": {
+    "file": "assets/MontserratAlternates-SemiBold-2a7aa31a.ttf",
+    "src": "src/styles/fonts/MontserratAlternates-SemiBold.ttf"
+  }
+}
