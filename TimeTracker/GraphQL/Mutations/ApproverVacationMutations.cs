@@ -52,7 +52,6 @@ public sealed class ApproverVacationMutations:ObjectGraphType
         
         
         Field<ApproverVacationType>("updateState")
-
             .Argument<ApproverVacationUpdateType>("approverVacation")
             .ResolveAsync(async ctx =>
             {
