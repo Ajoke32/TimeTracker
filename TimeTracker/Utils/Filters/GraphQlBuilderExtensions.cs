@@ -1,8 +1,5 @@
-﻿using System.Linq.Expressions;
-using GraphQL;
-using GraphQL.Builders;
+﻿using GraphQL.Builders;
 using GraphQL.Types;
-using TimeTracker.Utils.Filters.ExpressionTypes;
 using TimeTracker.Utils.Filters.ExpressionTypes.GraphTypes;
 
 
@@ -14,10 +11,7 @@ public static class GraphQlBuilderExtensions
     {
         builder
             .Argument<WhereGraphType>("where",
-                configure: c =>
-                {
-                    c.DefaultValue = null;
-                })
+                configure: c =>c.DefaultValue = null)
             .Argument<ListGraphType<WhereGraphType>>("group");
 
         return builder;

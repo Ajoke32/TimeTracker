@@ -7,8 +7,11 @@ public sealed class WhereGraphType : InputObjectGraphType<WhereExpression>
     public WhereGraphType()
     {
         
-        Field(x => x.PropertyName,nullable:true).Name("property");
-        Field(x => x.Operator,nullable:true).Name("operator");
-        Field(x => x.CompareValue,nullable:true).Name("value");
+        Field(x => x.PropertyName).Name("property");
+        Field(x => x.Operator).Name("operator");
+        Field(x => x.CompareValue).Name("value");
+        Field(x => x.Connector,nullable:true)
+            .DefaultValue(null)
+            .Name("connector");
     }
 }

@@ -14,22 +14,15 @@ public static class IQueryableExtensions
         
         if (groupExpression!=null&&groupExpression.Any())
         {
-            var labmdas = new List<Expression<Func<T, bool>>>();
             var group =  groupExpression;
+            Expression<Func<T, bool>>? combinedExpression = null;
+            var parameter = Expression.Parameter(typeof(T), "f");
             foreach (var exp in group)
             {
-                var lmb = LambdaBuilder.BuildLambda<T>(exp,exp.Operator);
-                labmdas.Add(lmb);
-            }
-            
-            Expression<Func<T, bool>>? combinedExpression = null;
-            
-            var parameter = Expression.Parameter(typeof(T), "f");
-            
-            foreach (var lamda in labmdas)
-            {
-                var replacedBody = new ParameterReplacer(lamda.Parameters[0],
-                    parameter).Visit(lamda.Body);
+                var lambda = LambdaBuilder.BuildLambda<T>(exp,exp.Operator);
+                
+                var replacedBody = new ParameterReplacer(lambda.Parameters[0],
+                    parameter).Visit(lambda.Body);
                 
                 if (combinedExpression == null)
                 {
@@ -37,10 +30,24 @@ public static class IQueryableExtensions
                 }
                 else
                 {
-                    var andExpression = Expression.AndAlso(combinedExpression.Body, replacedBody);
-                    combinedExpression = Expression.Lambda<Func<T, bool>>(andExpression, parameter);
+                    if (exp.Connector == "")
+                    {
+                        continue;
+                    }
+                    BinaryExpression? resultingExpression = null;
+                    if (exp.Connector == "and")
+                    {
+                        resultingExpression  = Expression.AndAlso(combinedExpression.Body, replacedBody);
+                    }
+
+                    if (exp.Connector == "or")
+                    {
+                        resultingExpression  = Expression.Or(combinedExpression.Body, replacedBody);
+                    }
+                    combinedExpression = Expression.Lambda<Func<T, bool>>(resultingExpression, parameter);
                 }
             }
+            
 
             return q.Where(combinedExpression!);
         }
