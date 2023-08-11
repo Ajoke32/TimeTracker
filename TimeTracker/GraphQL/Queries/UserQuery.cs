@@ -36,11 +36,8 @@ public sealed class UserQuery : ObjectGraphType
                 var skip = ctx.GetArgument<int?>("skip");
 
                 
-                var users = await uow.GenericRepository<User>().GetAsync(
-                    includeProperties: include,
-                    take: take,
-                    skip: skip
-                );
+                var users = await uow.GenericRepository<User>()
+                    .GetAsync(includeProperties: include,take: take,skip: skip);
                 
                 return users.ApplyGraphQlFilters(ctx)
                     .ApplyGraphQlOrdering(ctx);
