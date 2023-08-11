@@ -24,6 +24,12 @@ public static class GraphQlBuilderExtensions
 
         return builder;
     }
+
+    public static FieldBuilder<T, V> UseOrdering<T,V>(this FieldBuilder<T, V> builder)
+    {
+        builder.Argument<OrderByGraphType>("orderBy");
+        return builder;
+    }
 }
 
 

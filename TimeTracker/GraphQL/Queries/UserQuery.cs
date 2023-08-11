@@ -41,11 +41,14 @@ public sealed class UserQuery : ObjectGraphType
                     take: take,
                     skip: skip
                 );
-                return users.ApplyGraphQlFilters(ctx);
+                
+                return users.ApplyGraphQlFilters(ctx)
+                    .ApplyGraphQlOrdering(ctx);
             })
             .Description("gets all users")
             .UseFiltering()
-            .UsePaging();
+            .UsePaging()
+            .UseOrdering();
 
         Field<UserType>("user")
             .Argument<int>("id")
