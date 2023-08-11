@@ -10,8 +10,8 @@ const MessageModal = () => {
 
     const [message,setMessage] = useState<string>("");
     const [error,setError] = useState<string>("");
-    const {onSuccess,
-        isOpen,userId,
+
+    const {isOpen,userId,
         vacationId,state} = useTypedSelector(s=>s.messageModal)
 
     const dispatch = useAppDispatch();
@@ -22,6 +22,7 @@ const MessageModal = () => {
 
     function handleClose(){
         dispatch(modalClose());
+        setMessage("");
     }
 
     function handleSuccess(){
@@ -29,7 +30,7 @@ const MessageModal = () => {
             setError("Message field required");
             return;
         }
-        dispatch(updateApproverVacationState({id:userId!,vacationId:vacationId!,isApproved:state!,message:message}));
+        dispatch(updateApproverVacationState({approverId:userId!,vacationId:vacationId!,isApproved:state!,message:message}));
         dispatch(modalClose());
         setMessage("");
     }
@@ -38,7 +39,7 @@ const MessageModal = () => {
         <div className="msg-wrapper" style={{display:isOpen?'flex':'none'}}>
             <h2 style={{color:"#ffaa00"}}>This is unreversible action</h2>
             <span>{error}</span>
-            <textarea placeholder="explanation" onChange={(e)=>messageInputHandle(e)}></textarea>
+            <textarea placeholder="explanation" value={message} onChange={(e)=>messageInputHandle(e)}></textarea>
             <div className="btn-group">
             <BaseButton disabled={false} onClick={handleSuccess} btnStyle={'confirm'} text={"Save my answer"}/>
             <BaseButton disabled={false} onClick={handleClose} btnStyle={'decline'} text={"Discard"}/>

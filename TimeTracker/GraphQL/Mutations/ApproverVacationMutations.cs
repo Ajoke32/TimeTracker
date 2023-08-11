@@ -5,6 +5,7 @@ using TimeTracker.Absctration;
 using TimeTracker.GraphQL.Types;
 using TimeTracker.GraphQL.Types.InputTypes.ApproveInput;
 using TimeTracker.Models;
+using TimeTracker.Models.Dtos;
 
 
 namespace TimeTracker.GraphQL.Mutations;
@@ -51,6 +52,7 @@ public sealed class ApproverVacationMutations:ObjectGraphType
         
         
         Field<ApproverVacationType>("updateState")
+<<<<<<< HEAD
             .Argument<int>("approverId")
             .Argument<bool>("state", nullable: true)
             .Argument<int>("vacationId")
@@ -69,6 +71,22 @@ public sealed class ApproverVacationMutations:ObjectGraphType
                 approverVacation.IsApproved = state;
                 approverVacation.Message = message;
 
+=======
+            .Argument<ApproverVacationUpdateType>("approverVacation")
+            .ResolveAsync(async ctx =>
+            {
+                var av = ctx.GetArgument<ApproverVacationUpdateDto>("approverVacation");
+            
+                var approverVacation = await uow.GenericRepository<ApproverVacation>()
+                    .FindAsync(a => a.VacationId==av.VacationId && a.UserId == av.ApproverId
+                    ,relatedData:"Vacation.User")??throw new ValidationError("ApproverVacation not found");
+                
+                
+                approverVacation.IsApproved = av.IsApproved;
+                approverVacation.Message = av.Message;
+                
+                
+>>>>>>> production
                 await uow.SaveAsync();
 
                 return approverVacation;

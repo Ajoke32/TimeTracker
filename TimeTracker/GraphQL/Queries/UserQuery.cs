@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 using GraphQL;
 using GraphQL.Execution;
 using GraphQL.Types;
@@ -12,6 +13,7 @@ using TimeTracker.Models.Dtos;
 using TimeTracker.Utils.Auth;
 using TimeTracker.Utils.Email;
 using TimeTracker.Utils.Errors;
+using TimeTracker.Utils.Filters;
 
 
 namespace TimeTracker.GraphQL.Queries;
@@ -47,10 +49,10 @@ public sealed class UserQuery : ObjectGraphType
                     skip: skip, 
                     filter: activated ? (u => u.IsEmailActivated && u.Id != userId) : (u => u.Id != userId)
                 );
-
-                return users;
+                return users.ApplyGraphQlFilters(ctx);
             })
-            .Description("gets all users");
+            .Description("gets all users")
+            .UseFiltering(typeof(User));
 
         Field<UserType>("user")
             .Argument<int>("id")
@@ -124,12 +126,13 @@ public sealed class UserQuery : ObjectGraphType
                 
                 return authService!.RefreshToken(user);
             });
-
+        
         Field<ListGraphType<UserType>>("usersByIds")
             .Argument<List<int>>("ids")
             .ResolveAsync(async _ =>
             {
                 var ids = _.GetArgument<List<int>>("ids");
+                
                 
                 return await uow.GenericRepository<User>()
                     .GetAsync(u => ids.Contains(u.Id));

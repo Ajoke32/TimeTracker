@@ -67,7 +67,7 @@ public class EmailTokenService
             var id = reader.ReadInt32();
 
             var user = await _repository.GenericRepository<User>()
-                .FindAsync(u => u.Id == id);
+                .FindAsync(u => u.Id == id); 
 
             if (user == null) { return false;}
             
