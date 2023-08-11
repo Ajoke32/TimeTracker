@@ -47,7 +47,7 @@ public sealed class VacationMutations:ObjectGraphType
                     .FindAsync(v => v.Id == id,relatedData:"ApproverVacations")??throw new ValidationError("Vacation not found");
                 
                 vacation.VacationState = GetVacationState(vacation.ApproverVacations);
-                vacation.HaveAnswer = true;
+                vacation.HaveAnswer = true; 
                 await uow.SaveAsync();
                 
                 return vacation;
@@ -93,7 +93,7 @@ public sealed class VacationMutations:ObjectGraphType
                 
                 if (vacation == null) { return null; }
                 
-                if (state == VacationState.Canceled&&vacation.VacationState==VacationState.Approved)
+                if (vacation.VacationState==VacationState.Approved)
                 {
                     if (vacation.StartDate.Date <= DateTime.Now.Date)
                     {

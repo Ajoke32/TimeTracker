@@ -128,7 +128,6 @@ export const updateApproverVacationsStateToDefaultEpic: Epic = (action$: Observa
             UpdateApproverVacationToDefault(action$.payload)
                 .pipe(
                     map(res => {
-                        console.log(res.response.errors);
                         if (res.response.errors != null) {
                             return updateToDefaultFail(res.response.errors[0].message)
                         }
