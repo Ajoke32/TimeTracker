@@ -52,26 +52,7 @@ public sealed class ApproverVacationMutations:ObjectGraphType
         
         
         Field<ApproverVacationType>("updateState")
-<<<<<<< HEAD
-            .Argument<int>("approverId")
-            .Argument<bool>("state", nullable: true)
-            .Argument<int>("vacationId")
-            .Argument<string>("message", nullable: true)
-            .ResolveAsync(async ctx =>
-            {
-                var state = ctx.GetArgument<bool>("state");
-                var approverId = ctx.GetArgument<int>("approverId");
-                var vacationId = ctx.GetArgument<int>("vacationId");
-                var message = ctx.GetArgument<string>("message");
 
-                var approverVacation = await uow.GenericRepository<ApproverVacation>()
-                    .FindAsync(a => a.VacationId == vacationId && a.UserId == approverId
-                        , relatedData: "Vacation.User") ?? throw new ValidationError("ApproverVacation not found");
-                
-                approverVacation.IsApproved = state;
-                approverVacation.Message = message;
-
-=======
             .Argument<ApproverVacationUpdateType>("approverVacation")
             .ResolveAsync(async ctx =>
             {
@@ -86,7 +67,6 @@ public sealed class ApproverVacationMutations:ObjectGraphType
                 approverVacation.Message = av.Message;
                 
                 
->>>>>>> production
                 await uow.SaveAsync();
 
                 return approverVacation;
