@@ -13,6 +13,7 @@ export const fetchUsersEpic: Epic = (action: Observable<PayloadAction<FetchUsers
             FetchUsersQuery(action.payload)
                 .pipe(
                     mergeMap(async resp => {
+                        console.log(resp);
                         if (resp.response.errors != null) {
                             const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
                             return fetchUsersFail(errorMessage)
@@ -20,6 +21,7 @@ export const fetchUsersEpic: Epic = (action: Observable<PayloadAction<FetchUsers
                         return fetchUsersSuccess(resp.response.data.userQuery.users);
                     }),
                     catchError((e: Error) => {
+                        console.log(e);
                         return of(fetchUsersFail("Unexpected error"))
                     })
                 ),
