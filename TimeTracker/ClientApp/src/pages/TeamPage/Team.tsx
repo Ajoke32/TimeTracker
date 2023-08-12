@@ -4,25 +4,35 @@ import { useState, useEffect } from 'react';
 import { useAppDispatch, useTypedSelector } from "../../hooks";
 import { User, fetchUsers } from "../../redux";
 import "@components/UI/Buttons/buttons.css"
+import {FiltersType} from "@redux/types/filterTypes.ts";
+import {addUserFilter} from "@redux/slices/userFiltersSlice.ts";
+
+
 
 export const Team = () => {
     const dispatch = useAppDispatch();
     const authState = useTypedSelector(state => state.auth);
     const {loading,users} = useTypedSelector(state => state.users);
 
-    const [fetched, setFetched] = useState<number>(0);
     const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
 
+    const  {filters,skip,take} = useTypedSelector(s=>s.userFilters);
+
     const loadMore = () => {
-        dispatch(fetchUsers({ take: 5, skip: fetched, activated: false, userId: authState.user?.id! }));
+        console.log(skip);
+        dispatch(fetchUsers({
+            take: take,
+            skip: skip,
+            userId: authState.user?.id!,
+            group:filters.group
+        }));
     }
 
     useEffect(() => {
         loadMore();
-    }, [])
+    }, [filters])
 
     useEffect(() => {
-        setFetched(users.length);
         setFilteredUsers(users);
     }, [users.length])
 
@@ -37,10 +47,12 @@ export const Team = () => {
                 <div className="team-menu__main">
                     <div className="users-table__wrapper">
                         <UsersTableNavbar users={users} setFilteredUsers={setFilteredUsers} />
-                        {loading&&users.length==0? <Loader /> :
+                        {loading? <Loader /> :
                             <>
                                 <UsersTable users={users} />
-                                <button className="load-more" onClick={() => { loadMore() }}>{loading?"Loading..":"Load more"}</button>
+                                <div>
+
+                                </div>
                             </>
                         }
 

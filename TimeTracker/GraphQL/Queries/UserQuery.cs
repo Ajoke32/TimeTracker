@@ -32,15 +32,14 @@ public sealed class UserQuery : ObjectGraphType
             .ResolveAsync(async ctx =>
             {
                 var include = ctx.GetArgument<string>("include");
-                var take = ctx.GetArgument<int?>("take");
-                var skip = ctx.GetArgument<int?>("skip");
-
+                
                 
                 var users = await uow.GenericRepository<User>()
-                    .GetAsync(includeProperties: include,take: take,skip: skip);
+                    .GetAsync(includeProperties: include);
                 
                 return users.ApplyGraphQlFilters(ctx)
-                    .ApplyGraphQlOrdering(ctx);
+                    .ApplyGraphQlOrdering(ctx)
+                    .ApplyGraphQlPaging(ctx);
             })
             .Description("gets all users")
             .UseFiltering()

@@ -21,7 +21,7 @@ const usersSlice = createSlice({
         fetchUsers: createPendingReducerWithPayload<UsersSliceState, FetchUsersType>(),
         fetchUsersSuccess: createSuccessReducerWithPayload<UsersSliceState, User[]>(
             (state: UsersSliceState, action: PayloadAction<User[]>) => {
-                state.users = [...state.users, ...action.payload];
+                state.users = [...action.payload];
             }),
         fetchUsersFail: createErrorReducer(),
 

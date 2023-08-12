@@ -1,5 +1,5 @@
 ﻿.team-menu__wrapper {
-    height: 90vh;
+    height: 100vh;
     width: 100%;
     padding: 5% 5% 10% 5%;
     overflow: hidden;
@@ -39,4 +39,14 @@
     
     border: 8px solid rgba(0, 0, 0, .1);
     border-left-color: var(--color-cyan);
+}
+
+.select-group{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.select-group label{
+    color: lightblue;
+    font-size: 15px;
 }
