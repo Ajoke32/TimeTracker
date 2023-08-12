@@ -13,13 +13,14 @@ export const AddApproversForm = ({ step }: { step?: number }) => {
 
     const [approvers, setApprovers] = useState<number[]>([]);
     const [fetched, setFetched] = useState<number>(0);
-
+    const  {filters} = useTypedSelector(s=>s.userFilters);
     const handleClick = () => {
         dispatch(addApprovers({ approvers: approvers, userId: user!.id! }))
     }
 
     const loadMore = () => {
-        dispatch(fetchApprovers({ take: 5, skip: fetched, activated: true, userId: user!.id! }));
+        dispatch(fetchApprovers({ take: 5, skip: fetched,
+            userId: user!.id!,group:filters.group }));
     }
 
     useEffect(() => {
