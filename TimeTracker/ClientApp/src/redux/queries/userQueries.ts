@@ -138,3 +138,13 @@ export function EmailConfirmQuery(token: string) {
     },
   )
 }
+
+export function FetchUsersCountQuery(){
+    return AjaxQuery<QueryStructure<{ userQuery: { getUsersCount: number } }>>(
+        `query{
+          userQuery{
+            getUsersCount
+          }
+       }`,
+    )
+}

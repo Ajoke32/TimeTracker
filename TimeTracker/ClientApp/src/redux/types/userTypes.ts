@@ -1,4 +1,4 @@
-import {FiltersType, WhereFilter} from "@redux/types/filterTypes.ts";
+import {FiltersType, PagingExtraInfo, WhereFilter} from "@redux/types/filterTypes.ts";
 
 
 export interface UserLoginType {
@@ -26,7 +26,7 @@ export interface FetchUserType {
     userId: number
 }
 
-export interface FetchUsersType extends FetchUserType,FiltersType {
+export interface FetchUsersType extends FetchUserType,FiltersType{
     take: number,
     skip: number,
     group:WhereFilter[]

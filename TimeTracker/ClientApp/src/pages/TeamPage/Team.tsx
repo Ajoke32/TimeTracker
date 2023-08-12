@@ -2,10 +2,10 @@
 import { H4, UsersTable, UsersTableNavbar, Loader } from "../../components";
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useTypedSelector } from "../../hooks";
-import { User, fetchUsers } from "../../redux";
+import {User, fetchUsers, getUsersCount} from "../../redux";
 import "@components/UI/Buttons/buttons.css"
-import {FiltersType} from "@redux/types/filterTypes.ts";
-import {addUserFilter} from "@redux/slices/userFiltersSlice.ts";
+import {calculateTotalPages} from "../../utils/paging.ts";
+import {setSkip, setTake} from "@redux/slices/userFiltersSlice.ts";
 
 
 
@@ -16,10 +16,9 @@ export const Team = () => {
 
     const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
 
-    const  {filters,skip,take} = useTypedSelector(s=>s.userFilters);
-
+    const  {filters,skip,staticTake,take} = useTypedSelector(s=>s.userFilters);
+    const {count,loading:countLoading} = useTypedSelector(s=>s.users);
     const loadMore = () => {
-        console.log(skip);
         dispatch(fetchUsers({
             take: take,
             skip: skip,
@@ -27,16 +26,22 @@ export const Team = () => {
             group:filters.group
         }));
     }
+    useEffect(() => {
+        dispatch(getUsersCount());
+    }, []);
 
     useEffect(() => {
         loadMore();
-    }, [filters])
+    }, [filters,take,skip])
 
     useEffect(() => {
         setFilteredUsers(users);
     }, [users.length])
 
-
+    function handlePageClick(page:number){
+        dispatch(setTake(staticTake*page));
+        dispatch(setSkip((page-1)*staticTake));
+    }
     return (
         <div className="team-menu__wrapper">
             <div className="team-menu__wrapper-inner">
@@ -50,14 +55,24 @@ export const Team = () => {
                         {loading? <Loader /> :
                             <>
                                 <UsersTable users={users} />
-                                <div>
-
-                                </div>
                             </>
                         }
-
                     </div>
                 </div>
+                <div className="pages-wrapper">
+                <button className={`btn-base btn-info ${skip==0?'neutral':''}`} disabled={skip==0} onClick={()=>{
+                    dispatch(setTake(take-staticTake))
+                    dispatch(setSkip(skip-staticTake))
+                }}>Prev</button>
+                {[...Array(calculateTotalPages(count,5))].map((_, index) => (
+                            <div onClick={()=>handlePageClick(index+1)} key={index}>{index + 1}</div>))
+                }
+                <button className={`btn-base btn-info ${take>count?'neutral':''}`} disabled={take>count} onClick={()=>{
+                    dispatch(setTake(take+staticTake))
+                    dispatch(setSkip(skip+staticTake))
+                }}>Next</button>
+                </div>
+
             </div>
         </div>
     );

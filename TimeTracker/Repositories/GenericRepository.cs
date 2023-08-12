@@ -119,11 +119,15 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         {
             _dbSet.Attach(entity);
         }
-
+        
         _dbSet.Remove(entity);
         return Task.FromResult(true);
     }
 
+    public ValueTask<int> GetRecordsCount()
+    {
+        return new ValueTask<int>(_dbSet.Count());
+    }
     public ValueTask<TEntity> UpdateAsync(TEntity model)
     {
         var entity = _dbSet.Update(model);

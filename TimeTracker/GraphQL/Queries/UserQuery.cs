@@ -4,6 +4,7 @@ using GraphQL;
 using GraphQL.Execution;
 using GraphQL.Types;
 using GraphQL.Validation;
+using GraphQL.Validation.Errors.Custom;
 using TimeTracker.Absctration;
 using TimeTracker.Enums;
 using TimeTracker.GraphQL.Types;
@@ -11,6 +12,7 @@ using TimeTracker.GraphQL.Types.InputTypes;
 using TimeTracker.Models;
 using TimeTracker.Models.Dtos;
 using TimeTracker.Utils.Auth;
+
 using TimeTracker.Utils.Email;
 using TimeTracker.Utils.Errors;
 using TimeTracker.Utils.Filters;
@@ -23,7 +25,7 @@ public sealed class UserQuery : ObjectGraphType
 {
 
     private readonly IUnitOfWorkRepository _uow;
-    public UserQuery(IUnitOfWorkRepository uow,IMapper mapper)
+    public UserQuery(IUnitOfWorkRepository uow)
     {
         _uow = uow;
 
@@ -32,19 +34,19 @@ public sealed class UserQuery : ObjectGraphType
             .ResolveAsync(async ctx =>
             {
                 var include = ctx.GetArgument<string>("include");
-                
-                
+
+
                 var users = await uow.GenericRepository<User>()
                     .GetAsync(includeProperties: include);
-                
+
                 return users.ApplyGraphQlFilters(ctx)
                     .ApplyGraphQlOrdering(ctx)
                     .ApplyGraphQlPaging(ctx);
-            })
-            .Description("gets all users")
+
+            }).Description("gets all users")
             .UseFiltering()
-            .UsePaging()
-            .UseOrdering();
+            .UseOrdering()
+            .UsePaging();
 
         Field<UserType>("user")
             .Argument<int>("id")
@@ -129,8 +131,11 @@ public sealed class UserQuery : ObjectGraphType
                 return await uow.GenericRepository<User>()
                     .GetAsync(u => ids.Contains(u.Id));
             });
-
-       
+        
+        Field<int>("getUsersCount")
+            .ResolveAsync(async _ =>await uow.GenericRepository<User>().GetRecordsCount());
+        
+      
 
     }
 

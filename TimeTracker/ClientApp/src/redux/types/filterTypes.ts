@@ -11,3 +11,9 @@ export interface WhereFilter{
 export interface FiltersType{
     group:WhereFilter[]
 }
+
+export interface PagingExtraInfo{
+    extensions?:{
+        count:number
+    }
+}

@@ -4,8 +4,9 @@ import {fetchUsers, fetchUsersSuccess} from "@redux/slices/usersSlice.ts";
 
 export interface UserFiltersState{
     filters:FiltersType,
-    take:number|null,
+    take:number,
     skip:number,
+    staticTake:number
 }
 const initialState:UserFiltersState={
     filters:{
@@ -13,6 +14,7 @@ const initialState:UserFiltersState={
     },
     take:5,
     skip:0,
+    staticTake:5
 }
 
 const userFiltersSlice = createSlice({
@@ -21,21 +23,20 @@ const userFiltersSlice = createSlice({
     reducers: {
         addUserFilter:(state:UserFiltersState,action:PayloadAction<WhereFilter>)=>{
             state.filters.group.push(action.payload);
-            state.skip=0;
         },
         userFiltersToDefault:(state:UserFiltersState)=>{
             state.filters=initialState.filters;
-            state.skip=0;
-        }
+        },
+        setTake:(state:UserFiltersState,action:PayloadAction<number>)=>{
+            state.take=action.payload;
+        },
+        setSkip:(state:UserFiltersState,action:PayloadAction<number>)=>{
+            state.skip=action.payload;
+        },
     },
-    extraReducers:(builder)=>{
-        builder.addCase(fetchUsersSuccess,(state, action)=>{
-            state.skip = action.payload.length;
-        });
-    }
 });
 
 
-export const { addUserFilter,userFiltersToDefault }
+export const { addUserFilter,setTake,setSkip,userFiltersToDefault }
     = userFiltersSlice.actions;
 export const userFilters = userFiltersSlice.reducer;
