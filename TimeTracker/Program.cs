@@ -125,6 +125,7 @@ builder.Services.AddScoped<IRepositoryFactory, RepositoryFactory>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<EmailTokenService>();
 
+
 builder.Services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
 
 builder.Services.AddDbContext<TimeTrackerContext>((serv, options) =>

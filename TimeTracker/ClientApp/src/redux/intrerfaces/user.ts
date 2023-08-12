@@ -1,6 +1,7 @@
 import {Vacation} from "../types";
+import {PagingExtraInfo} from "@redux/types/filterTypes.ts";
 
-export interface User {
+export interface User{
     id: number;
     firstName: string;
     lastName: string;

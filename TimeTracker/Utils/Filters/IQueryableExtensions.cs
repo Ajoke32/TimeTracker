@@ -7,7 +7,7 @@ namespace TimeTracker.Utils.Filters;
 
 public static class IQueryableExtensions
 {
-    public static IQueryable<T> ApplyGraphQlFilters<T>(this IQueryable<T> q, IResolveFieldContext context)
+    public static IQueryable<T> ApplyGraphQlFilters<T>(this IQueryable<T> q, IResolveFieldContext context,bool withExtraInfo=true)
     {
         var expression = context.GetArgument<WhereExpression>("where");
         var groupExpression = context.GetArgument<List<WhereExpression>>("group");
@@ -48,7 +48,12 @@ public static class IQueryableExtensions
                     combinedExpression = Expression.Lambda<Func<T, bool>>(resultingExpression, parameter);
                 }
             }
-            
+
+            if (withExtraInfo)
+            {
+                var count = q.Count(combinedExpression!);
+                context.OutputExtensions.Add("count", count);
+            }
 
             return q.Where(combinedExpression!);
         }
@@ -65,7 +70,10 @@ public static class IQueryableExtensions
     public static IQueryable<T> ApplyGraphQlOrdering<T>(this IQueryable<T> q, IResolveFieldContext context)
     {
         var orderBy = context.GetArgument<OrderByExpression>("orderBy");
-
+        if (orderBy == null)
+        {
+            throw new Exception("cannot apply ordering,orderBy expression missing");
+        }
         var parameter = Expression.Parameter(typeof(T), "f");
         Expression property = Expression.Property(parameter, orderBy.Property);
 
@@ -99,4 +107,12 @@ public static class IQueryableExtensions
 
         return q.Provider.CreateQuery<T>(orderedQuery);
     }
+
+    public static IQueryable<T> ApplyGraphQlPaging<T>(this IQueryable<T> q, IResolveFieldContext context)
+    {
+        var take = context.GetArgument<int>("take");
+        var skip = context.GetArgument<int>("skip");
+        return q.Take(take).Skip(skip);
+    }
+    
 }

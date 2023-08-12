@@ -1,3 +1,6 @@
+import {FiltersType, PagingExtraInfo, WhereFilter} from "@redux/types/filterTypes.ts";
+
+
 export interface UserLoginType {
     email: string,
     password: string
@@ -23,8 +26,10 @@ export interface FetchUserType {
     userId: number
 }
 
-export interface FetchUsersType extends FetchUserType {
+export interface FetchUsersType extends FetchUserType,FiltersType{
     take: number,
     skip: number,
-    activated: Boolean,
+    group:WhereFilter[]
 }
+
+export const userFields = ['FirstName','LastName',"Email","HoursPerMonth","WorkingHours","VacationDays"]

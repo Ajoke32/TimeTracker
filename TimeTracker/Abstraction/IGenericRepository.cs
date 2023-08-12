@@ -17,4 +17,5 @@ public interface IGenericRepository<TEntity> where TEntity:class
 
     public ValueTask<TEntity> UpdateAsync(TEntity entity);
     public ValueTask<bool> AddRangeAsync(IEnumerable<TEntity> entities);
+    public ValueTask<int> GetRecordsCount();
 }

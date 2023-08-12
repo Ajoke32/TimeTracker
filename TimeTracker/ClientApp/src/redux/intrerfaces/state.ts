@@ -19,6 +19,7 @@ export interface UserSliceState extends DefaultState {
 
 export interface UsersSliceState extends DefaultState {
     users: User[],
+    count:number,
 }
 
 export interface TimerSliceState extends DefaultState {

@@ -1,6 +1,9 @@
 import { Dropdown, SearchInput, LargeButton, } from "../UI";
 import { User, Permission } from "../../redux";
 import { useTypedSelector } from "../../hooks";
+import {userFields} from "@redux/types";
+import Filter from "./Filters";
+import React from "react";
 
 export const UsersTableNavbar = ({ users, setFilteredUsers }: { users: User[], setFilteredUsers: any }) => {
     const authState = useTypedSelector(state => state.auth);
@@ -20,6 +23,7 @@ export const UsersTableNavbar = ({ users, setFilteredUsers }: { users: User[], s
                 <Dropdown options={[{ value: true, name: "Active" }, { value: false, name: "Inactive" }]} title="Show users" />
                 <SearchInput name="search" placeholder="Search by name or email" onSearch={handleSearch} />
             </div>
+            <Filter/>
             {(authState.user!.permissions & Permission.Create) ?
                 <div className="users-table__navbar-btn">
                     <a className="add-user__link" href="/team/adduser">
