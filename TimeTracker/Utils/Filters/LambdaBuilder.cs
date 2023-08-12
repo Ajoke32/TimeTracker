@@ -33,6 +33,16 @@ public class LambdaBuilder
         {
             body = Expression.NotEqual(property, constant);
         }
+
+        if (oprt == "gt")
+        {
+            body = Expression.GreaterThan(property, constant);
+        }
+
+        if (oprt == "lt")
+        {
+            body = Expression.LessThan(property, constant);
+        }
         
         return Expression.Lambda<Func<T, bool>>(body!, parameter);
     }
