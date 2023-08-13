@@ -49,12 +49,12 @@ export function PasswordConfirmQuery(data: { token: string, password: string }) 
 }
 
 export function FetchUsersQuery(data: FetchUsersType) {
-  const { take, skip, group,userId } = data;
+  const { take, skip, group,orderBy,userId } = data;
   return AjaxQuery<QueryStructure<{ userQuery: { users: User[] } }>>(
-    `query GetUsers($take: Int, $skip: Int,$group:[Where]!){
+    `query GetUsers($take: Int, $skip: Int,$group:[Where]!,$orderBy:OrderBy){
       userQuery{
           users(group:$group,
-                take:$take,skip:$skip,orderBy:{property:"Id",direction:"ASC"}){
+                take:$take,skip:$skip,orderBy:$orderBy){
                id
                 email
                 workType
@@ -69,7 +69,8 @@ export function FetchUsersQuery(data: FetchUsersType) {
     {
       take: take,
       skip: skip,
-      group:[...group,{property:"Id",operator:"neq",value:userId.toString(),connector:"and"}]
+      group:[...group,{property:"Id",operator:"neq",value:userId.toString(),connector:"and"}],
+      orderBy:orderBy.property!==""?orderBy:null
     },
   );
 }

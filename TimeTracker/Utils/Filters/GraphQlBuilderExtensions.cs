@@ -27,7 +27,10 @@ public static class GraphQlBuilderExtensions
 
     public static FieldBuilder<T, V> UseOrdering<T,V>(this FieldBuilder<T, V> builder)
     {
-        builder.Argument<OrderByGraphType>("orderBy");
+        builder
+            .Argument<OrderByGraphType>("orderBy")
+            .Argument<ListGraphType<OrderByGraphType>>("orderGroup");
+        
         return builder;
     }
 }

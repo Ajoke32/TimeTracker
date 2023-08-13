@@ -1,4 +1,5 @@
-import {PayloadAction} from "@reduxjs/toolkit";
+import {current, PayloadAction} from "@reduxjs/toolkit";
+import {stat} from "fs";
 
 
 export interface WhereFilter{
@@ -11,7 +12,12 @@ export interface WhereFilter{
 export interface FiltersType{
     group:WhereFilter[]
 }
-
+export interface OrderingType{
+    orderBy:{
+        property:string,
+        direction:string
+    }
+}
 export interface PagingExtraInfo{
     extensions?:{
         count:number
@@ -24,7 +30,7 @@ export interface PagingType{
     perPage:number
 }
 
-export interface OrderingPagingFilterType extends PagingType,PagingExtraInfo,FiltersType{}
+export interface OrderingPagingFilterType extends PagingType,PagingExtraInfo,FiltersType,OrderingType{}
 export interface PagingEntityType<T> extends PagingExtraInfo{
     entities:T[],
 }
@@ -58,4 +64,28 @@ export const basicPagingReducers={
         state.perPage=action.payload;
         state.take = action.payload;
     }
+}
+
+export const basicOrderingReducers={
+    setColumn:(state:OrderingPagingFilterType,action:PayloadAction<string>)=>{
+        console.log(current(state.orderBy));
+
+        if(state.orderBy.property===action.payload&&state.orderBy.direction==="DESC"){
+            state.orderBy={
+                property:"",
+                direction:""
+            };
+            return;
+        }
+
+        if(state.orderBy.property==action.payload){
+            state.orderBy.direction = "DESC";
+        }else {
+            state.orderBy = {
+                property: action.payload,
+                direction: state.orderBy.direction = "ASC"
+            };
+        }
+
+    },
 }
