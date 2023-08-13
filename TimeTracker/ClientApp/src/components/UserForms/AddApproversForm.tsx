@@ -19,7 +19,7 @@ export const AddApproversForm = ({ step }: { step?: number }) => {
 
     const loadMore = () => {
         dispatch(fetchApprovers({ take: 5, skip: fetched,
-            userId: user!.id!,group:[] }));
+            userId: user!.id!,group:[],orderBy:{property:"",direction:""}}));
     }
 
     useEffect(() => {
