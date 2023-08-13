@@ -87,4 +87,10 @@
 .filters-wrapper span{
     margin-left: 10px;
 }
+.desc{
+    background-color: #669bbc;
+}
+.asc{
+    background-color: #bde0fe;
+}
 /*del*/

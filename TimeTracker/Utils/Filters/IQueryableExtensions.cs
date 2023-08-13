@@ -89,8 +89,71 @@ public static class IQueryableExtensions
         return q.Provider.CreateQuery<T>(orderedQuery);
     }
 
+    
+
     public static IQueryable<T> ApplyGraphQlPaging<T>(this IQueryable<T> q,int take,int skip)
     {
         return q.Take(take).Skip(skip);
+    }
+
+    private static MethodCallExpression BuildOrderedQuery<T>(string methodName,OrderByExpression order,
+        ParameterExpression parameter,Expression parameters)
+    {
+        var property = Expression.Property(parameter, order.Property);
+            
+        var thenByLambda = Expression.Lambda(property, parameter);
+
+        var thenByMethod = typeof(Queryable).GetMethods()
+            .Single(method => method.Name == methodName && method.GetParameters().Length == 2)
+            .MakeGenericMethod(typeof(T), property.Type);
+
+        return Expression.Call(
+            typeof(Queryable),
+            thenByMethod.Name,
+            new[] { typeof(T), property.Type },
+            parameters,
+            Expression.Quote(thenByLambda)
+        );
+    }
+    
+    
+    public static IQueryable<T> ApplyGraphQlOrderingGroup<T>(this IQueryable<T> q, List<OrderByExpression> orderGroup)
+    {
+        
+        var parameter = Expression.Parameter(typeof(T), "f");
+       
+        Expression property = Expression.Property(parameter, orderGroup[0].Property);
+
+        var lambda = Expression.Lambda(property, parameter);
+
+        MethodInfo orderByMethod = null;
+        MethodCallExpression? orderedQuery = null;
+        if (orderGroup[0].Direction == "ASC")
+        {
+            orderedQuery = BuildOrderedQuery<T>("OrderBy", orderGroup[0], parameter,q.Expression);
+        }
+        else
+        {
+            orderedQuery = BuildOrderedQuery<T>("OrderByDescending", orderGroup[0], parameter,q.Expression);
+           
+        }
+
+        
+        
+        foreach (var thenBy in orderGroup.Skip(1))
+        {
+
+            if (thenBy.Direction == "ASC")
+            {
+                orderedQuery = BuildOrderedQuery<T>("ThenBy",thenBy,parameter, orderedQuery);
+            }
+            else
+            {
+                orderedQuery = BuildOrderedQuery<T>("ThenByDescending",thenBy,parameter, orderedQuery);
+            }
+            
+        }
+        
+        return q.Provider.CreateQuery<T>(orderedQuery);
     }
 }

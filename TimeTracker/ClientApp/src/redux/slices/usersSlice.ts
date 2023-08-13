@@ -8,7 +8,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User, UsersSliceState } from "../intrerfaces";
 import { FetchUsersType } from "../types";
 import {
-    basicFilteringReducers,
+    basicFilteringReducers, basicOrderingReducers,
     basicPagingReducers, defaultPagingState,
     PagingEntityType,
     PagingExtraInfo
@@ -20,6 +20,10 @@ const initialState: UsersSliceState = {
     group: [],
     ...defaultState,
     ...defaultPagingState,
+    orderBy:{
+        property:"",
+        direction:""
+    },
     users: [],
     count:0
 }
@@ -46,7 +50,8 @@ const usersSlice = createSlice({
             }),
         deleteUserFail: createErrorReducer(),
         ...basicFilteringReducers,
-        ...basicPagingReducers
+        ...basicPagingReducers,
+        ...basicOrderingReducers
     },
 });
 
@@ -58,4 +63,6 @@ export const { fetchUsersFail,
     setTake:setUsersTake,
     setSkip:setUsersSkip,
     setPerPage:setUsersPerPage,
-    filtersToDefault:userFiltersToDefault,removeFilter:removeUserFilter} = usersSlice.actions;
+    filtersToDefault:userFiltersToDefault,
+    removeFilter:removeUserFilter,
+    setColumn:setUsersOrdering} = usersSlice.actions;

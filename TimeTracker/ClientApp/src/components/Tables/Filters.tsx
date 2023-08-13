@@ -10,8 +10,8 @@ const Filter = () => {
     const [clicked, setClicked] = useState<boolean>(false);
     const dispatch = useAppDispatch();
     const [filter, setFilter] = useState<WhereFilter>({
-        property: "",
-        operator: "",
+        property: "FirstName",
+        operator: "gt",
         value: ""
     });
 

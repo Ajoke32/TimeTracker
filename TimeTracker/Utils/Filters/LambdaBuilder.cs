@@ -50,7 +50,7 @@ public class LambdaBuilder
         
         return Expression.Lambda<Func<T, bool>>(body!, parameter);
     }
-    private static ConstantExpression GetConvertedConstantExpression<T>(string propertyName,string compareValue)
+    public static ConstantExpression GetConvertedConstantExpression<T>(string propertyName,string compareValue)
     {
         var converted = EntityFiledTypeConverter.ConvertToFieldType<T>(propertyName, compareValue);
         return Expression.Constant(converted);

@@ -13,7 +13,7 @@ import {WhereFilter} from "@redux/types/filterTypes.ts";
 export const Team = () => {
     const dispatch = useAppDispatch();
     const authState = useTypedSelector(state => state.auth);
-    const {loading,users,group,skip,perPage,take}
+    const {loading,users,group,skip,perPage,orderBy,take}
         = useTypedSelector(state => state.users);
 
     const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
@@ -25,14 +25,14 @@ export const Team = () => {
             take: take,
             skip: skip,
             userId: authState.user?.id!,
-            group:group
+            group:group,
+            orderBy:orderBy
         }));
     }
 
     useEffect(() => {
-        console.log(group);
         loadMore();
-    }, [group,take,skip])
+    }, [group,take,skip,orderBy])
 
     useEffect(() => {
         setFilteredUsers(users);

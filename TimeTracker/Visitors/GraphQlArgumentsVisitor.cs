@@ -23,10 +23,15 @@ public class GraphQlArgumentsVisitor:IGraphQlArgumentVisitor
         }
 
         var orderBy = context.GetArgument<OrderByExpression?>("orderBy");
-        
+        var orderGroup = context.GetArgument<List<OrderByExpression>?>("orderGroup");
         if (orderBy != null)
         {
             entities=entities.ApplyGraphQlOrdering(orderBy);
+        }
+
+        if (orderGroup != null)
+        {
+            entities = entities.ApplyGraphQlOrderingGroup(orderGroup);
         }
 
         if (withExtraInfo)

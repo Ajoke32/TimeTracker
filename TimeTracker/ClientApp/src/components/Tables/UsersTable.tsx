@@ -1,19 +1,24 @@
-﻿import {deleteUser, User} from "../../redux";
+﻿import {deleteUser, setUsersOrdering, User} from "../../redux";
 import { ProfileAvatar} from "../UI";
 import "./tables.css"
-import {useAppDispatch} from "@hooks/customHooks.ts";
+import {useAppDispatch, useTypedSelector} from "@hooks/customHooks.ts";
 
 
 export const UsersTable = ({ users }: { users: User[] }) => {
 
     const dispatch = useAppDispatch()
-
+    const {orderBy}  = useTypedSelector(s=>s.users);
     const handleConfirmButtonClick = (value: number) => {
         const conf = confirm("Are you sure?")
         if(conf){
             dispatch(deleteUser(value));
         }
     };
+
+    function setOrderBy(prop:string){
+        dispatch(setUsersOrdering(prop));
+    }
+
     return (
         <div className="table-wrapper__inner">
             <table className="users-table__table">
@@ -21,9 +26,12 @@ export const UsersTable = ({ users }: { users: User[] }) => {
                     <tr>
                         <th></th>
                         <th>User</th>
-                        <th>Email</th>
-                        <th>Vacation Days</th>
-                        <th>Working hours</th>
+                        <th className={`${orderBy.property==="Email"?orderBy.direction==="ASC"?'asc':'desc':''}`}
+                            onClick={()=>setOrderBy("Email")}>Email</th>
+                        <th className={`${orderBy.property==="VacationDays"?orderBy.direction==="ASC"?'asc':'desc':''}`}
+                            onClick={()=>setOrderBy("VacationDays")}>Vacation Days</th>
+                        <th className={`${orderBy.property==="HoursPerMonth"?orderBy.direction==="ASC"?'asc':'desc':''}`}
+                            onClick={()=>setOrderBy("HoursPerMonth")}>Working hours</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
