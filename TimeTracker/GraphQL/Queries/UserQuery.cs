@@ -16,6 +16,7 @@ using TimeTracker.Utils.Auth;
 using TimeTracker.Utils.Email;
 using TimeTracker.Utils.Errors;
 using TimeTracker.Utils.Filters;
+using TimeTracker.Visitors;
 
 
 namespace TimeTracker.GraphQL.Queries;
@@ -25,7 +26,7 @@ public sealed class UserQuery : ObjectGraphType
 {
 
     private readonly IUnitOfWorkRepository _uow;
-    public UserQuery(IUnitOfWorkRepository uow)
+    public UserQuery(IUnitOfWorkRepository uow,IGraphQlArgumentVisitor visitor)
     {
         _uow = uow;
 
@@ -38,10 +39,8 @@ public sealed class UserQuery : ObjectGraphType
 
                 var users = await uow.GenericRepository<User>()
                     .GetAsync(includeProperties: include);
-
-                return users.ApplyGraphQlFilters(ctx)
-                    .ApplyGraphQlOrdering(ctx)
-                    .ApplyGraphQlPaging(ctx);
+                
+                return visitor.Visit(users,ctx);
 
             }).Description("gets all users")
             .UseFiltering()

@@ -57,13 +57,19 @@
     align-self: center;
     justify-content: center;
     align-items: center;
+    gap:5px;
 }
 .pages-wrapper>div{
     font-size: 20px;
+    font-family: sans-serif;
     cursor: pointer;
     padding: 5px 15px;
     text-align: center;
     border: 1px solid lightblue;
+    border-radius: 8px;
+}
+.pages-wrapper>div:hover{
+    background-color: lightblue;
 }
 
 /*del*/

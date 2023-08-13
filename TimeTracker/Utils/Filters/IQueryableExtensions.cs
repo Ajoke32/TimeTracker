@@ -7,82 +7,65 @@ namespace TimeTracker.Utils.Filters;
 
 public static class IQueryableExtensions
 {
-    public static IQueryable<T> ApplyGraphQlFilters<T>(this IQueryable<T> q, IResolveFieldContext context,bool withExtraInfo=true)
+    public static IQueryable<T> ApplyGroupFilters<T>(this IQueryable<T> q,
+        List<WhereExpression> groupExpression,IResolveFieldContext context, bool withExtraInfo = true)
     {
-        var expression = context.GetArgument<WhereExpression>("where");
-        var groupExpression = context.GetArgument<List<WhereExpression>>("group");
-        
-        
-        if (groupExpression!=null&&groupExpression.Any())
+        var group = groupExpression;
+        Expression<Func<T, bool>>? combinedExpression = null;
+        var parameter = Expression.Parameter(typeof(T), "f");
+        foreach (var exp in group)
         {
-            var group =  groupExpression;
-            Expression<Func<T, bool>>? combinedExpression = null;
-            var parameter = Expression.Parameter(typeof(T), "f");
-            foreach (var exp in group)
+            var lambda = LambdaBuilder.BuildLambda<T>(exp, exp.Operator);
+
+            var replacedBody = new ParameterReplacer(lambda.Parameters[0],
+                parameter).Visit(lambda.Body);
+
+            if (combinedExpression == null)
             {
-                var lambda = LambdaBuilder.BuildLambda<T>(exp,exp.Operator);
-                
-                var replacedBody = new ParameterReplacer(lambda.Parameters[0],
-                    parameter).Visit(lambda.Body);
-                
-                if (combinedExpression == null)
-                {
-                    combinedExpression = Expression.Lambda<Func<T, bool>>(replacedBody, parameter);
-                }
-                else
-                {
-                    if (exp.Connector == "")
-                    {
-                        continue;
-                    }
-                    BinaryExpression? resultingExpression = null;
-                    if (exp.Connector == "and")
-                    {
-                        resultingExpression  = Expression.AndAlso(combinedExpression.Body, replacedBody);
-                    }
-
-                    if (exp.Connector == "or")
-                    {
-                        resultingExpression  = Expression.Or(combinedExpression.Body, replacedBody);
-                    }
-                    combinedExpression = Expression.Lambda<Func<T, bool>>(resultingExpression, parameter);
-                }
+                combinedExpression = Expression.Lambda<Func<T, bool>>(replacedBody, parameter);
             }
-
-            if (withExtraInfo)
+            else
             {
-                var count = q.Count(combinedExpression!);
-                context.OutputExtensions.Add("count", count);
+                if (exp.Connector == "")
+                {
+                    continue;
+                }
+
+                BinaryExpression? resultingExpression = null;
+                if (exp.Connector == "and")
+                {
+                    resultingExpression = Expression.AndAlso(combinedExpression.Body, replacedBody);
+                }
+
+                if (exp.Connector == "or")
+                {
+                    resultingExpression = Expression.Or(combinedExpression.Body, replacedBody);
+                }
+
+                combinedExpression = Expression.Lambda<Func<T, bool>>(resultingExpression, parameter);
             }
-
-            return q.Where(combinedExpression!);
         }
+        
 
-        if (expression != null)
-        {
-            var lambda = LambdaBuilder.BuildLambda<T>(expression,expression.Operator);
-            return q.Where(lambda);
-        }
-
-        return q;
+        return q.Where(combinedExpression!);
     }
 
-    public static IQueryable<T> ApplyGraphQlOrdering<T>(this IQueryable<T> q, IResolveFieldContext context)
+    public static IQueryable<T> ApplyWhereFilter<T>(this IQueryable<T> q,WhereExpression expression)
     {
-        var orderBy = context.GetArgument<OrderByExpression>("orderBy");
-        if (orderBy == null)
-        {
-            throw new Exception("cannot apply ordering,orderBy expression missing");
-        }
+        var lambda = LambdaBuilder.BuildLambda<T>(expression, expression.Operator);
+        return q.Where(lambda);
+    }
+
+    public static IQueryable<T> ApplyGraphQlOrdering<T>(this IQueryable<T> q, OrderByExpression orderBy)
+    {
+        
         var parameter = Expression.Parameter(typeof(T), "f");
         Expression property = Expression.Property(parameter, orderBy.Property);
 
-
         var lambda = Expression.Lambda(property, parameter);
 
-
         MethodInfo orderByMethod = null;
-        
+
         if (orderBy.Direction == "ASC")
         {
             orderByMethod = typeof(Queryable).GetMethods()
@@ -108,11 +91,8 @@ public static class IQueryableExtensions
         return q.Provider.CreateQuery<T>(orderedQuery);
     }
 
-    public static IQueryable<T> ApplyGraphQlPaging<T>(this IQueryable<T> q, IResolveFieldContext context)
+    public static IQueryable<T> ApplyGraphQlPaging<T>(this IQueryable<T> q,int take,int skip)
     {
-        var take = context.GetArgument<int>("take");
-        var skip = context.GetArgument<int>("skip");
         return q.Take(take).Skip(skip);
     }
-    
 }

@@ -2,7 +2,7 @@
 import { H4, UsersTable, UsersTableNavbar, Loader } from "../../components";
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useTypedSelector } from "../../hooks";
-import {User, fetchUsers, getUsersCount} from "../../redux";
+import {User, fetchUsers} from "../../redux";
 import "@components/UI/Buttons/buttons.css"
 import {calculateTotalPages} from "../../utils/paging.ts";
 import {setSkip, setTake} from "@redux/slices/userFiltersSlice.ts";
@@ -17,7 +17,7 @@ export const Team = () => {
     const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
 
     const  {filters,skip,staticTake,take} = useTypedSelector(s=>s.userFilters);
-    const {count,loading:countLoading} = useTypedSelector(s=>s.users);
+    const {count} = useTypedSelector(s=>s.users);
     const loadMore = () => {
         dispatch(fetchUsers({
             take: take,
@@ -26,9 +26,6 @@ export const Team = () => {
             group:filters.group
         }));
     }
-    useEffect(() => {
-        dispatch(getUsersCount());
-    }, []);
 
     useEffect(() => {
         loadMore();

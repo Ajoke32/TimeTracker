@@ -10,7 +10,7 @@ import {
     DeleteUserEpic,
     emailConfirmEpic
 } from './user'
-import {fetchUsersEpic, getUsersCountEpic} from "./users";
+import {fetchUsersEpic} from "./users";
 import {vacationEpics} from "./vacation";
 import { addApproversEpic, fetchApproversEpic } from "./approvers";
 
@@ -33,7 +33,6 @@ export const rootEpic: Epic = (action$, store$, dependencies) =>
         editUserEpic,
         fetchVacationDaysEpic,
         DeleteUserEpic,
-        getUsersCountEpic,
         emailConfirmEpic,
         ...workedHourEpics,
         ...vacationEpics,

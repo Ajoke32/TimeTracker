@@ -41,16 +41,10 @@ const usersSlice = createSlice({
                 state.users = state.users.filter(u => u.id !== action.payload);
             }),
         deleteUserFail: createErrorReducer(),
-
-        getUsersCount:createPendingReducer(),
-        getUsersCountSuccess:createSuccessReducerWithPayload<typeof initialState,number>
-        ((state, action)=>{
-            state.count=action.payload;
-        }),
     },
 });
 
 export const users = usersSlice.reducer;
 export const { fetchUsersFail,
     fetchUsersSuccess, fetchUsers, deleteUserSuccess,
-    deleteUserFail, deleteUser,getUsersCountSuccess,getUsersCount } = usersSlice.actions;
+    deleteUserFail, deleteUser, } = usersSlice.actions;
