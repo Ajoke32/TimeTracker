@@ -1,8 +1,8 @@
 import { Epic, ofType } from "redux-observable";
 import {catchError, map, mergeMap, Observable, of, tap} from "rxjs";
 import { PayloadAction } from "@reduxjs/toolkit";
-import {FetchUsersCountQuery, FetchUsersQuery} from "../queries";
-import {fetchUsersFail, fetchUsersSuccess, getUsersCountSuccess} from "../slices";
+import { FetchUsersQuery} from "../queries";
+import {fetchUsersFail, fetchUsersSuccess} from "../slices";
 import { FetchUsersType } from "../types";
 import { GetErrorMessage } from "../../utils";
 
@@ -29,15 +29,3 @@ export const fetchUsersEpic: Epic = (action: Observable<PayloadAction<FetchUsers
         )
     );
 
-export const getUsersCountEpic: Epic = (action, state) =>
-    action.pipe(
-        ofType("users/getUsersCount"),
-        mergeMap(() =>
-            FetchUsersCountQuery()
-                .pipe(
-                    map(resp => {
-                        return getUsersCountSuccess(resp.response.data.userQuery.getUsersCount);
-                    })
-                ),
-        )
-    );

@@ -11,7 +11,6 @@ import { persistStore, persistReducer } from 'redux-persist';
 
 import storage from 'redux-persist/lib/storage'
 import {infoModalReducer} from "@redux/slices/stateInfoModalSlice.ts";
-import {userFilters} from "@redux/slices/userFiltersSlice.ts";
 
 
 const middleware = createEpicMiddleware();
@@ -34,7 +33,6 @@ const rootReducer = combineReducers({
   calendar: calendar,
   workedHours: workedHours,
   infoModal:infoModalReducer,
-  userFilters:userFilters
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

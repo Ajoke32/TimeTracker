@@ -8,11 +8,9 @@ public class LambdaBuilder
 {
   
 
-    public static Expression<Func<T, bool>> BuildLambda<T>(WhereExpression expression,string oprt)
+    public static Expression<Func<T, bool>> BuildLambda<T>(WhereExpression expression,string oprt,ParameterExpression parameter)
     {
-        BinaryExpression body = null;
-        
-        var parameter = Expression.Parameter(typeof(T), "f");
+        Expression body = null;
         
         var propertyName = expression.PropertyName;
         
@@ -28,7 +26,7 @@ public class LambdaBuilder
         {
             body =  Expression.Equal(property, constant);
         }
-
+        
         if (oprt == "neq")
         {
             body = Expression.NotEqual(property, constant);
@@ -39,6 +37,12 @@ public class LambdaBuilder
             body = Expression.GreaterThan(property, constant);
         }
 
+        if (oprt == "contains")
+        {
+            var method = typeof(string).GetMethod("Contains",new[] { typeof(string) });
+            body = Expression.Call(property, method, constant);
+        }
+        
         if (oprt == "lt")
         {
             body = Expression.LessThan(property, constant);

@@ -40,7 +40,15 @@
     border: 8px solid rgba(0, 0, 0, .1);
     border-left-color: var(--color-cyan);
 }
+/*del*/
+.select-group>select{
+    border: none;
 
+}
+.select-group>input{
+    border: none;
+    border-bottom: 1px solid lightblue;
+}
 .select-group{
     display: flex;
     flex-direction: column;
@@ -50,20 +58,33 @@
     color: lightblue;
     font-size: 15px;
 }
-/*del*/
+
 .pages-wrapper{
+    margin-top: 10px;
     display: flex;
     width: 50%;
     align-self: center;
     justify-content: center;
     align-items: center;
+    gap:5px;
 }
 .pages-wrapper>div{
     font-size: 20px;
+    font-family: sans-serif;
     cursor: pointer;
     padding: 5px 15px;
     text-align: center;
     border: 1px solid lightblue;
+    border-radius: 8px;
+}
+.pages-wrapper>div:hover{
+    background-color: lightblue;
+}
+.active-page{
+    background-color: #79bdd0;
 }
 
+.filters-wrapper span{
+    margin-left: 10px;
+}
 /*del*/

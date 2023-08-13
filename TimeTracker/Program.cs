@@ -22,6 +22,7 @@ using TimeTracker.Utils.Email;
 using TimeTracker.Utils.Environment;
 using TimeTracker.Utils.Filters;
 using TimeTracker.Utils.SoftDelete;
+using TimeTracker.Visitors;
 using Vite.AspNetCore;
 using Vite.AspNetCore.Extensions;
 
@@ -124,7 +125,7 @@ builder.Services.AddScoped<IRepositoryFactory, RepositoryFactory>();
 
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<EmailTokenService>();
-
+builder.Services.AddScoped<IGraphQlArgumentVisitor, GraphQlArgumentsVisitor>();
 
 builder.Services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
 
