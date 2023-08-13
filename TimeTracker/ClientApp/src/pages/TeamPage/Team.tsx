@@ -2,9 +2,10 @@
 import { H4, UsersTable, UsersTableNavbar, Loader } from "../../components";
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useTypedSelector } from "../../hooks";
-import {User, fetchUsers, setUsersTake, setUsersSkip} from "../../redux";
+import {User, fetchUsers, setUsersTake, setUsersSkip, removeUserFilter} from "../../redux";
 import "@components/UI/Buttons/buttons.css"
 import {calculateTotalPages} from "../../utils/paging.ts";
+import {WhereFilter} from "@redux/types/filterTypes.ts";
 
 
 
@@ -29,6 +30,7 @@ export const Team = () => {
     }
 
     useEffect(() => {
+        console.log(group);
         loadMore();
     }, [group,take,skip])
 
@@ -41,11 +43,22 @@ export const Team = () => {
         dispatch(setUsersSkip((page-1)*perPage));
         setActivePage(page-1);
     }
+
+    function handleRemoveFilter(filter:WhereFilter){
+        dispatch(removeUserFilter(filter));
+    }
+
     return (
         <div className="team-menu__wrapper">
             <div className="team-menu__wrapper-inner">
                 <div className="team-menu__header-wrapper">
                     <H4 value="Members" />
+                    <div className="filters-wrapper">
+                        {group.map(f=>{
+                            return <span key={f.property} onClick={()=>handleRemoveFilter(f)}
+                                         className="btn-base btn-info">{f.property} X</span>
+                        })}
+                    </div>
                 </div>
 
                 <div className="team-menu__main">

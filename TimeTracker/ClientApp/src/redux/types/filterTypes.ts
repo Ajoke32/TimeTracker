@@ -42,6 +42,9 @@ export const basicFilteringReducers={
     filtersToDefault:(state:OrderingPagingFilterType)=>{
         state.group=[];
     },
+    removeFilter:(state:OrderingPagingFilterType,action:PayloadAction<WhereFilter>)=>{
+        state.group = state.group.filter(f=>f.property!==action.payload.property);
+    },
 }
 
 export const basicPagingReducers={
