@@ -1,9 +1,9 @@
-import React, {ChangeEventHandler, useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {userFields} from "@redux/types";
 import {WhereFilter} from "@redux/types/filterTypes.ts";
-import {ChangeHandler} from "react-hook-form";
-import {useAppDispatch, useTypedSelector} from "@hooks/customHooks.ts";
-import {addUserFilter, userFiltersToDefault} from "@redux/slices/userFiltersSlice.ts";
+import {useAppDispatch} from "@hooks/customHooks.ts";
+import {addUserFilter, userFiltersToDefault} from "@redux/slices";
+
 
 
 const Filter = () => {

@@ -52,6 +52,7 @@
 }
 /*del*/
 .pages-wrapper{
+    margin-top: 10px;
     display: flex;
     width: 50%;
     align-self: center;
@@ -71,5 +72,7 @@
 .pages-wrapper>div:hover{
     background-color: lightblue;
 }
-
+.active-page{
+    background-color: #79bdd0;
+}
 /*del*/

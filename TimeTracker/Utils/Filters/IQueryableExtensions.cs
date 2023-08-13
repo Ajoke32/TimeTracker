@@ -15,14 +15,11 @@ public static class IQueryableExtensions
         var parameter = Expression.Parameter(typeof(T), "f");
         foreach (var exp in group)
         {
-            var lambda = LambdaBuilder.BuildLambda<T>(exp, exp.Operator);
-
-            var replacedBody = new ParameterReplacer(lambda.Parameters[0],
-                parameter).Visit(lambda.Body);
-
+            var lambda = LambdaBuilder.BuildLambda<T>(exp, exp.Operator,parameter);
+            
             if (combinedExpression == null)
             {
-                combinedExpression = Expression.Lambda<Func<T, bool>>(replacedBody, parameter);
+                combinedExpression = Expression.Lambda<Func<T, bool>>(lambda.Body, parameter);
             }
             else
             {
@@ -34,12 +31,12 @@ public static class IQueryableExtensions
                 BinaryExpression? resultingExpression = null;
                 if (exp.Connector == "and")
                 {
-                    resultingExpression = Expression.AndAlso(combinedExpression.Body, replacedBody);
+                    resultingExpression = Expression.AndAlso(combinedExpression.Body, lambda.Body);
                 }
 
                 if (exp.Connector == "or")
                 {
-                    resultingExpression = Expression.Or(combinedExpression.Body, replacedBody);
+                    resultingExpression = Expression.Or(combinedExpression.Body, lambda.Body);
                 }
 
                 combinedExpression = Expression.Lambda<Func<T, bool>>(resultingExpression, parameter);
@@ -52,7 +49,8 @@ public static class IQueryableExtensions
 
     public static IQueryable<T> ApplyWhereFilter<T>(this IQueryable<T> q,WhereExpression expression)
     {
-        var lambda = LambdaBuilder.BuildLambda<T>(expression, expression.Operator);
+        var parameter = Expression.Parameter(typeof(T), "f");
+        var lambda = LambdaBuilder.BuildLambda<T>(expression, expression.Operator,parameter);
         return q.Where(lambda);
     }
 

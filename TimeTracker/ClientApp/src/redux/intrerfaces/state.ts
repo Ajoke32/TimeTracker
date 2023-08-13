@@ -1,5 +1,6 @@
 import { User } from './'
 import { ApproverVacation, Vacation, WorkedHour } from '@redux/types';
+import {OrderingPagingFilterType} from "@redux/types/filterTypes.ts";
 
 export interface DefaultState {
     loading: boolean,
@@ -17,7 +18,7 @@ export interface UserSliceState extends DefaultState {
     vacationDays?: number
 }
 
-export interface UsersSliceState extends DefaultState {
+export interface UsersSliceState extends DefaultState,OrderingPagingFilterType {
     users: User[],
     count:number,
 }

@@ -8,11 +8,10 @@ public class LambdaBuilder
 {
   
 
-    public static Expression<Func<T, bool>> BuildLambda<T>(WhereExpression expression,string oprt)
+    public static Expression<Func<T, bool>> BuildLambda<T>(WhereExpression expression,string oprt,ParameterExpression parameter)
     {
         BinaryExpression body = null;
         
-        var parameter = Expression.Parameter(typeof(T), "f");
         
         var propertyName = expression.PropertyName;
         
