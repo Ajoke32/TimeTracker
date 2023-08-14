@@ -5,10 +5,11 @@
 .sidebar-list {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    margin-top: 3.5rem;
+    margin-top: 2rem;
     list-style: none;
-    height: 70vh;
+    height: 80vh;
     overflow: auto;
 }
 

@@ -11,7 +11,7 @@ import {ApproverVacation, ApproverVacationUpdate, Vacation, VacationApproverInpu
 
 export function CreateApproverVacation(approverVacation:VacationApproverInput){
 
-    return AjaxQuery<QueryStructure<{ approverVacationMutation: { createApproverVacation:VacationApproverInput}}>>(
+    return AjaxQuery<{ approverVacationMutation: { createApproverVacation:VacationApproverInput}}>(
         'mutation CreateApproverVacation($approverVacation:ApproverVacationInputType!){approverVacationMutation{createApproverVacation(approverVacation:$approverVacation){id,userId}}}',
         {approverVacation:approverVacation}
     )
@@ -19,35 +19,35 @@ export function CreateApproverVacation(approverVacation:VacationApproverInput){
 
 export function UpdateApproverVacations(input:VacationApproverInput){
 
-    return AjaxQuery<QueryStructure<any>>(
+    return AjaxQuery<any>(
         'mutation UpdateApproversVacations($av:ApproverVacationInputType!){approverVacationMutation{updateApproversVacations(approverVacation:$av)}}',
         {av:input}
     )
 }
 
 export function DeleteApproverVacationByVacationId(id:number){
-    return AjaxQuery<QueryStructure<{approverVacationMutation:{deleteByVacationId:ApproverVacation}}>>(
+    return AjaxQuery<{approverVacationMutation:{deleteByVacationId:ApproverVacation}}>(
         `mutation DeleteByVacationId($id:Int!){approverVacationMutation{deleteByVacationId(id:$id)}}`,
         {id:id}
     )
 }
 
 export function FetchApproverVacationById(id:number){
-    return AjaxQuery<QueryStructure<{approverVacationQuery:{approverVacation:ApproverVacation}}>>(
+    return AjaxQuery<{approverVacationQuery:{approverVacation:ApproverVacation}}>(
         'query FetchById($id:Int!){approverVacationQuery{approverVacation(id:$id){isApproved,isDeleted,id,vacation{id,vacationState,startDate,message,endDate,user{firstName,lastName,email,vacationDays}}}}}',
         {id:id}
     )
 }
 
 export function UpdateApproverVacationToDefault(vacationId:number){
-    return AjaxQuery<QueryStructure<{approverVacationMutation:{stateToDefault:boolean}}>>(
+    return AjaxQuery<{approverVacationMutation:{stateToDefault:boolean}}>(
         'mutation StateToDefault($id:Int!){approverVacationMutation{stateToDefault(vacationId:$id)}}',
         {id:vacationId}
     )
 }
 
 export function UpdateApproverVacationState(av:ApproverVacationUpdate){
-    return AjaxQuery<QueryStructure<{ approverVacationMutation: { updateState:ApproverVacation}}>>(
+    return AjaxQuery<{ approverVacationMutation: { updateState:ApproverVacation}}>(
         `mutation UpdateState(
               $state: Boolean!
               $vacationId: Int!

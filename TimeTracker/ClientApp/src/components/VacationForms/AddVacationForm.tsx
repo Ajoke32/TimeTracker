@@ -49,9 +49,13 @@ export const AddVacationForm = () => {
     }
 
     return (
-        <div style={{display:"flex",alignItems:"center",justifyContent:"center",marginTop:'80px',height:"100%"}}>
-            <form onSubmit={handleSubmit(onSubmit)} style={{display:"flex",gap:"10px",flexDirection:"column",width:"50%"}}>
-                <h2 style={{textAlign:"center"}}>Available vacation days {vacationDays}</h2>
+        <div className="vacations-content__wrapper">
+            <form onSubmit={handleSubmit(onSubmit)} className="add-vacation__form">
+                <H5 value={`Available vacation days ${userLoading?"loading..":vacationDays}`} />
+                <div className="login-form__messages-wrapper">
+                    {loading?<Loader/>:""}
+                    {error ? <H5 value={error} />: ""}
+                </div>
                 <label style={{marginLeft:"5px"}}>Start date</label>
                 <input {...register("startDate")} name="startDate" className="text-input" type="date" placeholder="Start date"/>
                 <label style={{marginLeft:"5px"}}>End date</label>

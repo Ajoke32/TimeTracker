@@ -1,3 +1,4 @@
+import { CalendarCell, CalendarEvent, WorkPlan } from '@redux/types/calendarTypes';
 import { User } from './'
 import { ApproverVacation, Vacation, WorkedHour } from '@redux/types';
 import {OrderingPagingFilterType} from "@redux/types/filterTypes.ts";
@@ -53,4 +54,16 @@ export interface VacationState extends DefaultState {
 
 export interface WorkedHoursSlice extends DefaultState {
     workedHours: WorkedHour[]
+}
+
+export interface CalendarSlice extends DefaultState {
+    events: FormattedCalendarArr<CalendarEvent>,
+    workPlans: FormattedCalendarArr<WorkPlan>,
+    currentDate: Date
+}
+
+export interface FormattedCalendarArr<T> {
+    previousMonth: T[],
+    currentMonth: T[],
+    nextMonth: T[]
 }

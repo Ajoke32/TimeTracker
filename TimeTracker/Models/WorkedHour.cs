@@ -8,7 +8,7 @@ public class WorkedHour
 
     public User User { get; set; } = null!;
 
-    public DateOnly Date { get; set; }
+    public DateTime Date { get; set; }
 
     public TimeOnly StartTime { get; set; }
     

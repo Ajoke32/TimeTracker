@@ -1,27 +1,13 @@
+import { months } from "../../";
 
-const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-];
+export const CurrentDateElement = ({date, showFullDate = false} : {date: Date, showFullDate: boolean}) => {
 
-
-export const CurrentDateElement = ({date} : {date: Date}) => {
-
-    const currentDate = `${date.getDate()} ${months[date.getMonth()]}`;
+    const currentDate = showFullDate 
+        ? `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}` 
+        : `${months[date.getMonth()]} ${date.getFullYear()}`;
     
     return (
         <div className="current-date__wrapper">
-            <span>{(date.getDate() === new Date().getDate()) && (date.getMonth() === new Date().getMonth()) ? "Today" : ""}</span>
             <span>{currentDate}</span>
         </div>
     );

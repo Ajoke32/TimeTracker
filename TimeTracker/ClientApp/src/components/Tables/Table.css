@@ -1,22 +1,32 @@
-.table-wrapper{
+.vacations-content__wrapper {
+    height: 90vh;
+    display: flex;
+    padding: 10% 15%;
+    flex-direction: column;
+    overflow: hidden;
+    
+}
+
+.vacations-content__inner {
     border: 1px solid var(--color-stroke-gray);
-    padding: 25px;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width: 1000px;
-    border-radius: 8px;
+
+    border-radius: 1rem;
+    background: var(--color-white);
 }
 
-
-
 .head{
-    background-color: #caf0f8;
+    background: var(--color-background-grey);
+    height: 3rem;
     padding: 10px;
     border-radius: 8px;
 }
 .head span{
     font-weight: bold;
+    font-size: .85rem;
 }
 
 .empty{
@@ -26,9 +36,50 @@
 }
 
 .info{
-    font-family: sans-serif;
-    background-color: #a2d2ff;
     border-radius: 8px;
     padding: 10px;
+    height: 25vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.add-vacation__form {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    width: 60%;
+    align-self: center;
+    padding: 2rem;
+    background: var(--color-white);
+    border: 1px solid var(--color-stroke-gray);
+    border-radius: 1rem;
+}
+
+.add-vacation__form .login-form__messages-wrapper {
+    height: 8vh;
+}
+
+.add-vacation__form button {
+    width: 35%;
+}
+
+@media screen and (min-width: 920px) and (max-width: 1680px) {
+    .vacations-content__wrapper {
+        padding: 10% 10%;
+    }
+}
+
+@media screen and (min-width: 920px) and (max-width: 1080px) {
+    .vacations-content__wrapper {
+        padding: 10% 5%;
+    }
+}
+
+@media screen and (min-width: 640px) and (max-width: 920px) {
+    .vacations-content__wrapper {
+        padding: 5% 3%;
+    }
 }
 

@@ -22,6 +22,11 @@ public class TimeTrackerContext:DbContext
     public DbSet<ApproverVacation> ApproversVacation { get; set; }
 
     public DbSet<WorkedHour> WorkedHours { get; set; }
+
+    public DbSet<WorkPlan> WorkPlans { get; set; }
+
+    public DbSet<CalendarEvent> CalendarEvents { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserApprover>()
@@ -44,13 +49,6 @@ public class TimeTrackerContext:DbContext
             .HasForeignKey(a => a.UserId);
         
         modelBuilder.Entity<WorkedHour>()
-            .Property(a => a.Date)
-            .HasConversion(
-                v => v.ToDateTime(new TimeOnly()),
-                v => DateOnly.FromDateTime(v)
-            );
-        
-        modelBuilder.Entity<WorkedHour>()
             .Property(a => a.StartTime)
             .HasConversion(
                 v => v.ToTimeSpan(),
@@ -66,6 +64,25 @@ public class TimeTrackerContext:DbContext
 
         modelBuilder.Entity<WorkedHour>()
             .Property(a => a.TotalTime)
+            .HasConversion(
+                v => v.ToTimeSpan(),
+                v => TimeOnly.FromTimeSpan(v)
+            );
+
+        modelBuilder.Entity<WorkPlan>()
+            .HasOne(a => a.User)
+            .WithMany(u => u.WorkPlans)
+            .HasForeignKey(a => a.UserId);
+        
+        modelBuilder.Entity<WorkPlan>()
+            .Property(a => a.StartTime)
+            .HasConversion(
+                v => v.ToTimeSpan(),
+                v => TimeOnly.FromTimeSpan(v)
+            );
+        
+        modelBuilder.Entity<WorkPlan>()
+            .Property(a => a.EndTime)
             .HasConversion(
                 v => v.ToTimeSpan(),
                 v => TimeOnly.FromTimeSpan(v)

@@ -1,6 +1,4 @@
-import {PagingExtraInfo} from "@redux/types/filterTypes.ts";
-
-export interface QueryStructure<T> extends PagingExtraInfo{
+export interface QueryStructure<T> {
     data: T,
     errors: ResponseError[] | null,
 }

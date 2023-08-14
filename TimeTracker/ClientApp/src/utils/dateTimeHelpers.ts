@@ -1,4 +1,5 @@
-import { WorkedHour, WorkedTime } from "@redux/types";
+import { CalendarEvent, DateRangeType, WorkPlan, WorkedHour, WorkedTime } from "@redux/types";
+import { addMonth, substractMonth } from ".";
 
 export const GetFormattedUTCDateString = (date: Date): string => {
     let result = "";
@@ -12,7 +13,7 @@ export const GetFormattedUTCDateString = (date: Date): string => {
 
 export const GetFormattedUTCTimeString = (time: string, date: string): string => {
     let result = "";
-    
+
     const localDate = new Date(`${date} ${time}`)
     const hours = localDate.getUTCHours();
     const minutes = localDate.getUTCMinutes();
@@ -62,9 +63,10 @@ export const GetLocalDateFromUTC = (utc: string): Date => {
 }
 
 export const GetLocalWorkedHour = (wh: WorkedHour): WorkedHour => {
+    const dateOnly = wh.date.toString().split("T")[0]
 
-    const utcStart = `${wh.date} ${wh.startTime}`;
-    const utcEnd = `${wh.date} ${wh.endTime}`
+    const utcStart = `${dateOnly} ${wh.startTime}`;
+    const utcEnd = `${dateOnly} ${wh.endTime}`
 
     const localStart = GetLocalDateFromUTC(utcStart)
     const localEnd = GetLocalDateFromUTC(utcEnd)
@@ -85,4 +87,101 @@ export const GetLocalWorkedHour = (wh: WorkedHour): WorkedHour => {
     wh.endTime = GetFormattedTimeString(localEndTime)
 
     return wh;
+}
+
+export const GetThreeMonthDateRange = (date: Date): DateRangeType => {
+    const previousMonth = substractMonth(date);
+    const nextMonth = addMonth(date);
+
+    const firstDayOfMonth = new Date(previousMonth.getFullYear(), previousMonth.getMonth(), 1)
+    const lastDayOfMonth = new Date(nextMonth.getFullYear(), addMonth(nextMonth).getMonth(), 0);
+
+    const firstTime = GetFormattedUTCTimeString("00:00:00", GetFormattedDateString(firstDayOfMonth))
+    const lastTime = GetFormattedUTCTimeString("00:00:00", GetFormattedDateString(lastDayOfMonth))
+
+    return {
+        startDate: `${GetFormattedUTCDateString(firstDayOfMonth)}T${firstTime}`,
+        endDate: `${GetFormattedUTCDateString(lastDayOfMonth)}T${lastTime}`
+    }
+}
+
+export const GetOneMonthDateRange = (date: Date): DateRangeType => {
+
+    const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1)
+    const lastDayOfMonth = new Date(date.getFullYear(), addMonth(date).getMonth(), 0);
+
+    const firstTime = GetFormattedUTCTimeString("00:00:00", GetFormattedDateString(firstDayOfMonth))
+    const lastTime = GetFormattedUTCTimeString("00:00:00", GetFormattedDateString(lastDayOfMonth))
+
+    return {
+        startDate: `${GetFormattedUTCDateString(firstDayOfMonth)}T${firstTime}`,
+        endDate: `${GetFormattedUTCDateString(lastDayOfMonth)}T${lastTime}`
+    }
+}
+
+export const GetLocalCalendarEvent = (event: CalendarEvent): CalendarEvent => {
+    const dateOnly = event.date.toString().split("T")[0]
+
+    event.date = GetLocalDateFromUTC(dateOnly);
+
+    return event;
+}
+
+export const GetLocalWorkPlan = (plan: WorkPlan): WorkPlan => {
+    const dateOnly = plan.date.toString().split("T")[0]
+
+    const utcStart = `${dateOnly} ${plan.startTime}`;
+    const utcEnd = `${dateOnly} ${plan.endTime}`
+
+    const localStart = GetLocalDateFromUTC(utcStart)
+    const localEnd = GetLocalDateFromUTC(utcEnd)
+
+    const localStartTime: WorkedTime = {
+        hours: localStart.getHours(),
+        minutes: localStart.getMinutes(),
+        seconds: localStart.getSeconds()
+    }
+
+    const localEndTime: WorkedTime = {
+        hours: localEnd.getHours(),
+        minutes: localEnd.getMinutes(),
+        seconds: localEnd.getSeconds()
+    }
+
+    plan.date = localStart
+    plan.startTime = GetFormattedTimeString(localStartTime)
+    plan.endTime = GetFormattedTimeString(localEndTime)
+
+    return plan;
+}
+
+export const ParseTimeString = (time: string): Date => {
+    const [hours, minutes, seconds] = time.split(':').map(Number)
+    const date = new Date();
+
+    date.setHours(hours, minutes, seconds)
+
+    return date;
+}
+
+export const CalculateTimeDifference = (timeString1: string, timeString2: string): number => {
+    const time1 = ParseTimeString(timeString1);
+    const time2 = ParseTimeString(timeString2);
+
+    const timeDifference = Math.abs(time2.getTime() - time1.getTime());
+    return timeDifference
+}
+
+export const GetFormattedTimeDifference = (timeString1: string, timeString2: string): string => {
+    const totalSeconds = Math.floor(CalculateTimeDifference(timeString1, timeString2) / 1000);
+
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    const formattedHours = hours < 10 ? `0${hours}` : `${hours}`;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+    const formattedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+
+    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 }

@@ -14,11 +14,13 @@ export const TrackerTimer = ({ workedHour }: { workedHour?: WorkedHour }) => {
 
         return (
             <>
-                <CurrentDateElement date={new Date(workedHour.date)} />
+                <CurrentDateElement date={new Date(workedHour.date)} showFullDate={true} />
                 <div className="tracker-content__wrapper">
                     <div className="tracker-content__inner">
                         <div className="timer-tracker">
-                            <Timer hours={time.hours} minutes={time.minutes} seconds={time.seconds} />
+                            <div className="timer-tracker__wrapper worked-hours__timer">
+                                <Timer hours={time.hours} minutes={time.minutes} seconds={time.seconds} />
+                            </div>
                             <WorkedHours workedHour={workedHour} />
                         </div>
                     </div>
@@ -77,15 +79,17 @@ export const TrackerTimer = ({ workedHour }: { workedHour?: WorkedHour }) => {
 
     return (
         <>
-            <CurrentDateElement date={new Date()} />
+            <CurrentDateElement date={new Date()} showFullDate={true}/>
             <div className="tracker-content__wrapper">
                 <div className="tracker-content__inner">
                     <div className="timer-tracker">
-                        <Timer
-                            hours={hours}
-                            minutes={minutes}
-                            seconds={seconds}
-                        />
+                        <div className="timer-tracker__wrapper">
+                            <Timer
+                                hours={hours}
+                                minutes={minutes}
+                                seconds={seconds}
+                            />
+                        </div>
                         <div className="tracker-btn__wrapper">
                             {isRunning
                                 ? <SmallButton type="button" value="Stop" handleClick={handleStopButton} />

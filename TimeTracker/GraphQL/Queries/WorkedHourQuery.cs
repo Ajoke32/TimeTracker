@@ -26,9 +26,7 @@ public sealed class WorkedHourQuery : ObjectGraphType
                 var userId = ctx.GetArgument<int>("userId");
 
                 var workedHours = await uow.GenericRepository<WorkedHour>()
-                                    .GetAsync(
-                                        filter:(w => w.UserId == userId)
-                                        );
+                                    .GetAsync(filter: (w => w.UserId == userId));
 
                 return workedHours;
             })
