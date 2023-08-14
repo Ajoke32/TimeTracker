@@ -79,6 +79,19 @@ export const TrackerSetHours = ({ workedHour }: { workedHour?: WorkedHour }) => 
         <>
             {workedHour ? <CurrentDateElement date={workedHour.date} showFullDate={true}/> : <SelectedDateElement date={selectedDate} />}
 
+            {!workedHour ?
+                <div className="time-range__date-wrapper">
+                    <button type='button' onClick={handleShowDatePicker}>
+                        <input
+                            type="date"
+                            className="date-picker__input"
+                            value={selectedDate}
+                            {...register("date")}
+                            onChange={handleDateChange}
+                            style={!showDatePicker ? { display: 'none' } : {}} />
+                    </button>
+                </div> : <></>}
+            
             <div className="set-hours-tracker">
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="time-range__wrapper">
@@ -104,20 +117,7 @@ export const TrackerSetHours = ({ workedHour }: { workedHour?: WorkedHour }) => 
                             />
                         </div>
                     </div>
-
-                    {!workedHour ? <div className="time-range__date-wrapper">
-                        <button type='button' onClick={handleShowDatePicker}>
-                            <input
-                                type="date"
-                                className="date-picker__input"
-                                value={selectedDate}
-                                {...register("date")}
-                                onChange={handleDateChange}
-                                style={!showDatePicker ? { display: 'none' } : {}} />
-                        </button>
-                    </div> : <></>}
-
-
+                    
                     <div className="tracker-btn__wrapper">
                         <SmallButton type="submit" value={workedHour ? "Change" : "Add"} />
                         {workedHour ? <SmallButton type="button" value="Delete" handleClick={handleDelete}/> : <></>}

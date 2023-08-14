@@ -47,8 +47,8 @@ export const AddVacationForm = () => {
     }
 
     return (
-        <div style={{display:"flex",alignItems:"center",justifyContent:"center",marginTop:'80px',height:"100%"}}>
-            <form onSubmit={handleSubmit(onSubmit)} style={{display:"flex",gap:"10px",flexDirection:"column",width:"50%"}}>
+        <div className="vacations-content__wrapper">
+            <form onSubmit={handleSubmit(onSubmit)} className="add-vacation__form">
                 <H5 value={`Available vacation days ${userLoading?"loading..":vacationDays}`} />
                 <div className="login-form__messages-wrapper">
                     {loading?<Loader/>:""}

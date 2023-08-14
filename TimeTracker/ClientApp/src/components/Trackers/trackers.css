@@ -14,7 +14,7 @@
     height: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     padding-left: 2rem;
 }
 
@@ -27,13 +27,14 @@
 }
 
 .tracker-content__inner {
-    width: 100%;    
+    width: 80%;    
 }
 
 .timer-tracker,
 .set-hours-tracker{
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 .set-hours-tracker > form {
@@ -44,13 +45,15 @@
     justify-content: space-evenly;
 }
 
-.timer-tracker {
+.set-hours-tracker {
+    width: 80%;
     justify-content: space-evenly;
 }
 
-.set-hours-tracker {
-    width: 100%;
-    justify-content: space-evenly;
+.timer-tracker__wrapper {
+    width: 25%;
+    display: flex;
+    justify-content: center;
 }
 
 .timer-time__wrapper > span {
@@ -72,7 +75,7 @@
 }
 
 .time-range__wrapper {
-    width: 50%;
+    width: 35%;
     display: flex;
 }
 
@@ -97,7 +100,7 @@
     border: 1px solid var(--color-stroke-gray);
     border-radius: 15px;
     
-    font-size: 1.1rem;
+    font-size: .9rem;
     position: relative;
 }
 
@@ -116,7 +119,7 @@
 .tracker-btn__wrapper {
     display: flex;
     align-items: center;
-    width: 30%;
+    width: 20%;
     height: 100%;
 }
 
@@ -174,6 +177,9 @@
     height: 100%;
     width: fit-content;
     margin: auto;
+}
+.worked-hours__timer span {
+    font-size: 1.3rem;
 }
 
 .tracker-actions__wrapper button,
@@ -239,13 +245,4 @@
 
 .action-active-btn {
     opacity: 1!important;
-
-}
-
-.trackers-separator__wrapper {
-    width: 90%;
-    height: 1.5rem;
-    align-items: center;
-    justify-content: center;
-    margin: 20px auto -20px auto ;
 }

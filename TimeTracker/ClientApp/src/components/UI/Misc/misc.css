@@ -6,7 +6,7 @@
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    margin: 2vh 0 2vh 0;
+    margin: 1vh 0 1vh 0;
 }
 
 .horizontal-line {
@@ -60,7 +60,7 @@
 
 .timer-wrapper span {
     margin-left: 5px;
-    font-size: 2rem;
+    font-size: 1.5rem;
     position: relative;
     display: flex;
     align-items: center;

@@ -160,7 +160,7 @@ const Scheduler = ({ data, back }: { data: { cell: CalendarCell, calendar: Calen
                                             className="working-hours__inner-row"
                                             style={{
                                                 width: `${(convertTimeToIndex(item.totalTime) / (hours.length * 60)) * 100}%`,
-                                                background: colors[index],
+                                                background: generateRandomColor(),
                                                 left: `${((convertTimeToIndex(item.startTime) - convertTimeToIndex(hours[0])) / (hours.length * 60)) * 100}%`
                                             }}
                                         >

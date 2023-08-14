@@ -61,9 +61,6 @@ export const Header = () => {
                         <div className="header-timer__content" style={!isRunning ? { opacity: '.5' } : {}}>
                             <Timer hours={hours} minutes={minutes} seconds={seconds} />
                         </div>
-                        <button className="timer-start-stop__btn" onClick={handleStartStopButton}>
-                            <div className={isRunning ? "timer-stop__icon" : "timer-start__icon"}></div>
-                        </button>
                     </div>
                 )}
             </div>

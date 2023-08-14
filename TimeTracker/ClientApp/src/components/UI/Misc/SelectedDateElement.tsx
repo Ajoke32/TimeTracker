@@ -5,8 +5,7 @@ export const SelectedDateElement = ({date} : {date: string}) => {
     
     return (
         <div className="selected-date__wrapper">
-            <span>Selected</span>
-            <span>{`${selectedDate.getDate()} ${months[selectedDate.getMonth()]}`}</span>
+            <span>{`${months[selectedDate.getMonth()]} ${selectedDate.getDate()}, ${selectedDate.getFullYear()}`}</span>
         </div>
     );
 };

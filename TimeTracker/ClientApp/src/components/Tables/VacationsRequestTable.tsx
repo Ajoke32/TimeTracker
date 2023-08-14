@@ -6,6 +6,7 @@ import {fetchRequests} from "../../redux";
 import {Loader} from "../UI";
 import MessageModal from "@components/UI/Modals/MessageModal.tsx";
 import {getApproverVacationString, getStringVacationState, isVacationAnswered} from "../../utils/vacationHelper.ts";
+import {H4} from "@components/Headings";
 
 export const VacationsRequestTable = () => {
 
@@ -20,32 +21,33 @@ export const VacationsRequestTable = () => {
         dispatch(fetchRequests(userId!))
     },[])
 
-
+    
+    
     return (
-        <div style={{display:"flex",justifyContent:"center",marginTop:"80px"}}>
+        <div  className="vacations-content__wrapper">
             <MessageModal />
-            <span>{error&&error}</span>
-            {loading&&vacationRequests.length===0?<Loader />:
-                <div className="table-wrapper">
+            <span>{error && error}</span>
+            {loading && vacationRequests.length === 0 ? <Loader />:
+                <div className="vacations-content__inner">
                     <div className="search-bar">
                         <input type="text" placeholder="search by email" className="input-search"/>
                         <span>{loading&&"Working on it..."}</span>
                     </div>
-                    {vacationRequests.length===0&&<div className="empty info">You have no requests</div>}
+                    {vacationRequests.length === 0 && <div className="empty info"><H4 value="You have no vacation requests"/></div>}
                     {vacationRequests.map(a=>{
-                        return <div key={a.id} className="request-item">
-                            <span>{a.vacation.user.firstName} {a.vacation.user.lastName}</span>
-                            <span>{a.vacation.user.email}</span>
-                            <span className={a.isDeleted?"archived":getApproverVacationString(a.isApproved!,'pending')}>
-                                        {!a.isDeleted?getApproverVacationString(a.isApproved!,'Pending',true):"Archived"}
-                                    </span>
-                            <a style={{textDecoration:"none"}} className="btn-base btn-info more-btn"
-                               href={`/vacation/details/${a.id}`}>
-                                Details
-                            </a>
-                        </div>
+                        return (
+                            <div key={a.id} className="request-item">
+                                <span>{a.vacation.user.firstName} {a.vacation.user.lastName}</span>
+                                <span>{a.vacation.user.email}</span>
+                                <span className={a.isDeleted?"archived":getApproverVacationString(a.isApproved!,'pending')}>
+                                    {!a.isDeleted?getApproverVacationString(a.isApproved!,'Pending',true):"Archived"}
+                                </span>
+                                <a style={{textDecoration:"none"}} className="btn-base btn-info more-btn"
+                                   href={`/vacation/details/${a.id}`}>
+                                    Details
+                                </a>
+                            </div>)
                     })}
-
                 </div>
             }
 

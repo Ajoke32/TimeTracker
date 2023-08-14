@@ -8,6 +8,7 @@ import moment from "moment/moment";
 import {getStringVacationState} from "../../utils/vacationHelper.ts";
 import {Vacation, VacationStateEnum} from "@redux/types";
 import CancelVacationModal from "@components/UI/Modals/CancelVacationModal.tsx";
+import {H4} from "@components/Headings";
 
 
 export const VacationsTable = () => {
@@ -38,11 +39,11 @@ export const VacationsTable = () => {
 
 
     return (
-        <div style={{display:"flex",justifyContent:"center",marginTop:"80px"}}>
+        <div className="vacations-content__wrapper">
             <CancelVacationModal clicked={clicked!} setIsOpen={setIsOpen} setVacation={setClicked} vacation={clicked!} onEdit={handleVacationEdit} onSuccess={handleCancel} isOpen={isOpen} />
             <span>{error&&error}</span>
             {loading?<Loader/>:
-                <div className="table-wrapper">
+                <div className="vacations-content__inner">
                     <div className="requests-wrapper">
                         <div className="search-bar">
                             <input type="text" placeholder="search by date" className="input-search"/>
@@ -55,6 +56,7 @@ export const VacationsTable = () => {
                             <span>State</span>
                             <span>Action</span>
                     </div>
+                    {vacations.length === 0 && <div className="empty info"><H4 value="You have no active vacations"/></div>}
                     {vacations.map(v=>{
                         return (
                         <div key={v.id} className="vacation-item">
