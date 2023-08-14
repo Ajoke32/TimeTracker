@@ -1,6 +1,7 @@
 import React, {ChangeEvent, useEffect, useRef, useState} from 'react';
 import {Vacation, VacationStateEnum} from "@redux/types";
 import moment from "moment";
+import {useTypedSelector} from "@hooks/customHooks.ts";
 
 
 interface CancelVacationModalProps{
@@ -17,10 +18,8 @@ const CancelVacationModal = ({isOpen,onSuccess,onEdit,vacation,setVacation,click
     const backRef = useRef<HTMLDivElement>(null);
     const [startDate,setStartDate] = useState<string>("")
     const [endDate,setEndDate] = useState<string>("")
-    
+    const {error} = useTypedSelector(s=>s.vacations);
     useEffect(() => {
-
-        console.log(clicked);
         const handleKeyPress = (event:KeyboardEvent) => {
             if (event.key === 'Escape') {
                hideElements();
@@ -58,7 +57,7 @@ const CancelVacationModal = ({isOpen,onSuccess,onEdit,vacation,setVacation,click
 
     return (
         <div onClick={hideElements} ref={backRef} className="black-rga" style={{display:`${isOpen?'flex':'none'}`}}>
-            <div ref={modalRef} style={{display:`${isOpen?'flex':'none'}`}} className="cancel-modal">
+            <div ref={modalRef} onClick={(e)=>e.stopPropagation()} style={{display:`${isOpen?'flex':'none'}`}} className="cancel-modal">
                 <h2 style={{padding:"10px"}}>Maybe you want edit you vacation days</h2>
                 <div className="input-group">
                    <input value={startDate} className="w-90 btn-base" style={{color:"black"}} onChange={(e)=>handleStartDateInput(e)} type="date"/>

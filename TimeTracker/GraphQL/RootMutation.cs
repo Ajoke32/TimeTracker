@@ -26,6 +26,6 @@ public sealed class RootMutation:ObjectGraphType
             .Resolve(_ => new { });
 
         Field<CalendarEventMutations>("calendarEventMutations")
-            .Resolve(_ => new { });
+            .Resolve(_ => new { });        
     }
 }

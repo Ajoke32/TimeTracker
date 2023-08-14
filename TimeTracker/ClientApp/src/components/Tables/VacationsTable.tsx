@@ -3,7 +3,7 @@ import {useAppDispatch, useTypedSelector} from "../../hooks";
 import {Loader} from "../UI";
 import './Table.css'
 import './VacationsTable.css'
-import {changeVacationState, fetchUserVacations, updateVacation} from "../../redux";
+import {changeVacationState, fetchUserVacations, updateToDefault, updateVacation} from "../../redux";
 import moment from "moment/moment";
 import {getStringVacationState} from "../../utils/vacationHelper.ts";
 import {Vacation, VacationStateEnum} from "@redux/types";
@@ -13,7 +13,8 @@ import {H4} from "@components/Headings";
 
 export const VacationsTable = () => {
 
-    const {error,loading,vacations} = useTypedSelector(s=>s.vacations);
+    const {error,updated,loading,vacations}
+        = useTypedSelector(s=>s.vacations);
     const dispatch = useAppDispatch();
     const userId = useTypedSelector(u=>u.auth.user?.id);
     const [isOpen,setIsOpen]=useState<boolean>(false);
@@ -22,7 +23,11 @@ export const VacationsTable = () => {
     useEffect(()=>{
         dispatch(fetchUserVacations(userId!))
     },[]);
-
+    useEffect(() => {
+        if(updated!==null){
+            dispatch(updateToDefault(clicked?.id!));
+        }
+    }, [updated]);
     function handleSelect(vacation:Vacation){
         setClicked(vacation);
         setIsOpen(true);
@@ -41,7 +46,6 @@ export const VacationsTable = () => {
     return (
         <div className="vacations-content__wrapper">
             <CancelVacationModal clicked={clicked!} setIsOpen={setIsOpen} setVacation={setClicked} vacation={clicked!} onEdit={handleVacationEdit} onSuccess={handleCancel} isOpen={isOpen} />
-            <span>{error&&error}</span>
             {loading?<Loader/>:
                 <div className="vacations-content__inner">
                     <div className="requests-wrapper">
@@ -65,12 +69,13 @@ export const VacationsTable = () => {
                             <span className={v.vacationState===VacationStateEnum.Edited?"pending":v.vacationState.toLowerCase()}>
                                 {v.vacationState===VacationStateEnum.Edited?"Pending":getStringVacationState(v.vacationState)}
                             </span>
-                            {(v.haveAnswer||v.vacationState===VacationStateEnum.Canceled)?
-                                <span className={"neutral"}>No action</span>
-                               : <button onClick={() => handleSelect(v)} style={{marginRight: "5px"}}
+                            {v.vacationState!==VacationStateEnum.Declined
+                            &&v.vacationState!==VacationStateEnum.Canceled
+                                ?<button onClick={() => handleSelect(v)} style={{marginRight: "5px"}}
                                          className="btn-base btn-decline">
                                     Cancel
-                                </button>}
+                                </button>
+                                :<span className="neutral">No action</span>}
                         </div>
                         )
                     })}

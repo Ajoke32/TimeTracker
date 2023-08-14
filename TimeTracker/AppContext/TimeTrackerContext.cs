@@ -41,9 +41,8 @@ public class TimeTrackerContext:DbContext
             .HasForeignKey(a => a.UserId)
             .OnDelete(DeleteBehavior.NoAction);
 
-        modelBuilder.Entity<User>()
-            .HasQueryFilter(u => !u.IsDeleted);
-
+        modelBuilder.Entity<User>();
+        
         modelBuilder.Entity<WorkedHour>()
             .HasOne(a => a.User)
             .WithMany(u => u.WorkedHours)

@@ -10,12 +10,11 @@ import {
     DeleteUserEpic,
     emailConfirmEpic
 } from './user'
-import { fetchUsersEpic } from "./users";
+import {fetchUsersEpic} from "./users";
 import {vacationEpics} from "./vacation";
 import { addApproversEpic, fetchApproversEpic } from "./approvers";
-
 import {vacationApproverEpics } from "./approverVacation";
-import { fetchWorkedHoursEpic, editWorkedHourEpic, workedHourEpics, deleteWorkedHourEpic, createWorkedHourEpic } from "./timeTracker";
+import { workedHourEpics } from "./timeTracker";
 import { calendarEpics } from "./calendar";
 
 

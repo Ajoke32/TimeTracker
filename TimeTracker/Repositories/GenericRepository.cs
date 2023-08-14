@@ -49,7 +49,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
             {
                 query = query.Take((int)take);
             }
-
+            
             return query;
         }
         catch (Exception e)
@@ -89,7 +89,8 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
     
 
-    public async Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> func, string? relatedData = null)
+    public async Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> func, string? relatedData = null,
+        bool asNoTracking=false)
     {
         try
         {
@@ -99,6 +100,11 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
                 query = query.Include(relatedData);
             }
 
+            if (asNoTracking)
+            {
+                query = query.AsNoTracking();
+            }
+            
             return await query.FirstOrDefaultAsync(func);
         }
         catch (Exception e)
@@ -113,17 +119,20 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         {
             _dbSet.Attach(entity);
         }
-
+        
         _dbSet.Remove(entity);
         return Task.FromResult(true);
     }
 
+    public ValueTask<int> GetRecordsCount()
+    {
+        return new ValueTask<int>(_dbSet.Count());
+    }
     public ValueTask<TEntity> UpdateAsync(TEntity model)
     {
         var entity = _dbSet.Update(model);
         _context.Entry(model).State = EntityState.Modified;
         return new ValueTask<TEntity>(entity.Entity);
     }
-    
     
 }

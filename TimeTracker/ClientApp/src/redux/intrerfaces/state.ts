@@ -1,6 +1,7 @@
 import { CalendarCell, CalendarEvent, WorkPlan } from '@redux/types/calendarTypes';
 import { User } from './'
 import { ApproverVacation, Vacation, WorkedHour } from '@redux/types';
+import {OrderingPagingFilterType} from "@redux/types/filterTypes.ts";
 
 export interface DefaultState {
     loading: boolean,
@@ -18,8 +19,9 @@ export interface UserSliceState extends DefaultState {
     vacationDays?: number
 }
 
-export interface UsersSliceState extends DefaultState {
+export interface UsersSliceState extends DefaultState,OrderingPagingFilterType {
     users: User[],
+    count:number,
 }
 
 export interface TimerSliceState extends DefaultState {
@@ -46,7 +48,8 @@ export interface VacationState extends DefaultState {
     created: boolean,
     createdId?: number,
     vacations: Vacation[],
-    vacation:Vacation|null
+    vacation:Vacation|null,
+    updated:Vacation|null
 }
 
 export interface WorkedHoursSlice extends DefaultState {

@@ -1,41 +1,13 @@
 import {AjaxQuery} from "./query";
-import {ApproverVacation, Vacation, VacationApproverInput} from "../types";
+import {QueryStructure} from "../intrerfaces";
+import {ApproverVacation, ApproverVacationUpdate, Vacation, VacationApproverInput} from "../types";
 
 
 
-export function UpdateApproverVacationState(id:number,state:boolean,approverId:number,message?:string){
-    return AjaxQuery<{ approverVacationMutation: { updateState:ApproverVacation}}>(
-        `mutation UpdateState(
-              $state: Boolean!
-              $vacationId: Int!
-              $approverId: Int!
-              $message: String
-            ) {
-              approverVacationMutation {
-                updateState(
-                  state: $state
-                  vacationId: $vacationId
-                  approverId: $approverId
-                  message: $message
-                ) {
-                  id
-                  vacationId
-                  isApproved,
-                  vacation{
-                    vacationState,
-                    user{
-                      firstName,
-                      lastName,
-                      email
-                     }
-                  }
-                }
-              }
-            }
-`,
-        {vacationId:id,state:state,approverId:approverId,message:message}
-    )
-}
+
+
+
+
 
 export function CreateApproverVacation(approverVacation:VacationApproverInput){
 
@@ -62,7 +34,49 @@ export function DeleteApproverVacationByVacationId(id:number){
 
 export function FetchApproverVacationById(id:number){
     return AjaxQuery<{approverVacationQuery:{approverVacation:ApproverVacation}}>(
-        'query FetchById($id:Int!){approverVacationQuery{approverVacation(id:$id){isApproved,isDeleted,id,vacation{id,vacationState,startDate,endDate,user{firstName,lastName,email,vacationDays}}}}}',
+        'query FetchById($id:Int!){approverVacationQuery{approverVacation(id:$id){isApproved,isDeleted,id,vacation{id,vacationState,startDate,message,endDate,user{firstName,lastName,email,vacationDays}}}}}',
         {id:id}
     )
+}
+
+export function UpdateApproverVacationToDefault(vacationId:number){
+    return AjaxQuery<{approverVacationMutation:{stateToDefault:boolean}}>(
+        'mutation StateToDefault($id:Int!){approverVacationMutation{stateToDefault(vacationId:$id)}}',
+        {id:vacationId}
+    )
+}
+
+export function UpdateApproverVacationState(av:ApproverVacationUpdate){
+    return AjaxQuery<{ approverVacationMutation: { updateState:ApproverVacation}}>(
+        `mutation UpdateState(
+              $state: Boolean!
+              $vacationId: Int!
+              $approverId: Int!
+              $message: String
+            ) {
+              approverVacationMutation {
+                updateState(
+                  state: $state
+                  vacationId: $vacationId
+                  approverId: $approverId
+                  message: $message
+                ) {
+                  id
+                  vacationId
+                  isApproved,
+                  vacation{
+                    vacationState,
+                    message
+                    user{
+                      firstName,
+                      lastName,
+                      email,
+                      vacationDays
+                     }
+                  }
+                }
+              }
+            }
+        `        ,
+        {vacationId:av.vacationId,state:av.isApproved,approverId:av.approverId,message:av.message})
 }

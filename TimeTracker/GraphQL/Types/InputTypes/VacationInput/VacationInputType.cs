@@ -8,7 +8,7 @@ public sealed class VacationInputType: InputObjectGraphType<Vacation>
 {
     public VacationInputType()
     {
-        Field(x=>x.Id).Description("vacation id");
+        Field(x=>x.Id,nullable:true).Description("vacation id");
         Field(x=>x.UserId).Description("vacation user id");
         Field(v => v.StartDate)
             .Type(new DateGraphType())

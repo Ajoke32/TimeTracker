@@ -11,7 +11,7 @@ export interface ApproverVacation{
 }
 
 export interface ApproverVacationUpdate{
-    id:number,
+    approverId:number,
     isApproved:boolean,
     vacationId:number,
     message?:string

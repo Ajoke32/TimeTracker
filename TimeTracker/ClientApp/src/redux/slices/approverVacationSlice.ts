@@ -28,9 +28,9 @@ const approverVacationsSlice = createSlice({
         ((state:VacationApproverState)=>{
             state.updated=false;
         }),
-        updateApproverVacationStateStateSuccess:(state:VacationApproverState,action:PayloadAction<ApproverVacation>)=>{
-            state.loading=false;
+        updateApproverVacationStateSuccess:(state:VacationApproverState,action:PayloadAction<ApproverVacation>)=>{
             state.approverVacation=action.payload;
+            state.loading=false;
             state.updated=true;
         },
         updateApproverVacationStateStateFail:createErrorReducer(),
@@ -68,18 +68,22 @@ const approverVacationsSlice = createSlice({
         ((state, action)=>{
             state.approverVacation=action.payload;
         }),
-        fetchApproverVacationByIdFail:createErrorReducer()
+        fetchApproverVacationByIdFail:createErrorReducer(),
+
+        updateToDefault:createPendingReducerWithPayload<typeof initialState,number>(),
+        updateToDefaultFail:createErrorReducer(),
+        updateToDefaultSuccess:createSuccessReducerWithoutPayload()
     },
 });
 
 
 export const approverVacations = approverVacationsSlice.reducer;
 export const  {updateApproverVacationState,
-    updateApproverVacationStateStateSuccess,
+    updateApproverVacationStateSuccess,
     updateApproverVacationStateStateFail,
 fetchRequests,fetchRequestsFail,
     fetchRequestsSuccess,updateApproversVacationsSuccess,
     updateApproversVacationsFail,updateApproversVacations
     ,deleteByVacationIdSuccess,deleteByVacationIdFail
     ,deleteByVacationId,fetchApproverVacationById,
-    fetchApproverVacationByIdSuccess,fetchApproverVacationByIdFail} =  approverVacationsSlice.actions
+    fetchApproverVacationByIdSuccess,fetchApproverVacationByIdFail,updateToDefaultSuccess,updateToDefaultFail,updateToDefault} =  approverVacationsSlice.actions

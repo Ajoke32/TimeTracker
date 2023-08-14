@@ -1,4 +1,4 @@
-import {createReducer, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import { createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {
     createErrorReducer,
     createPendingReducerWithPayload,
@@ -13,7 +13,8 @@ const initialState:VacationState = {
     ...defaultState,
     created:false,
     vacations:[],
-    vacation:null
+    vacation:null,
+    updated:null
 }
 
 const vacationsSlice = createSlice({
@@ -42,14 +43,24 @@ const vacationsSlice = createSlice({
         }),
         fetchUserVacationsFail:createErrorReducer(),
 
-        changeVacationState:createPendingReducerWithPayload<typeof initialState,VacationChangeType>(),
-        changeVacationSateSuccess:createSuccessReducerWithPayload<typeof initialState,Vacation>
-        ((state,action)=>{
-           state.vacation=action.payload;
-        }),
+        changeVacationState:(state:VacationState,action:PayloadAction<VacationChangeType>)=>{
+            state.updated=null;
+        },
+        changeVacationStateSuccess:(state:VacationState,action:PayloadAction<Vacation>)=>{
+            state.vacations = state.vacations.map(v=>{
+                if(v.id===action.payload.id){
+                    v =action.payload;
+                }
+                return v;
+            });
+            state.updated=action.payload;
+        },
         changeVacationStateFail:createErrorReducer(),
 
-        updateVacation:createPendingReducerWithPayload<typeof initialState,Vacation>(),
+        updateVacation:createPendingReducerWithPayload<typeof initialState,Vacation>
+        ((state,action)=>{
+            state.updated=null;
+        }),
         updateVacationSuccess:createSuccessReducerWithPayload<typeof initialState,Vacation>
         ((state, action)=>{
             const upd = action.payload;
@@ -59,6 +70,7 @@ const vacationsSlice = createSlice({
                 }
                 return v;
             });
+            state.updated=upd;
         }),
         updateVacationFail:createErrorReducer(),
 
@@ -89,7 +101,7 @@ export const  {createVacation,
     ,fetchUserVacationsFail
     ,fetchUserVacations,changeVacationState
     ,changeVacationStateFail
-    ,changeVacationSateSuccess,
+    ,changeVacationStateSuccess,
     updateVacationSuccess,updateVacationFail
     ,updateVacation
     ,deleteVacationSuccess,fetchVacationById,

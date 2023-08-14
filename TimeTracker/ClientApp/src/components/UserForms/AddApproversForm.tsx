@@ -13,13 +13,13 @@ export const AddApproversForm = ({ step }: { step?: number }) => {
 
     const [approvers, setApprovers] = useState<number[]>([]);
     const [fetched, setFetched] = useState<number>(0);
-
     const handleClick = () => {
         dispatch(addApprovers({ approvers: approvers, userId: user!.id! }))
     }
 
     const loadMore = () => {
-        dispatch(fetchApprovers({ take: 5, skip: fetched, activated: true, userId: user!.id! }));
+        dispatch(fetchApprovers({ take: 5, skip: fetched,
+            userId: user!.id!,group:[],orderBy:{property:"",direction:""}}));
     }
 
     useEffect(() => {

@@ -1,9 +1,10 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Loader, SmallButton, TextInput} from "../UI";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {useAppDispatch, useTypedSelector} from "../../hooks";
 import {H5} from "../Headings";
 import {createVacation, fetchVacationDays, updateApproversVacations} from "../../redux";
+
 
 
 interface VacationInput{
@@ -29,12 +30,13 @@ export const AddVacationForm = () => {
     const {loading,error,created,createdId}
         = useTypedSelector(s=>s.vacations);
 
-
-
     const dispatch = useAppDispatch();
 
+    useEffect(() => {
+        dispatch(fetchVacationDays(user?.id!));
+    }, []);
+
     useEffect(()=>{
-        dispatch(fetchVacationDays(user?.id!))
         if(created){
             dispatch(updateApproversVacations({vacationId:createdId!,userId:user?.id!}))
         }
@@ -42,7 +44,7 @@ export const AddVacationForm = () => {
 
 
     const onSubmit: SubmitHandler<VacationInput> = (data) => {
-        dispatch(createVacation({...data,userId:user?.id!}))
+        dispatch(createVacation({...data,userId:user?.id!}));
         reset()
     }
 
@@ -60,6 +62,7 @@ export const AddVacationForm = () => {
                 <input {...register("endDate")} name="endDate" className="text-input" type="date" placeholder="End date"/>
                 <TextInput name="message" register={register("message")} placeholder="Message"/>
                 <SmallButton type="submit" value="Create vacation"/>
+
             </form>
         </div>
     );

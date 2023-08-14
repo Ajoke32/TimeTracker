@@ -7,7 +7,6 @@ import {
     updateApproverVacationState,
     updateVacationState
 } from "@redux/slices";
-import {Loader} from "@components/UI";
 import './VacationDetails.css'
 import moment from "moment";
 import {VacationStateEnum} from "@redux/types";
@@ -21,7 +20,8 @@ const VacationDetails = () => {
     const [error,setError]= useState<string>("");
     const [approveId,setApproveId] = useState<number>();
     const userId = useTypedSelector(s=>s.auth.user?.id);
-    const {updated,deleted,approverVacation:av,loading} = useTypedSelector(s=>s.approverVacations);
+    const {updated,deleted,approverVacation:av,loading}
+        = useTypedSelector(s=>s.approverVacations);
     function notFound(){
         if(!id){
             return <Navigate to="/notFound" />
@@ -35,7 +35,7 @@ const VacationDetails = () => {
         if(updated){
             dispatch(updateVacationState(approveId!));
         }
-    },[updated,deleted])
+    },[updated])
 
     useEffect(() => {
         notFound();
@@ -49,7 +49,9 @@ const VacationDetails = () => {
             setError("message field required")
             return;
         }
-        dispatch(updateApproverVacationState({id:userId!,vacationId:av?.vacation.id!,isApproved:state!,message:message}));
+        dispatch(updateApproverVacationState({
+            approverId:userId!,vacationId:av?.vacation.id!,
+            isApproved:state!,message:message}));
         setMessage("");
     }
 
@@ -59,8 +61,7 @@ const VacationDetails = () => {
 
     return (
         <>
-            {loading?<Loader/>
-                :<div className="vacation-card-wrapper">
+            {<div className="vacation-card-wrapper">
                     <div className="vacation-card">
                         <div className="user-info">
                             <div className="vacation-days">
@@ -82,7 +83,7 @@ const VacationDetails = () => {
                             <span>Message: {av?.vacation?.message===''?"empty":av?.vacation?.message}</span>
                             <span>Available vacation days: {av?.vacation?.user.vacationDays}</span>
                         </div>
-                        {(av?.isApproved===null&&!av.isDeleted)&&
+                        {(av?.isApproved===null&&!av.isDeleted&&av.vacation.vacationState!==VacationStateEnum.Declined)&&
                           <>
                               <textarea value={message} onChange={messageInputHandle} style={{height:"150px"}} placeholder="Message"></textarea>
                               <span>{error}</span>

@@ -1,5 +1,4 @@
 .request-item{
-    position: relative;
     display: grid;
     grid-template-columns:.5fr 1fr .5fr .3fr;
     align-items: center;
@@ -147,5 +146,5 @@
 
 
 .neutral{
-    color: rgba(185, 185, 185, 0.81);
+    background-color: rgba(185, 185, 185, 0.81);
 }

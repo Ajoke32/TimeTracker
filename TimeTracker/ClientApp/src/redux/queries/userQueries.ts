@@ -49,27 +49,28 @@ export function PasswordConfirmQuery(data: { token: string, password: string }) 
 }
 
 export function FetchUsersQuery(data: FetchUsersType) {
-  const { take, skip, activated, userId } = data;
+  const { take, skip, group,orderBy,userId } = data;
   return AjaxQuery<{ userQuery: { users: User[] } }>(
-    `query GetUsers($take: Int, $skip: Int, $activated: Boolean!, $userId: Int) {
-        userQuery {
-          users(take: $take, skip: $skip, onlyActivated: $activated, userId: $userId) {
-            id
-            email
-            workType
-            firstName
-            lastName
-            isEmailActivated
-            vacationDays
-            hoursPerMonth
-          }
+    `query GetUsers($take: Int, $skip: Int,$group:[Where]!,$orderBy:OrderBy){
+      userQuery{
+          users(group:$group,
+                take:$take,skip:$skip,orderBy:$orderBy){
+               id
+                email
+                workType
+                firstName
+                lastName
+                isEmailActivated
+                vacationDays
+                hoursPerMonth
         }
-      }`,
+      }
+    }`,
     {
       take: take,
       skip: skip,
-      activated: activated,
-      userId: userId
+      group:[...group,{property:"Id",operator:"neq",value:userId.toString(),connector:"and"}],
+      orderBy:orderBy.property!==""?orderBy:null
     },
   );
 }
@@ -137,4 +138,14 @@ export function EmailConfirmQuery(token: string) {
       token: token
     },
   )
+}
+
+export function FetchUsersCountQuery(){
+    return AjaxQuery<{ userQuery: { getUsersCount: number } }>(
+        `query{
+          userQuery{
+            getUsersCount
+          }
+       }`,
+    )
 }
