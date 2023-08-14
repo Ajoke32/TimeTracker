@@ -1,4 +1,4 @@
-export interface QueryStructure<T> {
+interface QueryStructure<T> {
     data: T,
     errors: ResponseError[] | null,
 }

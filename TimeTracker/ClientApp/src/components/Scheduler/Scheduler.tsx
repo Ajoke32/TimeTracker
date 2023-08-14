@@ -1,8 +1,13 @@
 ﻿import './scheduler.css';
 import "../Calendar/calendars.css"
-import React, {useState} from 'react';
-import {CurrentDateElement} from "@components/UI";
-import {H4} from "@components/Headings";
+import { useState, useEffect } from 'react';
+import { CurrentDateElement } from "@components/UI";
+import { H4 } from "@components/Headings";
+import { CalendarType, CalendarCell } from '@redux/types';
+import { useTypedSelector } from '@hooks/customHooks';
+import { GetFormattedTimeDifference, createCalendarCell } from '../../utils';
+import { SearchInput, UsersTable, UsersTableNavbar } from '..';
+import { User } from '@redux/intrerfaces';
 
 
 const hours = [
@@ -36,7 +41,7 @@ const generateRandomColor = () => {
     const randomG = Math.floor(Math.random() * 100) + 155;
     const randomB = Math.floor(Math.random() * 100) + 200;
     const randomOpacity = Math.random() * 0.3 + 0.3;
-    
+
     return `rgba(${randomR}, ${randomG}, ${randomB}, ${randomOpacity})`;
 }
 
@@ -48,64 +53,45 @@ const colors = [
     generateRandomColor(),
 ]
 
-const Scheduler = ({date} : {date: Date}) => {
-    const [currentDate, setCurrentDate] = useState<Date>(date);
+const Scheduler = ({ data, back }: { data: { cell: CalendarCell, calendar: CalendarType }, back: (selectedDate: Date) => void }) => {
+    const { cell, calendar } = data;
+    const { events, workPlans } = useTypedSelector(state => state.calendar);
+    const { users } = useTypedSelector(state => state.users)
+
+    const [currentDate, setCurrentDate] = useState<Date>(cell.date);
+    const [calendarCell, setCalendarCell] = useState<CalendarCell>(cell)
+    const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
+
     const defaultRowsCount = 7;
-    
-    const workedHours = [
-        {
-        startTime: "08:30:00",
-        endTime: "15:35:00",
-        totalTime: "7:15",
-        date: new Date(),
-        },
 
-        {
-            startTime: "16:00:00",
-            endTime: "18:45:00",
-            totalTime: "2:45",
-            date: new Date(),
-        },
+    const workedHours = calendarCell.workPlans.map(c => {
+        return {
+            startTime: c.startTime,
+            endTime: c.endTime,
+            totalTime: GetFormattedTimeDifference(c.startTime, c.endTime),
+            date: c.date,
+            user: `${c.firstName} ${c.lastName}`
+        }
+    })
 
-        {
-            startTime: "08:00:00",
-            endTime: "20:00:00",
-            totalTime: "12:00",
-            date: new Date(),
-        },
+    useEffect(() => {
+        if (calendarCell.date != currentDate)
+            currentDate.getMonth() == new Date().getMonth()
+                ? setCalendarCell(calendar.currentDates.find
+                    (c => c.date.getDate() == currentDate.getDate())
+                    ?? createCalendarCell(currentDate, events.currentMonth, workPlans.currentMonth)
+                )
+                : currentDate.getMonth() > new Date().getMonth()
+                    ? setCalendarCell(calendar.nextDates.find
+                        (c => c.date.getDate() == currentDate.getDate())
+                        ?? createCalendarCell(currentDate, events.nextMonth, workPlans.nextMonth)
+                    )
+                    : setCalendarCell(calendar.previousDates.find
+                        (c => c.date.getDate() == currentDate.getDate())
+                        ?? createCalendarCell(currentDate, events.previousMonth, workPlans.previousMonth)
+                    )
+    }, [currentDate])
 
-        {
-            startTime: "14:20:00",
-            endTime: "19:20:00",
-            totalTime: "05:00",
-            date: new Date(),
-        },
-
-        {
-            startTime: "16:00:00",
-            endTime: "18:45:00",
-            totalTime: "2:45",
-            date: new Date(2023, 7, 7),
-        },
-
-        {
-            startTime: "08:00:00",
-            endTime: "20:00:00",
-            totalTime: "12:00",
-            date: new Date(2023, 7, 7),
-        },
-
-        {
-            startTime: "14:20:00",
-            endTime: "19:20:00",
-            totalTime: "05:00",
-            date: new Date(2023, 7, 7),
-        },
-    ];
-    
-    const filteredWorkedHours = workedHours.filter((item) => item.date.toDateString() === currentDate.toDateString())
-    
-    
     const handlePrevDayButton = () => {
         const newDate = new Date(currentDate);
         newDate.setDate(newDate.getDate() - 1);
@@ -113,10 +99,10 @@ const Scheduler = ({date} : {date: Date}) => {
         if (newDate.getDate() === 0) {
             newDate.setDate(0);
         }
-        
+
         setCurrentDate(newDate);
     }
-    
+
     const handleNextDayButton = () => {
         const newDate = new Date(currentDate);
         newDate.setDate(newDate.getDate() + 1);
@@ -127,56 +113,78 @@ const Scheduler = ({date} : {date: Date}) => {
 
         setCurrentDate(newDate);
     }
-    
+
+    const handleSearch = (searchValue: string) => {
+        const filtered = users.filter(
+            (user) =>
+                (user.firstName.toLowerCase().includes(searchValue.toLowerCase()) ||
+                    user.lastName.toLowerCase().includes(searchValue.toLowerCase())) ||
+                user.email.toLowerCase().includes(searchValue.toLowerCase())
+        );
+        setFilteredUsers(filtered);
+    };
+
     return (
-        <div className="working-hours__wrapper">
-            <div className="calendar-header__wrapper">
-                <div className="calendar-date__wrapper"><CurrentDateElement date={currentDate} showFullDate={true}/></div>
-                <div className="calendar-actions">
-                    <div>
-                        <button onClick={handlePrevDayButton}></button>
-                        <button onClick={handleNextDayButton}></button>
+        <div className="component-wrapper">
+            <div className="working-hours__wrapper">
+                <div className="calendar-header__wrapper">
+                    <div className="calendar-date__wrapper">
+                        <button onClick={() => { back(currentDate) }} id='return-button' />
+                        <CurrentDateElement date={currentDate} showFullDate={true} />
+                    </div>
+                    <div className="calendar-actions">
+                        <div>
+                            <button onClick={handlePrevDayButton}></button>
+                            <button onClick={handleNextDayButton}></button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="working-hours__table">
-                <div className="working-hours__schedule">
-                    {hours.map((time, index) => (
-                         <div key={index}><span>{time}</span></div>
-                    ))}
-                </div>
+                <div className="working-hours__table">
+                    <div className="working-hours__schedule">
+                        {hours.map((time, index) => (
+                            <div key={index}><span>{time}</span></div>
+                        ))}
+                    </div>
 
-                {filteredWorkedHours.length < 1 ? (
-                    <div className="no-data__message-wrapper"><H4 value="No data available"/></div>
-                ) : (
-                    <div 
-                        className="working-hours__content" 
-                        style={{ gridTemplateRows: `repeat(${filteredWorkedHours.length < 7 ? 7 : filteredWorkedHours.length}, 1fr)` }}
-                    >
-                            {filteredWorkedHours.map((item, index) => (
+                    {workedHours.length < 1 ? (
+                        <div className="no-data__message-wrapper"><H4 value="No data available" /></div>
+                    ) : (
+                        <div
+                            className="working-hours__content"
+                            style={{ gridTemplateRows: `repeat(${workedHours.length < 7 ? 7 : workedHours.length}, 1fr)` }}>
+                            {workedHours.map((item, index) => (
                                 <div className="content-row" key={index}>
                                     {convertTimeToIndex(item.totalTime) > 15 &&
-                                    <div
-                                        className="working-hours__inner-row"
-                                        style={{
-                                            width: `${(convertTimeToIndex(item.totalTime) / (hours.length * 60)) * 100}%`,
-                                            background: colors[index],
-                                            left: `${((convertTimeToIndex(item.startTime) - convertTimeToIndex(hours[0])) / (hours.length * 60)) * 100}%`}}
-                                    >
-                                        <div className="time-range__wrapper">
-                                            <span className="">{item.startTime.slice(0, -3)} - {item.endTime.slice(0, -3)}</span>
-                                        </div>
-                                    </div>}
+                                        <div
+                                            className="working-hours__inner-row"
+                                            style={{
+                                                width: `${(convertTimeToIndex(item.totalTime) / (hours.length * 60)) * 100}%`,
+                                                background: colors[index],
+                                                left: `${((convertTimeToIndex(item.startTime) - convertTimeToIndex(hours[0])) / (hours.length * 60)) * 100}%`
+                                            }}
+                                        >
+                                            <div className="time-range__wrapper">
+                                                <span className="">{item.startTime.slice(0, -3)} - {item.endTime.slice(0, -3)}</span>
+                                            </div>
+                                        </div>}
                                 </div>
                             ))}
-                        {filteredWorkedHours.length < defaultRowsCount &&
-                            Array.from({length: defaultRowsCount - filteredWorkedHours.length}, (_, index) => (
-                                <div className="content-row" key={index}></div>
-                        ))}
-                    </div>)}
-            </div> 
+                            {workedHours.length < defaultRowsCount &&
+                                Array.from({ length: defaultRowsCount - workedHours.length }, (_, index) => (
+                                    <div className="content-row" key={index}></div>
+                                ))}
+                        </div>)}
+                </div>
+            </div>
+            <div className="side-form-wrapper">
+                
+                <div className="user-search-form">
+                    <SearchInput name="search" placeholder="Search by name or email" onSearch={handleSearch} />
+                </div>
+            </div>
         </div>
+
     );
 };
 

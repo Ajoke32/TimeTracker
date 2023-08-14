@@ -16,6 +16,7 @@ import { addApproversEpic, fetchApproversEpic } from "./approvers";
 
 import {vacationApproverEpics } from "./approverVacation";
 import { fetchWorkedHoursEpic, editWorkedHourEpic, workedHourEpics, deleteWorkedHourEpic, createWorkedHourEpic } from "./timeTracker";
+import { calendarEpics } from "./calendar";
 
 
 
@@ -37,6 +38,7 @@ export const rootEpic: Epic = (action$, store$, dependencies) =>
         ...workedHourEpics,
         ...vacationEpics,
         ...vacationApproverEpics,
+        ...calendarEpics
 
     )
         (action$, store$, dependencies).pipe(

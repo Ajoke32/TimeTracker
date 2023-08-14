@@ -1,24 +1,9 @@
-
-const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-];
-
+import { months } from "../../";
 
 export const CurrentDateElement = ({date, showFullDate = false} : {date: Date, showFullDate: boolean}) => {
 
     const currentDate = showFullDate 
-        ? ` ${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}` 
+        ? `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}` 
         : `${months[date.getMonth()]} ${date.getFullYear()}`;
     
     return (

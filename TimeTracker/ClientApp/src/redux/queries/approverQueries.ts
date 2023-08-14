@@ -8,7 +8,7 @@ export function AddApproversQuery(data: ApproversAddType) {
     const token = ReadCookie('user');
     const { approvers, userId } = data;
 
-    return AjaxQuery<QueryStructure<{ userMutation: { create: boolean } }>>(
+    return AjaxQuery<{ userMutation: { create: boolean } }>(
         "mutation AddApprovers($userId:Int!,$approvers:[Int!]){ approverMutation{create(userSenderId:$userId,approvers:$approvers)}}",
         {
             approvers: approvers,

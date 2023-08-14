@@ -1,11 +1,39 @@
-﻿.working-hours__wrapper {
+﻿.component-wrapper{
     width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.side-form-wrapper{
+    background-color: var(--color-white);
+    height: 100%;
+    width: 20%;
+    border-radius: 0 1rem 1rem 0;
+    padding: 0 5px 0 5px ;
+}
+
+.user-search-form{
+    display: flex;
+    height: 100%;
+    padding: 0 5px 0 5px;
+    flex-direction: column;
+}
+
+.user-search-form::before{
+    content: '';
+    height: 10%;
+}
+
+.working-hours__wrapper {
+    width: 80%;
     height: 100%;
     display: flex;
     flex-direction: column;
 
     background: var(--color-white);
-    border-radius: 1rem;
+    border-radius: 1rem 0 0 1rem;
 }
 
 .working-hours__header {

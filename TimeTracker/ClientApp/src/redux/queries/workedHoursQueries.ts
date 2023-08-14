@@ -1,10 +1,8 @@
 import { AjaxQuery } from './query';
-import { QueryStructure } from '../intrerfaces';
 import { WorkedHour, CreateWorkedHourType, UpdateWorkedHourType } from '@redux/types';
-import { createWorkedHourEpic, fetchWorkedHoursEpic } from '@redux/epics/timeTracker';
 
 export function FetchWorkedHoursQuery(userId: number) {
-  return AjaxQuery<QueryStructure<{ workedHourQuery: { workedHours: WorkedHour[] } }>>(
+  return AjaxQuery<{ workedHourQuery: { workedHours: WorkedHour[] } }>(
     `query GetUserWorkedHours($userId: Int!) {
       workedHourQuery {
         workedHours(userId: $userId) {
@@ -22,7 +20,7 @@ export function FetchWorkedHoursQuery(userId: number) {
 }
 
 export function UpdateWorkedHoursQuery(workedHour: UpdateWorkedHourType) {
-  return AjaxQuery<QueryStructure<{ workedHourMutations: { update: WorkedHour } }>>(
+  return AjaxQuery<{ workedHourMutations: { update: WorkedHour } }>(
     `mutation UpdateWorkedHours($workedHour: UpdateWorkedHourInputType!) {
       workedHourMutations {
         update(workedHour: $workedHour) {
@@ -40,7 +38,7 @@ export function UpdateWorkedHoursQuery(workedHour: UpdateWorkedHourType) {
 }
 
 export function DeleteWorkedHoursQuery(id: number) {
-  return AjaxQuery<QueryStructure<{ workedHourMutations: { delete: number } }>>(
+  return AjaxQuery<{ workedHourMutations: { delete: number } }>(
     `mutation DeleteWorkedHours($id: Int!) {
       workedHourMutations {
         delete(id: $id)
@@ -53,7 +51,7 @@ export function DeleteWorkedHoursQuery(id: number) {
 export function CreateWorkedHoursQuery(workedHour: CreateWorkedHourType) {
   //const token = ReadCookie('user');
 
-  return AjaxQuery<QueryStructure<{ workedHourMutations: { create: WorkedHour } }>>(
+  return AjaxQuery<{ workedHourMutations: { create: WorkedHour } }>(
     `mutation CreateWorkedHour($workedHour: WorkedHourInputType!) {
       workedHourMutations {
         create(workedHour: $workedHour) {

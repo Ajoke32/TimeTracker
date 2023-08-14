@@ -5,7 +5,6 @@ import {
     createErrorReducer,
     createPendingReducerWithPayload,
     createSuccessReducerWithPayload,
-    createSuccessReducerWithoutPayload,
     defaultState
 } from "./generic";
 import { GetLocalWorkedHour } from '../../utils';

@@ -1,10 +1,10 @@
 import { AjaxQuery } from './query';
-import { QueryStructure, User } from '../intrerfaces';
+import { User } from '../intrerfaces';
 import { UserAddType, FetchUsersType } from '../types'
 import { ReadCookie } from '../../utils';
 
 export function UserLoginQuery(userData: { email: string, password: string }) {
-  return AjaxQuery<QueryStructure<{ userQuery: { login: string } }>>(
+  return AjaxQuery<{ userQuery: { login: string } }>(
     "query Login($user: UserLoginInputType!) {userQuery {login(user: $user)}}",
     { user: userData }
   );
@@ -13,7 +13,7 @@ export function UserLoginQuery(userData: { email: string, password: string }) {
 export function AddUserQuery(userData: UserAddType) {
   const token = ReadCookie('user');
 
-  return AjaxQuery<QueryStructure<{ userMutation: { create: User } }>>(
+  return AjaxQuery<{ userMutation: { create: User } }>(
     `mutation AddUser($user: UserInputType!) {
           userMutation {
             create(user: $user) {
@@ -35,7 +35,7 @@ export function AddUserQuery(userData: UserAddType) {
 
 export function PasswordConfirmQuery(data: { token: string, password: string }) {
   const { token, password } = data;
-  return AjaxQuery<QueryStructure<{ userMutation: { verifyUser: boolean } }>>(
+  return AjaxQuery<{ userMutation: { verifyUser: boolean } }>(
     `mutation Verify($token: String!, $password: String!) {
             userMutation {
               verifyUser(token: $token, password: $password)
@@ -50,7 +50,7 @@ export function PasswordConfirmQuery(data: { token: string, password: string }) 
 
 export function FetchUsersQuery(data: FetchUsersType) {
   const { take, skip, activated, userId } = data;
-  return AjaxQuery<QueryStructure<{ userQuery: { users: User[] } }>>(
+  return AjaxQuery<{ userQuery: { users: User[] } }>(
     `query GetUsers($take: Int, $skip: Int, $activated: Boolean!, $userId: Int) {
         userQuery {
           users(take: $take, skip: $skip, onlyActivated: $activated, userId: $userId) {
@@ -76,7 +76,7 @@ export function FetchUsersQuery(data: FetchUsersType) {
 
 
 export function FetchUserQuery(userId: number) {
-  return AjaxQuery<QueryStructure<{ userQuery: { user: User } }>>(
+  return AjaxQuery<{ userQuery: { user: User } }>(
     `query GetUser($userId: Int!) {
             userQuery {
               user(id: $userId) {
@@ -101,7 +101,7 @@ export function FetchUserQuery(userId: number) {
 export function EditUserQuery(user: User) {
   const token = ReadCookie('user');
 
-  return AjaxQuery<QueryStructure<{ userMutation: { update: boolean } }>>(
+  return AjaxQuery<{ userMutation: { update: boolean } }>(
     `mutation EditUser($user: UpdateUserInputType!) {
         userMutation {
           update(user: $user) 
@@ -113,21 +113,21 @@ export function EditUserQuery(user: User) {
 }
 
 export function FetchUserVacationDays(id:number){
-    return AjaxQuery<QueryStructure<{ userQuery:{user:{vacationDays:number}} }>>(
+    return AjaxQuery<{ userQuery:{user:{vacationDays:number}} }>(
         'query FetchUserVacationDays($id:Int!){userQuery{user(id:$id){vacationDays}}}',
         {id:id}
     )
 }
 
 export function DeleteUser(id:number){
-    return AjaxQuery<QueryStructure<{ userMutation:{deleteById:number} }>>(
+    return AjaxQuery<{ userMutation:{deleteById:number} }>(
         'mutation DeleteUser($id:Int!){userMutation{deleteById(id:$id)}}',
         {id:id}
     )
 }
 
 export function EmailConfirmQuery(token: string) {
-  return AjaxQuery<QueryStructure<{ userMutation: { verifyUser: boolean } }>>(
+  return AjaxQuery<{ userMutation: { verifyUser: boolean } }>(
     `mutation emailVerify($token: String!) {
             userMutation {
               verifyEmail(token: $token)

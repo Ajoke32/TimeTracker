@@ -14,7 +14,7 @@ export const TrackerTimer = ({ workedHour }: { workedHour?: WorkedHour }) => {
 
         return (
             <>
-                <CurrentDateElement date={new Date(workedHour.date)} />
+                <CurrentDateElement date={new Date(workedHour.date)} showFullDate={true} />
                 <div className="tracker-content__wrapper">
                     <div className="tracker-content__inner">
                         <div className="timer-tracker">
@@ -77,7 +77,7 @@ export const TrackerTimer = ({ workedHour }: { workedHour?: WorkedHour }) => {
 
     return (
         <>
-            <CurrentDateElement date={new Date()} />
+            <CurrentDateElement date={new Date()} showFullDate={true}/>
             <div className="tracker-content__wrapper">
                 <div className="tracker-content__inner">
                     <div className="timer-tracker">
