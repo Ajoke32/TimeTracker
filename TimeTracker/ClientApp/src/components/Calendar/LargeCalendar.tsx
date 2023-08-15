@@ -41,7 +41,7 @@ export const LargeCalendar = ({ date, setter }: { date?: Date, setter: React.Dis
             setIsCurrentMonth(false);
         else
             setIsCurrentMonth(true);
-    })
+    },[])
 
     useEffect(() => {
         setCalendar(setValues())

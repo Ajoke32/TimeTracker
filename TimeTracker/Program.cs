@@ -145,7 +145,8 @@ builder.Services.AddGraphQL(options =>
         .AddGraphTypes()
         .AddSystemTextJson()
         .AddAuthorizationRule()
-        .AddErrorInfoProvider(e => e.ExposeExceptionDetails = true);
+        .AddErrorInfoProvider(e => e.ExposeExceptionDetails = true)
+        .AddAutoClrMappings();
 });
 
 builder.Services.AddTransient<Authenticate>();

@@ -11,14 +11,17 @@ public class WorkedHourProfile : Profile
     {
         CreateMap<WorkedHourInputDto, WorkedHour>()
             .ForMember(x => x.TotalTime,
-            o =>
-                o.MapFrom(src => TimeOnly.FromTimeSpan(src.EndTime - src.StartTime)));
+                o =>
+                    o.MapFrom(src => TimeOnly.FromTimeSpan(src.EndTime - src.StartTime)))
+            .ForMember(x=>x.Date,
+                o=>
+                    o.MapFrom(x=>x.Date.ToDateTime(TimeOnly.Parse("00:00:00"))));
 
         CreateMap<WorkedHourUpdateDto, WorkedHour>()
             .ForMember(x => x.Id,
                 o => o.UseDestinationValue())
             .ForMember(x => x.TotalTime,
-            o =>
-                o.MapFrom(src => TimeOnly.FromTimeSpan(src.EndTime - src.StartTime)));
+                o =>
+                    o.MapFrom(src => TimeOnly.FromTimeSpan(src.EndTime - src.StartTime)));
     }
 }

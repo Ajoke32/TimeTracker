@@ -40,13 +40,7 @@ public class TimeTrackerContext:DbContext
             .WithMany(u => u.Approvers)
             .HasForeignKey(a => a.UserId)
             .OnDelete(DeleteBehavior.NoAction);
-
-        modelBuilder.Entity<User>();
         
-        modelBuilder.Entity<WorkedHour>()
-            .HasOne(a => a.User)
-            .WithMany(u => u.WorkedHours)
-            .HasForeignKey(a => a.UserId);
         
         modelBuilder.Entity<WorkedHour>()
             .Property(a => a.StartTime)
@@ -68,11 +62,7 @@ public class TimeTrackerContext:DbContext
                 v => v.ToTimeSpan(),
                 v => TimeOnly.FromTimeSpan(v)
             );
-
-        modelBuilder.Entity<WorkPlan>()
-            .HasOne(a => a.User)
-            .WithMany(u => u.WorkPlans)
-            .HasForeignKey(a => a.UserId);
+        
         
         modelBuilder.Entity<WorkPlan>()
             .Property(a => a.StartTime)
@@ -87,6 +77,16 @@ public class TimeTrackerContext:DbContext
                 v => v.ToTimeSpan(),
                 v => TimeOnly.FromTimeSpan(v)
             );
+
+        modelBuilder.Entity<WorkPlan>()
+            .Property(w => w.Date)
+            .HasConversion(w => w.ToDateTime(new TimeOnly()),
+                w=>DateOnly.FromDateTime(w));
+        
+        modelBuilder.Entity<CalendarEvent>()
+            .Property(w => w.Date)
+            .HasConversion(w => w.ToDateTime(new TimeOnly()),
+                w=>DateOnly.FromDateTime(w));
         
         base.OnModelCreating(modelBuilder);
     }

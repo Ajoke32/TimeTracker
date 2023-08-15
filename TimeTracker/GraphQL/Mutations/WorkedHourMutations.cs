@@ -20,8 +20,9 @@ public sealed class WorkedHourMutations : ObjectGraphType
             .ResolveAsync(async ctx =>
             {
                 var wh = ctx.GetArgument<WorkedHourInputDto>("workedHour");
-
-                var created = await uow.GenericRepository<WorkedHour>().CreateAsync(mapper.Map<WorkedHour>(wh));
+                
+                var created = await uow.GenericRepository<WorkedHour>()
+                    .CreateAsync(mapper.Map<WorkedHour>(wh));
 
                 await uow.SaveAsync();
 
@@ -53,7 +54,8 @@ public sealed class WorkedHourMutations : ObjectGraphType
                 var currentValue = await uow.GenericRepository<WorkedHour>().FindAsync(w => w.Id == wh.Id)
                             ?? throw new ValidationError("Record not found"); // Temp error
 
-                var updated = await uow.GenericRepository<WorkedHour>().UpdateAsync(mapper.Map<WorkedHourUpdateDto, WorkedHour>(wh, currentValue));
+                var updated = await uow.GenericRepository<WorkedHour>()
+                    .UpdateAsync(mapper.Map(wh, currentValue));
 
                 await uow.SaveAsync();
 

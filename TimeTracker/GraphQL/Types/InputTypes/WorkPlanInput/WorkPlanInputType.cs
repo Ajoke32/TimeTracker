@@ -1,10 +1,11 @@
 using GraphQL.Types;
+using TimeTracker.Models;
 using TimeTracker.Models.Dtos;
 
 
 namespace TimeTracker.GraphQL.Types.InputTypes.WorkPlanInput;
 
-public sealed class WorkPlanInputType: InputObjectGraphType<WorkPlanInputDto>
+public sealed class WorkPlanInputType: InputObjectGraphType<WorkPlan>
 {
     public WorkPlanInputType()
     {

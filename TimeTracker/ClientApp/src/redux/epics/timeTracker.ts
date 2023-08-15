@@ -46,7 +46,6 @@ export const resetTimerEpic: Epic = (action: Observable<PayloadAction<CreateWork
         mergeMap(action =>
             CreateWorkedHoursQuery(action.payload).pipe(
                 mergeMap(async resp => {
-
                     if (resp.response.errors != null) {
                         const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
                         return resetTimerFail(errorMessage)

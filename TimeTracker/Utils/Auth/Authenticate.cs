@@ -57,7 +57,7 @@ public class Authenticate
         return new RefreshToken
         {
             Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
-            Expiration = DateTime.Now.AddMinutes(_tokenExpiration*2)
+            Expiration = DateTime.Now.AddYears(1)
         };
     }
 

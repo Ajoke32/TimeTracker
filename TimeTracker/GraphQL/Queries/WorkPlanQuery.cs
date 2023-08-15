@@ -23,8 +23,8 @@ public sealed class WorkPlanQuery : ObjectGraphType
 
                 var workPlans = await uow.GenericRepository<WorkPlan>()
                                     .GetAsync(c => c.UserId == userId
-                                                && c.Date >= dateRange.StartDate
-                                                && c.Date <= dateRange.EndDate,
+                                                && c.Date >= DateOnly.FromDateTime(dateRange.StartDate)
+                                                && c.Date <= DateOnly.FromDateTime(dateRange.EndDate),
                                                 includeProperties: "User");
 
                 return workPlans;

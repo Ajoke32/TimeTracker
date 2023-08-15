@@ -25,8 +25,8 @@ public sealed class CalendarEventQuery : ObjectGraphType
                 var dateRange = ctx.GetArgument<DateRangeInputDto>("dateRange");
 
                 var calendarEvents = await uow.GenericRepository<CalendarEvent>()
-                                    .GetAsync(c => c.Date >= dateRange.StartDate
-                                                && c.Date <= dateRange.EndDate);
+                                    .GetAsync(c => c.Date >= DateOnly.FromDateTime(dateRange.StartDate)
+                                                && c.Date <= DateOnly.FromDateTime(dateRange.EndDate));
 
                 return calendarEvents;
             })
