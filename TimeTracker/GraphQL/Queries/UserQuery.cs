@@ -117,7 +117,20 @@ public sealed class UserQuery : ObjectGraphType
 
                 var authService = _.RequestServices?.GetRequiredService<Authenticate>();
                 
-                return authService!.RefreshToken(user);
+                var result = authService!.RefreshToken(user);
+                
+                if (result == "refresh token expires")
+                {
+                    throw new ValidationError("refresh token expires");
+                }
+
+                var refreshToken = authService.GenerateRefreshToken();
+                user.RefreshToken = refreshToken.Token;
+                user.RefreshTokenExpiration = refreshToken.Expiration;
+
+                await uow.SaveAsync();
+                
+                return result;
             });
         
         Field<ListGraphType<UserType>>("usersByIds")
@@ -131,11 +144,6 @@ public sealed class UserQuery : ObjectGraphType
                     .GetAsync(u => ids.Contains(u.Id));
             });
         
-        Field<int>("getUsersCount")
-            .ResolveAsync(async _ =>await uow.GenericRepository<User>().GetRecordsCount());
-        
-      
-
     }
 
     private async Task<string> AuthorizeConfirmedEmailAsync(User actualUser,string password,Authenticate authenticate)

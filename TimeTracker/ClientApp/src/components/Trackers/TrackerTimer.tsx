@@ -67,7 +67,6 @@ export const TrackerTimer = ({ workedHour }: { workedHour?: WorkedHour }) => {
             minutes: stopDate.getUTCMinutes(),
             seconds: stopDate.getUTCSeconds()
         }
-
         dispatch(resetTimer({
             userId: user!.id,
             date: GetFormattedUTCDateString(stopDate),

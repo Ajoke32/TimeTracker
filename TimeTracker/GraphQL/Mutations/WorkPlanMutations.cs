@@ -14,15 +14,16 @@ namespace TimeTracker.GraphQL.Mutations;
 
 public sealed class WorkPlanMutations : ObjectGraphType
 {
-    public WorkPlanMutations(IUnitOfWorkRepository uow, IMapper mapper)
+    public WorkPlanMutations(IUnitOfWorkRepository uow)
     {
         Field<WorkPlan>("create")
             .Argument<WorkPlanInputType>("workPlan")
             .ResolveAsync(async ctx =>
             {
-                var wp = ctx.GetArgument<WorkPlanInputDto>("workPlan");
+                var wp = ctx.GetArgument<WorkPlan>("workPlan");
 
-                var created = await uow.GenericRepository<WorkPlan>().CreateAsync(mapper.Map<WorkPlan>(wp));
+                var created = await uow.GenericRepository<WorkPlan>()
+                    .CreateAsync(wp);
 
                 await uow.SaveAsync();
 

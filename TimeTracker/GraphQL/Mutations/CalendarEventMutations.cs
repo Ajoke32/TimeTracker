@@ -19,16 +19,18 @@ public sealed class CalendarEventMutations : ObjectGraphType
             .Argument<CalendarEventInputType>("calendarEvent")
             .ResolveAsync(async ctx =>
             {
-                var evt = ctx.GetArgument<CalendarEventInputDto>("calendarEvent");
+                var evt = ctx.GetArgument<CalendarEvent>("calendarEvent");
 
-                var calendarEvent = await uow.GenericRepository<CalendarEvent>().FindAsync(c => c.Date == evt.Date.ToDateTime(new TimeOnly()));
+                var calendarEvent = await uow.GenericRepository<CalendarEvent>()
+                    .FindAsync(c => c.Date == evt.Date);
 
                 if (calendarEvent is not null)
                 {
                     throw new ValidationError("Event on this date already exists!");
                 }
 
-                var created = await uow.GenericRepository<CalendarEvent>().CreateAsync(mapper.Map<CalendarEvent>(evt));
+                var created = await uow.GenericRepository<CalendarEvent>()
+                    .CreateAsync(evt);
 
                 await uow.SaveAsync();
 

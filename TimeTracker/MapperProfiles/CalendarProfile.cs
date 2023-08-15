@@ -11,10 +11,6 @@ public class CalendarProfile : Profile
 
     public CalendarProfile()
     {
-        CreateMap<WorkPlanInputDto, WorkPlan>()
-                .ForMember(x => x.Date,
-                    o => o.MapFrom(src => src.Date.ToDateTime(new TimeOnly()))
-                );
         
         CreateMap<CalendarEventInputDto, CalendarEvent>()
                 .ForMember(x => x.Date,
