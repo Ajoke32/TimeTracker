@@ -14,7 +14,7 @@ public class GraphQlArgumentsVisitor:IGraphQlArgumentVisitor
 
         if (groupExpression != null && groupExpression.Any())
         {
-            entities=entities.ApplyGroupFilters(groupExpression,context);
+            entities=entities.ApplyGroupFilters(groupExpression);
         }
 
         if (expression != null)

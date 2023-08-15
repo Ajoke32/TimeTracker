@@ -17,6 +17,7 @@ public class LambdaBuilder
         var property = Expression.Property(parameter, propertyName);
         
         var constant = GetConvertedConstantExpression<T>(propertyName,expression.CompareValue);
+        
         if (oprt.IsNullOrEmpty())
         {
             throw new Exception("empty operator");
@@ -53,6 +54,7 @@ public class LambdaBuilder
     public static ConstantExpression GetConvertedConstantExpression<T>(string propertyName,string compareValue)
     {
         var converted = EntityFiledTypeConverter.ConvertToFieldType<T>(propertyName, compareValue);
+        
         return Expression.Constant(converted);
     }
 }
