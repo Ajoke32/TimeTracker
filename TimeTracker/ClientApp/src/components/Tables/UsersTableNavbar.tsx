@@ -1,29 +1,47 @@
-import { Dropdown, SearchInput, LargeButton, } from "../UI";
-import { User, Permission } from "../../redux";
-import { useTypedSelector } from "../../hooks";
+import {Dropdown, SearchInput, LargeButton, SmallButton,} from "../UI";
+import {User, Permission, removeUserFilter, addUserFilter, addUsersFilters, userFiltersToDefault} from "../../redux";
+import {useAppDispatch, useTypedSelector} from "../../hooks";
 import {userFields} from "@redux/types";
 import Filter from "./Filters";
-import React from "react";
+import React, {useState} from "react";
+import {WhereFilter} from "@redux/types/filterTypes.ts";
 
 export const UsersTableNavbar = ({ users, setFilteredUsers }: { users: User[], setFilteredUsers: any }) => {
     const authState = useTypedSelector(state => state.auth);
-    const handleSearch = (searchValue: string) => {
-        const filtered = users.filter(
-            (user) =>
-                (user.firstName.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    user.lastName.toLowerCase().includes(searchValue.toLowerCase())) ||
-                user.email.toLowerCase().includes(searchValue.toLowerCase())
-        );
-        setFilteredUsers(filtered);
-    };
+    const [search,setSearch] = useState<string>("");
+    const dispatch =useAppDispatch();
+    const fieldsToSearch = ["Email","FirstName","LastName"];
+    function handleChange(e:React.ChangeEvent<HTMLSelectElement>){
+        if(e.target.value==="all"){
+            dispatch(removeUserFilter("IsDeleted"));
+            return;
+        }
+        dispatch(addUserFilter({
+            operator:"eq",
+            value:e.target.value,
+            property:"IsDeleted"
+        }));
+    }
 
+    function onInput(value:string){
+        setSearch(value);
+    }
+    function handleSearch(){
+        dispatch(userFiltersToDefault());
+        const filters:WhereFilter[] = [];
+        for(const field of fieldsToSearch){
+            filters.push({property:field,operator:"contains",value:search,connector:"or"});
+        }
+        dispatch(addUsersFilters(filters));
+    }
     return (
         <div className="users-table__navbar">
             <div className="users-table__navbar-left">
-                <Dropdown options={[{ value: true, name: "Active" }, { value: false, name: "Inactive" }]} title="Show users" />
-                <SearchInput name="search" placeholder="Search by name or email" onSearch={handleSearch} />
+                <Dropdown onSelectChange={(e)=>handleChange(e)} options={[{ value: false, name: "Active" },
+                    { value: true, name: "Inactive" }]} title="Show users" />
+                <SearchInput name="search" placeholder="Search by name or email" onSearch={onInput} />
             </div>
-            <Filter/>
+            <button onClick={handleSearch} className={"btn-base btn-confirm"}>Search</button>
             {(authState.user!.permissions & Permission.Create) ?
                 <div className="users-table__navbar-btn">
                     <a className="add-user__link" href="/team/adduser">

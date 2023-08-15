@@ -16,7 +16,7 @@ import {
     fetchWorkedHoursFail,
     fetchWorkedHoursSuccess,
     resetTimerFail,
-    resetTimerSuccess
+    resetTimerSuccess, WorkedFetchType
 } from '../slices';
 import { GetErrorMessage } from "../../utils";
 
@@ -68,17 +68,20 @@ action.pipe(
     })
 )
 
-export const fetchWorkedHoursEpic: Epic = (action: Observable<PayloadAction<number>>, state) =>
+export const fetchWorkedHoursEpic: Epic = (action: Observable<PayloadAction<WorkedFetchType>>, state) =>
     action.pipe(
         ofType("workedHours/fetchWorkedHours"),
         mergeMap(action =>
-            FetchWorkedHoursQuery(action.payload).pipe(
+            FetchWorkedHoursQuery(action.payload.userId,action.payload.take,action.payload.skip).pipe(
                 mergeMap(async resp => {
                     if (resp.response.errors != null) {
                         const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
                         return fetchWorkedHoursFail(errorMessage)
                     }
-                    return fetchWorkedHoursSuccess(resp.response.data.workedHourQuery.workedHours);
+                    return fetchWorkedHoursSuccess({
+                        entities:resp.response.data.workedHourQuery.workedHours,
+                        extensions:resp.response.extensions
+                    });
                 }),
                 catchError((e: Error) => {
                     console.log(e);

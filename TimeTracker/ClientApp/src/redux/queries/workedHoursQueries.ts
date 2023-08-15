@@ -1,11 +1,11 @@
 import { AjaxQuery } from './query';
 import { WorkedHour, CreateWorkedHourType, UpdateWorkedHourType } from '@redux/types';
 
-export function FetchWorkedHoursQuery(userId: number) {
+export function FetchWorkedHoursQuery(userId: number,take:number,skip:number) {
   return AjaxQuery<{ workedHourQuery: { workedHours: WorkedHour[] } }>(
-    `query GetUserWorkedHours($userId: Int!) {
-      workedHourQuery {
-        workedHours(userId: $userId) {
+    `query GetUserWorkedHours($userId: Int!,$take:Int,$skip:Int) {
+      workedHourQuery{
+        workedHours(userId: $userId,take:$take,skip:$skip) {
           id
           userId
           date
@@ -15,7 +15,7 @@ export function FetchWorkedHoursQuery(userId: number) {
         }
       }
     }`,
-    { userId: userId },
+    { userId: userId,take:take,skip:skip },
   );
 }
 

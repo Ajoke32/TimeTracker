@@ -12,12 +12,14 @@ using TimeTracker.Models.Dtos;
 using TimeTracker.Utils.Auth;
 using TimeTracker.Utils.Email;
 using TimeTracker.Utils.Errors;
+using TimeTracker.Utils.Filters;
+using TimeTracker.Visitors;
 
 namespace TimeTracker.GraphQL.Queries;
 
 public sealed class WorkedHourQuery : ObjectGraphType
 {
-    public WorkedHourQuery(IUnitOfWorkRepository uow, IMapper mapper)
+    public WorkedHourQuery(IUnitOfWorkRepository uow, IGraphQlArgumentVisitor visitor)
     {
         Field<ListGraphType<WorkedHourType>>("workedHours")
             .Argument<int>("userId")
@@ -27,9 +29,12 @@ public sealed class WorkedHourQuery : ObjectGraphType
 
                 var workedHours = await uow.GenericRepository<WorkedHour>()
                                     .GetAsync(filter: (w => w.UserId == userId));
-
-                return workedHours;
+                
+                workedHours = workedHours.OrderByDescending(w=>w.Id);
+                
+                return visitor.Visit(workedHours,ctx);
             })
-            .Description("gets all user's worked hours");
+            .Description("gets all user's worked hours")
+            .UsePaging();
     }
 }
