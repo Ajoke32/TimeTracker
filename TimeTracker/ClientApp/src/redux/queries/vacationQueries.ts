@@ -17,10 +17,10 @@ export function AddVacationQuery(vacation:VacationInputType) {
     )
 }
 
-export function FetchVacationsRequest(id:number){
+export function FetchVacationsRequest(id:number,take:number,skip:number){
     return AjaxQuery<{ approverVacationQuery: { requests:ApproverVacation[]}}>(
-        'query GetRequests($userId:Int!){approverVacationQuery{requests(userId:$userId){id,isApproved,isDeleted,vacation{vacationState,id,endDate,message,startDate,user{firstName,lastName,email}}}}}',
-        {userId:id}
+        'query GetRequests($userId:Int!,$take:Int,$skip:Int){approverVacationQuery{requests(userId:$userId,take:$take,skip:$skip){id,isApproved,isDeleted,vacation{vacationState,id,endDate,message,startDate,user{firstName,lastName,email}}}}}',
+        {userId:id,take:take,skip:skip}
     )
 }
 

@@ -8,9 +8,15 @@ import {
     defaultState
 } from "./generic";
 import { GetLocalWorkedHour } from '../../utils';
+import {basicPagingReducers, defaultPagingState, PagingEntityType, PagingInputType} from "@redux/types/filterTypes.ts";
+
+export interface WorkedFetchType extends PagingInputType{
+    userId:number
+}
 
 const initialState: WorkedHoursSlice = {
     ...defaultState,
+    ...{...defaultPagingState,take:4,perPage:4},
     workedHours: []
 };
 
@@ -26,13 +32,16 @@ const workedHoursSlice = createSlice({
         ),
         createWorkedHourFail: createErrorReducer(),
 
-        fetchWorkedHours: createPendingReducerWithPayload<WorkedHoursSlice, number>(),
-        fetchWorkedHoursSuccess: createSuccessReducerWithPayload<WorkedHoursSlice, WorkedHour[]>(
-            (state: WorkedHoursSlice, action: PayloadAction<WorkedHour[]>) => {
-                action.payload.forEach((wh, index) => {
-                    action.payload[index] = GetLocalWorkedHour(wh)
+        fetchWorkedHours: createPendingReducerWithPayload<WorkedHoursSlice, WorkedFetchType>(),
+        fetchWorkedHoursSuccess: createSuccessReducerWithPayload<WorkedHoursSlice, PagingEntityType<WorkedHour>>(
+            (state, action) => {
+                action.payload.entities.forEach((wh, index) => {
+                    action.payload.entities[index] = GetLocalWorkedHour(wh)
                 })
-                state.workedHours = action.payload;
+                state.workedHours = action.payload.entities;
+                if(action.payload.extensions){
+                    state.extensions=action.payload.extensions;
+                }
             }),
         fetchWorkedHoursFail: createErrorReducer(),
 
@@ -53,6 +62,7 @@ const workedHoursSlice = createSlice({
                 state.workedHours = state.workedHours.filter(wh => wh.id != action.payload)
             }),
         deleteWorkedHourFail: createErrorReducer(),
+        ...basicPagingReducers
     },
 });
 
@@ -60,6 +70,7 @@ export const {
     fetchWorkedHours, fetchWorkedHoursSuccess, fetchWorkedHoursFail,
     editWorkedHour, editWorkedHourFail, editWorkedHourSuccess,
     deleteWorkedHour, deleteWorkedHourFail, deleteWorkedHourSuccess,
-    createWorkedHour, createWorkedHourFail, createWorkedHourSuccess
+    createWorkedHour, createWorkedHourFail, createWorkedHourSuccess,
+    setTake:setWorkedHoursTake,setSkip:setWorkedHourSkip
 } = workedHoursSlice.actions;
 export const workedHours = workedHoursSlice.reducer;

@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react';
 import { useAppDispatch, useTypedSelector } from "../../hooks";
 import {User, fetchUsers, setUsersTake, setUsersSkip, removeUserFilter} from "../../redux";
 import "@components/UI/Buttons/buttons.css"
-import {calculateTotalPages} from "../../utils/paging.ts";
+
 import {WhereFilter} from "@redux/types/filterTypes.ts";
+import Pager from "@components/Paging/Pager.tsx";
 
 
 
@@ -17,7 +18,7 @@ export const Team = () => {
         = useTypedSelector(state => state.users);
 
     const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
-    const [activePage,setActivePage] = useState<number>(0);
+
 
     const {count} = useTypedSelector(s=>s.users);
     const loadMore = () => {
@@ -38,14 +39,10 @@ export const Team = () => {
         setFilteredUsers(users);
     }, [users.length])
 
-    function handlePageClick(page:number){
-        dispatch(setUsersTake(perPage*page));
-        dispatch(setUsersSkip((page-1)*perPage));
-        setActivePage(page-1);
-    }
+
 
     function handleRemoveFilter(filter:WhereFilter){
-        dispatch(removeUserFilter(filter));
+        dispatch(removeUserFilter(filter.property));
     }
 
     return (
@@ -71,21 +68,10 @@ export const Team = () => {
                         }
                     </div>
                 </div>
-                <div className="pages-wrapper">
-                <button className={`btn-base btn-info ${skip==0?'neutral':''}`} disabled={skip==0} onClick={()=>{
-                    dispatch(setUsersTake(take-perPage))
-                    dispatch(setUsersSkip(skip-perPage))
-                    setActivePage(prevState => prevState-1);
-                }}>Prev</button>
-                {[...Array(calculateTotalPages(count,perPage))].map((_, index) => (
-                            <div className={`${index===activePage?'active-page':''}`} onClick={()=>handlePageClick(index+1)} key={index}>{index + 1}</div>))
+                {count>perPage&&
+                    <Pager skip={skip} take={take} setSkip={setUsersSkip} setTake={setUsersTake}
+                           extensions={{count:count}} perPage={perPage} />
                 }
-                <button className={`btn-base btn-info ${take>count?'neutral':''}`} disabled={take>count} onClick={()=>{
-                    dispatch(setUsersTake(take+perPage))
-                    dispatch(setUsersSkip(skip+perPage))
-                    setActivePage(prevState => prevState+1);
-                }}>Next</button>
-                </div>
 
             </div>
         </div>

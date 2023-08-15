@@ -19,7 +19,7 @@ interface TimeInputs {
     endTime: string
 }
 
-export const DayPlanForm = ({ cell }: { cell: CalendarCell }) => {
+export const DayPlanForm = ({ cell,setIsOpen}: { cell: CalendarCell,setIsOpen:(val:boolean)=>void }) => {
     const defaultValues: TimeInputs = {
         startTime: '08:00',
         endTime: '18:00',
@@ -55,7 +55,7 @@ export const DayPlanForm = ({ cell }: { cell: CalendarCell }) => {
             endTime: GetFormattedUTCTimeString(data.endTime, GetFormattedUTCDateString(cell.date)),
             date: GetFormattedDateString(new Date(data.date))
         } as CreateWorkedHourType))
-
+        setIsOpen(false);
     }
 
 

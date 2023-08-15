@@ -29,7 +29,7 @@ export const LargeCalendar = ({ date, setter }: { date?: Date, setter: React.Dis
             nextDates: [],
         }
     );
-
+    const [isModalOpen,setIsModalOpen] = useState<boolean>(false);
     const setValues = (): CalendarType => ({
         previousDates: setPrevMonthDates(currentDate, events.previousMonth, workPlans.previousMonth),
         currentDates: setCurrentMonthDates(currentDate, events.currentMonth, workPlans.currentMonth),
@@ -85,10 +85,10 @@ export const LargeCalendar = ({ date, setter }: { date?: Date, setter: React.Dis
 
     return (
         <div className="calendar-wrapper">
-            {isFormHidden && <div className="event-form__wrapper">
+            {isFormHidden && <div className="event-form__wrapper" style={{display:`${!isModalOpen?"none":''}`}}>
                 <button className="event-form__close-btn" onClick={() => setIsFormHidden(null)}></button>
-                <div className="event-form__inner">
-                    {tab ? <DayPlanForm cell={isFormHidden} /> : <AddEventForm cell={isFormHidden} />}
+                <div className="event-form__inner" style={{display:`${!isModalOpen?"none":''}`}}>
+                    {tab ? <DayPlanForm setIsOpen={setIsModalOpen} cell={isFormHidden} /> : <AddEventForm setIsOpen={setIsModalOpen} cell={isFormHidden} />}
                     <TabSwitcher setter={setTab} tab={tab} />
                 </div>
             </div>}
@@ -135,7 +135,10 @@ export const LargeCalendar = ({ date, setter }: { date?: Date, setter: React.Dis
                             <span className={getClassName(cell, "")}>
                                 {cell.date.getDate()}
                             </span>
-                            <button type="button" className="calendar-event__btn" onClick={(e) => handleAddEventButton(e, cell)} />
+                            <button type="button" className="calendar-event__btn" onClick={(e) =>{
+                                handleAddEventButton(e, cell)
+                                setIsModalOpen(true);
+                            }} />
                         </div>
                     ))}
 

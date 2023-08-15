@@ -1,25 +1,26 @@
-import {useEffect} from 'react';
+import React, {useEffect} from 'react';
 import "./ApproversTable.css"
 import "./Table.css"
 import {useAppDispatch, useTypedSelector} from "../../hooks";
-import {fetchRequests} from "../../redux";
+import {fetchRequests, setVacationRequestSkip, setVacationRequestsTake} from "../../redux";
 import {Loader} from "../UI";
 import MessageModal from "@components/UI/Modals/MessageModal.tsx";
-import {getApproverVacationString, getStringVacationState, isVacationAnswered} from "../../utils/vacationHelper.ts";
+import {getApproverVacationString} from "../../utils/vacationHelper.ts";
 import {H4} from "@components/Headings";
+import Pager from "@components/Paging/Pager.tsx";
 
 export const VacationsRequestTable = () => {
 
     const dispatch = useAppDispatch()
 
-    const {vacationRequests,error,loading} =
+    const {vacationRequests,take,perPage,extensions,skip,error,loading} =
         useTypedSelector(s=>s.approverVacations);
     const userId =
         useTypedSelector(s=>s.auth.user?.id);
 
     useEffect(()=>{
-        dispatch(fetchRequests(userId!))
-    },[])
+        dispatch(fetchRequests({userId:userId!,take:take,skip:skip}))
+    },[take,skip])
 
     
     
@@ -50,7 +51,9 @@ export const VacationsRequestTable = () => {
                     })}
                 </div>
             }
-
+            {extensions?.count!>perPage&&<Pager take={take} skip={skip} setSkip={setVacationRequestSkip} setTake={setVacationRequestsTake}
+                                               extensions={extensions} perPage={perPage}
+            />}
         </div>
     );
 };
