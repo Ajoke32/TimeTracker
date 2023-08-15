@@ -9,11 +9,7 @@ public class EntityFiledTypeConverter
         
         var property = classType.GetProperty(fieldName);
         
-        var propertyType = property.PropertyType;
-    
-        var convertedValue = Convert.ChangeType(compareValue, propertyType);
-
-        return convertedValue;
+        return Convert.ChangeType(compareValue, property.PropertyType);
     }
     
 }
