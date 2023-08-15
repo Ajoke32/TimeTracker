@@ -42,11 +42,6 @@ public class TimeTrackerContext:DbContext
             .OnDelete(DeleteBehavior.NoAction);
         
         
-        /*modelBuilder.Entity<WorkedHour>()
-            .HasOne(a => a.User)
-            .WithMany(u => u.WorkedHours)
-            .HasForeignKey(a => a.UserId);*/
-        
         modelBuilder.Entity<WorkedHour>()
             .Property(a => a.StartTime)
             .HasConversion(
@@ -67,11 +62,7 @@ public class TimeTrackerContext:DbContext
                 v => v.ToTimeSpan(),
                 v => TimeOnly.FromTimeSpan(v)
             );
-
-        /*modelBuilder.Entity<WorkPlan>()
-            .HasOne(a => a.User)
-            .WithMany(u => u.WorkPlans)
-            .HasForeignKey(a => a.UserId);*/
+        
         
         modelBuilder.Entity<WorkPlan>()
             .Property(a => a.StartTime)
