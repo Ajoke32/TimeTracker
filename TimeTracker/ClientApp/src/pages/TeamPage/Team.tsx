@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAppDispatch, useTypedSelector } from "../../hooks";
 import {User, fetchUsers, setUsersTake, setUsersSkip, removeUserFilter} from "../../redux";
 import "@components/UI/Buttons/buttons.css"
-import {calculateTotalPages} from "../../utils/paging.ts";
+
 import {WhereFilter} from "@redux/types/filterTypes.ts";
 import Pager from "@components/Paging/Pager.tsx";
 

@@ -10,6 +10,8 @@ import {
     ApproverVacation, ApproverVacationUpdate, Vacation,
     VacationApproverInput
 } from "../types";
+import {basicPagingReducers, defaultPagingState, PagingEntityType} from "@redux/types/filterTypes.ts";
+import {WorkedFetchType} from "@redux/slices/workedHoursSlice.ts";
 
 
 const initialState:VacationApproverState = {
@@ -18,6 +20,7 @@ const initialState:VacationApproverState = {
     updated:false,
     approverVacation:null,
     deleted:false,
+    ...{...defaultPagingState,take:4,perPage:4}
 }
 
 const approverVacationsSlice = createSlice({
@@ -35,10 +38,11 @@ const approverVacationsSlice = createSlice({
         },
         updateApproverVacationStateStateFail:createErrorReducer(),
 
-        fetchRequests:createPendingReducerWithPayload<typeof initialState,number>(),
-        fetchRequestsSuccess:createSuccessReducerWithPayload<typeof initialState,ApproverVacation[]>(
-            (state:VacationApproverState,action:PayloadAction<ApproverVacation[]>)=>{
-            state.vacationRequests=action.payload;
+        fetchRequests:createPendingReducerWithPayload<typeof initialState,WorkedFetchType>(),
+        fetchRequestsSuccess:createSuccessReducerWithPayload<typeof initialState,PagingEntityType<ApproverVacation>>(
+            (state,action)=>{
+            state.vacationRequests=action.payload.entities;
+            state.extensions = action.payload.extensions;
             state.loading=false;
         }),
         fetchRequestsFail:createErrorReducer(),
@@ -72,7 +76,9 @@ const approverVacationsSlice = createSlice({
 
         updateToDefault:createPendingReducerWithPayload<typeof initialState,number>(),
         updateToDefaultFail:createErrorReducer(),
-        updateToDefaultSuccess:createSuccessReducerWithoutPayload()
+        updateToDefaultSuccess:createSuccessReducerWithoutPayload(),
+
+        ...basicPagingReducers
     },
 });
 
@@ -81,9 +87,11 @@ export const approverVacations = approverVacationsSlice.reducer;
 export const  {updateApproverVacationState,
     updateApproverVacationStateSuccess,
     updateApproverVacationStateStateFail,
-fetchRequests,fetchRequestsFail,
+    fetchRequests,fetchRequestsFail,
     fetchRequestsSuccess,updateApproversVacationsSuccess,
     updateApproversVacationsFail,updateApproversVacations
     ,deleteByVacationIdSuccess,deleteByVacationIdFail
     ,deleteByVacationId,fetchApproverVacationById,
-    fetchApproverVacationByIdSuccess,fetchApproverVacationByIdFail,updateToDefaultSuccess,updateToDefaultFail,updateToDefault} =  approverVacationsSlice.actions
+    fetchApproverVacationByIdSuccess,fetchApproverVacationByIdFail
+    ,updateToDefaultSuccess,updateToDefaultFail,updateToDefault
+    ,setSkip:setVacationRequestSkip,setTake:setVacationRequestsTake} =  approverVacationsSlice.actions

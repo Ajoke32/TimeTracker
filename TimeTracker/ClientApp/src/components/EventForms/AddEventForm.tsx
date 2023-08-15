@@ -1,10 +1,9 @@
-import React, { ChangeEvent, useState } from 'react';
 import { SubmitHandler, useForm } from "react-hook-form";
-import { LargeButton, TextInput, Dropdown } from "@components/UI";
+import { LargeButton, TextInput, } from "@components/UI";
 import "./eventForms.css"
 import { CalendarCell, CreateCalendarEventType } from '@redux/types';
 import { months } from '..';
-import { useAppDispatch, useTypedSelector } from '@hooks/customHooks';
+import { useAppDispatch} from '@hooks/customHooks';
 import { createCalendarEvent } from '@redux/slices';
 import { GetFormattedDateString } from '../../utils';
 
@@ -14,11 +13,10 @@ type Inputs = {
     eventType: number
 }
 
-export const AddEventForm = ({ cell }: { cell: CalendarCell }) => {
+export const AddEventForm = ({ cell, setIsOpen}: { cell: CalendarCell,setIsOpen:(val:boolean)=>void}) => {
 
     const showDate = `${cell.date.getDate()} ${months[cell.date.getMonth()]}`;
     const dispatch = useAppDispatch()
-
     const { register, handleSubmit, setValue,
         formState: { errors }, reset } = useForm<Inputs>({
             mode: 'onBlur',
@@ -35,7 +33,7 @@ export const AddEventForm = ({ cell }: { cell: CalendarCell }) => {
             eventType: data.eventType,
             title: data.title
         } as CreateCalendarEventType))
-
+        setIsOpen(false);
     }
 
     return (

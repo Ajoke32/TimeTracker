@@ -26,16 +26,12 @@ export const UsersTable = ({ users }: { users: User[] }) => {
                     <tr>
                         <th></th>
                         <th>User</th>
-                        <th className={`${orderBy.property==="Email"?orderBy.direction==="ASC"?'asc':'desc':''}`}
-                            onClick={()=>setOrderBy("Email")}>Email</th>
-                        <th className={`${orderBy.property==="VacationDays"?orderBy.direction==="ASC"?'asc':'desc':''}`}
-                            onClick={()=>setOrderBy("VacationDays")}>Vacation Days</th>
-                        <th className={`${orderBy.property==="HoursPerMonth"?orderBy.direction==="ASC"?'asc':'desc':''}`}
-                            onClick={()=>setOrderBy("HoursPerMonth")}>Working hours</th>
+                        <th onClick={()=>setOrderBy("Email")}>Email</th>
+                        <th onClick={()=>setOrderBy("VacationDays")}>Vacation Days</th>
+                        <th onClick={()=>setOrderBy("HoursPerMonth")}>Working hours</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
-
                 <tbody>
                     {users.map((user) => (
 

@@ -1,5 +1,13 @@
 import {Dropdown, SearchInput, LargeButton, SmallButton,} from "../UI";
-import {User, Permission, removeUserFilter, addUserFilter, addUsersFilters, userFiltersToDefault} from "../../redux";
+import {
+    User,
+    Permission,
+    removeUserFilter,
+    addUserFilter,
+    addUsersFilters,
+    userFiltersToDefault,
+    usersPagingToDefault
+} from "../../redux";
 import {useAppDispatch, useTypedSelector} from "../../hooks";
 import {userFields} from "@redux/types";
 import Filter from "./Filters";
@@ -12,6 +20,7 @@ export const UsersTableNavbar = ({ users, setFilteredUsers }: { users: User[], s
     const dispatch =useAppDispatch();
     const fieldsToSearch = ["Email","FirstName","LastName"];
     function handleChange(e:React.ChangeEvent<HTMLSelectElement>){
+        dispatch(usersPagingToDefault());
         if(e.target.value==="all"){
             dispatch(removeUserFilter("IsDeleted"));
             return;

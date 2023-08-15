@@ -83,6 +83,10 @@ export const basicPagingReducers={
     setPerPage:(state:PagingWithExtraInfo,action:PayloadAction<number>)=>{
         state.perPage=action.payload;
         state.take = action.payload;
+    },
+    toDefault:(state:PagingWithExtraInfo)=>{
+        state.take=state.perPage;
+        state.skip=0;
     }
 }
 

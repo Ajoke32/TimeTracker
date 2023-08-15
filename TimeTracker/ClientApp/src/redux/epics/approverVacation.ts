@@ -18,7 +18,7 @@ import {
     updateApproversVacationsFail,
     updateApproversVacationsSuccess,
     updateApproverVacationStateStateFail,
-    updateApproverVacationStateSuccess, updateToDefaultFail, updateToDefaultSuccess
+    updateApproverVacationStateSuccess, updateToDefaultFail, updateToDefaultSuccess, WorkedFetchType
 } from "../slices";
 import {ApproverVacationUpdate, VacationApproverInput} from "../types";
 import {GetErrorMessage} from "../../utils";
@@ -43,18 +43,21 @@ const updateApproverVacationEpic: Epic = (action: Observable<PayloadAction<Appro
         )
     );
 
-const fetchVacationsRequestsEpic: Epic = (action: Observable<PayloadAction<number>>, state) =>
+const fetchVacationsRequestsEpic: Epic = (action: Observable<PayloadAction<WorkedFetchType>>, state) =>
     action.pipe(
         ofType("approverVacation/fetchRequests"),
         mergeMap(action =>
-            FetchVacationsRequest(action.payload)
+            FetchVacationsRequest(action.payload.userId,action.payload.take,action.payload.skip)
                 .pipe(
                     mergeMap(async resp => {
                         if (resp.response.errors != null) {
                             const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
                             return fetchRequestsFail(errorMessage)
                         }
-                        return fetchRequestsSuccess(resp.response.data.approverVacationQuery.requests);
+                        return fetchRequestsSuccess({
+                            entities:resp.response.data.approverVacationQuery.requests,
+                            extensions:resp.response.extensions
+                        });
                     }),
                     catchError((e: Error) => {
                         console.log(e);

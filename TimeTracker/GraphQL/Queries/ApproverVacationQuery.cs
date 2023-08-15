@@ -3,13 +3,15 @@ using GraphQL.Types;
 using TimeTracker.Absctration;
 using TimeTracker.GraphQL.Types;
 using TimeTracker.Models;
+using TimeTracker.Utils.Filters;
+using TimeTracker.Visitors;
 
 
 namespace TimeTracker.GraphQL.Queries;
 
 public sealed class ApproverVacationQuery:ObjectGraphType
 {
-    public ApproverVacationQuery(IUnitOfWorkRepository uow)
+    public ApproverVacationQuery(IUnitOfWorkRepository uow,IGraphQlArgumentVisitor visitor)
     {
         Field<ListGraphType<ApproverVacationType>>("requests")
             .Argument<int>("userId")
@@ -18,11 +20,13 @@ public sealed class ApproverVacationQuery:ObjectGraphType
                 var id = context.GetArgument<int>("userId");
                 
                 
-                return  await uow.GenericRepository<ApproverVacation>()
+                var req =  await uow.GenericRepository<ApproverVacation>()
                         .GetAsync(
                             includeProperties:"Vacation.User",
                             filter:a=>a.UserId==id);
-            });
+
+                return visitor.Visit(req,context);
+            }).UsePaging();
 
         Field<ApproverVacationType>("approverVacation")
             .Argument<int>("id")

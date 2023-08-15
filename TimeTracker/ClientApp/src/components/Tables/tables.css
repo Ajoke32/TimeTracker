@@ -25,6 +25,9 @@
     border-collapse: collapse;
     background: transparent;
 }
+.users-table__table th{
+    cursor: pointer;
+}
 
 .approvers-table__table thead tr,
 .approvers-table__table tbody tr {
@@ -183,3 +186,4 @@ tbody::-webkit-scrollbar-thumb:hover {
     background-position: center center;
     background-repeat: no-repeat;
 }
+

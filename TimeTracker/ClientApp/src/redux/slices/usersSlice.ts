@@ -65,4 +65,4 @@ export const { fetchUsersFail,
     setPerPage:setUsersPerPage,
     filtersToDefault:userFiltersToDefault,
     removeFilter:removeUserFilter,
-    setColumn:setUsersOrdering,addFilters:addUsersFilters} = usersSlice.actions;
+    setColumn:setUsersOrdering,toDefault:usersPagingToDefault,addFilters:addUsersFilters} = usersSlice.actions;

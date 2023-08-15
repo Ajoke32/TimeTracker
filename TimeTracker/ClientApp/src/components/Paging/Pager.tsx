@@ -1,9 +1,8 @@
-import React, {useState} from 'react';
-import {setUsersSkip, setUsersTake} from "@redux/slices";
+import React, {useEffect, useState} from 'react';
 import {calculateTotalPages} from "../../utils/paging.ts";
 import {useAppDispatch} from "@hooks/customHooks.ts";
-import {PagingType, PagingWithExtraInfo} from "@redux/types/filterTypes.ts";
-import {ActionCreator, ActionCreatorWithPayload, PayloadAction} from "@reduxjs/toolkit";
+import {PagingWithExtraInfo} from "@redux/types/filterTypes.ts";
+import {ActionCreatorWithPayload} from "@reduxjs/toolkit";
 
 
 interface PagerProps extends PagingWithExtraInfo{
@@ -20,6 +19,12 @@ const Pager = ({setSkip,setTake,perPage,take,skip,extensions}:PagerProps) => {
         dispatch(setSkip((page-1)*perPage));
         setActivePage(page-1);
     }
+
+    useEffect(() => {
+        if(take===perPage&&skip===0){
+            setActivePage(0);
+        }
+    }, [take,skip]);
 
     return (
         <div className="pages-wrapper">
