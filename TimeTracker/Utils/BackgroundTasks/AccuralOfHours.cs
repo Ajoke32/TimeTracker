@@ -15,12 +15,19 @@ public class AccuralOfHours:IJob
     public async Task Execute(IJobExecutionContext context)
     {
         var fullTimers = await _uow.GenericRepository<User>()
-            .GetAsync(u => u.WorkType == WorkType.FullTime);
-
-        // foreach (var user in fullTimers)
-        // {
-        //     user.WorkedHours += 8;
-        // }
+            .GetAsync(u => u.WorkType == WorkType.FullTime
+                ,includeProperties:"Vacations");
+        
+        foreach (var user in fullTimers)
+        {
+            var vacation = user.Vacations.Find(v => v.StartDate.Date<=DateTime.Now.Date
+                                                    &&v.EndDate>=DateTime.Now.Date);
+            if (vacation != null)
+            {
+                continue;
+            }
+            user.HoursPerMonth += 8;
+        }
 
         await _uow.SaveAsync();
     }

@@ -1,5 +1,6 @@
 import { CalendarEvent, DateRangeType, WorkPlan, WorkedHour, WorkedTime } from "@redux/types";
 import { addMonth, substractMonth } from ".";
+import moment from "moment";
 
 export const GetFormattedUTCDateString = (date: Date): string => {
     let result = "";
@@ -27,13 +28,7 @@ export const GetFormattedUTCTimeString = (time: string, date: string): string =>
 }
 
 export const GetFormattedDateString = (date: Date): string => {
-    let result = "";
-
-    result = result.concat(`${date.getFullYear().toString()}-`);
-    result = result.concat(date.getMonth() < 9 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`);
-    result = result.concat(date.getDate() < 10 ? `-0${date.getDate()}` : `-${date.getDate()}`);
-
-    return result;
+    return moment(date).format("YYYY-MM-DD")
 }
 
 export const GetFormattedTimeString = (time: WorkedTime | string): string => {
