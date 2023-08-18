@@ -18,7 +18,7 @@ import {
     fetchUserVacationsFail,
     fetchUserVacationsSuccess, fetchVacationByIdFail, fetchVacationByIdSuccess, updateVacationFail,
     updateVacationStateFail,
-    updateVacationStateSuccess, updateVacationSuccess,
+    updateVacationStateSuccess, updateVacationSuccess, WorkedFetchType,
 } from "../slices";
 import { GetErrorMessage } from "../../utils";
 
@@ -64,7 +64,7 @@ const updateVacationStateEpic: Epic = (action: Observable<PayloadAction<number>>
         )
     );
 
-const fetchUserVacationsEpic:Epic = (action:Observable<PayloadAction<number>>)=>
+const fetchUserVacationsEpic:Epic = (action:Observable<PayloadAction<WorkedFetchType>>)=>
     action.pipe(
         ofType('vacation/fetchUserVacations'),
         mergeMap(action=>
@@ -74,7 +74,10 @@ const fetchUserVacationsEpic:Epic = (action:Observable<PayloadAction<number>>)=>
                         if (res.response.errors != null) {
                             return fetchUserVacationsFail(res.response.errors[0].message)
                         }
-                        return fetchUserVacationsSuccess(res.response.data.vacationQuery.userVacations);
+                        return fetchUserVacationsSuccess({
+                            extensions:res.response.extensions,
+                            entities:res.response.data.vacationQuery.userVacations
+                        });
                     }),
                     catchError((e: Error) => {
                         console.log(e);

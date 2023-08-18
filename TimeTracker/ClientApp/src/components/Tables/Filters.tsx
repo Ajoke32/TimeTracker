@@ -1,16 +1,21 @@
 import React, {useState} from 'react';
-import {userFields} from "@redux/types";
 import {WhereFilter} from "@redux/types/filterTypes.ts";
 import {useAppDispatch} from "@hooks/customHooks.ts";
-import {addUserFilter, userFiltersToDefault} from "@redux/slices";
+import {ActionCreatorWithoutPayload, ActionCreatorWithPayload} from "@reduxjs/toolkit";
 
 
-const Filter = () => {
+interface FilterProps{
+    addFilter:ActionCreatorWithPayload<WhereFilter>,
+    filterFields:string[],
+    filtersToDefault:ActionCreatorWithoutPayload
+}
+
+const Filter = ({addFilter,filterFields,filtersToDefault}:FilterProps) => {
 
     const [clicked, setClicked] = useState<boolean>(false);
     const dispatch = useAppDispatch();
     const [filter, setFilter] = useState<WhereFilter>({
-        property: "FirstName",
+        property: filterFields[0],
         operator: "gt",
         value: ""
     });
@@ -40,7 +45,7 @@ const Filter = () => {
     }
 
     function handleApplyFilters() {
-        dispatch(addUserFilter({...filter, value: value}));
+        dispatch(addFilter({...filter, value: value}));
     }
 
     return (
@@ -53,13 +58,13 @@ const Filter = () => {
                 <div style={{
                     position: "absolute",
                     display: "flex",flexDirection:"column", gap: "10px", backgroundColor: "#fff", padding: "5px",
-                    zIndex: "100", borderRadius: "8px", left: "-350px", top: "40px"
+                    zIndex: "100", borderRadius: "8px", left: "0", top: "10px"
                 }} className="filter-select">
                     <div style={{display:"flex",flexDirection:'row',gap:"5px"}}>
                         <div className='select-group'>
                             <label htmlFor="">Column</label>
                             <select id='property' onChange={(e) => handleSelectChange(e)} className="input-base">
-                                {userFields.map(f => {
+                                {filterFields.map(f => {
                                     return <option key={f} value={f}>{f}</option>
                                 })}
                             </select>
@@ -69,9 +74,10 @@ const Filter = () => {
                             <select id='operator' onChange={(e) => handleSelectChange(e)} className="input-base">
                                 <option value="gt">GreaterThan</option>
                                 <option value="lt">LessThan</option>
+                                <option value="leq">LessThanOrEqual</option>
+                                <option value="geq">GreaterThanOrEqual</option>
                                 <option value="neq">NotEqual</option>
                                 <option value="eq">Equal</option>
-                                <option value="contains">Contains</option>
                             </select>
                         </div>
                         <div className='select-group'>
@@ -84,7 +90,7 @@ const Filter = () => {
                     </div>
                     <div style={{display:"flex",gap:"10px",alignSelf:"flex-end"}}>
                         <button className="btn-base btn-decline" onClick={() => {
-                            dispatch(userFiltersToDefault())
+                            dispatch(filtersToDefault())
                         }}>Reset
                         </button>
                         <button className="btn-base btn-confirm" onClick={handleApplyFilters}>Apply filters</button>

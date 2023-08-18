@@ -8,9 +8,15 @@ import {
     defaultState
 } from "./generic";
 import { GetLocalWorkedHour } from '../../utils';
-import {basicPagingReducers, defaultPagingState, PagingEntityType, PagingInputType} from "@redux/types/filterTypes.ts";
+import {
+    basicPagingReducers,
+    defaultPagingState,
+    FiltersType,
+    PagingEntityType,
+    PagingInputType
+} from "@redux/types/filterTypes.ts";
 
-export interface WorkedFetchType extends PagingInputType{
+export interface WorkedFetchType extends PagingInputType,FiltersType{
     userId:number
 }
 

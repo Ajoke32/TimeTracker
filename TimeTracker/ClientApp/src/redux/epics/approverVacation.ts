@@ -47,7 +47,7 @@ const fetchVacationsRequestsEpic: Epic = (action: Observable<PayloadAction<Worke
     action.pipe(
         ofType("approverVacation/fetchRequests"),
         mergeMap(action =>
-            FetchVacationsRequest(action.payload.userId,action.payload.take,action.payload.skip)
+            FetchVacationsRequest(action.payload.userId,action.payload.take,action.payload.skip,action.payload.group)
                 .pipe(
                     mergeMap(async resp => {
                         if (resp.response.errors != null) {

@@ -3,6 +3,8 @@ import {AjaxQuery} from "./query";
 import {ReadCookie} from "../../utils";
 import {ApproverVacation} from "../types";
 import moment from "moment";
+import {WhereFilter} from "@redux/types/filterTypes.ts";
+import {WorkedFetchType} from "@redux/slices";
 
 
 
@@ -17,10 +19,10 @@ export function AddVacationQuery(vacation:VacationInputType) {
     )
 }
 
-export function FetchVacationsRequest(id:number,take:number,skip:number){
+export function FetchVacationsRequest(id:number,take:number,skip:number,group:WhereFilter[]){
     return AjaxQuery<{ approverVacationQuery: { requests:ApproverVacation[]}}>(
-        'query GetRequests($userId:Int!,$take:Int,$skip:Int){approverVacationQuery{requests(userId:$userId,take:$take,skip:$skip){id,isApproved,isDeleted,vacation{vacationState,id,endDate,message,startDate,user{firstName,lastName,email}}}}}',
-        {userId:id,take:take,skip:skip}
+        'query GetRequests($userId:Int!,$take:Int,$skip:Int,$group:[Where]!){approverVacationQuery{requests(userId:$userId,take:$take,skip:$skip,group:$group){id,isApproved,isDeleted,vacation{vacationState,id,endDate,message,startDate,user{firstName,lastName,email}}}}}',
+        {userId:id,take:take,skip:skip,group:group}
     )
 }
 
@@ -32,11 +34,11 @@ export function UpdateVacationState(id:number){
     )
 }
 
-export function FetchUserVacations(userId:number){
+export function FetchUserVacations(input:WorkedFetchType){
 
     return AjaxQuery<{ vacationQuery:{userVacations:Vacation[]} }>(
-        'query GetUserVacations($id:Int!){vacationQuery{userVacations(userId:$id){id,vacationState,deletedAt,isDeleted,haveAnswer,endDate,startDate,message}}}',
-        {id:userId}
+        'query GetUserVacations($id:Int!,$take:Int,$skip:Int,$group:[Where!]){vacationQuery{userVacations(userId:$id,take:$take,skip:$skip,group:$group){id,vacationState,deletedAt,isDeleted,haveAnswer,endDate,startDate,message}}}',
+        {id:input.userId,take:input.take,skip:input.skip,group:input.group}
     )
 }
 

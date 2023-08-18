@@ -45,10 +45,10 @@ export interface PagingInputType{
     take:number,
     skip:number,
 }
-
+export type FilterAndPagingInputType = PagingInputType|FiltersType
 
 export const basicFilteringReducers={
-    addFilter:(state:OrderingPagingFilterType,action:PayloadAction<WhereFilter>)=>{
+    addFilter:(state:FiltersType,action:PayloadAction<WhereFilter>)=>{
         const filter = state.group.find(f=>f.property==action.payload.property);
         if(filter){
             state.group = state.group.map(f=>{
@@ -62,13 +62,13 @@ export const basicFilteringReducers={
         }
 
     },
-    addFilters:(state:OrderingPagingFilterType,action:PayloadAction<WhereFilter[]>)=>{
+    addFilters:(state:FiltersType,action:PayloadAction<WhereFilter[]>)=>{
         state.group = state.group.concat(action.payload);
     },
-    filtersToDefault:(state:OrderingPagingFilterType)=>{
+    filtersToDefault:(state:FiltersType)=>{
         state.group=[];
     },
-    removeFilter:(state:OrderingPagingFilterType,action:PayloadAction<string>)=>{
+    removeFilter:(state:FiltersType,action:PayloadAction<string>)=>{
         state.group = state.group.filter(f=>f.property!==action.payload);
     },
 }

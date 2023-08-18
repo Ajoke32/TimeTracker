@@ -10,7 +10,12 @@ import {
     ApproverVacation, ApproverVacationUpdate, Vacation,
     VacationApproverInput
 } from "../types";
-import {basicPagingReducers, defaultPagingState, PagingEntityType} from "@redux/types/filterTypes.ts";
+import {
+    basicFilteringReducers,
+    basicPagingReducers,
+    defaultPagingState,
+    PagingEntityType, WhereFilter
+} from "@redux/types/filterTypes.ts";
 import {WorkedFetchType} from "@redux/slices/workedHoursSlice.ts";
 
 
@@ -20,7 +25,8 @@ const initialState:VacationApproverState = {
     updated:false,
     approverVacation:null,
     deleted:false,
-    ...{...defaultPagingState,take:4,perPage:4}
+    ...{...defaultPagingState,take:4,perPage:4},
+    group:[]
 }
 
 const approverVacationsSlice = createSlice({
@@ -78,7 +84,8 @@ const approverVacationsSlice = createSlice({
         updateToDefaultFail:createErrorReducer(),
         updateToDefaultSuccess:createSuccessReducerWithoutPayload(),
 
-        ...basicPagingReducers
+        ...basicPagingReducers,
+        ...basicFilteringReducers
     },
 });
 
@@ -94,4 +101,8 @@ export const  {updateApproverVacationState,
     ,deleteByVacationId,fetchApproverVacationById,
     fetchApproverVacationByIdSuccess,fetchApproverVacationByIdFail
     ,updateToDefaultSuccess,updateToDefaultFail,updateToDefault
-    ,setSkip:setVacationRequestSkip,setTake:setVacationRequestsTake} =  approverVacationsSlice.actions
+    ,setSkip:setVacationRequestSkip,
+    setTake:setVacationRequestsTake,
+    setPerPage:setVacationRequestPerPage,
+    addFilters:addVacationRequestFilter,
+    filtersToDefault:vacationRequestsFiltersToDefault} =  approverVacationsSlice.actions

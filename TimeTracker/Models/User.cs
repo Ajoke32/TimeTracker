@@ -22,6 +22,8 @@ public class User:SoftDeleteBase
     
     [Required] public WorkType WorkType { get; set; }
     
+    public int AvailableVacationDays { get; set; }
+    
     public string? RefreshToken { get; set; }
     
     public DateTime? RefreshTokenExpiration { get; set; }

@@ -32,7 +32,7 @@ public sealed class WorkedHourQuery : ObjectGraphType
                 
                 workedHours = workedHours.OrderByDescending(w=>w.Id);
                 
-                return visitor.Visit(workedHours,ctx);
+                return visitor.VisitPaging(workedHours,ctx);
             })
             .Description("gets all user's worked hours")
             .UsePaging();

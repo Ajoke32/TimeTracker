@@ -86,17 +86,24 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddDataProtection();
 
-/*
-builder.Services.AddQuartz(q =>
+/*builder.Services.AddQuartz(q =>
 {
     q.UseMicrosoftDependencyInjectionJobFactory();
-    var jobKey = new JobKey("auto");
-    q.AddJob<AccuralOfHours>(o=>o.WithIdentity(jobKey));
+    var accuralOfHoursJobKey = new JobKey("auto");
+    var accuralOfVacationDays = new JobKey("auto-vacations");
+    q.AddJob<AccuralOfHours>(o=>o.WithIdentity(accuralOfHoursJobKey));
+    q.AddJob<AccrualOfVacationDays>(o=>o.WithIdentity(accuralOfVacationDays));
     q.AddTrigger(o =>
     {
-        o.ForJob(jobKey)
+        o.ForJob(accuralOfHoursJobKey)
             .WithIdentity("auth-trigger")
             .WithCronSchedule("0 0 0 ? * MON,FRI *");
+    });
+    q.AddTrigger(o =>
+    {
+        o.ForJob(accuralOfVacationDays)
+            .WithIdentity("auth-trigger")
+            .WithCronSchedule("0 0 08 1 * ?");
     });
 });
 
