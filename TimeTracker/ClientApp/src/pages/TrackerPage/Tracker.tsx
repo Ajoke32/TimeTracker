@@ -16,7 +16,8 @@ export const Tracker = () => {
         dispatch(fetchWorkedHours({
             userId:user!.id,
             take:take,
-            skip:skip
+            skip:skip,
+            group:[]
         }))
     }, [take,skip])
 
