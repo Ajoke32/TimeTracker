@@ -3,12 +3,14 @@ using GraphQL.Types;
 using TimeTracker.Absctration;
 using TimeTracker.GraphQL.Types;
 using TimeTracker.Models;
+using TimeTracker.Utils.Filters;
+using TimeTracker.Visitors;
 
 namespace TimeTracker.GraphQL.Queries;
 
 public sealed class VacationsQuery:ObjectGraphType
 {
-    public VacationsQuery(IUnitOfWorkRepository uow)
+    public VacationsQuery(IUnitOfWorkRepository uow,IGraphQlArgumentVisitor visitor)
     {
         Field<ListGraphType<VacationType>>("userVacations")
             .Argument<int>("userId")
@@ -16,9 +18,12 @@ public sealed class VacationsQuery:ObjectGraphType
             {
                 var id = _.GetArgument<int>("userId");
                 
-                return await uow.GenericRepository<Vacation>()
+                var vacations  =  await uow.GenericRepository<Vacation>()
                     .GetAsync(x => x.UserId == id);
-            });
+
+                return visitor.Visit(vacations, _);
+            }).UseFiltering()
+            .UsePaging();
 
         Field<VacationType>("vacation")
             .Argument<int>("id")

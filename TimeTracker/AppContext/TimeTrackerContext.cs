@@ -87,7 +87,7 @@ public class TimeTrackerContext:DbContext
             .Property(w => w.Date)
             .HasConversion(w => w.ToDateTime(new TimeOnly()),
                 w=>DateOnly.FromDateTime(w));
-        
+
         base.OnModelCreating(modelBuilder);
     }
 

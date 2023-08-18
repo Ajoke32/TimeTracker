@@ -24,9 +24,11 @@ public sealed class ApproverVacationQuery:ObjectGraphType
                         .GetAsync(
                             includeProperties:"Vacation.User",
                             filter:a=>a.UserId==id);
+                req = req.OrderByDescending(av => av.IsApproved == null);
 
                 return visitor.Visit(req,context);
-            }).UsePaging();
+            }).UsePaging()
+            .UseFiltering();
 
         Field<ApproverVacationType>("approverVacation")
             .Argument<int>("id")

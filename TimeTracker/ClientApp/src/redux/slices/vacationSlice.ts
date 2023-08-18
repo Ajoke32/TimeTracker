@@ -7,14 +7,23 @@ import {
 } from "./generic";
 import {VacationState} from "../intrerfaces";
 import {Vacation, VacationChangeType, VacationInputType} from "../types";
+import {
+    basicFilteringReducers,
+    basicPagingReducers,
+    defaultPagingState,
+    PagingEntityType
+} from "@redux/types/filterTypes.ts";
+import {WorkedFetchType} from "@redux/slices/workedHoursSlice.ts";
 
 
 const initialState:VacationState = {
     ...defaultState,
+    ...defaultPagingState,
     created:false,
     vacations:[],
     vacation:null,
-    updated:null
+    updated:null,
+    group:[]
 }
 
 const vacationsSlice = createSlice({
@@ -36,10 +45,11 @@ const vacationsSlice = createSlice({
         updateVacationStateSuccess:createSuccessReducerWithoutPayload(),
         updateVacationStateFail:createErrorReducer(),
 
-        fetchUserVacations:createPendingReducerWithPayload<typeof initialState,number>(),
-        fetchUserVacationsSuccess:createSuccessReducerWithPayload<typeof initialState,Vacation[]>
-        ((state:VacationState,action:PayloadAction<Vacation[]>)=>{
-            state.vacations=action.payload;
+        fetchUserVacations:createPendingReducerWithPayload<typeof initialState,WorkedFetchType>(),
+        fetchUserVacationsSuccess:createSuccessReducerWithPayload<typeof initialState,PagingEntityType<Vacation>>
+        ((state,action)=>{
+            state.vacations=action.payload.entities;
+            state.extensions = action.payload.extensions;
         }),
         fetchUserVacationsFail:createErrorReducer(),
 
@@ -86,7 +96,10 @@ const vacationsSlice = createSlice({
         ((state,action)=>{
             state.vacation=action.payload;
         }),
-        fetchVacationByIdFail:createErrorReducer()
+        fetchVacationByIdFail:createErrorReducer(),
+
+        ...basicFilteringReducers,
+        ...basicPagingReducers
     }
 });
 
@@ -106,4 +119,7 @@ export const  {createVacation,
     ,updateVacation
     ,deleteVacationSuccess,fetchVacationById,
     deleteVacationFail,fetchVacationByIdFail,
-    deleteVacation,fetchVacationByIdSuccess} =  vacationsSlice.actions;
+    deleteVacation,fetchVacationByIdSuccess
+    ,addFilters:addVacationFilters,addFilter:addVacationFilter
+    ,filtersToDefault:vacationFiltersToDefault,setTake:setVacationsTake
+    ,setSkip:setVacationsSkip,setPerPage:setVacationsPerPage} =  vacationsSlice.actions;
