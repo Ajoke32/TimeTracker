@@ -68,11 +68,18 @@
     border: 1px solid lightgray;
     border-radius: 8px;
 }
+
+
 .input-search:hover,
-.input-search:focus{
+.input-search:focus,.input-per-page:is(:hover,:focus){
     box-shadow: 0 0 3px 0 #0aa9ff;
 }
-
+.input-per-page{
+    width: 40px;
+    border: 1px solid lightgray;
+    border-radius: 8px;
+    text-align: center;
+}
 .btn-confirm{
     background-color: #70e000;
 }

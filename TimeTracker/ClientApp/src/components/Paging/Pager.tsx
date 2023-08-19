@@ -15,14 +15,15 @@ const Pager = ({setSkip,setTake,capacity=0,perPage,take,skip,extensions}:PagerPr
 
     const [activePage,setActivePage] = useState<number>(1);
     const dispatch = useAppDispatch();
-    const totalPages = calculateTotalPages(extensions?.count!,take);
     const initialCapacity = capacity;
     capacity=capacity*3-(capacity-1);
 
     const [pagesToDisplay,setPagesToDisplay] = useState<number[]>([]);
 
     useEffect(() => {
+
         const pages= [];
+        const totalPages = calculateTotalPages(extensions?.count!,take);
         for(let i=0;i<totalPages;i++){
             if(i===capacity){
                 break;
@@ -30,7 +31,7 @@ const Pager = ({setSkip,setTake,capacity=0,perPage,take,skip,extensions}:PagerPr
             pages.push(i+1);
         }
         setPagesToDisplay(pages);
-    }, []);
+    }, [perPage]);
 
     function handlePageClick(page:number){
         dispatch(setTake(perPage*page));
@@ -80,7 +81,7 @@ const Pager = ({setSkip,setTake,capacity=0,perPage,take,skip,extensions}:PagerPr
                 ))
             }
 
-            <button  className={`arrow-wrapper right-arrow ${take>extensions?.count!?'inactive':''}`} disabled={take>extensions?.count!}  onClick={()=>{
+            <button  className={`arrow-wrapper right-arrow ${take>=extensions?.count!?'inactive':''}`} disabled={take>=extensions?.count!}  onClick={()=>{
                 dispatch(setTake(take+perPage))
                 dispatch(setSkip(skip+perPage))
                 setActivePage(prevState => prevState+1);

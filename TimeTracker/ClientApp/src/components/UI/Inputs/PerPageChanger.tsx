@@ -15,7 +15,7 @@ const PerPageChanger = ({count,setPerPage,perPage}:PerPageChangerProps) => {
     const dispatch = useAppDispatch();
     function changeTake(e:React.ChangeEvent<HTMLInputElement>){
         const newValue = parseInt(e.currentTarget.value);
-        if(newValue<=count) {
+        if(newValue<=count&&newValue>0) {
             dispatch(setPerPage(parseInt(e.currentTarget.value)));
             setTakeValue(parseInt(e.currentTarget.value));
             return;
@@ -25,7 +25,8 @@ const PerPageChanger = ({count,setPerPage,perPage}:PerPageChangerProps) => {
 
 
     return (
-        <input onChange={(e)=>changeTake(e)} value={takeValue} type="number" placeholder="take" className="input-search"/>
+        <input onChange={(e)=>changeTake(e)} value={takeValue}
+               type="number" placeholder="take" className="input-per-page"/>
     );
 };
 

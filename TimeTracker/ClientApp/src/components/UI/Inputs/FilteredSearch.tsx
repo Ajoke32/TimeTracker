@@ -3,6 +3,7 @@ import {ActionCreatorWithoutPayload, ActionCreatorWithPayload} from "@reduxjs/to
 import {addUsersFilters, userFiltersToDefault} from "@redux/slices";
 import {WhereFilter} from "@redux/types/filterTypes.ts";
 import {useAppDispatch} from "@hooks/customHooks.ts";
+import {SearchInput} from "@components/UI";
 
 interface FilteredSearchProps{
     fieldsToSearch:string[],
@@ -13,9 +14,8 @@ interface FilteredSearchProps{
 const FilteredSearch = ({filtersToDefault,addFilters,fieldsToSearch}:FilteredSearchProps) => {
     const dispatch =  useAppDispatch();
 
-    const [search,setSearch] = useState<string>("");
 
-    function handleSearch(){
+    function handleSearch(search:string){
         dispatch(filtersToDefault());
         const filters:WhereFilter[] = [];
         for(const field of fieldsToSearch){
@@ -23,16 +23,15 @@ const FilteredSearch = ({filtersToDefault,addFilters,fieldsToSearch}:FilteredSea
         }
         dispatch(addFilters(filters));
     }
+    function deleteHandle(e:React.ChangeEvent<HTMLInputElement>){
+        if(e.target.value===""){
+            dispatch(filtersToDefault());
+        }
+    }
 
     return (
         <>
-            <input onChange={(e)=>{
-                setSearch(e.target.value);
-                if(e.target.value===""){
-                    dispatch(filtersToDefault());
-                }
-            }} type="text" placeholder="search" className="input-search"/>
-            <button onClick={handleSearch} className="btn-base btn-confirm">search</button>
+            <SearchInput onChangeAdditional={deleteHandle} onSearch={handleSearch} name={"search"} placeholder={"Search"} />
         </>
     );
 };
