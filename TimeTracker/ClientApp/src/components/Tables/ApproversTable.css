@@ -39,7 +39,11 @@
     cursor: pointer;
     transition: 0.2s;
 }
-
+.btn-icon{
+    border: none;
+    outline: none;
+    background: #fff;
+}
 .request-item .more-btn {
     background: transparent;
     border: .5px solid var(--color-black);

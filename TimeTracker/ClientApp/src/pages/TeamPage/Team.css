@@ -57,28 +57,67 @@
 }
 
 .pages-wrapper{
+    background-color: #fff;
+    border-radius: 30px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0 7px 29px 0;
     margin-top: 10px;
     display: flex;
-    width: 50%;
+    padding: 15px;
     align-self: center;
     justify-content: center;
     align-items: center;
     gap:5px;
 }
 .pages-wrapper>div{
-    font-size: 20px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-family: sans-serif;
     cursor: pointer;
-    padding: 5px 15px;
-    text-align: center;
+    border-radius: 50%;
+}
+.pages-wrapper>div>span{
+    font-size: 15px;
+}
+.arrow-wrapper{
+    border-radius: 50%;
+    background: none;
+}
+.arrow-wrapper:hover{
     border: 1px solid lightblue;
-    border-radius: 8px;
+    border-radius: 50%;
+    background-color: chartreuse;
+}
+.inactive{
+    opacity: 0.5;
+}
+.right-arrow{
+    margin-left: 10px;
+    transform:rotate(-90deg);
+    background-image: url("../../assets/images/arrow-down.png");
+}
+.left-arrow{
+    margin-right: 10px;
+    transform: rotate(90deg);
+    background-image: url("/src/assets/images/arrow-down.png");
+}
+.arrow-wrapper{
+    width: 20px;
+    height: 20px;
+    border: none;
+    background-size: contain;
+    background-position: center 1px;
+    cursor: pointer;
+    background-repeat: no-repeat;
 }
 .pages-wrapper>div:hover{
     background-color: lightblue;
 }
 .active-page{
-    background-color: #79bdd0;
+    background-color: #00a6fb;
+    color: white;
 }
 
 .filters-wrapper span{

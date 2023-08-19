@@ -64,7 +64,7 @@ export const VacationsRequestTable = () => {
                     })}
                 </div>
             }
-            {extensions?.count!>perPage&&<Pager take={take} skip={skip} setSkip={setVacationRequestSkip} setTake={setVacationRequestsTake}
+            {extensions?.count!>perPage&&<Pager capacity={2} take={take} skip={skip} setSkip={setVacationRequestSkip} setTake={setVacationRequestsTake}
                                                extensions={extensions} perPage={perPage}
             />}
         </div>
