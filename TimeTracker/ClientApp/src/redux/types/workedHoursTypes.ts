@@ -25,3 +25,14 @@ export interface UpdateWorkedHourType {
     startTime: string,
     endTime: string,
 }
+
+export interface WorkedHoursStatistic{
+    actuallyWorked:string,
+    actuallyWorkedHours:string,
+    needToWork:string
+}
+
+export interface WorkedHoursStatisticInput{
+    userId:number,
+    date:Date
+}

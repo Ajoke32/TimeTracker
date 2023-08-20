@@ -1,10 +1,10 @@
 import { Epic, ofType } from "redux-observable";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { catchError, map, mergeMap, Observable, of } from "rxjs";
-import { CreateWorkedHourType, UpdateWorkedHourType, WorkedHour } from '@redux/types';
+import {CreateWorkedHourType, UpdateWorkedHourType, WorkedHour, WorkedHoursStatisticInput} from '@redux/types';
 import {
     UpdateWorkedHoursQuery, FetchWorkedHoursQuery,
-    DeleteWorkedHoursQuery, CreateWorkedHoursQuery
+    DeleteWorkedHoursQuery, CreateWorkedHoursQuery, WorkedHoursStatistic
 } from "@redux/queries";
 import {
     createWorkedHourFail,
@@ -13,12 +13,13 @@ import {
     deleteWorkedHourSuccess,
     editWorkedHourFail,
     editWorkedHourSuccess,
-    fetchWorkedHoursFail,
+    fetchWorkedHoursFail, fetchWorkedHoursStatisticFail, fetchWorkedHoursStatisticSuccess,
     fetchWorkedHoursSuccess,
     resetTimerFail,
     resetTimerSuccess, WorkedFetchType
 } from '../slices';
 import { GetErrorMessage } from "../../utils";
+import {act} from "react-dom/test-utils";
 
 export const createWorkedHourEpic: Epic = (action: Observable<PayloadAction<CreateWorkedHourType>>, state) =>
     action.pipe(
@@ -129,5 +130,20 @@ export const deleteWorkedHourEpic: Epic = (action: Observable<PayloadAction<numb
                 )
         )
     )
-
-export const workedHourEpics = [fetchWorkedHoursEpic, createWorkedHourEpic, editWorkedHourEpic, deleteWorkedHourEpic, resetTimerEpic, resetTimerSuccessEpic]
+export const fetchWorkedHourStatistic:Epic=(action:Observable<PayloadAction<WorkedHoursStatisticInput>>)=>
+    action.pipe(
+        ofType('workedHours/fetchWorkedHoursStatistic'),
+        mergeMap(act=>
+            WorkedHoursStatistic(act.payload.userId,act.payload.date)
+                .pipe(
+                    map(res=>{
+                        if (res.response.errors != null) {
+                            return fetchWorkedHoursStatisticFail(res.response.errors[0].message)
+                        }
+                        return fetchWorkedHoursStatisticSuccess(res.response.data.workedHourQuery.getStatistic);
+                    }),
+                    catchError((e: Error) => of(fetchWorkedHoursStatisticFail("error")))
+                )
+        )
+    )
+export const workedHourEpics = [fetchWorkedHourStatistic,fetchWorkedHoursEpic, createWorkedHourEpic, editWorkedHourEpic, deleteWorkedHourEpic, resetTimerEpic, resetTimerSuccessEpic]
