@@ -69,7 +69,7 @@ export const Team = () => {
                     </div>
                 </div>
                 {count>perPage&&
-                    <Pager skip={skip} take={take} setSkip={setUsersSkip} setTake={setUsersTake}
+                    <Pager capacity={2} skip={skip} take={take} setSkip={setUsersSkip} setTake={setUsersTake}
                            extensions={{count:count}} perPage={perPage} />
                 }
 

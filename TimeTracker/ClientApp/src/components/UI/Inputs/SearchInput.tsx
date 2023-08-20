@@ -1,10 +1,12 @@
 ﻿import {SearchInputProps} from "./InputProps";
 import './inputs.css'
 import searchInput from "../../../assets/images/search_input_icon.png"
-export const SearchInput = ({ name, placeholder, register,  onSearch }: SearchInputProps) => {
+import {useState} from "react";
+export const SearchInput = ({ name, placeholder, register,  onSearch,onChangeAdditional }: SearchInputProps) => {
+
+    const [search,setSearch] = useState<string>("");
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { value } = event.target;
-        onSearch(value);
+        setSearch(event.target.value);
     };
     
     
@@ -16,11 +18,16 @@ export const SearchInput = ({ name, placeholder, register,  onSearch }: SearchIn
                     name={name} 
                     placeholder={placeholder} 
                     {...register} 
-                    onChange={handleInputChange}
+                    onChange={(e)=>{
+                        handleInputChange(e);
+                        if(onChangeAdditional) {
+                            onChangeAdditional(e);
+                        }
+                    }}
                     className="search-input" 
                     autoComplete='off'
                     />
-                <button className="search-input__toggle-btn">
+                <button onClick={()=>onSearch(search)} className="search-input__toggle-btn">
                     <img src={searchInput}  alt="search"/>
                 </button>
             </div>

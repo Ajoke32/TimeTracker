@@ -43,9 +43,9 @@ export const VacationsRequestTable = () => {
                             <FilteredSearch fieldsToSearch={fieldsToSearch}
                                             filtersToDefault={vacationRequestsFiltersToDefault}
                                             addFilters={addVacationRequestFilter} />
-                            <PerPageChanger setPerPage={setVacationRequestPerPage} perPage={perPage} count={extensions?.count!} />
                         </div>
                         <span>{loading&&"Working on it..."}</span>
+                        <PerPageChanger setPerPage={setVacationRequestPerPage} perPage={perPage} count={extensions?.count!} />
                     </div>
                     {vacationRequests.length === 0 && <div className="empty info"><H4 value="You have no vacation requests"/></div>}
                     {vacationRequests.map(a=>{
@@ -64,7 +64,7 @@ export const VacationsRequestTable = () => {
                     })}
                 </div>
             }
-            {extensions?.count!>perPage&&<Pager take={take} skip={skip} setSkip={setVacationRequestSkip} setTake={setVacationRequestsTake}
+            {extensions?.count!>perPage&&<Pager capacity={2} take={take} skip={skip} setSkip={setVacationRequestSkip} setTake={setVacationRequestsTake}
                                                extensions={extensions} perPage={perPage}
             />}
         </div>

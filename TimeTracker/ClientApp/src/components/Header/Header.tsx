@@ -2,7 +2,7 @@
 import { ProfileAvatar, Timer } from "@components/UI";
 import { useAppDispatch, useTypedSelector } from "../../hooks";
 import { useEffect } from "react";
-import { startTimer, resetTimer, tick } from "@redux/slices";
+import {startTimer, resetTimer, tick, fetchWorkedHoursStatisticFail, fetchWorkedHoursStatistic} from "@redux/slices";
 import { useLocation } from 'react-router-dom'
 import { WorkedTime } from "@redux/types";
 import { GetFormattedUTCDateString, GetFormattedTimeString } from "../../utils";
@@ -12,7 +12,7 @@ export const Header = () => {
     const { user } = useTypedSelector(state => state.auth);
     const { isRunning, startedAt, hours, minutes, seconds } = useTypedSelector(state => state.timer);
     const isTrackerPage = (useLocation().pathname === '/tracker');
-
+    const {hoursToWork} = useTypedSelector(s=>s.workedHours);
     useEffect(() => {
         if (!isTrackerPage && isRunning) {
             const intervalId = setInterval(() => {
@@ -24,6 +24,10 @@ export const Header = () => {
             }
         }
     }, [dispatch, isRunning]);
+
+    useEffect(() => {
+        dispatch(fetchWorkedHoursStatistic({userId:user?.id!,date:new Date()}));
+    }, []);
 
     const handleStartStopButton = () => {
         if (!isRunning) {
@@ -64,7 +68,9 @@ export const Header = () => {
                     </div>
                 )}
             </div>
-
+            <div>
+                <span>Worked hours: {hoursToWork?.actuallyWorked}% / 100% ({hoursToWork?.actuallyWorkedHours}h/{hoursToWork?.needToWork}h)</span>
+            </div>
             <div className="header-profile__wrapper">
                 <div className="header-profile__notifications">
                     <div className="header-profile__notifications-inner">

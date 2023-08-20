@@ -121,7 +121,7 @@ export const VacationsTable = () => {
                 </div>
 
             {extensions?.count!>perPage&&
-                <Pager take={take} skip={skip} perPage={perPage}  setSkip={setVacationsSkip} extensions={extensions} setTake={setVacationsTake} />}
+                <Pager capacity={2} take={take} skip={skip} perPage={perPage}  setSkip={setVacationsSkip} extensions={extensions} setTake={setVacationsTake} />}
         </div>
     );
 };

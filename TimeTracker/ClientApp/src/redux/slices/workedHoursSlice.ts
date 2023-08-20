@@ -1,6 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { WorkedHoursSlice } from '..';
-import { WorkedHour, UpdateWorkedHourType, CreateWorkedHourType } from '@redux/types';
+import {
+    WorkedHour,
+    UpdateWorkedHourType,
+    CreateWorkedHourType,
+    WorkedHoursStatisticInput,
+    WorkedHoursStatistic
+} from '@redux/types';
 import {
     createErrorReducer,
     createPendingReducerWithPayload,
@@ -23,7 +29,8 @@ export interface WorkedFetchType extends PagingInputType,FiltersType{
 const initialState: WorkedHoursSlice = {
     ...defaultState,
     ...{...defaultPagingState,take:4,perPage:4},
-    workedHours: []
+    workedHours: [],
+    hoursToWork:undefined
 };
 
 const workedHoursSlice = createSlice({
@@ -64,10 +71,17 @@ const workedHoursSlice = createSlice({
 
         deleteWorkedHour: createPendingReducerWithPayload<WorkedHoursSlice, number>(),
         deleteWorkedHourSuccess: createSuccessReducerWithPayload<WorkedHoursSlice, number>(
-            (state: WorkedHoursSlice, action: PayloadAction<number>) => {
+            (state, action) => {
                 state.workedHours = state.workedHours.filter(wh => wh.id != action.payload)
             }),
         deleteWorkedHourFail: createErrorReducer(),
+
+        fetchWorkedHoursStatistic:createPendingReducerWithPayload<typeof initialState,WorkedHoursStatisticInput>(),
+        fetchWorkedHoursStatisticSuccess:createSuccessReducerWithPayload<typeof initialState,WorkedHoursStatistic>
+        ((state,action)=>{
+            state.hoursToWork=action.payload;
+        }),
+        fetchWorkedHoursStatisticFail:createErrorReducer(),
         ...basicPagingReducers
     },
 });
@@ -77,6 +91,7 @@ export const {
     editWorkedHour, editWorkedHourFail, editWorkedHourSuccess,
     deleteWorkedHour, deleteWorkedHourFail, deleteWorkedHourSuccess,
     createWorkedHour, createWorkedHourFail, createWorkedHourSuccess,
-    setTake:setWorkedHoursTake,setSkip:setWorkedHourSkip
+    setTake:setWorkedHoursTake,setSkip:setWorkedHourSkip,fetchWorkedHoursStatistic
+    ,fetchWorkedHoursStatisticSuccess,fetchWorkedHoursStatisticFail
 } = workedHoursSlice.actions;
 export const workedHours = workedHoursSlice.reducer;

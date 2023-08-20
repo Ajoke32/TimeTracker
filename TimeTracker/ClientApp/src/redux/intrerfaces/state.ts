@@ -1,6 +1,6 @@
 import { CalendarCell, CalendarEvent, WorkPlan } from '@redux/types/calendarTypes';
 import { User } from './'
-import { ApproverVacation, Vacation, WorkedHour } from '@redux/types';
+import {ApproverVacation, Vacation, WorkedHour, WorkedHoursStatistic} from '@redux/types';
 import {
     FiltersType,
     OrderingPagingFilterType,
@@ -59,7 +59,8 @@ export interface VacationState extends DefaultState,FiltersType,PagingWithExtraI
 }
 
 export interface WorkedHoursSlice extends DefaultState,PagingType,PagingExtraInfo {
-    workedHours: WorkedHour[]
+    workedHours: WorkedHour[],
+    hoursToWork?:WorkedHoursStatistic
 }
 
 export interface CalendarSlice extends DefaultState {
