@@ -94,13 +94,6 @@ export const UsersTableSmall = () => {
                 }
             </div>
 
-            {count > perPage &&
-                <div className='pager-wrapper'>
-                    <Pager skip={skip} take={take} setSkip={setUsersSkip} setTake={setUsersTake}
-                        extensions={{ count: count }} perPage={perPage} />
-                </div>
-            }
-
             <div className='users-list-wrapper'>
                 {users.map(u =>
                     <div key={u.id} >
@@ -109,6 +102,12 @@ export const UsersTableSmall = () => {
                 )}
             </div>
 
+            {count > perPage &&
+                <div className='pager-wrapper'>
+                    <Pager capacity={2} skip={skip} take={take} setSkip={setUsersSkip} setTake={setUsersTake}
+                        extensions={{ count: count }} perPage={perPage} />
+                </div>
+            }
 
             <div className='table-controls-wrapper'>
                 <div className='add-user-button-wrapper'>

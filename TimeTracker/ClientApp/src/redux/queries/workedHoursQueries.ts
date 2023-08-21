@@ -1,5 +1,6 @@
 import { AjaxQuery } from './query';
-import { WorkedHour, CreateWorkedHourType, UpdateWorkedHourType } from '@redux/types';
+import { WorkedHour, CreateWorkedHourType, UpdateWorkedHourType,WorkedHoursStatistic } from '@redux/types';
+import moment from "moment";
 
 export function FetchWorkedHoursQuery(userId: number,take:number,skip:number) {
   return AjaxQuery<{ workedHourQuery: { workedHours: WorkedHour[] } }>(
@@ -66,5 +67,20 @@ export function CreateWorkedHoursQuery(workedHour: CreateWorkedHourType) {
     }`,
     { workedHour: workedHour },
     //token
+  )
+}
+
+export function WorkedHoursStatistic(userId:number,date:Date){
+  return AjaxQuery<{ workedHourQuery: { getStatistic: WorkedHoursStatistic } }>(
+      `query GetWorkedHours($id:Int!,$date:DateOnly!){
+        workedHourQuery{
+          getStatistic(userId:$id,date:$date){
+            actuallyWorked,
+            needToWork,
+            actuallyWorkedHours
+          }
+        }
+      }`,
+      { date: moment(date).format("YYYY-MM-DD"),id:userId },
   )
 }

@@ -7,7 +7,7 @@ import {useAppDispatch, useTypedSelector} from "@hooks/customHooks.ts";
 export const UsersTable = ({ users }: { users: User[] }) => {
 
     const dispatch = useAppDispatch()
-    const {orderBy}  = useTypedSelector(s=>s.users);
+
     const handleConfirmButtonClick = (value: number) => {
         const conf = confirm("Are you sure?")
         if(conf){

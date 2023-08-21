@@ -11,6 +11,7 @@ export interface TextInputProps extends InputProps{
 
 export interface SearchInputProps extends TextInputProps {
     onSearch: any;
+    onChangeAdditional?:( e:React.ChangeEvent<HTMLInputElement>)=>void
 }
 
 export interface CheckboxInputProps {

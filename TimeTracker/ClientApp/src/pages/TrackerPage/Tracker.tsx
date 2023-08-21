@@ -16,7 +16,8 @@ export const Tracker = () => {
         dispatch(fetchWorkedHours({
             userId:user!.id,
             take:take,
-            skip:skip
+            skip:skip,
+            group:[]
         }))
     }, [take,skip])
 
@@ -37,7 +38,7 @@ export const Tracker = () => {
                     ))
                 }
                 {extensions?.count!>perPage&&
-                    <Pager take={take} skip={skip} perPage={perPage} setTake={setWorkedHoursTake}
+                    <Pager capacity={2} take={take} skip={skip} perPage={perPage} setTake={setWorkedHoursTake}
                            setSkip={setWorkedHourSkip} extensions={{count:extensions?.count!}} />}
             </div>
         </div >

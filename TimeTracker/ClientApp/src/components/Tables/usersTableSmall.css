@@ -6,6 +6,11 @@
     width: 100%;
     display: flex;
     justify-content: center;
+    margin-bottom: 10px;
+}
+
+.pager-wrapper .pages-wrapper {
+    margin-top: 0;
 }
 
 .search-header {

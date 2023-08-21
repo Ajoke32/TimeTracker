@@ -11,44 +11,22 @@ public class LambdaBuilder
     public static Expression<Func<T, bool>> BuildLambda<T>(WhereExpression expression,string oprt,ParameterExpression parameter)
     {
         Expression body = null;
+        var props = expression.PropertyName.Split
+            (new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
         
-        var propertyName = expression.PropertyName;
+        MemberExpression property = Expression.Property(parameter, props[0]);
         
-        var property = Expression.Property(parameter, propertyName);
-        
-        var constant = GetConvertedConstantExpression<T>(propertyName,expression.CompareValue);
-        
-        if (oprt.IsNullOrEmpty())
+        for(var i=1;i<props.Length;i++)
         {
-            throw new Exception("empty operator");
-        }
-        
-        if (oprt == "eq")
-        {
-            body =  Expression.Equal(property, constant);
-        }
-        
-        if (oprt == "neq")
-        {
-            body = Expression.NotEqual(property, constant);
+           property = Expression.Property(property, props[i]);
         }
 
-        if (oprt == "gt")
-        {
-            body = Expression.GreaterThan(property, constant);
-        }
+        
+        var converted = EntityFiledTypeConverter.ConvertToFieldType(property.Type,expression.CompareValue,oprt);
+        var constant =Expression.Constant(converted);
 
-        if (oprt == "contains")
-        {
-            var method = typeof(string).GetMethod("Contains",new[] { typeof(string) });
-            body = Expression.Call(property, method, constant);
-        }
-        
-        if (oprt == "lt")
-        {
-            body = Expression.LessThan(property, constant);
-        }
-        
+        body = ApplyOperator(oprt,property, constant);
+
         return Expression.Lambda<Func<T, bool>>(body!, parameter);
     }
     public static ConstantExpression GetConvertedConstantExpression<T>(string propertyName,string compareValue)
@@ -56,5 +34,33 @@ public class LambdaBuilder
         var converted = EntityFiledTypeConverter.ConvertToFieldType<T>(propertyName, compareValue);
         
         return Expression.Constant(converted);
+    }
+
+    private static Expression ApplyOperator(string oprt,MemberExpression property, ConstantExpression constant)
+    {
+        
+        
+        switch (oprt)
+        {
+            case "eq":return Expression.Equal(property, constant);
+            case "leq": return Expression.LessThanOrEqual(property, constant);
+            case "geq": return Expression.GreaterThanOrEqual(property, constant);
+            case "neq":return Expression.NotEqual(property, constant);
+            case "gt":return Expression.GreaterThan(property, constant);
+            case "contains":
+            {
+                var method = typeof(string).GetMethod("Contains",new[] { typeof(string) });
+                
+                if (property.Type != typeof(DateTime))
+                {
+                    return Expression.Call(property, method, constant);
+                }
+                var toString = typeof(object).GetMethod("ToString");
+                return Expression.Call(Expression.Call(property, toString), method, constant);
+            }
+            case "lt":return Expression.LessThan(property, constant);
+            default: throw new Exception("operator not specified");
+        }
+
     }
 }

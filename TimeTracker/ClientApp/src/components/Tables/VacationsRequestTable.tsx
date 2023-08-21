@@ -1,38 +1,51 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import "./ApproversTable.css"
 import "./Table.css"
 import {useAppDispatch, useTypedSelector} from "../../hooks";
-import {fetchRequests, setVacationRequestSkip, setVacationRequestsTake} from "../../redux";
+import {
+    addVacationRequestFilter,
+    fetchRequests,
+    setVacationRequestPerPage,
+    setVacationRequestSkip,
+    setVacationRequestsTake,
+    vacationRequestsFiltersToDefault
+} from "../../redux";
 import {Loader} from "../UI";
 import MessageModal from "@components/UI/Modals/MessageModal.tsx";
 import {getApproverVacationString} from "../../utils/vacationHelper.ts";
 import {H4} from "@components/Headings";
 import Pager from "@components/Paging/Pager.tsx";
+import FilteredSearch from "@components/UI/Inputs/FilteredSearch.tsx";
+import PerPageChanger from "@components/UI/Inputs/PerPageChanger.tsx";
 
 export const VacationsRequestTable = () => {
 
     const dispatch = useAppDispatch()
-
-    const {vacationRequests,take,perPage,extensions,skip,error,loading} =
+    const fieldsToSearch = ['Vacation.User.Email', 'Vacation.User.FirstName','Vacation.User.LastName']
+    const {vacationRequests,take,group,perPage,extensions,skip,error,loading} =
         useTypedSelector(s=>s.approverVacations);
     const userId =
         useTypedSelector(s=>s.auth.user?.id);
 
     useEffect(()=>{
-        dispatch(fetchRequests({userId:userId!,take:take,skip:skip}))
-    },[take,skip])
+        dispatch(fetchRequests({userId:userId!,take:take,skip:skip,group:group}))
+    },[take,skip,group])
 
-    
+
     
     return (
         <div  className="vacations-content__wrapper">
-            <MessageModal />
             <span>{error && error}</span>
             {loading && vacationRequests.length === 0 ? <Loader />:
                 <div className="vacations-content__inner">
                     <div className="search-bar">
-                        <input type="text" placeholder="search by email" className="input-search"/>
+                        <div style={{display:"flex",gap:"10px"}}>
+                            <FilteredSearch fieldsToSearch={fieldsToSearch}
+                                            filtersToDefault={vacationRequestsFiltersToDefault}
+                                            addFilters={addVacationRequestFilter} />
+                        </div>
                         <span>{loading&&"Working on it..."}</span>
+                        <PerPageChanger setPerPage={setVacationRequestPerPage} perPage={perPage} count={extensions?.count!} />
                     </div>
                     {vacationRequests.length === 0 && <div className="empty info"><H4 value="You have no vacation requests"/></div>}
                     {vacationRequests.map(a=>{
@@ -51,7 +64,7 @@ export const VacationsRequestTable = () => {
                     })}
                 </div>
             }
-            {extensions?.count!>perPage&&<Pager take={take} skip={skip} setSkip={setVacationRequestSkip} setTake={setVacationRequestsTake}
+            {extensions?.count!>perPage&&<Pager capacity={2} take={take} skip={skip} setSkip={setVacationRequestSkip} setTake={setVacationRequestsTake}
                                                extensions={extensions} perPage={perPage}
             />}
         </div>
