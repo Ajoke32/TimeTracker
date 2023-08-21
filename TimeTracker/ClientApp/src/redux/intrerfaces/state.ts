@@ -58,8 +58,13 @@ export interface WorkedHoursSlice extends DefaultState,PagingType,PagingExtraInf
 
 export interface CalendarSlice extends DefaultState {
     events: FormattedCalendarArr<CalendarEvent>,
-    workPlans: FormattedCalendarArr<WorkPlan>,
+    workPlans: FormattedCalendarArr<SortedCalendarArr>,
     currentDate: Date
+}
+
+export interface SortedCalendarArr {
+    userId: number,
+    workPlans: WorkPlan[]
 }
 
 export interface FormattedCalendarArr<T> {

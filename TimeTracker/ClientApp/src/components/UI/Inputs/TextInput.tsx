@@ -6,7 +6,6 @@ export const TextInput = ({ name, placeholder, register, errors, isDisabled }: T
 
     return (
         <div>
-
             <input type="text"
                 name={name}
                 placeholder={placeholder}

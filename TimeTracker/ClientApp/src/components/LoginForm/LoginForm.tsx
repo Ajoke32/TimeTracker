@@ -55,7 +55,9 @@ export const LoginForm = () => {
                     <InputTooltip description="Don't have an account?" url="/auth" urlTitle="Get started" />
                 </div>
 
-                <LargeButton type="submit" value="Login" />
+                <div className='submit-wrapper'>
+                    <LargeButton type="submit" value="Login" />
+                </div>
             </form>
 
         </div>

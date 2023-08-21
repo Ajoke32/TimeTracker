@@ -1,4 +1,4 @@
-import {Dropdown, SearchInput, LargeButton, SmallButton,} from "../UI";
+import { Dropdown, SearchInput, LargeButton, SmallButton, } from "../UI";
 import {
     User,
     Permission,
@@ -8,49 +8,44 @@ import {
     userFiltersToDefault,
     usersPagingToDefault
 } from "../../redux";
-import {useAppDispatch, useTypedSelector} from "../../hooks";
-import {userFields} from "@redux/types";
+import { useAppDispatch, useTypedSelector } from "../../hooks";
+import { userFields } from "@redux/types";
 import Filter from "./Filters";
-import React, {useState} from "react";
-import {WhereFilter} from "@redux/types/filterTypes.ts";
+import React, { useState } from "react";
+import { WhereFilter } from "@redux/types/filterTypes.ts";
 
-export const UsersTableNavbar = ({ users, setFilteredUsers }: { users: User[], setFilteredUsers: any }) => {
+export const UsersTableNavbar = () => {
     const authState = useTypedSelector(state => state.auth);
-    const [search,setSearch] = useState<string>("");
-    const dispatch =useAppDispatch();
-    const fieldsToSearch = ["Email","FirstName","LastName"];
-    function handleChange(e:React.ChangeEvent<HTMLSelectElement>){
+    const dispatch = useAppDispatch();
+    const fieldsToSearch = ["Email", "FirstName", "LastName"];
+    function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
         dispatch(usersPagingToDefault());
-        if(e.target.value==="all"){
+        if (e.target.value === "all") {
             dispatch(removeUserFilter("IsDeleted"));
             return;
         }
         dispatch(addUserFilter({
-            operator:"eq",
-            value:e.target.value,
-            property:"IsDeleted"
+            operator: "eq",
+            value: e.target.value,
+            property: "IsDeleted"
         }));
     }
 
-    function onInput(value:string){
-        setSearch(value);
-    }
-    function handleSearch(){
+    function handleSearch(search: string) {
         dispatch(userFiltersToDefault());
-        const filters:WhereFilter[] = [];
-        for(const field of fieldsToSearch){
-            filters.push({property:field,operator:"contains",value:search,connector:"or"});
+        const filters: WhereFilter[] = [];
+        for (const field of fieldsToSearch) {
+            filters.push({ property: field, operator: "contains", value: search, connector: "or" });
         }
         dispatch(addUsersFilters(filters));
     }
     return (
         <div className="users-table__navbar">
             <div className="users-table__navbar-left">
-                <Dropdown onSelectChange={(e)=>handleChange(e)} options={[{ value: false, name: "Active" },
-                    { value: true, name: "Inactive" }]} title="Show users" />
-                <SearchInput name="search" placeholder="Search by name or email" onSearch={onInput} />
+                <Dropdown onSelectChange={(e) => handleChange(e)} options={[{ value: false, name: "Active" },
+                { value: true, name: "Inactive" }]} title="Show users" />
+                <SearchInput name="search" placeholder="Search by name or email" onSearch={handleSearch} />
             </div>
-            <button onClick={handleSearch} className={"btn-base btn-confirm"}>Search</button>
             {(authState.user!.permissions & Permission.Create) ?
                 <div className="users-table__navbar-btn">
                     <a className="add-user__link" href="/team/adduser">

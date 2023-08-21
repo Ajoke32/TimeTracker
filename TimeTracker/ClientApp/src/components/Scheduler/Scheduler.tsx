@@ -3,76 +3,50 @@ import "../Calendar/calendars.css"
 import { useState, useEffect } from 'react';
 import { CurrentDateElement } from "@components/UI";
 import { H4 } from "@components/Headings";
-import { CalendarType, CalendarCell } from '@redux/types';
+import { CalendarType, CalendarCell, SchedulerWorkedHour, SchedulerWorkPlan } from '@redux/types';
 import { useTypedSelector } from '@hooks/customHooks';
-import { GetFormattedTimeDifference, createCalendarCell } from '../../utils';
-import { SearchInput, UsersTable, UsersTableNavbar } from '..';
-import { User } from '@redux/intrerfaces';
-
-
-const hours = [
-    "08:00",
-    "09:00",
-    "10:00",
-    "11:00",
-    "12:00",
-    "13:00",
-    "14:00",
-    "15:00",
-    "16:00",
-    "17:00",
-    "18:00",
-    "19:00",
-    "20:00",
-];
-
-const convertTimeToIndex = (time: string) => {
-    const [hoursStr, minutesStr] = time.split(":");
-    let hours = parseInt(hoursStr, 10);
-    let minutes = parseInt(minutesStr, 10);
-
-    return minutes + hours * 60;
-};
-
-
-/*random color from grey to light blue/cyan */
-const generateRandomColor = () => {
-    const randomR = Math.floor(Math.random() * 100) + 100;
-    const randomG = Math.floor(Math.random() * 100) + 155;
-    const randomB = Math.floor(Math.random() * 100) + 200;
-    const randomOpacity = Math.random() * 0.3 + 0.3;
-
-    return `rgba(${randomR}, ${randomG}, ${randomB}, ${randomOpacity})`;
-}
-
-const colors = [
-    generateRandomColor(),
-    generateRandomColor(),
-    generateRandomColor(),
-    generateRandomColor(),
-    generateRandomColor(),
-]
+import { GetFormattedTimeDifference, addDay, createCalendarCell, substractDay } from '../../utils';
+import { SchedulerModal, UsersTableSmall, hours } from '..';
+import { TimeRow } from './TimeRow';
 
 const Scheduler = ({ data, back }: { data: { cell: CalendarCell, calendar: CalendarType }, back: (selectedDate: Date) => void }) => {
     const { cell, calendar } = data;
+
     const { events, workPlans } = useTypedSelector(state => state.calendar);
-    const { users } = useTypedSelector(state => state.users)
+    const { user } = useTypedSelector(state => state.auth)
 
     const [currentDate, setCurrentDate] = useState<Date>(cell.date);
     const [calendarCell, setCalendarCell] = useState<CalendarCell>(cell)
-    const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
+    const [workedHours, setWorkedHours] = useState<SchedulerWorkedHour[]>()
+    const [colors, setColors] = useState<string[]>([])
+    const [isFormHidden, setIsFormHidden] = useState<SchedulerWorkPlan | null>(null);
 
     const defaultRowsCount = 7;
 
-    const workedHours = calendarCell.workPlans.map(c => {
-        return {
-            startTime: c.startTime,
-            endTime: c.endTime,
-            totalTime: GetFormattedTimeDifference(c.startTime, c.endTime),
-            date: c.date,
-            user: `${c.firstName} ${c.lastName}`
-        }
-    })
+    useEffect(() => {
+        const wp: SchedulerWorkedHour[] = calendarCell.workPlans.map(c => ({
+            userId: c.userId,
+            workPlans: c.workPlans.map(p => {
+                return {
+                    id: p.id,
+                    startTime: p.startTime,
+                    endTime: p.endTime,
+                    totalTime: GetFormattedTimeDifference(p.startTime, p.endTime),
+                    date: p.date,
+                    user: `${p.firstName} ${p.lastName}`,
+                    userId: p.userId
+                }
+            })
+
+        }))
+
+        setWorkedHours(sortByCurrentUser(wp))
+        setColors(generateColors())
+    }, [calendarCell])
+
+    useEffect(() => {
+        setCalendarCell(createCalendarCell(currentDate, events.currentMonth, workPlans.currentMonth))
+    }, [workPlans])
 
     useEffect(() => {
         if (calendarCell.date != currentDate)
@@ -92,50 +66,47 @@ const Scheduler = ({ data, back }: { data: { cell: CalendarCell, calendar: Calen
                     )
     }, [currentDate])
 
-    const handlePrevDayButton = () => {
-        const newDate = new Date(currentDate);
-        newDate.setDate(newDate.getDate() - 1);
-
-        if (newDate.getDate() === 0) {
-            newDate.setDate(0);
-        }
-
-        setCurrentDate(newDate);
+    const handleDayButton = (date: Date) => {
+        setCurrentDate(date);
     }
 
-    const handleNextDayButton = () => {
-        const newDate = new Date(currentDate);
-        newDate.setDate(newDate.getDate() + 1);
+    const sortByCurrentUser = (wp: SchedulerWorkedHour[]) => {
+        const firstElement = wp.findIndex(w => w.userId == user!.id)
 
-        if (newDate.getDate() === 1) {
-            newDate.setDate(1);
+        if (firstElement !== -1) {
+            const elementToMove = wp.splice(firstElement, 1)[0];
+            wp.splice(0, 0, elementToMove);
         }
-
-        setCurrentDate(newDate);
+        return wp
     }
 
-    const handleSearch = (searchValue: string) => {
-        const filtered = users.filter(
-            (user) =>
-                (user.firstName.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    user.lastName.toLowerCase().includes(searchValue.toLowerCase())) ||
-                user.email.toLowerCase().includes(searchValue.toLowerCase())
-        );
-        setFilteredUsers(filtered);
-    };
+    const generateColors = () => {
+        let colorsArr = colors;
+        for (let i = colors!.length; i < calendarCell.workPlans.length; i++) {
+            const randomR = Math.floor(Math.random() * 100) + 100;
+            const randomG = Math.floor(Math.random() * 100) + 155;
+            const randomB = Math.floor(Math.random() * 100) + 200;
+            const randomOpacity = Math.random() * 0.3 + 0.3;
+
+            colorsArr.push(`rgba(${randomR}, ${randomG}, ${randomB}, ${randomOpacity})`)
+        }
+        return colorsArr;
+    }
 
     return (
         <div className="component-wrapper">
+            <SchedulerModal isHidden={isFormHidden} setIsHidden={setIsFormHidden}/>
+
             <div className="working-hours__wrapper">
                 <div className="calendar-header__wrapper">
                     <div className="calendar-date__wrapper">
                         <button onClick={() => { back(currentDate) }} id='return-button' />
-                        <CurrentDateElement date={currentDate} showFullDate={true} />
+                        <CurrentDateElement date={currentDate} showFullDate={true} additional={calendarCell.events.length > 0 ? calendarCell.events[0].title : undefined} />
                     </div>
                     <div className="calendar-actions">
                         <div>
-                            <button onClick={handlePrevDayButton}></button>
-                            <button onClick={handleNextDayButton}></button>
+                            <button onClick={() => { handleDayButton(substractDay(currentDate)) }}></button>
+                            <button onClick={() => { handleDayButton(addDay(currentDate)) }}></button>
                         </div>
                     </div>
                 </div>
@@ -147,29 +118,17 @@ const Scheduler = ({ data, back }: { data: { cell: CalendarCell, calendar: Calen
                         ))}
                     </div>
 
-                    {workedHours.length < 1 ? (
+                    {!workedHours ? (
                         <div className="no-data__message-wrapper"><H4 value="No data available" /></div>
                     ) : (
                         <div
                             className="working-hours__content"
                             style={{ gridTemplateRows: `repeat(${workedHours.length < 7 ? 7 : workedHours.length}, 1fr)` }}>
-                            {workedHours.map((item, index) => (
-                                <div className="content-row" key={index}>
-                                    {convertTimeToIndex(item.totalTime) > 15 &&
-                                        <div
-                                            className="working-hours__inner-row"
-                                            style={{
-                                                width: `${(convertTimeToIndex(item.totalTime) / (hours.length * 60)) * 100}%`,
-                                                background: generateRandomColor(),
-                                                left: `${((convertTimeToIndex(item.startTime) - convertTimeToIndex(hours[0])) / (hours.length * 60)) * 100}%`
-                                            }}
-                                        >
-                                            <div className="time-range__wrapper">
-                                                <span className="">{item.startTime.slice(0, -3)} - {item.endTime.slice(0, -3)}</span>
-                                            </div>
-                                        </div>}
-                                </div>
-                            ))}
+                            {workedHours.map((wh, index) => {
+                                return (
+                                    <TimeRow workedHour={wh} color={colors[index]} onClick={setIsFormHidden} key={index} />
+                                )
+                            })}
                             {workedHours.length < defaultRowsCount &&
                                 Array.from({ length: defaultRowsCount - workedHours.length }, (_, index) => (
                                     <div className="content-row" key={index}></div>
@@ -178,9 +137,10 @@ const Scheduler = ({ data, back }: { data: { cell: CalendarCell, calendar: Calen
                 </div>
             </div>
             <div className="side-form-wrapper">
-                
                 <div className="user-search-form">
-                    <SearchInput name="search" placeholder="Search by name or email" onSearch={handleSearch} />
+                    <div className='inner-wrapper'>
+                        <UsersTableSmall />
+                    </div>
                 </div>
             </div>
         </div>

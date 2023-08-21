@@ -20,12 +20,12 @@ const initialState: UsersSliceState = {
     group: [],
     ...defaultState,
     ...defaultPagingState,
-    orderBy:{
-        property:"",
-        direction:""
+    orderBy: {
+        property: "",
+        direction: ""
     },
     users: [],
-    count:0
+    count: 0
 }
 
 const usersSlice = createSlice({
@@ -37,8 +37,8 @@ const usersSlice = createSlice({
             (state, action) => {
                 state.users = [...action.payload.entities];
 
-                if(action.payload.extensions){
-                    state.count=action.payload.extensions.count;
+                if (action.payload.extensions) {
+                    state.count = action.payload.extensions.count;
                 }
             }),
         fetchUsersFail: createErrorReducer(),
@@ -59,10 +59,12 @@ export const users = usersSlice.reducer;
 export const { fetchUsersFail,
     fetchUsersSuccess, fetchUsers, deleteUserSuccess,
     deleteUserFail, deleteUser,
-    addFilter:addUserFilter,
-    setTake:setUsersTake,
-    setSkip:setUsersSkip,
-    setPerPage:setUsersPerPage,
-    filtersToDefault:userFiltersToDefault,
-    removeFilter:removeUserFilter,
-    setColumn:setUsersOrdering,toDefault:usersPagingToDefault,addFilters:addUsersFilters} = usersSlice.actions;
+    addFilter: addUserFilter,
+    setTake: setUsersTake,
+    setSkip: setUsersSkip,
+    setPerPage: setUsersPerPage,
+    filtersToDefault: userFiltersToDefault,
+    removeFilter: removeUserFilter,
+    setColumn: setUsersOrdering,
+    toDefault: usersPagingToDefault,
+    addFilters: addUsersFilters } = usersSlice.actions;

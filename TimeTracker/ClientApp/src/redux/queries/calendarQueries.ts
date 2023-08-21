@@ -1,5 +1,6 @@
+import { GetFormattedDateString, GetFormattedUTCTimeString } from '../../utils';
 import { AjaxQuery } from './query';
-import { WorkPlan, CalendarEvent, DateRangeType, CreateWorkedHourType, CreateCalendarEventType } from '@redux/types';
+import { WorkPlan, CalendarEvent, DateRangeType, SetWorkPlanType, SetCalendarEventType, FetchUsersPlansType, SchedulerWorkPlan, DeleteWorkPlanType } from '@redux/types';
 
 export function FetchCalendarEventsQuery(dateRange: DateRangeType) {
   return AjaxQuery<{ calendarEventQuery: { calendarEvents: CalendarEvent[] } }>(
@@ -17,13 +18,13 @@ export function FetchCalendarEventsQuery(dateRange: DateRangeType) {
   );
 }
 
-export function FetchWorkPlansQuery(data: { dateRange: DateRangeType, userId: number }) {
-  const { dateRange, userId } = data;
+export function FetchWorkPlansQuery(data: FetchUsersPlansType) {
+  const { dateRange, userIds } = data;
 
   return AjaxQuery<{ workPlanQuery: { workPlans: WorkPlan[] } }>(
-    `query GetWorkPlans($userId: Int!, $dateRange: DateRangeInputType!) {
+    `query GetWorkPlans($userIds: [Int!]!, $dateRange: DateRangeInputType!) {
             workPlanQuery {
-              workPlans(userId: $userId, dateRange: $dateRange) {
+              workPlans(userIds: $userIds, dateRange: $dateRange) {
                 id
                 userId
                 firstName
@@ -35,19 +36,19 @@ export function FetchWorkPlansQuery(data: { dateRange: DateRangeType, userId: nu
             }
           }`,
     {
-      userId: userId,
+      userIds: userIds,
       dateRange: dateRange
     },
   );
 }
 
-export function CreateWorkPlanQuery(workPlan: CreateWorkedHourType) {
+export function SetWorkPlanQuery(workPlan: SetWorkPlanType) {
   //const token = ReadCookie('user');
 
-  return AjaxQuery<{ workPlanMutations: { create: WorkPlan } }>(
-    `mutation CreateWorkPlan($workPlan: WorkPlanInputType!) {
+  return AjaxQuery<{ workPlanMutations: { set: WorkPlan } }>(
+    `mutation SetWorkPlan($workPlan: WorkPlanInputType!) {
       workPlanMutations {
-        create(workPlan: $workPlan) {
+        set(workPlan: $workPlan) {
           id
           userId
           date
@@ -61,13 +62,13 @@ export function CreateWorkPlanQuery(workPlan: CreateWorkedHourType) {
   )
 }
 
-export function CreateCalendarEventQuery(calendarEvent: CreateCalendarEventType) {
+export function SetCalendarEventQuery(calendarEvent: SetCalendarEventType) {
   //const token = ReadCookie('user');
 
-  return AjaxQuery<{ calendarEventMutations: { create: CalendarEvent } }>(
-    `mutation CreateCalendarEvent($calendarEvent: CalendarEventInputType!) {
+  return AjaxQuery<{ calendarEventMutations: { set: CalendarEvent } }>(
+    `mutation SetCalendarEvent($calendarEvent: CalendarEventInputType!) {
       calendarEventMutations {
-        create(calendarEvent: $calendarEvent) {
+        set(calendarEvent: $calendarEvent) {
           id
           date
           title
@@ -76,6 +77,35 @@ export function CreateCalendarEventQuery(calendarEvent: CreateCalendarEventType)
       }
     }`,
     { calendarEvent: calendarEvent },
+    //token
+  )
+}
+
+export function DeleteWorkPlanQuery(workPlan: SchedulerWorkPlan) {
+  //const token = ReadCookie('user');
+  const dateStr = GetFormattedDateString(workPlan.date);
+  const arg: DeleteWorkPlanType = {
+    id: workPlan.id,
+    date: dateStr,
+    userId: workPlan.userId,
+    startTime: GetFormattedUTCTimeString(workPlan.startTime, dateStr),
+    endTime: GetFormattedUTCTimeString(workPlan.endTime, dateStr)
+  }
+
+  return AjaxQuery<{ workPlanMutations: { delete: WorkPlan | null } }>(
+    `mutation DeleteWorkPlan($workPlan: WorkPlanInputType!) {
+      workPlanMutations {
+        delete(workPlan: $workPlan) {
+          id
+          userId
+          date
+          startTime
+          endTime
+        }
+      }
+    }
+    `,
+    { workPlan: arg },
     //token
   )
 }

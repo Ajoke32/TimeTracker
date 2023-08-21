@@ -1,7 +1,8 @@
 import { CalendarCell, CalendarEvent, WorkPlan } from "@redux/types";
 import { GetFormattedDateString } from ".";
+import { SortedCalendarArr } from "@redux/intrerfaces";
 
-export function setPrevMonthDates(date: Date, events: CalendarEvent[], plans: WorkPlan[]) {
+export function setPrevMonthDates(date: Date, events: CalendarEvent[], plans: SortedCalendarArr[]) {
     const firstDay = new Date(date.getFullYear(), date.getMonth(), 1)
 
     if (firstDay.getDay() !== 1) {
@@ -22,7 +23,7 @@ export function setPrevMonthDates(date: Date, events: CalendarEvent[], plans: Wo
     return [];
 }
 
-export function setCurrentMonthDates(date: Date, events: CalendarEvent[], plans: WorkPlan[]) {
+export function setCurrentMonthDates(date: Date, events: CalendarEvent[], plans: SortedCalendarArr[]) {
     const dates: CalendarCell[] = [];
     const lastDateOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 
@@ -33,7 +34,7 @@ export function setCurrentMonthDates(date: Date, events: CalendarEvent[], plans:
     return dates;
 }
 
-export function setNextMonthDates(date: Date, events: CalendarEvent[], plans: WorkPlan[]) {
+export function setNextMonthDates(date: Date, events: CalendarEvent[], plans: SortedCalendarArr[]) {
     const dates: CalendarCell[] = [];
     const lastDateOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
     let day = new Date(date.getFullYear(), date.getMonth(), lastDateOfMonth).getDay();
@@ -74,11 +75,30 @@ export function substractMonth(date: Date): Date {
     return newDate;
 }
 
-export function createCalendarCell(date: Date, events: CalendarEvent[], workPlans: WorkPlan[]) {
+export function createCalendarCell(date: Date, events: CalendarEvent[], workPlans: SortedCalendarArr[]) {
+    workPlans = workPlans.map((p) => ({
+        userId: p.userId,
+        workPlans: p.workPlans.filter(wp => wp.date.getDate() == date.getDate()),
+    }));
+
     return {
         date: date,
         events: events.filter(e => e.date.getDate() == date.getDate()),
-        workPlans: workPlans.filter(p => p.date.getDate() == date.getDate()),
+        workPlans: workPlans,
         isHoliday: date.getDay() == 0 || date.getDay() == 6
     } as CalendarCell
+}
+
+export const substractDay = (date: Date): Date => {
+    const newDate = new Date(date);
+    newDate.setDate(newDate.getDate() - 1);
+
+    return newDate;
+}
+
+export const addDay = (date: Date): Date => {
+    const newDate = new Date(date);
+    newDate.setDate(newDate.getDate() + 1);
+
+    return newDate;
 }

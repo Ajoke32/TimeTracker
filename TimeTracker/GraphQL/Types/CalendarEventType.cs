@@ -9,7 +9,7 @@ public sealed class CalendarEventType : ObjectGraphType<CalendarEvent>
 {
     public CalendarEventType()
     {
-        Field(x => x.Id).Description("Id");
+        Field(x => x.Id, nullable: true).Description("Id");
 
         Field(x => x.Date).Description("working date");
 

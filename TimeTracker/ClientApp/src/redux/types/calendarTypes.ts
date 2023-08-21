@@ -1,3 +1,5 @@
+import { SortedCalendarArr } from ".."
+
 export interface CalendarType {
     previousDates: CalendarCell[],
     currentDates: CalendarCell[],
@@ -24,29 +26,53 @@ export interface CalendarEvent {
 export interface CalendarCell {
     date: Date,
     events: CalendarEvent[],
-    workPlans: WorkPlan[],
+    workPlans: SortedCalendarArr[],
     isHoliday: boolean
 }
 
-export interface CreateCalendarEventType {
+export interface SetCalendarEventType {
+    id?: number,
     date: string,
     title: string,
     eventType: number,
 }
 
-export interface UpdateCalendarEventType {
-    id: number,
-    title: string
-}
-
-export interface UpdateWorkPlanType {
-    id: number,
+export interface SetWorkPlanType {
+    id?: number,
     startTime: string,
     endTime: string,
-    date: Date
+    date: string
 }
 
 export interface DateRangeType {
     startDate: string,
     endDate: string
+}
+
+export interface SchedulerWorkPlan {
+    id: number,
+    startTime: string;
+    endTime: string;
+    totalTime: string;
+    date: Date;
+    user: string;
+    userId: number
+}
+
+export interface DeleteWorkPlanType {
+    id: number,
+    startTime: string,
+    endTime: string,
+    date: string
+    userId: number
+}
+
+export interface SchedulerWorkedHour {
+    userId: number;
+    workPlans: SchedulerWorkPlan[];
+}
+
+export interface FetchUsersPlansType {
+    dateRange: DateRangeType,
+    userIds: number[]
 }

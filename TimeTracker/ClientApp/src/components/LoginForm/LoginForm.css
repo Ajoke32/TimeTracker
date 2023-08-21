@@ -63,6 +63,10 @@
    color: var(--color-red); 
 }
 
+.submit-wrapper {
+    margin-top: 2vh;
+}
+
 
 @media screen and(min-width: 1080px) and (max-width: 1680px) {
     .login-form {

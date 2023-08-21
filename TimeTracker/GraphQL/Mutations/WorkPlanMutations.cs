@@ -16,18 +16,32 @@ public sealed class WorkPlanMutations : ObjectGraphType
 {
     public WorkPlanMutations(IUnitOfWorkRepository uow)
     {
-        Field<WorkPlan>("create")
+        Field<WorkPlan>("set")
             .Argument<WorkPlanInputType>("workPlan")
             .ResolveAsync(async ctx =>
             {
                 var wp = ctx.GetArgument<WorkPlan>("workPlan");
 
-                var created = await uow.GenericRepository<WorkPlan>()
-                    .CreateAsync(wp);
+                var set = (wp.Id == null)
+                    ? await uow.GenericRepository<WorkPlan>().CreateAsync(wp)
+                    : await uow.GenericRepository<WorkPlan>().UpdateAsync(wp);
 
                 await uow.SaveAsync();
 
-                return created;
+                return set;
+            });
+
+        Field<WorkPlan?>("delete")
+            .Argument<WorkPlanInputType>("workPlan")
+            .ResolveAsync(async ctx =>
+            {
+                var wp = ctx.GetArgument<WorkPlan>("workPlan");
+
+                var deleted = await uow.GenericRepository<WorkPlan>().DeleteAsync(wp);
+
+                await uow.SaveAsync();
+
+                return deleted ? wp : null;
             });
     }
 }

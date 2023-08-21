@@ -9,7 +9,7 @@ public sealed class WorkPlanType:ObjectGraphType<WorkPlan>
 {
     public WorkPlanType()
     {
-        Field(x => x.Id).Description("Id");
+        Field(x => x.Id, nullable: true).Description("Id");
 
         Field(x => x.UserId).Description("user id");
 

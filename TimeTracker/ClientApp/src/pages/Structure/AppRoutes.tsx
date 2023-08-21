@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import {
   Home, Login, AddUser, Layout,
@@ -16,6 +17,10 @@ import VacationDetails from "@components/Cards/VacationDetails.tsx";
 export const AppRoutes = () => {
   const state = useTypedSelector((state) => state.auth);
 
+  // useEffect(()=>{
+    
+  // })
+
   return (
     <Routes>
       {state.status ? (
@@ -23,7 +28,7 @@ export const AppRoutes = () => {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="/tracker" element={<Tracker />} />
-            <Route path="/calendar" element={<Calendar/>}/>
+            <Route path="/calendar" element={<Calendar />} />
             <Route path="/team" element={<Outlet />}>
               <Route index element={<Team />} />
               <Route path="addUser"

@@ -1,23 +1,24 @@
 import { Epic, ofType } from "redux-observable";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { catchError, map, mergeMap, Observable, of } from "rxjs";
-import { CreateCalendarEventType, CreateWorkedHourType, DateRangeType, UpdateWorkedHourType, WorkedHour } from '@redux/types';
+import { SetCalendarEventType, DateRangeType, FetchUsersPlansType, SetWorkPlanType, WorkedHour, SchedulerWorkPlan } from '@redux/types';
 import {
-    CreateCalendarEventQuery,
-    CreateWorkPlanQuery,
+    SetCalendarEventQuery,
+    SetWorkPlanQuery,
     FetchCalendarEventsQuery,
-    FetchWorkPlansQuery
+    FetchWorkPlansQuery,
+    DeleteWorkPlanQuery
 } from "@redux/queries";
 import {
     fetchAllWorkPlansSuccess,
     fetchNextWorkPlansSuccess,
     fetchAllCalendarEventsSuccess,
     fetchNextCalendarEventsSuccess,
-    fetchFail, createFail, createWorkPlanSuccess, createCalendarEventSuccess
+    fetchFail, setFail, setWorkPlanSuccess, setCalendarEventSuccess, deleteFail, deleteWorkPlanSuccess
 } from '../slices';
 import { GetLocalDateFromUTC } from "../../utils";
 
-export const fetchWorkPlansEpic: Epic = (action: Observable<PayloadAction<{ dateRange: DateRangeType; userId: number; }>>, state) =>
+export const fetchWorkPlansEpic: Epic = (action: Observable<PayloadAction<FetchUsersPlansType>>, state) =>
     action.pipe(
         ofType("calendar/fetchWorkPlans"),
         mergeMap(action =>
@@ -71,46 +72,69 @@ export const fetchCalendarEventsEpic: Epic = (action: Observable<PayloadAction<D
         )
     );
 
-export const createWorkPlanEpic: Epic = (action: Observable<PayloadAction<CreateWorkedHourType>>, state) =>
+export const setWorkPlanEpic: Epic = (action: Observable<PayloadAction<SetWorkPlanType>>, state) =>
     action.pipe(
-        ofType("calendar/createWorkPlan"),
+        ofType("calendar/setWorkPlan"),
         mergeMap(action =>
-            CreateWorkPlanQuery(action.payload).pipe(
+            SetWorkPlanQuery(action.payload).pipe(
                 mergeMap(async resp => {
                     if (resp.response.errors != null) {
                         console.log(resp.response.errors)
                         //const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
-                        return createFail(resp.response.errors[0].message)
+                        return setFail(resp.response.errors[0].message)
                     }
-                    return createWorkPlanSuccess(resp.response.data.workPlanMutations.create);
+                    return setWorkPlanSuccess(resp.response.data.workPlanMutations.set);
                 }),
                 catchError((e: Error) => {
                     console.log(e)
-                    return of(createFail("Unexpected error"))
+                    return of(setFail("Unexpected error"))
                 })
             ),
         )
     );
-    
-export const createCalendarEventEpic: Epic = (action: Observable<PayloadAction<CreateCalendarEventType>>, state) =>
-action.pipe(
-    ofType("calendar/createCalendarEvent"),
-    mergeMap(action =>
-        CreateCalendarEventQuery(action.payload).pipe(
-            mergeMap(async resp => {
-                if (resp.response.errors != null) {
-                    console.log(resp.response.errors)
-                    //const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
-                    return createFail(resp.response.errors[0].message)
-                }
-                return createCalendarEventSuccess(resp.response.data.calendarEventMutations.create);
-            }),
-            catchError((e: Error) => {
-                console.log(e)
-                return of(createFail("Unexpected error"))
-            })
-        ),
-    )
-);
 
-export const calendarEpics = [fetchWorkPlansEpic, fetchCalendarEventsEpic, createCalendarEventEpic, createWorkPlanEpic]
+export const setCalendarEventEpic: Epic = (action: Observable<PayloadAction<SetCalendarEventType>>, state) =>
+    action.pipe(
+        ofType("calendar/createCalendarEvent"),
+        mergeMap(action =>
+            SetCalendarEventQuery(action.payload).pipe(
+                mergeMap(async resp => {
+                    if (resp.response.errors != null) {
+                        console.log(resp.response.errors)
+                        //const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
+                        return setFail(resp.response.errors[0].message)
+                    }
+                    return setCalendarEventSuccess(resp.response.data.calendarEventMutations.set);
+                }),
+                catchError((e: Error) => {
+                    console.log(e)
+                    return of(setFail("Unexpected error"))
+                })
+            ),
+        )
+    );
+
+    export const deleteWorkPlanEpic: Epic = (action: Observable<PayloadAction<SchedulerWorkPlan>>, state) =>
+    action.pipe(
+        ofType("calendar/deleteWorkPlan"),
+        mergeMap(action =>
+            DeleteWorkPlanQuery(action.payload).pipe(
+                mergeMap(async resp => {
+                    if (resp.response.errors != null) {
+                        console.log(resp.response.errors)
+                        //const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
+                        return deleteFail(resp.response.errors[0].message)
+                    }
+                    return resp.response.data.workPlanMutations.delete == null
+                    ? deleteFail("Failed to delete (Not found)")
+                    : deleteWorkPlanSuccess(resp.response.data.workPlanMutations.delete);
+                }),
+                catchError((e: Error) => {
+                    console.log(e)
+                    return of(deleteFail("Unexpected error"))
+                })
+            ),
+        )
+    );
+
+export const calendarEpics = [fetchWorkPlansEpic, fetchCalendarEventsEpic, setCalendarEventEpic, setWorkPlanEpic, deleteWorkPlanEpic]
