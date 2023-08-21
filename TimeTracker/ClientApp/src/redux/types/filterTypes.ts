@@ -1,49 +1,49 @@
-import {current, PayloadAction} from "@reduxjs/toolkit";
+import { current, PayloadAction } from "@reduxjs/toolkit";
 
 
 
-export interface WhereFilter{
-    property:string,
-    value:string,
-    operator:string,
-    connector?:string|null,
+export interface WhereFilter {
+    property: string,
+    value: string,
+    operator: string,
+    connector?: string | null,
 }
 
-export interface FiltersType{
-    group:WhereFilter[]
+export interface FiltersType {
+    group: WhereFilter[]
 }
-export interface OrderingType{
-    orderBy:{
-        property:string,
-        direction:string
+export interface OrderingType {
+    orderBy: {
+        property: string,
+        direction: string
     }
 }
-export interface PagingExtraInfo{
-    extensions?:{
-        count:number
+export interface PagingExtraInfo {
+    extensions?: {
+        count: number
     }
 }
 
-export interface PagingType{
-    take:number,
-    skip:number,
-    perPage:number
+export interface PagingType {
+    take: number,
+    skip: number,
+    perPage: number
 }
-export interface PagingWithExtraInfo extends PagingExtraInfo,PagingType{}
-export interface OrderingPagingFilterType extends PagingType,PagingExtraInfo,FiltersType,OrderingType{}
-export interface PagingEntityType<T> extends PagingExtraInfo{
-    entities:T[],
-}
-
-export const defaultPagingState={
-    take:5,
-    skip:0,
-    perPage:5
+export interface PagingWithExtraInfo extends PagingExtraInfo, PagingType { }
+export interface OrderingPagingFilterType extends PagingType, PagingExtraInfo, FiltersType, OrderingType { }
+export interface PagingEntityType<T> extends PagingExtraInfo {
+    entities: T[],
 }
 
-export interface PagingInputType{
-    take:number,
-    skip:number,
+export const defaultPagingState = {
+    take: 5,
+    skip: 0,
+    perPage: 5
+}
+
+export interface PagingInputType {
+    take: number,
+    skip: number,
 }
 export type FilterAndPagingInputType = PagingInputType|FiltersType
 
@@ -57,7 +57,7 @@ export const basicFilteringReducers={
                }
                return f;
             });
-        }else{
+        } else {
             state.group.push(action.payload);
         }
 
@@ -73,38 +73,38 @@ export const basicFilteringReducers={
     },
 }
 
-export const basicPagingReducers={
-    setTake:(state:PagingWithExtraInfo,action:PayloadAction<number>)=>{
-        state.take=action.payload;
-    },
-    setSkip:(state:PagingWithExtraInfo,action:PayloadAction<number>)=>{
-        state.skip=action.payload;
-    },
-    setPerPage:(state:PagingWithExtraInfo,action:PayloadAction<number>)=>{
-        state.perPage=action.payload;
+export const basicPagingReducers = {
+    setTake: (state: PagingWithExtraInfo, action: PayloadAction<number>) => {
         state.take = action.payload;
     },
-    toDefault:(state:PagingWithExtraInfo)=>{
-        state.take=state.perPage;
-        state.skip=0;
+    setSkip: (state: PagingWithExtraInfo, action: PayloadAction<number>) => {
+        state.skip = action.payload;
+    },
+    setPerPage: (state: PagingWithExtraInfo, action: PayloadAction<number>) => {
+        state.perPage = action.payload;
+        state.take = action.payload;
+    },
+    toDefault: (state: PagingWithExtraInfo) => {
+        state.take = state.perPage;
+        state.skip = 0;
     }
 }
 
-export const basicOrderingReducers={
-    setColumn:(state:OrderingPagingFilterType,action:PayloadAction<string>)=>{
+export const basicOrderingReducers = {
+    setColumn: (state: OrderingPagingFilterType, action: PayloadAction<string>) => {
 
 
-        if(state.orderBy.property===action.payload&&state.orderBy.direction==="DESC"){
-            state.orderBy={
-                property:"",
-                direction:""
+        if (state.orderBy.property === action.payload && state.orderBy.direction === "DESC") {
+            state.orderBy = {
+                property: "",
+                direction: ""
             };
             return;
         }
 
-        if(state.orderBy.property==action.payload){
+        if (state.orderBy.property == action.payload) {
             state.orderBy.direction = "DESC";
-        }else {
+        } else {
             state.orderBy = {
                 property: action.payload,
                 direction: state.orderBy.direction = "ASC"

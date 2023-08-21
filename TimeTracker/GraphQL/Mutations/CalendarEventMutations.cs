@@ -21,20 +21,18 @@ public sealed class CalendarEventMutations : ObjectGraphType
             {
                 var evt = ctx.GetArgument<CalendarEvent>("calendarEvent");
 
-                var calendarEvent = await uow.GenericRepository<CalendarEvent>()
-                    .FindAsync(c => c.Date == evt.Date);
+                var repository = uow.GenericRepository<CalendarEvent>();
+                var existingEvent = await repository.FindAsync(c => c.Date == evt.Date);
 
-                if (calendarEvent is not null)
-                {
-                    throw new ValidationError("Event on this date already exists!");
-                }
-
-                var created = await uow.GenericRepository<CalendarEvent>()
-                    .CreateAsync(evt);
+                var set = evt.Id is not null
+                    ? await repository.UpdateAsync(evt)
+                    : existingEvent is not null
+                        ? throw new ValidationError("Event on this date already exists!")
+                        : await repository.CreateAsync(evt);
 
                 await uow.SaveAsync();
 
-                return created;
+                return set;
             });
     }
 }

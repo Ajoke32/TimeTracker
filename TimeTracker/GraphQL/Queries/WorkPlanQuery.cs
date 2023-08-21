@@ -14,15 +14,15 @@ public sealed class WorkPlanQuery : ObjectGraphType
     public WorkPlanQuery(IUnitOfWorkRepository uow, IMapper mapper)
     {
         Field<ListGraphType<WorkPlanType>>("workPlans")
-            .Argument<int>("userId")
+            .Argument<List<int>>("userIds")
             .Argument<DateRangeInputType>("dateRange")
             .ResolveAsync(async ctx =>
             {
-                var userId = ctx.GetArgument<int>("userId");
+                var userIds = ctx.GetArgument<List<int>>("userIds");
                 var dateRange = ctx.GetArgument<DateRangeInputDto>("dateRange");
 
                 var workPlans = await uow.GenericRepository<WorkPlan>()
-                                    .GetAsync(c => c.UserId == userId
+                                    .GetAsync(c => userIds.Contains(c.UserId)
                                                 && c.Date >= DateOnly.FromDateTime(dateRange.StartDate)
                                                 && c.Date <= DateOnly.FromDateTime(dateRange.EndDate),
                                                 includeProperties: "User");

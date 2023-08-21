@@ -1,15 +1,15 @@
-﻿import {SearchInputProps} from "./InputProps";
+﻿import { useState } from 'react'
+import { SearchInputProps } from "./InputProps";
 import './inputs.css'
 import searchInput from "../../../assets/images/search_input_icon.png"
-import {useState} from "react";
 export const SearchInput = ({ name, placeholder, register,  onSearch,onChangeAdditional }: SearchInputProps) => {
 
     const [search,setSearch] = useState<string>("");
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(event.target.value);
     };
-    
-    
+
+
     return (
         <div className="input-wrapper">
             <div className="input-wrapper__inner">
@@ -31,6 +31,6 @@ export const SearchInput = ({ name, placeholder, register,  onSearch,onChangeAdd
                     <img src={searchInput}  alt="search"/>
                 </button>
             </div>
-        </div>
+        </div >
     );
 };

@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import "./calendars.css"
-import { CurrentDateElement, TabSwitcher } from '..';
+import { CurrentDateElement } from '..';
 import { useAppDispatch, useTypedSelector } from "@hooks/customHooks";
-import { Permission } from "@redux/enums";
-import { DayPlanForm, AddEventForm } from "@components/EventForms";
 import { days } from '..';
 import { setPrevMonthDates, setCurrentMonthDates, setNextMonthDates, addMonth, substractMonth, GetOneMonthDateRange, GetThreeMonthDateRange } from '../../utils';
 import { CalendarType, CalendarCell } from '@redux/types';
 import { fetchCalendarEvents, fetchWorkPlans, setDate } from '@redux/slices';
+import { CalendarModal } from '../UI/Modals';
 
+interface CalendarProps {
+    date?: Date,
+    setter: React.Dispatch<React.SetStateAction<{
+        cell: CalendarCell,
+        calendar: CalendarType
+    } | null>>
+}
 
 const calendarCellsCount = 42;
 
-export const LargeCalendar = ({ date, setter }: { date?: Date, setter: React.Dispatch<React.SetStateAction<{ cell: CalendarCell, calendar: CalendarType } | null>> }) => {
+export const LargeCalendar = ({ date, setter }: CalendarProps) => {
     const calendarState = useTypedSelector(state => state.calendar);
     const dispatch = useAppDispatch();
 
@@ -20,8 +26,7 @@ export const LargeCalendar = ({ date, setter }: { date?: Date, setter: React.Dis
     const { user } = useTypedSelector(state => state.auth);
 
     const [isCurrentMonth, setIsCurrentMonth] = useState<boolean>(true);
-    const [isFormHidden, setIsFormHidden] = useState<CalendarCell | null>(null);
-    const [tab, setTab] = useState<boolean>(true)
+    const [isFormHidden, setIsFormHidden] = useState<Date | null>(null);
     const [calendar, setCalendar] = useState<CalendarType>(
         {
             previousDates: [],
@@ -29,7 +34,7 @@ export const LargeCalendar = ({ date, setter }: { date?: Date, setter: React.Dis
             nextDates: [],
         }
     );
-    const [isModalOpen,setIsModalOpen] = useState<boolean>(false);
+
     const setValues = (): CalendarType => ({
         previousDates: setPrevMonthDates(currentDate, events.previousMonth, workPlans.previousMonth),
         currentDates: setCurrentMonthDates(currentDate, events.currentMonth, workPlans.currentMonth),
@@ -37,29 +42,22 @@ export const LargeCalendar = ({ date, setter }: { date?: Date, setter: React.Dis
     })
 
     useEffect(() => {
-        if (currentDate.getMonth() !== new Date().getMonth())
-            setIsCurrentMonth(false);
-        else
-            setIsCurrentMonth(true);
-    },[])
-
-    useEffect(() => {
-        setCalendar(setValues())
-    }, [calendarState.currentDate])
-
-    useEffect(() => {
-        if (date && date.getMonth() != currentDate.getMonth()) {
-            handleMonthButton(date)
-
-        }
-        else if(!date) {
+        if (!date) {
             dispatch(fetchWorkPlans({
                 dateRange: GetThreeMonthDateRange(calendarState.currentDate),
-                userId: user!.id
+                userIds: [user!.id]
             }))
             dispatch(fetchCalendarEvents(GetThreeMonthDateRange(calendarState.currentDate)))
         }
+        else if (date.getMonth() != currentDate.getMonth()) {
+            handleMonthButton(date)
+        }
     }, [])
+
+    useEffect(() => {
+        setIsCurrentMonth(currentDate.getMonth() == new Date().getMonth());
+        setCalendar(setValues())
+    }, [calendarState.currentDate])
 
 
     useEffect(() => {
@@ -73,26 +71,20 @@ export const LargeCalendar = ({ date, setter }: { date?: Date, setter: React.Dis
         dispatch(setDate(date))
         dispatch(fetchWorkPlans({
             dateRange: dateRange,
-            userId: user!.id
+            userIds: [user!.id]
         }))
         dispatch(fetchCalendarEvents(dateRange))
     }
 
     const handleAddEventButton = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, day: CalendarCell) => {
         e.stopPropagation();
-        setIsFormHidden(day)
+        setIsFormHidden(day.date)
     }
 
     return (
         <div className="calendar-wrapper">
-            {isFormHidden && <div className="event-form__wrapper" style={{display:`${!isModalOpen?"none":''}`}}>
-                <button className="event-form__close-btn" onClick={() => setIsFormHidden(null)}></button>
-                <div className="event-form__inner" style={{display:`${!isModalOpen?"none":''}`}}>
-                    {tab ? <DayPlanForm setIsOpen={setIsModalOpen} cell={isFormHidden} /> : <AddEventForm setIsOpen={setIsModalOpen} cell={isFormHidden} />}
-                    <TabSwitcher setter={setTab} tab={tab} />
-                </div>
-            </div>}
-
+            <CalendarModal isHidden={isFormHidden} setIsHidden={setIsFormHidden} />
+            
             <div className="calendar-header__wrapper">
                 <div className="calendar-date__wrapper">
                     <CurrentDateElement date={currentDate} showFullDate={false} />
@@ -129,15 +121,14 @@ export const LargeCalendar = ({ date, setter }: { date?: Date, setter: React.Dis
                     {calendar.currentDates.map((cell, index) => (
                         <div key={index}
                             className={
-                                (cell.date.getDate() === currentDate.getDate() && isCurrentMonth)
+                                (cell.date.getDate() === new Date().getDate() && isCurrentMonth)
                                     ? "dates-today__date" : ""}
                             onClick={() => { setter({ cell, calendar }) }} >
-                            <span className={getClassName(cell, "")}>
+                            <span className={getClassName(cell)}>
                                 {cell.date.getDate()}
                             </span>
-                            <button type="button" className="calendar-event__btn" onClick={(e) =>{
+                            <button type="button" className="calendar-event__btn" onClick={(e) => {
                                 handleAddEventButton(e, cell)
-                                setIsModalOpen(true);
                             }} />
                         </div>
                     ))}
@@ -158,6 +149,6 @@ export const LargeCalendar = ({ date, setter }: { date?: Date, setter: React.Dis
     );
 };
 
-const getClassName = (cell: CalendarCell, className: string): string => {
-    return cell.isHoliday ? `holiday ${className}` : className;
+const getClassName = (cell: CalendarCell, className?: string): string => {
+    return cell.isHoliday ? `holiday ${className ?? ''}` : className ?? "";
 }

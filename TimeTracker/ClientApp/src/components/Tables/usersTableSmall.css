@@ -1,0 +1,77 @@
+.small-users-table-wrapper {
+    padding: 15px 10px;
+}
+
+.pager-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.pager-wrapper .pages-wrapper {
+    margin-top: 0;
+}
+
+.search-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.search-header .search-input-wrapper {
+    flex: 1 1 auto;
+    width: 100%;
+}
+
+.search-header .reset-button-wrapper {
+    flex: 0 0 27%;
+    margin-left: 5px;
+}
+
+.reset-btn,
+.btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 3rem;
+    padding: 12px 14px;
+
+    border-radius: 10px;
+    background: var(--color-red);
+    border: 1px solid var(--color-stroke-gray);
+    opacity: .7;
+    color: white;
+
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn {
+    background: var(--color-cyan);
+}
+
+.users-list-wrapper {
+    margin: 10px 0
+}
+
+.button-wrapper {
+    margin: 10px 0
+}
+
+.table-controls-wrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+.table-controls-wrapper .add-user-button-wrapper {
+    flex: 1 1 auto;
+    width: 100%;
+}
+
+.table-controls-wrapper .reset-user-button-wrapper {
+    flex: 0 0 25%;
+    margin-left: 5px;
+    width: 100%;
+}
