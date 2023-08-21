@@ -10,10 +10,7 @@ import { CalendarModal } from '../UI/Modals';
 
 interface CalendarProps {
     date?: Date,
-    setter: React.Dispatch<React.SetStateAction<{
-        cell: CalendarCell,
-        calendar: CalendarType
-    } | null>>
+    setter: React.Dispatch<React.SetStateAction<CalendarCell | null>>
 }
 
 const calendarCellsCount = 42;
@@ -84,7 +81,7 @@ export const LargeCalendar = ({ date, setter }: CalendarProps) => {
     return (
         <div className="calendar-wrapper">
             <CalendarModal isHidden={isFormHidden} setIsHidden={setIsFormHidden} />
-            
+
             <div className="calendar-header__wrapper">
                 <div className="calendar-date__wrapper">
                     <CurrentDateElement date={currentDate} showFullDate={false} />
@@ -111,7 +108,7 @@ export const LargeCalendar = ({ date, setter }: CalendarProps) => {
                     {calendar.previousDates.map((cell, index) => (
                         <div key={index}
                             className="calendar-date__grey"
-                            onClick={() => { setter({ cell, calendar }) }}>
+                            onClick={() => { setter(cell) }}>
                             <span className={getClassName(cell, "calendar-prev__month-date")}>
                                 {cell.date.getDate()}
                             </span>
@@ -123,7 +120,7 @@ export const LargeCalendar = ({ date, setter }: CalendarProps) => {
                             className={
                                 (cell.date.getDate() === new Date().getDate() && isCurrentMonth)
                                     ? "dates-today__date" : ""}
-                            onClick={() => { setter({ cell, calendar }) }} >
+                            onClick={() => { setter(cell) }} >
                             <span className={getClassName(cell)}>
                                 {cell.date.getDate()}
                             </span>
@@ -137,7 +134,7 @@ export const LargeCalendar = ({ date, setter }: CalendarProps) => {
                         .map((cell, index) => (
                             <div key={index}
                                 className="calendar-date__grey"
-                                onClick={() => { setter({ cell, calendar }) }}>
+                                onClick={() => { setter(cell) }}>
                                 <span className={getClassName(cell, "calendar-prev__month-date")}>
                                     {cell.date.getDate()}
                                 </span>

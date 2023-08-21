@@ -5,7 +5,7 @@ import Scheduler from "@components/Scheduler/Scheduler.tsx";
 import { CalendarType, CalendarCell } from '@redux/types';
 
 const Calendar = () => {
-    const [page, setPage] = useState<{ cell: CalendarCell, calendar: CalendarType } | null>(null)
+    const [page, setPage] = useState<CalendarCell | null>(null)
     const [date, setDate] = useState<Date | undefined>();
 
     const returnBack = (selectedDate: Date) => {
@@ -16,7 +16,7 @@ const Calendar = () => {
     return (
         <div className="calendar-page__wrapper">
             {page
-                ? <Scheduler data={page} back={returnBack} />
+                ? <Scheduler cell={page} back={returnBack} />
                 : <LargeCalendar date={date} setter={setPage} />
             }
         </div>

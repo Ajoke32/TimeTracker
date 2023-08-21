@@ -4,15 +4,17 @@ import { useState, useEffect } from 'react';
 import { CurrentDateElement } from "@components/UI";
 import { H4 } from "@components/Headings";
 import { CalendarType, CalendarCell, SchedulerWorkedHour, SchedulerWorkPlan } from '@redux/types';
-import { useTypedSelector } from '@hooks/customHooks';
+import { useAppDispatch, useTypedSelector } from '@hooks/customHooks';
 import { GetFormattedTimeDifference, addDay, createCalendarCell, substractDay } from '../../utils';
 import { SchedulerModal, UsersTableSmall, hours } from '..';
 import { TimeRow } from './TimeRow';
+import { resetUsersWorkPlans } from '@redux/slices';
 
-const Scheduler = ({ data, back }: { data: { cell: CalendarCell, calendar: CalendarType }, back: (selectedDate: Date) => void }) => {
-    const { cell, calendar } = data;
+const Scheduler = ({ cell, back }: { cell: CalendarCell, back: (selectedDate: Date) => void }) => {
+    // const { cell, calendar } = data;
+    const dispatch = useAppDispatch()
 
-    const { events, workPlans } = useTypedSelector(state => state.calendar);
+    const calendar = useTypedSelector(state => state.calendar);
     const { user } = useTypedSelector(state => state.auth)
 
     const [currentDate, setCurrentDate] = useState<Date>(cell.date);
@@ -45,25 +47,16 @@ const Scheduler = ({ data, back }: { data: { cell: CalendarCell, calendar: Calen
     }, [calendarCell])
 
     useEffect(() => {
-        setCalendarCell(createCalendarCell(currentDate, events.currentMonth, workPlans.currentMonth))
-    }, [workPlans])
+        setCalendarCell(createCalendarCell(currentDate, calendar.events.currentMonth, calendar.workPlans.currentMonth))
+    }, [calendar.workPlans])
 
     useEffect(() => {
         if (calendarCell.date != currentDate)
             currentDate.getMonth() == new Date().getMonth()
-                ? setCalendarCell(calendar.currentDates.find
-                    (c => c.date.getDate() == currentDate.getDate())
-                    ?? createCalendarCell(currentDate, events.currentMonth, workPlans.currentMonth)
-                )
+                ? setCalendarCell(createCalendarCell(currentDate, calendar.events.currentMonth, calendar.workPlans.currentMonth))
                 : currentDate.getMonth() > new Date().getMonth()
-                    ? setCalendarCell(calendar.nextDates.find
-                        (c => c.date.getDate() == currentDate.getDate())
-                        ?? createCalendarCell(currentDate, events.nextMonth, workPlans.nextMonth)
-                    )
-                    : setCalendarCell(calendar.previousDates.find
-                        (c => c.date.getDate() == currentDate.getDate())
-                        ?? createCalendarCell(currentDate, events.previousMonth, workPlans.previousMonth)
-                    )
+                    ? setCalendarCell(createCalendarCell(currentDate, calendar.events.nextMonth, calendar.workPlans.nextMonth))
+                    : setCalendarCell(createCalendarCell(currentDate, calendar.events.previousMonth, calendar.workPlans.previousMonth))
     }, [currentDate])
 
     const handleDayButton = (date: Date) => {
@@ -78,6 +71,11 @@ const Scheduler = ({ data, back }: { data: { cell: CalendarCell, calendar: Calen
             wp.splice(0, 0, elementToMove);
         }
         return wp
+    }
+
+    const handleBackButton = () => {
+        back(currentDate)
+        dispatch(resetUsersWorkPlans(user!.id))
     }
 
     const generateColors = () => {
@@ -95,12 +93,12 @@ const Scheduler = ({ data, back }: { data: { cell: CalendarCell, calendar: Calen
 
     return (
         <div className="component-wrapper">
-            <SchedulerModal isHidden={isFormHidden} setIsHidden={setIsFormHidden}/>
+            <SchedulerModal isHidden={isFormHidden} setIsHidden={setIsFormHidden} />
 
             <div className="working-hours__wrapper">
                 <div className="calendar-header__wrapper">
                     <div className="calendar-date__wrapper">
-                        <button onClick={() => { back(currentDate) }} id='return-button' />
+                        <button onClick={handleBackButton} id='return-button' />
                         <CurrentDateElement date={currentDate} showFullDate={true} additional={calendarCell.events.length > 0 ? calendarCell.events[0].title : undefined} />
                     </div>
                     <div className="calendar-actions">
