@@ -49,6 +49,8 @@ public class User:SoftDeleteBase
 
     public List<WorkPlan> WorkPlans { get; } = new();
 
+    public List<SickLeave> SickLeaves { get; } = new();
+
     public User()
     {
         VacationDays = 30;
