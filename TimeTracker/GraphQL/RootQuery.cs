@@ -31,5 +31,8 @@ public sealed class RootQuery:ObjectGraphType
         Field<CalendarEventQuery>()
             .Name("calendarEventQuery")
             .Resolve(_ => new { });
+
+        Field<SickLeaveQuery>("sickLeavesQuery")
+            .Resolve(_ => new { });
     }
 }

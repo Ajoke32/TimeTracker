@@ -24,7 +24,9 @@ public class TimeTrackerContext:DbContext
     public DbSet<WorkedHour> WorkedHours { get; set; }
 
     public DbSet<WorkPlan> WorkPlans { get; set; }
-
+    
+    public DbSet<SickLeave> SickLeaves { get; set; }
+    
     public DbSet<CalendarEvent> CalendarEvents { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -88,6 +90,16 @@ public class TimeTrackerContext:DbContext
             .HasConversion(w => w.ToDateTime(new TimeOnly()),
                 w=>DateOnly.FromDateTime(w));
 
+        modelBuilder.Entity<SickLeave>()
+            .Property(s => s.StartDate)
+            .HasConversion(s => s.ToDateTime(new TimeOnly()),
+                s=>DateOnly.FromDateTime(s));
+        
+        modelBuilder.Entity<SickLeave>()
+            .Property(s => s.EndDate)
+            .HasConversion(s => s.ToDateTime(new TimeOnly()),
+                s=>DateOnly.FromDateTime(s));
+        
         base.OnModelCreating(modelBuilder);
     }
 
