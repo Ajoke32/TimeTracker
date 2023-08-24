@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import { fetchUsers, setUsersSkip, setUsersTake, User } from "../../redux";
+import { setUsersSkip, setUsersTake, User } from "../../redux";
 import { Checkbox, SearchInput } from "../UI";
 import "./usersTableSmall.css"
 import { useAppDispatch, useTypedSelector } from "@hooks/customHooks.ts";
 import Pager from '@components/Paging/Pager';
-import { addUsersFilters, fetchWorkPlans, resetUsersWorkPlans, userFiltersToDefault } from '@redux/slices';
+import { addUsersFilters, fetchUsers, fetchWorkPlans, loadUsers, resetUsersWorkPlans, userFiltersToDefault } from '@redux/slices';
 import { WhereFilter } from '@redux/types/filterTypes';
 import { GetOneMonthDateRange } from '../../utils';
 
@@ -15,28 +15,47 @@ export const UsersTableSmall = () => {
     const fieldsToSearch = ["Email", "FirstName", "LastName"];
 
     const authState = useTypedSelector(state => state.auth);
-    const { loading, users, group, skip, perPage, orderBy, take, count } = useTypedSelector(state => state.users);
+    const { loading, users, group, orderBy, extensions, perPage } = useTypedSelector(state => state.users);
     const calendarState = useTypedSelector(state => state.calendar);
     const { user } = useTypedSelector(state => state.auth)
 
     const [filtered, setFiltered] = useState<boolean>(false)
     const [plansAdded, setPlansAdded] = useState<boolean>(false)
     const [selectedUsers, setSelectedUsers] = useState<number[]>([])
+    const [take, setTake] = useState<number>(10)
 
     useEffect(() => {
-        loadMore();
-    }, [group, take, skip, orderBy])
+        reload();
+    }, [])
+
+    useEffect(() => {
+        if (group.length)
+            dispatch(fetchUsers({
+                userId: authState.user?.id!,
+                group: group,
+                orderBy: orderBy
+            }));
+    }, [group])
 
     const loadMore = () => {
-        dispatch(fetchUsers({
-            take: take,
-            skip: skip,
+        setTake(users.length + 10);
+        dispatch(loadUsers({
+            take: users.length + 10,
+            skip: users.length,
             userId: authState.user?.id!,
             group: group,
             orderBy: orderBy
         }));
     }
 
+    const reload = () => {
+        dispatch(fetchUsers({
+            take: take,
+            userId: authState.user?.id!,
+            group: [],
+            orderBy: orderBy
+        }));
+    }
 
     const handleSearch = (search: string) => {
         dispatch(userFiltersToDefault());
@@ -47,11 +66,12 @@ export const UsersTableSmall = () => {
         }
 
         dispatch(addUsersFilters(filters));
-        setFiltered(search != '')
+        setFiltered(true)
     }
 
     const handleResetFilter = () => {
-        handleSearch("")
+        dispatch(userFiltersToDefault())
+        reload();
         setFiltered(false)
     }
 
@@ -84,7 +104,6 @@ export const UsersTableSmall = () => {
                     <SearchInput name="search" placeholder="Search" onSearch={handleSearch} />
                 </div>
 
-
                 {filtered &&
                     <div className='reset-button-wrapper'>
                         <button className="reset-btn" onClick={handleResetFilter}>
@@ -101,11 +120,13 @@ export const UsersTableSmall = () => {
                     </div>
                 )}
             </div>
-
-            {count > perPage &&
+            {!filtered && !(users.length % 10) &&
                 <div className='pager-wrapper'>
-                    <Pager capacity={2} skip={skip} take={take} setSkip={setUsersSkip} setTake={setUsersTake}
-                        extensions={{ count: count }} perPage={perPage} />
+                    <div className='add-user-button-wrapper'>
+                        <button className="btn" onClick={loadMore}>
+                            Load more
+                        </button>
+                    </div>
                 </div>
             }
 
@@ -123,8 +144,6 @@ export const UsersTableSmall = () => {
                     </div>
                 }
             </div>
-
-
         </div>
     );
 };

@@ -13,6 +13,7 @@ import { VacationsTable } from "@components/Tables";
 import { Tracker } from "../TrackerPage/Tracker";
 import Calendar from "../CalendarPage/Calendar";
 import VacationDetails from "@components/Cards/VacationDetails.tsx";
+import { Dashboard } from '../DashboardPage/Dashboard';
 
 export const AppRoutes = () => {
   const state = useTypedSelector((state) => state.auth);
@@ -29,6 +30,7 @@ export const AppRoutes = () => {
             <Route index element={<Home />} />
             <Route path="/tracker" element={<Tracker />} />
             <Route path="/calendar" element={<Calendar />} />
+            <Route path='/dashboard' element={<Dashboard />}/>
             <Route path="/team" element={<Outlet />}>
               <Route index element={<Team />} />
               <Route path="addUser"

@@ -10,8 +10,7 @@ import {
     DeleteWorkPlanQuery
 } from "@redux/queries";
 import {
-    fetchAllWorkPlansSuccess,
-    fetchNextWorkPlansSuccess,
+    fetchWorkPlansSuccess,
     fetchAllCalendarEventsSuccess,
     fetchNextCalendarEventsSuccess,
     fetchFail, setFail, setWorkPlanSuccess, setCalendarEventSuccess, deleteFail, deleteWorkPlanSuccess
@@ -29,13 +28,8 @@ export const fetchWorkPlansEpic: Epic = (action: Observable<PayloadAction<FetchU
                         console.log(resp.response.errors[0])
                         return fetchFail("errorMessage")
                     }
-                    const startDate = GetLocalDateFromUTC(action.payload.dateRange.startDate.replace('T', ' '))
-                    const endDate = GetLocalDateFromUTC(action.payload.dateRange.endDate.replace('T', ' '))
 
-                    if (startDate.getMonth() == endDate.getMonth())
-                        return fetchNextWorkPlansSuccess(resp.response.data.workPlanQuery.workPlans)
-                    else
-                        return fetchAllWorkPlansSuccess(resp.response.data.workPlanQuery.workPlans);
+                    return fetchWorkPlansSuccess(resp.response.data.workPlanQuery.workPlans)
                 }),
                 catchError((e: Error) => {
                     console.log(e);
