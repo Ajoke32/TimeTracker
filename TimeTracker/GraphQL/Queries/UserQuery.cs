@@ -58,7 +58,7 @@ public sealed class UserQuery : ObjectGraphType
                 
                 var user = await uow.GenericRepository<User>().FindAsync(u=>u.Id==id,relatedData:include)
                             ?? throw new QueryError(Error.ERR_USER_NOT_FOUND);
-
+                
                 return user;
             }).Description("gets user by id");
 

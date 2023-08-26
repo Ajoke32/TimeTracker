@@ -25,9 +25,7 @@ export const Header = () => {
         }
     }, [dispatch, isRunning]);
 
-    useEffect(() => {
-        dispatch(fetchWorkedHoursStatistic({userId:user?.id!,date:new Date()}));
-    }, []);
+
 
     const handleStartStopButton = () => {
         if (!isRunning) {
@@ -67,9 +65,6 @@ export const Header = () => {
                         </div>
                     </div>
                 )}
-            </div>
-            <div>
-                <span>Worked hours: {hoursToWork?.actuallyWorked}% / 100% ({hoursToWork?.actuallyWorkedHours}h/{hoursToWork?.needToWork}h)</span>
             </div>
             <div className="header-profile__wrapper">
                 <div className="header-profile__notifications">

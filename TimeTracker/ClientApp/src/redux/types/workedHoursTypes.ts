@@ -29,7 +29,9 @@ export interface UpdateWorkedHourType {
 export interface WorkedHoursStatistic{
     actuallyWorked:string,
     actuallyWorkedHours:string,
-    needToWork:string
+    needToWork:string,
+    needToWorkToday:string,
+    actuallyWorkedToday:string
 }
 
 export interface WorkedHoursStatisticInput{

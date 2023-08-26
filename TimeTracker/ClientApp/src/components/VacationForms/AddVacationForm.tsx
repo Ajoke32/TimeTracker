@@ -51,18 +51,12 @@ export const AddVacationForm = () => {
     return (
         <div className="vacations-content__wrapper">
             <form onSubmit={handleSubmit(onSubmit)} className="add-vacation__form">
-                <H5 value={`Available vacation days ${userLoading?"loading..":vacationDays}`} />
-                <div className="login-form__messages-wrapper">
-                    {loading?<Loader/>:""}
-                    {error ? <H5 value={error} />: ""}
-                </div>
                 <label style={{marginLeft:"5px"}}>Start date</label>
                 <input {...register("startDate")} name="startDate" className="text-input" type="date" placeholder="Start date"/>
                 <label style={{marginLeft:"5px"}}>End date</label>
                 <input {...register("endDate")} name="endDate" className="text-input" type="date" placeholder="End date"/>
                 <TextInput name="message" register={register("message")} placeholder="Message"/>
                 <SmallButton type="submit" value="Create vacation"/>
-
             </form>
         </div>
     );
