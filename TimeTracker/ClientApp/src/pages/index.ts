@@ -1,4 +1,4 @@
-export * from './Home';
+export * from './HomePage.tsx';
 export * from './LoginPage/Login';
 export * from './Structure/AppRoutes';
 export * from './Structure/Layout';

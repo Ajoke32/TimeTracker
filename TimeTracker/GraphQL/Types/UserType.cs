@@ -41,5 +41,7 @@ public sealed class UserType:ObjectGraphType<User>
 
         Field(x => x.ApproverVacations,nullable:true).Description("user request");
 
+        Field(x => x.WorkPlans).Description("user work plans");
+
     }
 }

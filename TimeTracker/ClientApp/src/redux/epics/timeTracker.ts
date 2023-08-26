@@ -140,9 +140,12 @@ export const fetchWorkedHourStatistic:Epic=(action:Observable<PayloadAction<Work
                         if (res.response.errors != null) {
                             return fetchWorkedHoursStatisticFail(res.response.errors[0].message)
                         }
-                        return fetchWorkedHoursStatisticSuccess(res.response.data.workedHourQuery.getStatistic);
+                        return fetchWorkedHoursStatisticSuccess(res.response.data.workedHourQuery.getYearStatistic);
                     }),
-                    catchError((e: Error) => of(fetchWorkedHoursStatisticFail("error")))
+                    catchError((e: Error) => {
+                        console.log(e);
+                        return of(fetchWorkedHoursStatisticFail("error"));
+                    })
                 )
         )
     )

@@ -1,5 +1,4 @@
 import { CalendarCell, CalendarEvent, WorkPlan } from "@redux/types";
-import { GetFormattedDateString } from ".";
 import { SortedCalendarArr } from "@redux/intrerfaces";
 
 export function setPrevMonthDates(date: Date, events: CalendarEvent[], plans: SortedCalendarArr[]) {
