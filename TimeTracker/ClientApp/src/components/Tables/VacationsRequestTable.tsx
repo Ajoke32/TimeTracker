@@ -17,6 +17,7 @@ import {H4} from "@components/Headings";
 import Pager from "@components/Paging/Pager.tsx";
 import FilteredSearch from "@components/UI/Inputs/FilteredSearch.tsx";
 import PerPageChanger from "@components/UI/Inputs/PerPageChanger.tsx";
+import { WorkedFetchType } from '@redux/types/workedHoursTypes.ts';
 
 export const VacationsRequestTable = () => {
 
@@ -28,7 +29,7 @@ export const VacationsRequestTable = () => {
         useTypedSelector(s=>s.auth.user?.id);
 
     useEffect(()=>{
-        dispatch(fetchRequests({userId:userId!,take:take,skip:skip,group:group}))
+        dispatch(fetchRequests({userId:userId!,take:take,skip:skip,group:group} as WorkedFetchType))
     },[take,skip,group])
 
 

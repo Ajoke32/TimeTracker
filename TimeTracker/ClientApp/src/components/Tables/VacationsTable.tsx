@@ -13,7 +13,7 @@ import {
 } from "../../redux";
 import moment from "moment/moment";
 import {getStringVacationState} from "../../utils/vacationHelper.ts";
-import {Vacation, VacationStateEnum} from "@redux/types";
+import {Vacation, VacationStateEnum, WorkedFetchType} from "@redux/types";
 import CancelVacationModal from "@components/UI/Modals/CancelVacationModal.tsx";
 import {H4} from "@components/Headings";
 import FilteredSearch from "@components/UI/Inputs/FilteredSearch.tsx";
@@ -35,7 +35,7 @@ export const VacationsTable = () => {
     const [clicked,setClicked] = useState<Vacation>();
     const [selected,setSelected] = useState<string>("all")
     useEffect(()=>{
-        dispatch(fetchUserVacations({userId:userId!,take:take,skip:skip,group:group}))
+        dispatch(fetchUserVacations({userId:userId!,take:take,skip:skip,group:group} as WorkedFetchType))
     },[group,take]);
 
     useEffect(() => {
