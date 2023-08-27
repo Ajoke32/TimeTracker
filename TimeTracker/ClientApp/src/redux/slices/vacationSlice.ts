@@ -6,15 +6,13 @@ import {
     defaultState
 } from "./generic";
 import {VacationState} from "../intrerfaces";
-import {Vacation, VacationChangeType, VacationInputType} from "../types";
+import {Vacation, VacationChangeType, VacationInputType, WorkedFetchType} from "../types";
 import {
     basicFilteringReducers,
     basicPagingReducers,
     defaultPagingState,
     PagingEntityType
 } from "@redux/types/filterTypes.ts";
-import {WorkedFetchType} from "@redux/slices/workedHoursSlice.ts";
-
 
 const initialState:VacationState = {
     ...defaultState,

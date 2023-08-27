@@ -13,6 +13,7 @@ import { VacationsTable } from "@components/Tables";
 import { Tracker } from "../TrackerPage/Tracker";
 import Calendar from "../CalendarPage/Calendar";
 import VacationDetails from "@components/Cards/VacationDetails.tsx";
+import { Dashboard } from '../DashboardPage/Dashboard';
 import HomeTwo from "../HomeTwo.tsx";
 
 
@@ -28,6 +29,7 @@ export const AppRoutes = () => {
             <Route index element={<HomeTwo />} />
             <Route path="/tracker" element={<Tracker />} />
             <Route path="/calendar" element={<Calendar />} />
+            <Route path='/dashboard' element={<Dashboard />}/>
             <Route path="/team" element={<Outlet />}>
               <Route index element={<Team />} />
               <Route path="addUser"

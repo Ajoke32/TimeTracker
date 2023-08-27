@@ -9,8 +9,8 @@
     margin-bottom: 10px;
 }
 
-.pager-wrapper .pages-wrapper {
-    margin-top: 0;
+.pager-wrapper  .add-user-button-wrapper {
+    width: 100%;
 }
 
 .search-header {
@@ -53,6 +53,8 @@
 }
 
 .users-list-wrapper {
+    height: 50%;
+    overflow-y: scroll;
     margin: 10px 0
 }
 

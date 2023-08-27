@@ -1,32 +1,28 @@
+import { User } from "@redux/intrerfaces";
 import "./radiobuttons.css"
 import { useState } from 'react';
 
 interface RadioButtonProps {
-    options: number[],
-    title: string,
-    name: string,
-    register: any,
+    options: User[],
+    selectedOption: number,
+    setSelectedOption: React.Dispatch<React.SetStateAction<number>>
 }
 
-export const RadioButton = ({ title, options, name, register }: RadioButtonProps) => {
-
-    const [selectedOption, setSelectedOption] = useState<number>(50);
-    
-    
+export const RadioButton = ({ options, selectedOption, setSelectedOption }: RadioButtonProps) => {
 
     return (
         <div className="radio-button__wrapper">
-            <div className="radio-button__title-wrapper"><span>{title}</span></div>
             <div className="radio-button__options-wrapper">
-                {options.map((percentage) => (
-                    <label key={percentage}>
-                        <input {...register}
-                            value={percentage}
+                {options.map((user) => (
+                    <label key={user.id} className="radio-container">
+                        <input
+                            value={user.id}
                             type="radio"
-                            checked={percentage === selectedOption}
-                            onChange={() => { setSelectedOption(percentage) }}
+                            checked={user.id === selectedOption}
+                            onChange={() => { setSelectedOption(user.id) }}
                         />
-                        <span>{percentage}%</span>
+                        <span className="checkmark"></span>
+                        <span>{user.firstName}{user.lastName}</span>
                     </label>
                 ))}
             </div>

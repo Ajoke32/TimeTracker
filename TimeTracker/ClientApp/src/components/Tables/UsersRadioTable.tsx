@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react'
 import { setUsersSkip, setUsersTake, User } from "../../redux";
-import { Checkbox, SearchInput } from "../UI";
+import { Checkbox, PickerDateRange, RadioButton, SearchInput } from "../UI";
 import "./usersTableSmall.css"
 import { useAppDispatch, useTypedSelector } from "@hooks/customHooks.ts";
 import Pager from '@components/Paging/Pager';
-import { addUsersFilters, fetchUsers, fetchWorkPlans, loadUsers, resetUsersWorkPlans, userFiltersToDefault } from '@redux/slices';
+import { addUsersFilters, fetchUserWorkedHours, fetchUsers, fetchWorkPlans, loadUsers, resetUsersWorkPlans, userFiltersToDefault } from '@redux/slices';
 import { WhereFilter } from '@redux/types/filterTypes';
-import { GetOneMonthDateRange } from '../../utils';
+import { GetOneMonthDateRange, GetPickerDateRange } from '../../utils';
 
 
-export const UsersTableSmall = () => {
+export const UsersRadioTable = ({ selectedUser, setSelectedUser, dateRange }: {
+    selectedUser: number,
+    setSelectedUser: React.Dispatch<React.SetStateAction<number>>,
+    dateRange: PickerDateRange
+}) => {
 
     const dispatch = useAppDispatch();
     const fieldsToSearch = ["Email", "FirstName", "LastName"];
@@ -20,8 +24,7 @@ export const UsersTableSmall = () => {
     const { user } = useTypedSelector(state => state.auth)
 
     const [filtered, setFiltered] = useState<boolean>(false)
-    const [plansAdded, setPlansAdded] = useState<boolean>(false)
-    const [selectedUsers, setSelectedUsers] = useState<number[]>([])
+    const [progressAdded, setProgressAdded] = useState<boolean>(false)
     const [take, setTake] = useState<number>(10)
 
     useEffect(() => {
@@ -75,26 +78,22 @@ export const UsersTableSmall = () => {
         setFiltered(false)
     }
 
-    const handleResetPlans = () => {
-        setSelectedUsers([])
-        dispatch(resetUsersWorkPlans(user!.id))
-        setPlansAdded(false)
-    }
-
-    const handleSelect = (value: number, checked: boolean) => {
-        const selectedUsersArr = checked
-            ? [...selectedUsers, value]
-            : selectedUsers.filter((id) => id !== value);
-
-        setSelectedUsers(selectedUsersArr)
-    }
-
-    const handleAddPlans = () => {
-        dispatch(fetchWorkPlans({
-            dateRange: GetOneMonthDateRange(calendarState.currentDate),
-            userIds: selectedUsers
+    const handleResetProgress = () => {
+        setSelectedUser(user!.id)
+        dispatch(fetchUserWorkedHours({
+            userId: user!.id,
+            dateRange: GetPickerDateRange(dateRange)
         }))
-        setPlansAdded(true)
+        setProgressAdded(false)
+    }
+
+    const handleAddProgress = () => {
+        dispatch(fetchUserWorkedHours({
+            userId: selectedUser,
+            dateRange: GetPickerDateRange(dateRange)
+        }))
+        if (selectedUser != user!.id)
+            setProgressAdded(true)
     }
 
     return (
@@ -114,11 +113,7 @@ export const UsersTableSmall = () => {
             </div>
 
             <div className='users-list-wrapper'>
-                {users.map(u =>
-                    <div key={u.id} >
-                        <Checkbox value={u.id} optionName={`${u.firstName} ${u.lastName}`} isChecked={selectedUsers.includes(u.id)} onChange={handleSelect} />
-                    </div>
-                )}
+                <RadioButton options={users} selectedOption={selectedUser} setSelectedOption={setSelectedUser} />
             </div>
             {!filtered && !(users.length % 10) &&
                 <div className='pager-wrapper'>
@@ -132,13 +127,13 @@ export const UsersTableSmall = () => {
 
             <div className='table-controls-wrapper'>
                 <div className='add-user-button-wrapper'>
-                    <button className="btn" onClick={handleAddPlans}>
-                        Add users' plans
+                    <button className="btn" onClick={handleAddProgress}>
+                        Review user's progress
                     </button>
                 </div>
-                {plansAdded &&
+                {progressAdded &&
                     <div className='reset-user-button-wrapper'>
-                        <button className="reset-btn" onClick={handleResetPlans}>
+                        <button className="reset-btn" onClick={handleResetProgress}>
                             Reset
                         </button>
                     </div>

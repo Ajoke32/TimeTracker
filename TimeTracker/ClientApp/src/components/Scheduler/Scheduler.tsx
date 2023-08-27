@@ -5,13 +5,12 @@ import { CurrentDateElement } from "@components/UI";
 import { H4 } from "@components/Headings";
 import { CalendarType, CalendarCell, SchedulerWorkedHour, SchedulerWorkPlan } from '@redux/types';
 import { useAppDispatch, useTypedSelector } from '@hooks/customHooks';
-import { GetFormattedTimeDifference, addDay, createCalendarCell, substractDay } from '../../utils';
+import { GetFormattedTimeDifference, addDay, createCalendarCell, generateColors, substractDay } from '../../utils';
 import { SchedulerModal, UsersTableSmall, hours } from '..';
 import { TimeRow } from './TimeRow';
-import { resetUsersWorkPlans } from '@redux/slices';
+import { resetUsersWorkPlans, userFiltersToDefault } from '@redux/slices';
 
-const Scheduler = ({ cell, back }: { cell: CalendarCell, back: (selectedDate: Date) => void }) => {
-    // const { cell, calendar } = data;
+export const Scheduler = ({ cell, back }: { cell: CalendarCell, back: (selectedDate: Date) => void }) => {
     const dispatch = useAppDispatch()
 
     const calendar = useTypedSelector(state => state.calendar);
@@ -21,29 +20,35 @@ const Scheduler = ({ cell, back }: { cell: CalendarCell, back: (selectedDate: Da
     const [calendarCell, setCalendarCell] = useState<CalendarCell>(cell)
     const [workedHours, setWorkedHours] = useState<SchedulerWorkedHour[]>()
     const [colors, setColors] = useState<string[]>([])
+    const [rows, setRows] = useState<number>(0)
+
     const [isFormHidden, setIsFormHidden] = useState<SchedulerWorkPlan | null>(null);
 
-    const defaultRowsCount = 7;
+    const defaultRowsCount = 6;
 
     useEffect(() => {
-        const wp: SchedulerWorkedHour[] = calendarCell.workPlans.map(c => ({
-            userId: c.userId,
-            workPlans: c.workPlans.map(p => {
-                return {
-                    id: p.id,
-                    startTime: p.startTime,
-                    endTime: p.endTime,
-                    totalTime: GetFormattedTimeDifference(p.startTime, p.endTime),
-                    date: p.date,
-                    user: `${p.firstName} ${p.lastName}`,
-                    userId: p.userId
-                }
-            })
 
-        }))
+        const wp: SchedulerWorkedHour[] = [];
+        for (const c of calendarCell.workPlans) {
+            if (c.workPlans.length)
+                wp.push({
+                    userId: c.userId,
+                    workPlans: c.workPlans.map(p => {
+                        return {
+                            id: p.id,
+                            startTime: p.startTime,
+                            endTime: p.endTime,
+                            totalTime: GetFormattedTimeDifference(p.startTime, p.endTime),
+                            date: p.date,
+                            user: `${p.firstName} ${p.lastName}`,
+                            userId: p.userId
+                        }
+                    })
 
+                });
+        }
         setWorkedHours(sortByCurrentUser(wp))
-        setColors(generateColors())
+        setColors([...colors, ...generateColors(colors.length, calendarCell.workPlans.length-colors.length)])
     }, [calendarCell])
 
     useEffect(() => {
@@ -74,21 +79,9 @@ const Scheduler = ({ cell, back }: { cell: CalendarCell, back: (selectedDate: Da
     }
 
     const handleBackButton = () => {
-        back(currentDate)
+        dispatch(userFiltersToDefault())
         dispatch(resetUsersWorkPlans(user!.id))
-    }
-
-    const generateColors = () => {
-        let colorsArr = colors;
-        for (let i = colors!.length; i < calendarCell.workPlans.length; i++) {
-            const randomR = Math.floor(Math.random() * 100) + 100;
-            const randomG = Math.floor(Math.random() * 100) + 155;
-            const randomB = Math.floor(Math.random() * 100) + 200;
-            const randomOpacity = Math.random() * 0.3 + 0.3;
-
-            colorsArr.push(`rgba(${randomR}, ${randomG}, ${randomB}, ${randomOpacity})`)
-        }
-        return colorsArr;
+        back(currentDate)
     }
 
     return (
@@ -120,15 +113,16 @@ const Scheduler = ({ cell, back }: { cell: CalendarCell, back: (selectedDate: Da
                         <div className="no-data__message-wrapper"><H4 value="No data available" /></div>
                     ) : (
                         <div
-                            className="working-hours__content"
-                            style={{ gridTemplateRows: `repeat(${workedHours.length < 7 ? 7 : workedHours.length}, 1fr)` }}>
+                            className="working-hours__content">
                             {workedHours.map((wh, index) => {
+                                if (!wh.workPlans.length)
+                                    return
                                 return (
                                     <TimeRow workedHour={wh} color={colors[index]} onClick={setIsFormHidden} key={index} />
                                 )
                             })}
-                            {workedHours.length < defaultRowsCount &&
-                                Array.from({ length: defaultRowsCount - workedHours.length }, (_, index) => (
+                            {rows < defaultRowsCount &&
+                                Array.from({ length: defaultRowsCount - rows }, (_, index) => (
                                     <div className="content-row" key={index}></div>
                                 ))}
                         </div>)}
@@ -136,14 +130,10 @@ const Scheduler = ({ cell, back }: { cell: CalendarCell, back: (selectedDate: Da
             </div>
             <div className="side-form-wrapper">
                 <div className="user-search-form">
-                    <div className='inner-wrapper'>
-                        <UsersTableSmall />
-                    </div>
+                    <UsersTableSmall />
                 </div>
             </div>
         </div>
 
     );
 };
-
-export default Scheduler;

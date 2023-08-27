@@ -25,8 +25,6 @@ export const Header = () => {
         }
     }, [dispatch, isRunning]);
 
-
-
     const handleStartStopButton = () => {
         if (!isRunning) {
             dispatch(startTimer());
