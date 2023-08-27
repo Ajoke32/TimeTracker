@@ -10,6 +10,7 @@ using TimeTracker.GraphQL.Types;
 using TimeTracker.GraphQL.Types.InputTypes;
 using TimeTracker.Models;
 using TimeTracker.Models.Dtos;
+using TimeTracker.Repositories;
 using TimeTracker.Utils.Auth;
 using TimeTracker.Utils.Email;
 using TimeTracker.Utils.Errors;
@@ -21,8 +22,10 @@ namespace TimeTracker.GraphQL.Queries;
 
 public sealed class WorkedHourQuery : ObjectGraphType
 {
+    private readonly IGenericRepository<WorkedHour> _repos;
     public WorkedHourQuery(IUnitOfWorkRepository uow, IGraphQlArgumentVisitor visitor)
     {
+        _repos = uow.GenericRepository<WorkedHour>();
         Field<ListGraphType<WorkedHourType>>("workedHours")
             .Argument<int>("userId")
             .Argument<DateRangeInputType>("dateRange")
@@ -52,7 +55,7 @@ public sealed class WorkedHourQuery : ObjectGraphType
 
 
 
-        Field<HoursWorkedGraphType>("getStatistic")
+        Field<HoursWorkedGraphType>("getYearStatistic")
             .Argument<int>("userId")
             .Argument<DateOnlyGraphType>("date")
             .ResolveAsync(async _ =>
@@ -60,18 +63,38 @@ public sealed class WorkedHourQuery : ObjectGraphType
                 var id = _.GetArgument<int>("userId");
                 var date = _.GetArgument<DateOnly>("date");
                 var user = await uow.GenericRepository<User>()
-                    .FindAsync(u => u.Id == id, relatedData: "WorkedHours") ?? throw new Exception("not found");
-
-                var needToWork = user.HoursPerMonth * 8 * GetWorkedDaysInMonth(date.Year, date.Month) / 100;
-
+                    .FindAsync(u => u.Id == id,relatedData:"WorkedHours,WorkPlans")??throw new Exception("not found");
+                
+                var needToWork = user.HoursPerMonth* 8 * GetWorkedDaysInMonth(date.Year,date.Month)/100;
+                
                 var actuallyWorked = user.WorkedHours
                     .Aggregate(TimeSpan.Zero, (current, wh) => current + wh.TotalTime.ToTimeSpan());
 
+                var plans =user.WorkPlans
+                    .FindAll(w => w.Date == DateOnly.FromDateTime(DateTime.Now));
+                
+                
+                var needToWorkToday = TimeSpan.Zero;
+                
+                
+                var actuallyWorkedToday = user
+                    .WorkedHours
+                    .FindAll(wh=>wh.Date.Date == DateTime.Now.Date)
+                    .Aggregate(TimeSpan.Zero,(current,next)=>current+next.TotalTime.ToTimeSpan());
+                
+                if (plans.Any())
+                {
+                    needToWorkToday = plans
+                        .Aggregate(TimeSpan.Zero, (current, wh) => current + (wh.EndTime-wh.StartTime));
+                }
+                
                 return new HoursWorked()
                 {
                     ActuallyWorked = (actuallyWorked.TotalHours * 100 / needToWork).ToString("F2"),
                     ActuallyWorkedHours = actuallyWorked.TotalHours.ToString("F2"),
-                    NeedToWork = needToWork.ToString("F2")
+                    NeedToWork = needToWork.ToString("F2"),
+                    NeedToWorkToday = needToWorkToday.TotalHours.ToString("F2"),
+                    ActuallyWorkedToday = actuallyWorkedToday.TotalHours.ToString("F2") 
                 };
             });
     }

@@ -84,14 +84,15 @@ export function CreateWorkedHoursQuery(workedHour: CreateWorkedHourType) {
   )
 }
 
-export function WorkedHoursStatistic(userId: number, date: Date) {
-  return AjaxQuery<{ workedHourQuery: { getStatistic: WorkedHoursStatistic } }>(
-    `query GetWorkedHours($id:Int!,$date:DateOnly!){
+export function WorkedHoursStatistic(userId:number,date:Date){
+  return AjaxQuery<{ workedHourQuery: { getYearStatistic: WorkedHoursStatistic } }>(
+      `query GetWorkedHours($id:Int!,$date:DateOnly!){
         workedHourQuery{
-          getStatistic(userId:$id,date:$date){
+          getYearStatistic(userId:$id,date:$date){
             actuallyWorked,
-            needToWork,
-            actuallyWorkedHours
+            actuallyWorkedToday,
+            needToWorkToday,
+            needToWork
           }
         }
       }`,

@@ -95,9 +95,14 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         try
         {
             IQueryable<TEntity> query = _dbSet;
+
             if (relatedData != null)
             {
-                query = query.Include(relatedData);
+                foreach (var includeProperty in relatedData.Split
+                             (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty);
+                }
             }
 
             if (asNoTracking)

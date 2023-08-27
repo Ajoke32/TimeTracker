@@ -34,10 +34,12 @@ export interface UpdateWorkedHourType {
     endTime: string,
 }
 
-export interface WorkedHoursStatistic {
-    actuallyWorked: string,
-    actuallyWorkedHours: string,
-    needToWork: string
+export interface WorkedHoursStatistic{
+    actuallyWorked:string,
+    actuallyWorkedHours:string,
+    needToWork:string,
+    needToWorkToday:string,
+    actuallyWorkedToday:string
 }
 
 export interface WorkedHoursStatisticInput {

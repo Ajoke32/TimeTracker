@@ -10,5 +10,7 @@ public sealed class HoursWorkedGraphType:ObjectGraphType<HoursWorked>
         Field(x => x.ActuallyWorked);
         Field(x => x.NeedToWork);
         Field(x => x.ActuallyWorkedHours);
+        Field(x => x.NeedToWorkToday);
+        Field(x => x.ActuallyWorkedToday);
     }
 }

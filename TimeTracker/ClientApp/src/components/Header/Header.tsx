@@ -64,7 +64,6 @@ export const Header = () => {
                     </div>
                 )}
             </div>
-
             <div className="header-profile__wrapper">
                 <div className="header-profile__notifications">
                     <div className="header-profile__notifications-inner">
