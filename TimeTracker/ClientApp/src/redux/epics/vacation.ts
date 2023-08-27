@@ -1,7 +1,7 @@
 import { Epic, ofType } from "redux-observable";
 import { catchError, map, mergeMap, Observable, of } from "rxjs";
 import { PayloadAction } from "@reduxjs/toolkit";
-import {Vacation, VacationChangeType, VacationInputType} from "../types";
+import {Vacation, VacationChangeType, VacationInputType, WorkedFetchType} from "../types";
 import {
     AddVacationQuery,
     ChangeVacationState, DeleteVacation,
@@ -18,7 +18,7 @@ import {
     fetchUserVacationsFail,
     fetchUserVacationsSuccess, fetchVacationByIdFail, fetchVacationByIdSuccess, updateVacationFail,
     updateVacationStateFail,
-    updateVacationStateSuccess, updateVacationSuccess, WorkedFetchType,
+    updateVacationStateSuccess, updateVacationSuccess,
 } from "../slices";
 import { GetErrorMessage } from "../../utils";
 

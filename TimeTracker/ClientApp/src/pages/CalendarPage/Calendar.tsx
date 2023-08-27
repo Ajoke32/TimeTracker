@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { LargeCalendar } from "@components/Calendar/LargeCalendar";
 import "./Calendar.css"
-import Scheduler from "@components/Scheduler/Scheduler.tsx";
-import { CalendarType, CalendarCell } from '@redux/types';
+import { Scheduler } from "@components/Scheduler";
+import { CalendarCell } from '@redux/types';
 
 const Calendar = () => {
     const [page, setPage] = useState<CalendarCell | null>(null)

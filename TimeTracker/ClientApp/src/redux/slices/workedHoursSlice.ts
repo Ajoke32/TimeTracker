@@ -5,7 +5,9 @@ import {
     UpdateWorkedHourType,
     CreateWorkedHourType,
     WorkedHoursStatisticInput,
-    WorkedHoursStatistic
+    WorkedHoursStatistic,
+    WorkedFetchType,
+    DateRangeType,
 } from '@redux/types';
 import {
     createErrorReducer,
@@ -17,20 +19,16 @@ import { GetLocalWorkedHour } from '../../utils';
 import {
     basicPagingReducers,
     defaultPagingState,
-    FiltersType,
     PagingEntityType,
-    PagingInputType
 } from "@redux/types/filterTypes.ts";
 
-export interface WorkedFetchType extends PagingInputType,FiltersType{
-    userId:number
-}
+
 
 const initialState: WorkedHoursSlice = {
     ...defaultState,
-    ...{...defaultPagingState,take:4,perPage:4},
+    ...{ ...defaultPagingState, take: 4, perPage: 4 },
     workedHours: [],
-    hoursToWork:undefined
+    hoursToWork: undefined
 };
 
 const workedHoursSlice = createSlice({
@@ -45,15 +43,15 @@ const workedHoursSlice = createSlice({
         ),
         createWorkedHourFail: createErrorReducer(),
 
-        fetchWorkedHours: createPendingReducerWithPayload<WorkedHoursSlice, WorkedFetchType>(),
+        fetchWorkedHours: createPendingReducerWithPayload<WorkedHoursSlice, { userId: number, dateRange: DateRangeType }>(),
         fetchWorkedHoursSuccess: createSuccessReducerWithPayload<WorkedHoursSlice, PagingEntityType<WorkedHour>>(
             (state, action) => {
                 action.payload.entities.forEach((wh, index) => {
                     action.payload.entities[index] = GetLocalWorkedHour(wh)
                 })
                 state.workedHours = action.payload.entities;
-                if(action.payload.extensions){
-                    state.extensions=action.payload.extensions;
+                if (action.payload.extensions) {
+                    state.extensions = action.payload.extensions;
                 }
             }),
         fetchWorkedHoursFail: createErrorReducer(),
@@ -76,12 +74,12 @@ const workedHoursSlice = createSlice({
             }),
         deleteWorkedHourFail: createErrorReducer(),
 
-        fetchWorkedHoursStatistic:createPendingReducerWithPayload<typeof initialState,WorkedHoursStatisticInput>(),
-        fetchWorkedHoursStatisticSuccess:createSuccessReducerWithPayload<typeof initialState,WorkedHoursStatistic>
-        ((state,action)=>{
-            state.hoursToWork=action.payload;
-        }),
-        fetchWorkedHoursStatisticFail:createErrorReducer(),
+        fetchWorkedHoursStatistic: createPendingReducerWithPayload<typeof initialState, WorkedHoursStatisticInput>(),
+        fetchWorkedHoursStatisticSuccess: createSuccessReducerWithPayload<typeof initialState, WorkedHoursStatistic>
+            ((state, action) => {
+                state.hoursToWork = action.payload;
+            }),
+        fetchWorkedHoursStatisticFail: createErrorReducer(),
         ...basicPagingReducers
     },
 });
@@ -91,7 +89,7 @@ export const {
     editWorkedHour, editWorkedHourFail, editWorkedHourSuccess,
     deleteWorkedHour, deleteWorkedHourFail, deleteWorkedHourSuccess,
     createWorkedHour, createWorkedHourFail, createWorkedHourSuccess,
-    setTake:setWorkedHoursTake,setSkip:setWorkedHourSkip,fetchWorkedHoursStatistic
-    ,fetchWorkedHoursStatisticSuccess,fetchWorkedHoursStatisticFail
+    setTake: setWorkedHoursTake, setSkip: setWorkedHourSkip, fetchWorkedHoursStatistic
+    , fetchWorkedHoursStatisticSuccess, fetchWorkedHoursStatisticFail
 } = workedHoursSlice.actions;
 export const workedHours = workedHoursSlice.reducer;

@@ -18,9 +18,9 @@ import {
     updateApproversVacationsFail,
     updateApproversVacationsSuccess,
     updateApproverVacationStateStateFail,
-    updateApproverVacationStateSuccess, updateToDefaultFail, updateToDefaultSuccess, WorkedFetchType
+    updateApproverVacationStateSuccess, updateToDefaultFail, updateToDefaultSuccess, 
 } from "../slices";
-import {ApproverVacationUpdate, VacationApproverInput} from "../types";
+import {ApproverVacationUpdate, VacationApproverInput, WorkedFetchType} from "../types";
 import {GetErrorMessage} from "../../utils";
 
 

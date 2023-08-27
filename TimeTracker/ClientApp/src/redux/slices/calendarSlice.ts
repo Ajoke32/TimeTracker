@@ -98,37 +98,7 @@ const calendarSlice = createSlice({
         ),
 
         fetchWorkPlans: createPendingReducerWithPayload<CalendarSlice, FetchUsersPlansType>(),
-        fetchAllWorkPlansSuccess: createSuccessReducerWithPayload<CalendarSlice, WorkPlan[]>(
-            (state: CalendarSlice, action: PayloadAction<WorkPlan[]>) => {
-                const sortedEvents: FormattedCalendarArr<SortedCalendarArr> = {
-                    previousMonth: [],
-                    currentMonth: [],
-                    nextMonth: [],
-                };
-
-                action.payload.forEach((element) => {
-                    const local = GetLocalWorkPlan(element)
-
-                    const userEvents = sortedEvents[
-                        local.date.getMonth() == state.currentDate.getMonth()
-                            ? 'currentMonth'
-                            : local.date.getMonth() < state.currentDate.getMonth()
-                                ? 'previousMonth'
-                                : 'nextMonth'];
-
-                    const existingUser = userEvents.find((u) => u.userId === local.userId);
-
-                    existingUser
-                        ? existingUser.workPlans.push(local)
-                        : userEvents.push({
-                            userId: local.userId,
-                            workPlans: [local],
-                        })
-                });
-
-                state.workPlans = sortedEvents;
-            }),
-        fetchNextWorkPlansSuccess: createSuccessReducerWithPayload<CalendarSlice, WorkPlan[]>(
+        fetchWorkPlansSuccess: createSuccessReducerWithPayload<CalendarSlice, WorkPlan[]>(
             (state: CalendarSlice, action: PayloadAction<WorkPlan[]>) => {
                 const sortedEvents: FormattedCalendarArr<SortedCalendarArr> = state.workPlans
 
@@ -242,8 +212,7 @@ export const {
     fetchAllCalendarEventsSuccess,
     fetchNextCalendarEventsSuccess,
     fetchFail, fetchWorkPlans,
-    fetchAllWorkPlansSuccess,
-    fetchNextWorkPlansSuccess,
+    fetchWorkPlansSuccess,
     setWorkPlan, setWorkPlanSuccess,
     setCalendarEventSuccess,
     setCalendarEvent, setFail,

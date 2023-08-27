@@ -41,6 +41,15 @@ const usersSlice = createSlice({
                     state.count = action.payload.extensions.count;
                 }
             }),
+        loadUsers: createPendingReducerWithPayload<UsersSliceState, FetchUsersType>(),
+        loadUsersSuccess: createSuccessReducerWithPayload<UsersSliceState, PagingEntityType<User>>(
+            (state, action) => {
+                state.users = [...state.users, ...action.payload.entities];
+
+                if (action.payload.extensions) {
+                    state.count = action.payload.extensions.count;
+                }
+            }),
         fetchUsersFail: createErrorReducer(),
 
         deleteUser: createPendingReducerWithPayload<typeof initialState, number>(),
@@ -67,4 +76,5 @@ export const { fetchUsersFail,
     removeFilter: removeUserFilter,
     setColumn: setUsersOrdering,
     toDefault: usersPagingToDefault,
-    addFilters: addUsersFilters } = usersSlice.actions;
+    addFilters: addUsersFilters,
+    loadUsers, loadUsersSuccess } = usersSlice.actions;

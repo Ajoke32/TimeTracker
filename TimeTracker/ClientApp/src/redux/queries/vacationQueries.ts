@@ -1,12 +1,9 @@
 import {Vacation, VacationChangeType, VacationInputType} from "../types";
 import {AjaxQuery} from "./query";
 import {ReadCookie} from "../../utils";
-import {ApproverVacation} from "../types";
+import {ApproverVacation, WorkedFetchType} from "../types";
 import moment from "moment";
 import {WhereFilter} from "@redux/types/filterTypes.ts";
-import {WorkedFetchType} from "@redux/slices";
-
-
 
 export function AddVacationQuery(vacation:VacationInputType) {
 

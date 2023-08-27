@@ -27,8 +27,8 @@ export interface FetchUserType {
 }
 
 export interface FetchUsersType extends FetchUserType,FiltersType,OrderingType{
-    take: number,
-    skip: number,
+    take?: number,
+    skip?: number,
     group:WhereFilter[]
 }
 
