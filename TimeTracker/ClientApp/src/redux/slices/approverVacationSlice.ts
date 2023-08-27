@@ -8,7 +8,7 @@ import {
 import {createSlice,  PayloadAction} from "@reduxjs/toolkit";
 import {
     ApproverVacation, ApproverVacationUpdate, Vacation,
-    VacationApproverInput
+    VacationApproverInput, WorkedFetchType
 } from "../types";
 import {
     basicFilteringReducers,
@@ -16,7 +16,6 @@ import {
     defaultPagingState,
     PagingEntityType, WhereFilter
 } from "@redux/types/filterTypes.ts";
-import {WorkedFetchType} from "@redux/slices/workedHoursSlice.ts";
 
 
 const initialState:VacationApproverState = {
