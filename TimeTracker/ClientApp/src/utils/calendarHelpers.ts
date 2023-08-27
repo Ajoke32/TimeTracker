@@ -102,3 +102,17 @@ export const addDay = (date: Date): Date => {
 
     return newDate;
 }
+
+export const generateColors = (index: number, count: number) => {
+    const colorsArr: string[] = [];
+
+    for (let i = index; i < count; i++) {
+        const randomR = Math.floor(Math.random() * 100) + 100;
+        const randomG = Math.floor(Math.random() * 100) + 155;
+        const randomB = Math.floor(Math.random() * 100) + 200;
+        const randomOpacity = Math.random() * 0.3 + 0.3;
+
+        colorsArr.push(`rgba(${randomR}, ${randomG}, ${randomB}, ${randomOpacity})`)
+    }
+    return colorsArr;
+}

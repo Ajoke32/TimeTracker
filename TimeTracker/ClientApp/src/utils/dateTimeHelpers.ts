@@ -1,6 +1,7 @@
 import { CalendarEvent, DateRangeType, WorkPlan, WorkedHour, WorkedTime } from "@redux/types";
 import { addMonth, substractMonth } from ".";
 import moment from "moment";
+import { PickerDateRange } from "@components/index";
 
 export const GetFormattedUTCDateString = (date: Date): string => {
     let result = "";
@@ -100,6 +101,19 @@ export const GetThreeMonthDateRange = (date: Date): DateRangeType => {
     }
 }
 
+export const GetPickerDateRange = (range: PickerDateRange): DateRangeType => {
+    const startDate = range.startDate!.toDate();
+    const endDate = range.endDate ? range.endDate.toDate() : startDate;
+
+    const firstTime = GetFormattedUTCTimeString("00:00:00", GetFormattedDateString(startDate))
+    const lastTime = GetFormattedUTCTimeString("00:00:00", GetFormattedDateString(endDate))
+
+    return {
+        startDate: `${GetFormattedDateString(startDate)}T${firstTime}`,
+        endDate: `${GetFormattedDateString(endDate)}T${lastTime}`
+    }
+}
+
 export const GetOneMonthDateRange = (date: Date): DateRangeType => {
 
     const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1)
@@ -180,3 +194,9 @@ export const GetFormattedTimeDifference = (timeString1: string, timeString2: str
 
     return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 }
+
+export const convertTimeToIndex = (time: string) => {
+    const [hoursStr, minutesStr] = time.split(":");
+
+    return parseInt(minutesStr, 10) + parseInt(hoursStr, 10) * 60;
+};

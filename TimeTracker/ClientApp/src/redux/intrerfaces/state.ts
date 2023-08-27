@@ -22,7 +22,8 @@ export interface AuthSliceState extends DefaultState {
 
 export interface UserSliceState extends DefaultState {
     user: User | null,
-    vacationDays?: number
+    vacationDays?: number,
+    workedHours: FormattedWorkedHours[]
 }
 
 export interface UsersSliceState extends DefaultState,OrderingPagingFilterType {
@@ -78,4 +79,9 @@ export interface FormattedCalendarArr<T> {
     previousMonth: T[],
     currentMonth: T[],
     nextMonth: T[]
+}
+
+export interface FormattedWorkedHours {
+    date: Date,
+    workedHours: WorkedHour[]
 }

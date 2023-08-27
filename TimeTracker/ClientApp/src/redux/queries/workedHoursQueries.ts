@@ -1,12 +1,23 @@
 import { AjaxQuery } from './query';
-import { WorkedHour, CreateWorkedHourType, UpdateWorkedHourType,WorkedHoursStatistic } from '@redux/types';
+import { WorkedHour, CreateWorkedHourType, UpdateWorkedHourType, WorkedHoursStatistic, DateRangeType, WorkedFetchType } from '@redux/types';
 import moment from "moment";
 
-export function FetchWorkedHoursQuery(userId: number,take:number,skip:number) {
+export function FetchWorkedHoursQuery(data: {
+  userId: number,
+  dateRange: DateRangeType
+}) {
+  const { userId, dateRange } = data;
+
   return AjaxQuery<{ workedHourQuery: { workedHours: WorkedHour[] } }>(
-    `query GetUserWorkedHours($userId: Int!,$take:Int,$skip:Int) {
-      workedHourQuery{
-        workedHours(userId: $userId,take:$take,skip:$skip) {
+    `query GetUserWorkedHours(
+      $userId: Int!
+      $dateRange: DateRangeInputType
+    ) {
+      workedHourQuery {
+        workedHours(
+          userId: $userId
+          dateRange: $dateRange
+        ) {
           id
           userId
           date
@@ -16,7 +27,10 @@ export function FetchWorkedHoursQuery(userId: number,take:number,skip:number) {
         }
       }
     }`,
-    { userId: userId,take:take,skip:skip },
+    {
+      userId: userId,
+      dateRange: dateRange,
+    },
   );
 }
 
@@ -70,9 +84,9 @@ export function CreateWorkedHoursQuery(workedHour: CreateWorkedHourType) {
   )
 }
 
-export function WorkedHoursStatistic(userId:number,date:Date){
+export function WorkedHoursStatistic(userId: number, date: Date) {
   return AjaxQuery<{ workedHourQuery: { getStatistic: WorkedHoursStatistic } }>(
-      `query GetWorkedHours($id:Int!,$date:DateOnly!){
+    `query GetWorkedHours($id:Int!,$date:DateOnly!){
         workedHourQuery{
           getStatistic(userId:$id,date:$date){
             actuallyWorked,
@@ -81,6 +95,6 @@ export function WorkedHoursStatistic(userId:number,date:Date){
           }
         }
       }`,
-      { date: moment(date).format("YYYY-MM-DD"),id:userId },
+    { date: moment(date).format("YYYY-MM-DD"), id: userId },
   )
 }

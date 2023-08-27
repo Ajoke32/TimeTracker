@@ -15,6 +15,7 @@ using TimeTracker.Utils.Email;
 using TimeTracker.Utils.Errors;
 using TimeTracker.Utils.Filters;
 using TimeTracker.Visitors;
+using TimeTracker.GraphQL.Types.InputTypes.CalendarEventInput;
 
 namespace TimeTracker.GraphQL.Queries;
 
@@ -24,28 +25,31 @@ public sealed class WorkedHourQuery : ObjectGraphType
     {
         Field<ListGraphType<WorkedHourType>>("workedHours")
             .Argument<int>("userId")
+            .Argument<DateRangeInputType>("dateRange")
             .ResolveAsync(async ctx =>
             {
                 var userId = ctx.GetArgument<int>("userId");
+                var dateRange = ctx.GetArgument<DateRangeInputDto>("dateRange");
 
                 var workedHours = await uow.GenericRepository<WorkedHour>()
-                                    .GetAsync(filter: (w => w.UserId == userId));
-                
-                workedHours = workedHours.OrderByDescending(w=>w.Id);
-                
-                return visitor.VisitPaging(workedHours,ctx);
+                                    .GetAsync(w => w.UserId == userId
+                                                && w.Date.Date >= dateRange.StartDate.Date
+                                                && w.Date.Date <= dateRange.EndDate.Date);
+
+                workedHours = workedHours.OrderByDescending(w => w.Id);
+
+                return visitor.VisitPaging(workedHours, ctx);
             })
-            .Description("gets all user's worked hours")
-            .UsePaging();
+            .Description("gets all user's worked hours");
 
         Field<int>("getWorkedHoursInMonth")
-            .Argument<DateOnlyGraphType>("date")
-            .Resolve(c =>
-            {
-                var date = c.GetArgument<DateOnly>("date");
-                return 8 * GetWorkedDaysInMonth(date.Year,date.Month);
-            });
-        
+                .Argument<DateOnlyGraphType>("date")
+                .Resolve(c =>
+                {
+                    var date = c.GetArgument<DateOnly>("date");
+                    return 8 * GetWorkedDaysInMonth(date.Year, date.Month);
+                });
+
 
 
         Field<HoursWorkedGraphType>("getStatistic")
@@ -56,10 +60,10 @@ public sealed class WorkedHourQuery : ObjectGraphType
                 var id = _.GetArgument<int>("userId");
                 var date = _.GetArgument<DateOnly>("date");
                 var user = await uow.GenericRepository<User>()
-                    .FindAsync(u => u.Id == id,relatedData:"WorkedHours")??throw new Exception("not found");
-                
-                var needToWork = user.HoursPerMonth* 8 * GetWorkedDaysInMonth(date.Year,date.Month)/100;
-                
+                    .FindAsync(u => u.Id == id, relatedData: "WorkedHours") ?? throw new Exception("not found");
+
+                var needToWork = user.HoursPerMonth * 8 * GetWorkedDaysInMonth(date.Year, date.Month) / 100;
+
                 var actuallyWorked = user.WorkedHours
                     .Aggregate(TimeSpan.Zero, (current, wh) => current + wh.TotalTime.ToTimeSpan());
 
@@ -73,7 +77,7 @@ public sealed class WorkedHourQuery : ObjectGraphType
     }
 
 
-    private int GetWorkedDaysInMonth(int year,int month)
+    private int GetWorkedDaysInMonth(int year, int month)
     {
         var workDays = 0;
         var daysInMonth = DateTime.DaysInMonth(year, month);

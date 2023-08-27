@@ -1,3 +1,6 @@
+import { DateRangeType } from "."
+import { FiltersType, PagingInputType } from "./filterTypes"
+
 export interface WorkedHour {
     id: number,
     userId: number,
@@ -5,6 +8,11 @@ export interface WorkedHour {
     endTime: string,
     totalTime: string,
     date: Date,
+}
+
+export interface WorkedFetchType extends PagingInputType, FiltersType {
+    userId: number,
+    dateRange: DateRangeType
 }
 
 export interface WorkedTime {
@@ -26,13 +34,13 @@ export interface UpdateWorkedHourType {
     endTime: string,
 }
 
-export interface WorkedHoursStatistic{
-    actuallyWorked:string,
-    actuallyWorkedHours:string,
-    needToWork:string
+export interface WorkedHoursStatistic {
+    actuallyWorked: string,
+    actuallyWorkedHours: string,
+    needToWork: string
 }
 
-export interface WorkedHoursStatisticInput{
-    userId:number,
-    date:Date
+export interface WorkedHoursStatisticInput {
+    userId: number,
+    date: Date
 }

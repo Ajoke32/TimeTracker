@@ -5,12 +5,12 @@ import { CurrentDateElement } from "@components/UI";
 import { H4 } from "@components/Headings";
 import { CalendarType, CalendarCell, SchedulerWorkedHour, SchedulerWorkPlan } from '@redux/types';
 import { useAppDispatch, useTypedSelector } from '@hooks/customHooks';
-import { GetFormattedTimeDifference, addDay, createCalendarCell, substractDay } from '../../utils';
+import { GetFormattedTimeDifference, addDay, createCalendarCell, generateColors, substractDay } from '../../utils';
 import { SchedulerModal, UsersTableSmall, hours } from '..';
 import { TimeRow } from './TimeRow';
 import { resetUsersWorkPlans, userFiltersToDefault } from '@redux/slices';
 
-const Scheduler = ({ cell, back }: { cell: CalendarCell, back: (selectedDate: Date) => void }) => {
+export const Scheduler = ({ cell, back }: { cell: CalendarCell, back: (selectedDate: Date) => void }) => {
     const dispatch = useAppDispatch()
 
     const calendar = useTypedSelector(state => state.calendar);
@@ -48,7 +48,7 @@ const Scheduler = ({ cell, back }: { cell: CalendarCell, back: (selectedDate: Da
                 });
         }
         setWorkedHours(sortByCurrentUser(wp))
-        setColors(generateColors())
+        setColors([...colors, ...generateColors(colors.length, calendarCell.workPlans.length-colors.length)])
     }, [calendarCell])
 
     useEffect(() => {
@@ -82,19 +82,6 @@ const Scheduler = ({ cell, back }: { cell: CalendarCell, back: (selectedDate: Da
         dispatch(userFiltersToDefault())
         dispatch(resetUsersWorkPlans(user!.id))
         back(currentDate)
-    }
-
-    const generateColors = () => {
-        let colorsArr = colors;
-        for (let i = colors!.length; i < calendarCell.workPlans.length; i++) {
-            const randomR = Math.floor(Math.random() * 100) + 100;
-            const randomG = Math.floor(Math.random() * 100) + 155;
-            const randomB = Math.floor(Math.random() * 100) + 200;
-            const randomOpacity = Math.random() * 0.3 + 0.3;
-
-            colorsArr.push(`rgba(${randomR}, ${randomG}, ${randomB}, ${randomOpacity})`)
-        }
-        return colorsArr;
     }
 
     return (
@@ -150,5 +137,3 @@ const Scheduler = ({ cell, back }: { cell: CalendarCell, back: (selectedDate: Da
 
     );
 };
-
-export default Scheduler;

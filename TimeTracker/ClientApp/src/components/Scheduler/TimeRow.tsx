@@ -1,16 +1,12 @@
 import { SchedulerWorkPlan, SchedulerWorkedHour, WorkPlan } from "@redux/types"
 import { hours } from "..";
 import { useTypedSelector } from "@hooks/customHooks";
+import { convertTimeToIndex } from "../../utils";
 
 export const TimeRow = ({ workedHour, color, onClick }: { workedHour: SchedulerWorkedHour, color: string, onClick: React.Dispatch<React.SetStateAction<SchedulerWorkPlan | null>> }) => {
 
     const { user } = useTypedSelector(state => state.auth)
 
-    const convertTimeToIndex = (time: string) => {
-        const [hoursStr, minutesStr] = time.split(":");
-
-        return parseInt(minutesStr, 10) + parseInt(hoursStr, 10) * 60;
-    };
 
     return (
         <div className="content-row" >

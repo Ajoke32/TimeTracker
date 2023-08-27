@@ -89,9 +89,6 @@
     position: relative;
 }
 
-.content-row:first-child {
-}
-
 .content-row {
     border-bottom: .5px dashed rgba(91, 175, 195, .5);
 }
