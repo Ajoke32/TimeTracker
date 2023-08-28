@@ -23,7 +23,7 @@ ChartJS.register(
     Tooltip,
     Legend
 );
-const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday','Saturday','Sunday'];
+const weekDays = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday','Saturday'];
 export const options = {
     plugins: {
         legend: {
@@ -47,9 +47,8 @@ const Chart = ({arr}:ChartProps) => {
         totalHours[i]=0;
     }
     if(arr.length>0) {
-        let index = arr[0].workPlans[0].date.getDay();
+        let index = new Date().getDay();
 
-        labels.push(weekDays[index]);
 
         while (labels.length!==weekDays.length){
             if(index===6){

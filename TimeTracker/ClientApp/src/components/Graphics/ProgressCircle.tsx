@@ -7,6 +7,7 @@ interface ProgressCircleProps{
     dependency?:any
 }
 const ProgressCircle = ({percents,dependency}:ProgressCircleProps) => {
+    percents = isFinite(percents)?percents:0;
     const percentToCount = percents>100?100:percents;
     const circleRef = useRef<SVGCircleElement>(null);
     const radius = 80;
