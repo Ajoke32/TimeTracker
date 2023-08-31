@@ -24,10 +24,11 @@ public sealed class WorkPlanMutations : ObjectGraphType
 
 
                 var exists = await uow.GenericRepository<WorkPlan>()
-                            .FindAsync(p => p.Date.Equals(wp.Date) && p.Id != wp.Id
-                            && ((p.StartTime > wp.StartTime && p.StartTime < wp.EndTime)
-                            || (p.EndTime > wp.StartTime && p.EndTime < wp.EndTime)
-                            || (p.StartTime <= wp.StartTime && p.EndTime >= wp.EndTime)));
+                            .FindAsync(p => p.Date.Equals(wp.Date) 
+                                        && p.UserId == wp.UserId 
+                                        && p.Id != wp.Id 
+                                        && p.StartTime < wp.EndTime 
+                                        && wp.StartTime < p.EndTime);
 
                 if (exists is not null)
                     throw new ValidationError("Work plans intersect");

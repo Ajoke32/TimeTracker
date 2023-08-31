@@ -70,7 +70,7 @@ export const TrackerSetHours = ({ workedHour }: { workedHour?: WorkedHour }) => 
                 userId: user!.id,
                 startTime: GetFormattedUTCTimeString(data.startTime, data.date),
                 endTime: GetFormattedUTCTimeString(data.endTime, data.date),
-                date: GetFormattedUTCDateString(new Date(data.date))
+                date: `${data.date}T00:00:00`
             } as CreateWorkedHourType))
         }
     }
