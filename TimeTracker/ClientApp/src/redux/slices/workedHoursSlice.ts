@@ -38,7 +38,7 @@ const workedHoursSlice = createSlice({
         createWorkedHour: createPendingReducerWithPayload<WorkedHoursSlice, CreateWorkedHourType>(),
         createWorkedHourSuccess: createSuccessReducerWithPayload<WorkedHoursSlice, WorkedHour>(
             (state: WorkedHoursSlice, action: PayloadAction<WorkedHour>) => {
-                state.workedHours = [...state.workedHours, GetLocalWorkedHour(action.payload)]
+                state.workedHours = [GetLocalWorkedHour(action.payload), ...state.workedHours]
             }
         ),
         createWorkedHourFail: createErrorReducer(),

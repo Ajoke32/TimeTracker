@@ -1,4 +1,4 @@
-.tracker-page-wrapper{
+.tracker-page-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -27,17 +27,17 @@
 }
 
 .tracker-content__inner {
-    width: 80%;    
+    width: 80%;
 }
 
 .timer-tracker,
-.set-hours-tracker{
+.set-hours-tracker {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.set-hours-tracker > form {
+.set-hours-tracker>form {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -56,14 +56,14 @@
     justify-content: center;
 }
 
-.timer-time__wrapper > span {
+.timer-time__wrapper>span {
     position: relative;
     height: 100%;
     font-size: 2rem;
     padding-right: 5px;
 }
 
-.timer-time__wrapper > span:not(:last-of-type)::after {
+.timer-time__wrapper>span:not(:last-of-type)::after {
     content: "";
     position: absolute;
     top: 25%;
@@ -84,7 +84,7 @@
     display: flex;
 }
 
-.time-range__inner{
+.time-range__inner {
     width: 50%;
     display: flex;
     justify-content: center;
@@ -96,10 +96,10 @@
     text-align: center;
     margin: auto auto;
     background: transparent;
-    
+
     border: 1px solid var(--color-stroke-gray);
     border-radius: 15px;
-    
+
     font-size: .9rem;
     position: relative;
 }
@@ -111,7 +111,7 @@
     position: absolute;
 }
 
-.timer-tracker > span hr {
+.timer-tracker>span hr {
     height: 80%;
     transform: rotate(90deg);
 }
@@ -123,20 +123,27 @@
     height: 100%;
 }
 
-.tracker-btn__wrapper > div:last-of-type {
+.tracker-set-btn__wrapper {
+    display: flex;
+    align-items: center;
+    width: 20%;
+    height: 100%;
+}
+
+.tracker-btn__wrapper>div:last-of-type {
     margin-left: 5px;
 }
 
-.tracker-btn__wrapper > div:last-child > button {
+.tracker-btn__wrapper>div:last-child>button {
     background: var(--color-red);
 }
 
-.tracker-btn__wrapper > div:first-child > button {
+.tracker-btn__wrapper>div:first-child>button {
     background: var(--color-cyan);
 }
 
-.tracker-btn__wrapper > div,
-.tracker-btn__wrapper > div > button {
+.tracker-btn__wrapper>div,
+.tracker-btn__wrapper>div>button {
     width: 100%;
 }
 
@@ -163,12 +170,12 @@
     margin: 0 5px 0 5px;
 }
 
-.time-range__separator > span {
+.time-range__separator>span {
     font-size: 1.5rem;
     opacity: .7;
 }
 
-.tracker-actions__wrapper > div {
+.tracker-actions__wrapper>div {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -178,6 +185,7 @@
     width: fit-content;
     margin: auto;
 }
+
 .worked-hours__timer span {
     font-size: 1.3rem;
 }
@@ -187,7 +195,7 @@
     width: 24px;
     height: 24px;
 
-    border:none;
+    border: none;
     cursor: pointer;
 
     opacity: .5;
@@ -244,5 +252,34 @@
 }
 
 .action-active-btn {
-    opacity: 1!important;
+    opacity: 1 !important;
+}
+
+.double-btn-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.double-btn-wrapper>button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 2.5rem;
+    padding: 0 10px;
+    opacity: .7;
+    color: white;
+}
+
+.double-btn-wrapper>button:first-child {
+    border-radius: 10px 0 0 10px;
+    background: var(--color-cyan);
+    border: 1px solid var(--color-stroke-gray);
+}
+
+.double-btn-wrapper>button:last-child {
+    background: var(--color-red);
+    border-radius: 0 10px 10px 0;
+    border: 1px solid var(--color-stroke-gray);
+    border-left: none;
 }

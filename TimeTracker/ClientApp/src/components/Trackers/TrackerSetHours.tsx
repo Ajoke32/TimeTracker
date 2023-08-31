@@ -58,7 +58,6 @@ export const TrackerSetHours = ({ workedHour }: { workedHour?: WorkedHour }) => 
         });
 
     const onSubmit: SubmitHandler<Inputs> = (data) => {
-
         if (workedHour)
             dispatch(editWorkedHour({
                 id: workedHour.id,
@@ -77,7 +76,7 @@ export const TrackerSetHours = ({ workedHour }: { workedHour?: WorkedHour }) => 
     }
     return (
         <>
-            {workedHour ? <CurrentDateElement date={workedHour.date} showFullDate={true}/> : <SelectedDateElement date={selectedDate} />}
+            {workedHour ? <CurrentDateElement date={workedHour.date} showFullDate={true} /> : <SelectedDateElement date={selectedDate} />}
 
             {!workedHour ?
                 <div className="time-range__date-wrapper">
@@ -91,7 +90,7 @@ export const TrackerSetHours = ({ workedHour }: { workedHour?: WorkedHour }) => 
                             style={!showDatePicker ? { display: 'none' } : {}} />
                     </button>
                 </div> : <></>}
-            
+
             <div className="set-hours-tracker">
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="time-range__wrapper">
@@ -117,10 +116,16 @@ export const TrackerSetHours = ({ workedHour }: { workedHour?: WorkedHour }) => 
                             />
                         </div>
                     </div>
-                    
-                    <div className="tracker-btn__wrapper">
-                        <SmallButton type="submit" value={workedHour ? "Change" : "Add"} />
-                        {workedHour ? <SmallButton type="button" value="Delete" handleClick={handleDelete}/> : <></>}
+
+                    <div className="tracker-set-btn__wrapper">
+                        {!workedHour ?
+                            <SmallButton type="submit" value="Add" /> :
+                            <>
+                                <div className='double-btn-wrapper'>
+                                    <button type='submit' >Change</button>
+                                    <button type="button" onClick={handleDelete}>Delete</button>
+                                </div>
+                            </>}
                     </div>
                 </form>
             </div>

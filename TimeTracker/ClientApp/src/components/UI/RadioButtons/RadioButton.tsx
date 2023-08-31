@@ -22,7 +22,7 @@ export const RadioButton = ({ options, selectedOption, setSelectedOption }: Radi
                             onChange={() => { setSelectedOption(user.id) }}
                         />
                         <span className="checkmark"></span>
-                        <span>{user.firstName}{user.lastName}</span>
+                        <span>{user.firstName} {user.lastName}</span>
                     </label>
                 ))}
             </div>
