@@ -30,6 +30,7 @@ export const createWorkedHourEpic: Epic = (action: Observable<PayloadAction<Crea
             CreateWorkedHoursQuery(action.payload).pipe(
                 mergeMap(async resp => {
                     if (resp.response.errors != null) {
+                        console.log(resp.response)
                         const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
                         return createWorkedHourFail(errorMessage)
                     }
@@ -50,6 +51,7 @@ export const resetTimerEpic: Epic = (action: Observable<PayloadAction<CreateWork
             CreateWorkedHoursQuery(action.payload).pipe(
                 mergeMap(async resp => {
                     if (resp.response.errors != null) {
+                        console.log(resp.response)
                         const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
                         return resetTimerFail(errorMessage)
                     }
@@ -103,6 +105,7 @@ export const editWorkedHourEpic: Epic = (action: Observable<PayloadAction<Update
                 .pipe(
                     mergeMap(async resp => {
                         if (resp.response.errors != null) {
+                            console.log(resp.response)
                             const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
                             return editWorkedHourFail(errorMessage)
                         }

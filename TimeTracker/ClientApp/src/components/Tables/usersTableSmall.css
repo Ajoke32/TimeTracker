@@ -52,10 +52,33 @@
     background: var(--color-cyan);
 }
 
-.users-list-wrapper {
-    height: 50%;
-    overflow-y: scroll;
-    margin: 10px 0
+.users-list-wrapper, .radio-list-wrapper {
+    max-height: 50%;
+    overflow-y: auto;
+    margin: 10px 0;
+}
+
+.users-list-wrapper::-webkit-scrollbar-track, .radio-list-wrapper::-webkit-scrollbar-track
+{
+	background: transparent;
+}
+
+.radio-list-wrapper::-webkit-scrollbar, .users-list-wrapper::-webkit-scrollbar
+{
+	width: 10px;
+	background-color: transparent;
+}
+
+.radio-list-wrapper::-webkit-scrollbar-thumb,.users-list-wrapper::-webkit-scrollbar-thumb
+{
+	border-radius: 0.6rem;
+	background-color: var(--color-stroke-gray);
+}
+
+.radio-list-wrapper {
+    padding: 10px;
+    border-radius: 0.6rem;
+    border: 1px solid var(--color-stroke-gray);
 }
 
 .button-wrapper {

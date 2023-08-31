@@ -97,7 +97,7 @@ export const UsersRadioTable = ({ selectedUser, setSelectedUser, dateRange }: {
     }
 
     return (
-        <div className='small-users-table-wrapper'>
+        <div className='radio-table-wrapper'>
             <div className='search-header'>
                 <div className='search-input-wrapper'>
                     <SearchInput name="search" placeholder="Search" onSearch={handleSearch} />
@@ -112,7 +112,7 @@ export const UsersRadioTable = ({ selectedUser, setSelectedUser, dateRange }: {
                 }
             </div>
 
-            <div className='users-list-wrapper'>
+            <div className='radio-list-wrapper'>
                 <RadioButton options={users} selectedOption={selectedUser} setSelectedOption={setSelectedUser} />
             </div>
             {!filtered && !(users.length % 10) &&

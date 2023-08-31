@@ -87,7 +87,7 @@ export const DateRangePicker = ({ dateRange, setDateRange }: { dateRange: Picker
     }
 
     return (
-        <div className="date-range-picker">
+        <div className="date-range-picker" >
             <nav className="date-range-picker--nav">
                 <a onClick={() => changeMonth(date.month() - 1)}>&#8249;</a>
                 <h1>{date.format('MMMM')} <small>{date.format('YYYY')}</small></h1>
