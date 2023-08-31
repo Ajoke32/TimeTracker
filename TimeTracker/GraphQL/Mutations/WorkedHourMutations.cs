@@ -21,7 +21,7 @@ public sealed class WorkedHourMutations : ObjectGraphType
             {
                 var wh = ctx.GetArgument<WorkedHourInputDto>("workedHour");
 
-                if (wh.Date >= DateOnly.FromDateTime(DateTime.UtcNow)
+                if (wh.Date.Date >= DateTime.UtcNow.Date
                 && (wh.StartTime > TimeOnly.FromDateTime(DateTime.UtcNow)
                 || wh.EndTime > TimeOnly.FromDateTime(DateTime.UtcNow)))
                 {
@@ -29,10 +29,10 @@ public sealed class WorkedHourMutations : ObjectGraphType
                 }
 
                 var exists = await uow.GenericRepository<WorkedHour>()
-                            .FindAsync(p => p.Date.Equals(wh.Date)
-                            && ((p.StartTime > wh.StartTime && p.StartTime < wh.EndTime)
-                            || (p.EndTime > wh.StartTime && p.EndTime < wh.EndTime)
-                            || (p.StartTime <= wh.StartTime && p.EndTime >= wh.EndTime)));
+                            .FindAsync(p => p.Date.Date == wh.Date.Date 
+                                        && p.UserId == wh.UserId 
+                                        && p.StartTime < wh.EndTime 
+                                        && wh.StartTime < p.EndTime);
 
                 if (exists is not null)
                     throw new ValidationError("Worked hours intersect!");
@@ -78,10 +78,10 @@ public sealed class WorkedHourMutations : ObjectGraphType
                 }
 
                 var exists = await uow.GenericRepository<WorkedHour>()
-                            .FindAsync(p => p.Date.Equals(currentValue.Date) && p.Id != wh.Id
-                            && ((p.StartTime > wh.StartTime && p.StartTime < wh.EndTime)
-                            || (p.EndTime > wh.StartTime && p.EndTime < wh.EndTime)
-                            || (p.StartTime <= wh.StartTime && p.EndTime >= wh.EndTime)));
+                            .FindAsync(p => p.Date.Date == currentValue.Date.Date 
+                                        && p.UserId == currentValue.UserId 
+                                        && p.StartTime < wh.EndTime 
+                                        && wh.StartTime < p.EndTime);
 
                 if (exists is not null)
                     throw new ValidationError("Worked hours intersect!");
