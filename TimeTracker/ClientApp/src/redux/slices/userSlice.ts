@@ -14,7 +14,6 @@ const initialState: UserSliceState = {
     ...defaultState,
     user: null,
     vacationDays: 0,
-    workedHours: []
 };
 
 const userSlice = createSlice({
@@ -52,62 +51,6 @@ const userSlice = createSlice({
         fetchVacationDaysFail: createErrorReducer(),
 
         emailVerify: createPendingReducerWithPayload<UserSliceState, string>(),
-
-        fetchUserWorkedHours: createPendingReducerWithPayload<UserSliceState, { userId: number, dateRange: DateRangeType }>(),
-        fetchUserWorkedHoursSuccess: createSuccessReducerWithPayload<UserSliceState, PagingEntityType<WorkedHour>>(
-            (state, action) => {
-                const workedHours: FormattedWorkedHours[] = [];
-                action.payload.entities.forEach((wh, index) => {
-                    action.payload.entities[index] = GetLocalWorkedHour(wh)
-
-                    const userFormattedWorkedHours = workedHours.find(
-                        (formattedHours) => moment(formattedHours.date).isSame(moment(wh.date), 'day')
-                    );
-
-                    if (!userFormattedWorkedHours) {
-                        const newUserFormattedWorkedHours: FormattedWorkedHours = {
-                            date: wh.date,
-                            workedHours: [wh],
-                        };
-                        workedHours.push(newUserFormattedWorkedHours);
-                    } else {
-                        userFormattedWorkedHours.workedHours.push(wh);
-                    }
-                })
-                state.workedHours = workedHours;
-            }),
-        fetchUserWorkedHoursFail: createErrorReducer(),
-
-        editUserWorkedHour: createPendingReducerWithPayload<UserSliceState, UpdateWorkedHourType>(),
-        editUserWorkedHourSuccess: createSuccessReducerWithPayload<UserSliceState, WorkedHour>(
-            (state: UserSliceState, action: PayloadAction<WorkedHour>) => {
-                for (const wh of state.workedHours) {
-                    const index = wh.workedHours.findIndex(
-                        (workedHour) => workedHour.id === action.payload.id
-                    );
-                    if (index !== -1) {
-                        wh.workedHours[index] = GetLocalWorkedHour(action.payload);
-                        break;
-                    }
-                }
-            }
-        ),
-        editUserWorkedHourFail: createErrorReducer(),
-
-        deleteUserWorkedHour: createPendingReducerWithPayload<UserSliceState, number>(),
-        deleteUserWorkedHourSuccess: createSuccessReducerWithPayload<UserSliceState, number>(
-            (state, action) => {
-                for (const wh of state.workedHours) {
-                    const index = wh.workedHours.findIndex(
-                        (workedHour) => workedHour.id === action.payload
-                    );
-                    if (index !== -1) {
-                        wh.workedHours.splice(index, 1);
-                        break;
-                    }
-                }
-            }),
-        deleteUserWorkedHourFail: createErrorReducer(),
     },
 });
 
@@ -120,10 +63,5 @@ export const {
     editUser, editUserFail, editUserSuccess,
     fetchVacationDaysSuccess, fetchVacationDaysFail,
     fetchVacationDays, emailVerify,
-    fetchUserWorkedHours, fetchUserWorkedHoursFail, 
-    fetchUserWorkedHoursSuccess, editUserWorkedHour,
-    editUserWorkedHourFail, editUserWorkedHourSuccess,
-    deleteUserWorkedHour, deleteUserWorkedHourFail,
-    deleteUserWorkedHourSuccess
 } = userSlice.actions;
 

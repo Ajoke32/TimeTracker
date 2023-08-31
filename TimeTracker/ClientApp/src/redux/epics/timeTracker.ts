@@ -13,8 +13,6 @@ import {
     deleteWorkedHourSuccess,
     editWorkedHourFail,
     editWorkedHourSuccess,
-    fetchUserWorkedHoursFail,
-    fetchUserWorkedHoursSuccess,
     fetchWorkedHoursFail, fetchWorkedHoursStatisticFail, fetchWorkedHoursStatisticSuccess,
     fetchWorkedHoursSuccess,
     resetTimerFail,
