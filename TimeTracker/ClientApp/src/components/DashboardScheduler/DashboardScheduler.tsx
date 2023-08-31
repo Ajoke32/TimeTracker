@@ -7,14 +7,14 @@ import { useAppDispatch, useTypedSelector } from '@hooks/customHooks';
 import { DashboardSchedulerModal, DateRangePicker, PickerDateRange, UsersRadioTable, dashboardHours } from '..';
 import moment from "moment";
 import { GetFormattedDateString, GetPickerDateRange, convertTimeToIndex, generateColors } from "../../utils";
-import { fetchUserWorkedHours } from "@redux/slices";
-import TimeTracker from "@components/Trackers/TimeTracker";
+import { fetchWorkedHours } from "@redux/slices";
+import { DashboardTracker } from "@components/Trackers";
 
 export const DashboardScheduler = () => {
     const dispatch = useAppDispatch()
 
     const { user } = useTypedSelector(state => state.auth)
-    const { workedHours, loading } = useTypedSelector(state => state.user)
+    const { workedHours, loading } = useTypedSelector(state => state.workedHours)
 
     const [dateRange, setDateRange] = useState<PickerDateRange>({
         startDate: moment().subtract(1, 'day'),
@@ -32,7 +32,7 @@ export const DashboardScheduler = () => {
     }, [workedHours])
 
     useEffect(() => {
-        dispatch(fetchUserWorkedHours({
+        dispatch(fetchWorkedHours({
             userId: selectedUser,
             dateRange: GetPickerDateRange(dateRange)
         }))
@@ -49,11 +49,14 @@ export const DashboardScheduler = () => {
                         <Loader />
                     </div>
                     : workedHours.map((wh) => (
-                        <React.Fragment key={wh.date.toDateString()}>
+                        <div className="day-worked-hours-wrapper" key={wh.date.toDateString()}>
+                            <div className="worked-hours-date-wrapper">
+                                <CurrentDateElement date={wh.date} showFullDate={true} />
+                            </div>
                             {wh.workedHours.map((item, i) =>
-                                <TimeTracker workedHour={item} key={item.id} />
+                                <DashboardTracker workedHour={item} key={item.id} />
                             )}
-                        </React.Fragment>
+                        </div>
                     ))
                 }
             </div>
