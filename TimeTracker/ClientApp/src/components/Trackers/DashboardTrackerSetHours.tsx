@@ -18,27 +18,16 @@ interface TimeInputs {
     endTime: string
 }
 
-export const TrackerSetHours = ({ workedHour }: { workedHour?: WorkedHour }) => {
+export const DashboardTrackerSetHours = ({ workedHour }: { workedHour: WorkedHour }) => {
     const defaultValues: TimeInputs = {
         startTime: workedHour ? workedHour.startTime.slice(0, 5) : '08:00',
         endTime: workedHour ? workedHour.endTime.slice(0, 5) : '16:00',
     }
 
-    const [showDatePicker, setShowDatePicker] = useState<boolean>(true);
-    const [selectedDate, setSelectedDate] = useState<string>(GetFormattedDateString(new Date));
     const [timeInputs, setTimeInputs] = useState<TimeInputs>(defaultValues);
 
     const dispatch = useDispatch();
     const { user } = useTypedSelector(state => state.auth)
-
-    const handleShowDatePicker = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        setShowDatePicker(!showDatePicker);
-    }
-
-    const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedDate(event.target.value);
-        setShowDatePicker(!showDatePicker);
-    }
 
     const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value, name } = event.target;
@@ -53,47 +42,21 @@ export const TrackerSetHours = ({ workedHour }: { workedHour?: WorkedHour }) => 
         formState: { errors }, reset } = useForm<Inputs>({
             mode: 'onBlur',
             defaultValues: {
-                date: workedHour ? GetFormattedDateString(workedHour.date) : undefined
+                date: GetFormattedDateString(workedHour.date)
             }
         });
 
     const onSubmit: SubmitHandler<Inputs> = (data) => {
-        if (workedHour)
-            dispatch(editWorkedHour({
-                id: workedHour.id,
-                startTime: GetFormattedUTCTimeString(data.startTime, data.date),
-                endTime: GetFormattedUTCTimeString(data.endTime, data.date),
-            } as UpdateWorkedHourType))
-        else {
-            data.date = selectedDate;
-            dispatch(createWorkedHour({
-                userId: user!.id,
-                startTime: GetFormattedUTCTimeString(data.startTime, data.date),
-                endTime: GetFormattedUTCTimeString(data.endTime, data.date),
-                date: `${data.date}T00:00:00`
-            } as CreateWorkedHourType))
-        }
+        dispatch(editWorkedHour({
+            id: workedHour.id,
+            startTime: GetFormattedUTCTimeString(data.startTime, data.date),
+            endTime: GetFormattedUTCTimeString(data.endTime, data.date),
+        } as UpdateWorkedHourType))
     }
     return (
-        <>
-            {workedHour ? <CurrentDateElement date={workedHour.date} showFullDate={true} /> : <SelectedDateElement date={selectedDate} />}
-
-            {!workedHour ?
-                <div className="time-range__date-wrapper">
-                    <button type='button' onClick={handleShowDatePicker}>
-                        <input
-                            type="date"
-                            className="date-picker__input"
-                            value={selectedDate}
-                            {...register("date")}
-                            onChange={handleDateChange}
-                            style={!showDatePicker ? { display: 'none' } : {}} />
-                    </button>
-                </div> : <></>}
-
-            <div className="set-hours-tracker">
+            <div className="set-tracker-hours">
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="time-range__wrapper">
+                    <div className="worked-time-range__wrapper">
                         <div className="time-range__inner">
                             <input
                                 type="time"
@@ -119,10 +82,7 @@ export const TrackerSetHours = ({ workedHour }: { workedHour?: WorkedHour }) => 
 
                     <div className="tracker-set-btn__wrapper">
                         {!workedHour ?
-                            <div className='single-btn-wrapper'>
-                                <button type="submit">Add</button>
-                            </div>
-                            :
+                            <SmallButton type="submit" value="Add" /> :
                             <>
                                 <div className='double-btn-wrapper'>
                                     <button type='submit' >Change</button>
@@ -132,6 +92,5 @@ export const TrackerSetHours = ({ workedHour }: { workedHour?: WorkedHour }) => 
                     </div>
                 </form>
             </div>
-        </>
     );
 };

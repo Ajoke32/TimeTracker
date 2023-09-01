@@ -12,7 +12,7 @@
     display: block;
     position: relative;
     padding-left: 35px;
-    margin-bottom: 10px;
+    margin: 5px 0;
     cursor: pointer;
     user-select: none;
 }
@@ -31,7 +31,7 @@
     left: 0;
     height: 18px;
     width: 18px;
-    background-color: rgb(198, 197, 197);
+    border: 1px solid var(--color-stroke-gray);
     border-radius: 50%;
 }
 
@@ -50,8 +50,8 @@
 }
 
 .radio-container .checkmark:after {
-    top: 5px;
-    left: 5px;
+    top: 4px;
+    left: 4px;
     width: 8px;
     height: 8px;
     border-radius: 50%;

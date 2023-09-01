@@ -20,7 +20,23 @@ public sealed class WorkedHourMutations : ObjectGraphType
             .ResolveAsync(async ctx =>
             {
                 var wh = ctx.GetArgument<WorkedHourInputDto>("workedHour");
-                
+
+                if (wh.Date.Date >= DateTime.UtcNow.Date
+                && (wh.StartTime > TimeOnly.FromDateTime(DateTime.UtcNow)
+                || wh.EndTime > TimeOnly.FromDateTime(DateTime.UtcNow)))
+                {
+                    throw new ValidationError("Can't create worked hour for future");
+                }
+
+                var exists = await uow.GenericRepository<WorkedHour>()
+                            .FindAsync(p => p.Date.Date == wh.Date.Date 
+                                        && p.UserId == wh.UserId 
+                                        && p.StartTime < wh.EndTime 
+                                        && wh.StartTime < p.EndTime);
+
+                if (exists is not null)
+                    throw new ValidationError("Worked hours intersect!");
+
                 var created = await uow.GenericRepository<WorkedHour>()
                     .CreateAsync(mapper.Map<WorkedHour>(wh));
 
@@ -53,6 +69,22 @@ public sealed class WorkedHourMutations : ObjectGraphType
 
                 var currentValue = await uow.GenericRepository<WorkedHour>().FindAsync(w => w.Id == wh.Id)
                             ?? throw new ValidationError("Record not found"); // Temp error
+
+                if (currentValue.Date >= DateTime.UtcNow
+                && (wh.StartTime > TimeOnly.FromDateTime(DateTime.UtcNow)
+                || wh.EndTime > TimeOnly.FromDateTime(DateTime.UtcNow)))
+                {
+                    throw new ValidationError("Can't create worked hour for future");
+                }
+
+                var exists = await uow.GenericRepository<WorkedHour>()
+                            .FindAsync(p => p.Date.Date == currentValue.Date.Date 
+                                        && p.UserId == currentValue.UserId 
+                                        && p.StartTime < wh.EndTime 
+                                        && wh.StartTime < p.EndTime);
+
+                if (exists is not null)
+                    throw new ValidationError("Worked hours intersect!");
 
                 var updated = await uow.GenericRepository<WorkedHour>()
                     .UpdateAsync(mapper.Map(wh, currentValue));

@@ -3,7 +3,7 @@ import { TrackerTimer } from "@components/Trackers/TrackerTimer";
 import { TrackerSetHours } from "@components/Trackers/TrackerSetHours";
 import { WorkedHour } from '@redux/types';
 
-const TimeTracker = ({ workedHour }: { workedHour?: WorkedHour }) => {
+export const TimeTracker = ({ workedHour }: { workedHour?: WorkedHour }) => {
     const [switchAction, setSwitchAction] = useState<boolean>(true);
 
     const handleSwitchActionButton = () => {
@@ -29,5 +29,3 @@ const TimeTracker = ({ workedHour }: { workedHour?: WorkedHour }) => {
         </div>
     );
 };
-
-export default TimeTracker;

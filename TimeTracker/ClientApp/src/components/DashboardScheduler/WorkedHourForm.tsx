@@ -5,7 +5,7 @@ import { months } from '..';
 import { CalendarCell, CreateWorkedHourType, SchedulerWorkPlan, SetWorkPlanType, UpdateWorkedHourType, WorkPlan, WorkedHour } from '@redux/types';
 import { useAppDispatch, useTypedSelector } from '@hooks/customHooks';
 import { GetFormattedDateString, GetFormattedUTCDateString, GetFormattedUTCTimeString } from '../../utils';
-import { deleteUserWorkedHour, deleteWorkPlan, deleteWorkedHour, editUserWorkedHour, editWorkedHour, setWorkPlan } from '@redux/slices';
+import { deleteWorkPlan, deleteWorkedHour, editWorkedHour, setWorkPlan } from '@redux/slices';
 import { WorkedHourFormProps } from '.';
 
 interface TimeInputs {
@@ -43,7 +43,7 @@ export const WorkedHourForm = ({ setIsOpen, workedHour }: WorkedHourFormProps) =
     const onSubmit: SubmitHandler<Inputs> = (data) => {
         const dateStr = GetFormattedDateString(workedHour.date)
 
-        dispatch(editUserWorkedHour({
+        dispatch(editWorkedHour({
             id: data.id,
             startTime: GetFormattedUTCTimeString(data.startTime, dateStr),
             endTime: GetFormattedUTCTimeString(data.endTime, dateStr),
@@ -52,7 +52,7 @@ export const WorkedHourForm = ({ setIsOpen, workedHour }: WorkedHourFormProps) =
     }
 
     const handleDelete = (workedHour: WorkedHour) => {
-        dispatch(deleteUserWorkedHour(workedHour.id))
+        dispatch(deleteWorkedHour(workedHour.id))
         setIsOpen(null);
     }
 

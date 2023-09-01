@@ -23,7 +23,6 @@ export interface AuthSliceState extends DefaultState {
 export interface UserSliceState extends DefaultState {
     user: User | null,
     vacationDays?: number,
-    workedHours: FormattedWorkedHours[]
 }
 
 export interface UsersSliceState extends DefaultState,OrderingPagingFilterType {
@@ -60,7 +59,7 @@ export interface VacationState extends DefaultState,FiltersType,PagingWithExtraI
 }
 
 export interface WorkedHoursSlice extends DefaultState,PagingType,PagingExtraInfo {
-    workedHours: WorkedHour[],
+    workedHours: FormattedWorkedHours[]
     hoursToWork?:WorkedHoursStatistic
 }
 

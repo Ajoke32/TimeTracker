@@ -11,7 +11,9 @@ import {
     userAddFail, userAddSuccess,
     verifyFail, verifySuccess,
     fetchUserFail, fetchUserSuccess,
-    editUserFail, editUserSuccess, fetchVacationDaysFail, fetchVacationDaysSuccess, deleteUserFail, deleteUserSuccess, fetchUserWorkedHoursFail, fetchUserWorkedHoursSuccess, editUserWorkedHourFail, editUserWorkedHourSuccess, deleteUserWorkedHourFail, deleteUserWorkedHourSuccess
+    editUserFail, editUserSuccess,
+    fetchVacationDaysFail, fetchVacationDaysSuccess,
+    deleteUserFail, deleteUserSuccess
 } from '../slices';
 import { UpdateWorkedHourType, UserAddType, WorkedFetchType } from "../types";
 import { User } from "../intrerfaces";
@@ -151,67 +153,6 @@ export const emailConfirmEpic: Epic = (action: Observable<PayloadAction<string>>
         )
     );
 
-export const editUserWorkedHourEpic: Epic = (action: Observable<PayloadAction<UpdateWorkedHourType>>, state) =>
-    action.pipe(
-        ofType("user/editUserWorkedHour"),
-        mergeMap(action =>
-            UpdateWorkedHoursQuery(action.payload)
-                .pipe(
-                    mergeMap(async resp => {
-                        if (resp.response.errors != null) {
-                            const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
-                            return editUserWorkedHourFail(errorMessage)
-                        }
-                        return editUserWorkedHourSuccess(resp.response.data.workedHourMutations.update);
-                    }),
-                    catchError((e: Error) => {
-                        console.log(e);
-                        return of(editUserWorkedHourFail("Unexpected error"))
-                    })
-                ),
-        )
-    );
-
-export const deleteUserWorkedHourEpic: Epic = (action: Observable<PayloadAction<number>>) =>
-    action.pipe(
-        ofType('user/deleteUserWorkedHour'),
-        mergeMap(action =>
-            DeleteWorkedHoursQuery(action.payload)
-                .pipe(
-                    map(res => {
-                        if (res.response.errors != null) {
-                            return deleteUserWorkedHourFail(res.response.errors[0].message)
-                        }
-                        return deleteUserWorkedHourSuccess(res.response.data.workedHourMutations.delete);
-                    }),
-                    catchError((e: Error) => of(deleteUserWorkedHourFail("error")))
-                )
-        )
-    )
-
-export const fetchUserWorkedHoursEpic: Epic = (action: Observable<PayloadAction<WorkedFetchType>>, state) =>
-    action.pipe(
-        ofType("user/fetchUserWorkedHours"),
-        mergeMap(action =>
-            FetchWorkedHoursQuery(action.payload).pipe(
-                mergeMap(async resp => {
-                    if (resp.response.errors != null) {
-                        const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
-                        return fetchUserWorkedHoursFail(errorMessage)
-                    }
-                    return fetchUserWorkedHoursSuccess({
-                        entities: resp.response.data.workedHourQuery.workedHours,
-                        extensions: resp.response.extensions
-                    });
-                }),
-                catchError((e: Error) => {
-                    console.log(e);
-                    return of(fetchUserWorkedHoursFail("Unexpected error"))
-                })
-            ),
-        )
-    );
-
 export const userEpics = [
     addUserEpic,
     DeleteUserEpic,
@@ -219,8 +160,5 @@ export const userEpics = [
     fetchUserEpic,
     editUserEpic,
     fetchVacationDaysEpic,
-    emailConfirmEpic,
-    editUserWorkedHourEpic,
-    deleteUserWorkedHourEpic,
-    fetchUserWorkedHoursEpic
+    emailConfirmEpic
 ]

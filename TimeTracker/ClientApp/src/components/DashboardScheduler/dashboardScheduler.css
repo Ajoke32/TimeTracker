@@ -6,137 +6,31 @@
 }
 
 .worked-hours-wrapper {
-    width: 90%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    padding: 10px 0 10px 10px;
-
-    background: var(--color-white);
-    border-radius: 1rem 0 0 1rem;
-}
-
-.header-hours-wrapper {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    height: 35px;
-    margin-bottom: 2px;
-}
-
-.rotate-wrapper {
-    width: 100%;
-    height: 100%;
-    overflow-y: auto;
-    transform: rotateX(180deg);
-    border: 1px solid var(--color-stroke-gray);
-}
-
-.worked-hours-table {
-    position: relative;
-    width: calc(100% - 45px);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-
-    transform: rotateX(180deg);
-}
-
-.header-hour {
-    flex: 0 0 calc(100% / 13);
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: rgba(91, 175, 195, .1);
-    border-bottom: 1px solid var(--color-stroke-gray);
-    border-top: 1px solid var(--color-stroke-gray);
-}
-
-.header-hours-wrapper>div:not(:last-child) {
-    border-right: 1px solid var(--color-stroke-gray);
-}
-
-.header-hours-wrapper span {
-    opacity: .7;
-    font-size: .8rem;
-}
-
-.content-hour {
-    flex: 0 0 calc(100% / 7);
-    width: 100%;
-    position: relative;
-    border-bottom: .5px dashed rgba(91, 175, 195, .5);
-}
-
-.content-hour:hover {
-    background: var(--color-background-grey);
-}
-
-.worked-hours-content {
-    width: calc(100% / 13 * 24);
     flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
+    width: 75%;
+    height: 100%;
+    background: var(--color-white);
+    padding: 20px;
+    border-right: none;
+    border-radius: 1rem 0 0 1rem;
     overflow-y: auto;
 }
-
-.side-form {
-    border: 1px solid var(--color-stroke-gray);
-    display: flex;
-    height: 100%;
-    padding: 5px 5px 10px 5px;
-    flex-direction: column;
-}
-
-.dashboard-side-form-wrapper {
-    background-color: var(--color-white);
-    height: 100%;
-    width: 25%;
-    border-radius: 0 1rem 1rem 0;
-    padding: 3px 10px 10px 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-}
-
-.show-datepicker__btn {
-    width: 24px;
-    height: 24px;
-    background: url("../../assets/images/dashboard_calendar_icon.svg");
-    background-size: contain;
-    background-position: center center;
-    background-repeat: no-repeat;
-    cursor: pointer;
-    position: relative;
-    opacity: .6;
-    margin: 0 1.5rem;
-}
-
-.table-header-wrapper {
-    display: flex;
-    align-items: center;
-    height: 10%;
+.worked-hours-wrapper > div{
+    margin: 10px auto;
     width: 100%;
-    padding: 0 2rem 0 2rem;
-    position: relative;
 }
 
-.date-range-picker-wrapper {
-    padding: 10px;
-    min-width: 320px;
-    height: fit-content;
-    position: absolute;
-    top: 35px;
-    z-index: 1000;
-}
-
-.side-form {
-    border: 1px solid var(--color-stroke-gray);
+.right-side-form {
+    flex: 0 0 25%;
+    padding: 20px 20px 20px 10px;
     display: flex;
-    height: 90%;
-    padding: 5px 5px 10px 5px;
     flex-direction: column;
+    height: 100%;
+    min-width: 320px;
+    background-color: var(--color-white);
+    border-radius: 0 1rem 1rem 0;
+    border-left: none;
+    position: relative;
 }
 
 .date-range__separator {
@@ -148,4 +42,60 @@
 .date-range__separator>span {
     font-size: 1.5rem;
     opacity: .7;
+}
+
+.date-range-picker-wrapper {
+    position: absolute;
+    left: 65px;
+    background-color: var(--color-white);
+    z-index: 999;
+}
+
+.date-range__wrapper {
+    margin: 10px 0;
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    border: 1px solid var(--color-stroke-gray);
+    border-radius: 0.6rem;
+}
+
+
+.show-datepicker__btn {
+    width: 24px;
+    height: 24px;
+    background: url("../../assets/images/dashboard_calendar_icon.svg");
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    position: relative;
+    opacity: .6;
+    margin: 0 1rem 0 0.5rem;
+}
+.loader-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.day-worked-hours-wrapper{
+    width: 100%;
+    border: 1px solid var(--color-stroke-gray);
+    border-radius: 15px;
+}
+
+.worked-hour-row {
+    height: 4rem;
+    display: flex;
+    margin: auto;
+    justify-content: space-between;
+    border-top: .5px dashed rgba(91, 175, 195, .5);
+}
+
+.worked-hours-date-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
 }

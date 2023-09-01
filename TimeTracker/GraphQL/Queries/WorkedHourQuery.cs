@@ -39,7 +39,7 @@ public sealed class WorkedHourQuery : ObjectGraphType
                                                 && w.Date.Date >= dateRange.StartDate.Date
                                                 && w.Date.Date <= dateRange.EndDate.Date);
 
-                workedHours = workedHours.OrderByDescending(w => w.Id);
+                workedHours = workedHours.OrderByDescending(w => w.Date).ThenByDescending(w => w.StartTime);
 
                 return visitor.VisitPaging(workedHours, ctx);
             })

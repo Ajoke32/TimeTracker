@@ -8,7 +8,7 @@ using TimeTracker.Models.Dtos;
 using TimeTracker.Utils.Errors;
 using TimeTracker.Enums;
 using TimeTracker.GraphQL.Types.InputTypes.WorkPlanInput;
-
+using TimeTracker.Extensions;
 
 namespace TimeTracker.GraphQL.Mutations;
 
@@ -22,7 +22,18 @@ public sealed class WorkPlanMutations : ObjectGraphType
             {
                 var wp = ctx.GetArgument<WorkPlan>("workPlan");
 
-                var set = (wp.Id == null)
+
+                var exists = await uow.GenericRepository<WorkPlan>()
+                            .FindAsync(p => p.Date.Equals(wp.Date) 
+                                        && p.UserId == wp.UserId 
+                                        && p.Id != wp.Id 
+                                        && p.StartTime < wp.EndTime 
+                                        && wp.StartTime < p.EndTime);
+
+                if (exists is not null)
+                    throw new ValidationError("Work plans intersect");
+
+                var set = (wp.Id is null)
                     ? await uow.GenericRepository<WorkPlan>().CreateAsync(wp)
                     : await uow.GenericRepository<WorkPlan>().UpdateAsync(wp);
 

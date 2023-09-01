@@ -1,5 +1,6 @@
 import { CalendarCell, CalendarEvent, WorkPlan } from "@redux/types";
 import { SortedCalendarArr } from "@redux/intrerfaces";
+import moment from "moment";
 
 export function setPrevMonthDates(date: Date, events: CalendarEvent[], plans: SortedCalendarArr[]) {
     const firstDay = new Date(date.getFullYear(), date.getMonth(), 1)
@@ -48,30 +49,11 @@ export function setNextMonthDates(date: Date, events: CalendarEvent[], plans: So
 }
 
 export function addMonth(date: Date): Date {
-    const newDate = new Date(date);
-
-    const currentMonth = newDate.getMonth();
-    newDate.setMonth(currentMonth + 1);
-
-    if (newDate.getMonth() > 11) {
-        newDate.setFullYear(newDate.getFullYear() + 1);
-        newDate.setMonth(newDate.getMonth() - 12);
-    }
-
-    return newDate;
+    return moment(date).add(1, 'month').toDate();
 }
 
 export function substractMonth(date: Date): Date {
-    const newDate = new Date(date);
-    const currentMonth = newDate.getMonth();
-    newDate.setMonth(currentMonth - 1);
-
-    if (newDate.getMonth() < 0) {
-        newDate.setFullYear(newDate.getFullYear() - 1);
-        newDate.setMonth(newDate.getMonth() + 12);
-    }
-
-    return newDate;
+    return moment(date).subtract(1, 'month').toDate();
 }
 
 export function createCalendarCell(date: Date, events: CalendarEvent[], workPlans: SortedCalendarArr[]) {

@@ -4,7 +4,7 @@ import { Checkbox, PickerDateRange, RadioButton, SearchInput } from "../UI";
 import "./usersTableSmall.css"
 import { useAppDispatch, useTypedSelector } from "@hooks/customHooks.ts";
 import Pager from '@components/Paging/Pager';
-import { addUsersFilters, fetchUserWorkedHours, fetchUsers, fetchWorkPlans, loadUsers, resetUsersWorkPlans, userFiltersToDefault } from '@redux/slices';
+import { addUsersFilters, fetchUsers, fetchWorkPlans, fetchWorkedHours, loadUsers, resetUsersWorkPlans, userFiltersToDefault } from '@redux/slices';
 import { WhereFilter } from '@redux/types/filterTypes';
 import { GetOneMonthDateRange, GetPickerDateRange } from '../../utils';
 
@@ -80,7 +80,7 @@ export const UsersRadioTable = ({ selectedUser, setSelectedUser, dateRange }: {
 
     const handleResetProgress = () => {
         setSelectedUser(user!.id)
-        dispatch(fetchUserWorkedHours({
+        dispatch(fetchWorkedHours({
             userId: user!.id,
             dateRange: GetPickerDateRange(dateRange)
         }))
@@ -88,7 +88,7 @@ export const UsersRadioTable = ({ selectedUser, setSelectedUser, dateRange }: {
     }
 
     const handleAddProgress = () => {
-        dispatch(fetchUserWorkedHours({
+        dispatch(fetchWorkedHours({
             userId: selectedUser,
             dateRange: GetPickerDateRange(dateRange)
         }))
@@ -97,7 +97,7 @@ export const UsersRadioTable = ({ selectedUser, setSelectedUser, dateRange }: {
     }
 
     return (
-        <div className='small-users-table-wrapper'>
+        <div className='radio-table-wrapper'>
             <div className='search-header'>
                 <div className='search-input-wrapper'>
                     <SearchInput name="search" placeholder="Search" onSearch={handleSearch} />
@@ -112,7 +112,7 @@ export const UsersRadioTable = ({ selectedUser, setSelectedUser, dateRange }: {
                 }
             </div>
 
-            <div className='users-list-wrapper'>
+            <div className='radio-list-wrapper'>
                 <RadioButton options={users} selectedOption={selectedUser} setSelectedOption={setSelectedUser} />
             </div>
             {!filtered && !(users.length % 10) &&
