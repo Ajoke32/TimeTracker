@@ -4,7 +4,7 @@ import {WorkedHour} from "@redux/types";
 import {FormattedWorkedHours} from "@redux/intrerfaces";
 
 interface WorkedHoursListProps{
-    workedHours:WorkedHour[]
+    workedHours:FormattedWorkedHours[]
 }
 
 const WorkedHoursList = ({workedHours}:WorkedHoursListProps) => {
@@ -13,10 +13,12 @@ const WorkedHoursList = ({workedHours}:WorkedHoursListProps) => {
             <h2>Recent activity</h2>
             <div className={'work-plans'}>
                 {workedHours.map(w => {
-                    return <div key={w.id}  className="work-plan green with-date">
-                        <span >{moment(w.startTime, 'hh:mm').format("hh:mm")} -- {moment(w.endTime, 'hh:mm').format("hh:mm")}</span>
-                        <span>{moment(w.date).format("DD-MM-YYYY")}</span>
-                    </div>
+                    return w.workedHours.map(wp=>{
+                        return <div key={wp.id}  className="work-plan green with-date">
+                            <span >{moment(wp.startTime, 'hh:mm').format("hh:mm")} -- {moment(wp.endTime, 'hh:mm').format("hh:mm")}</span>
+                            <span>{moment(w.date).format("DD-MM-YYYY")}</span>
+                        </div>
+                    })
                 })}
             </div>
         </div>
