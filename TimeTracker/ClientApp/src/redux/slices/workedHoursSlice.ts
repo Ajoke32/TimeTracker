@@ -6,7 +6,6 @@ import {
     CreateWorkedHourType,
     WorkedHoursStatisticInput,
     WorkedHoursStatistic,
-    WorkedFetchType,
     DateRangeType,
 } from '@redux/types';
 import {
