@@ -80,9 +80,24 @@
     justify-content: center;
     display: flex;
     gap: 10px;
-    background-color: #9edbec;
     padding: 5px;
     border-radius: 8px;
+}
+
+.blue{
+    background-color: #9edbec;
+}
+.yellow{
+    background-color: #fff056;
+}
+.green{
+    background-color: #6ede8a;
+}
+
+.with-date{
+    padding-left: 15px;
+    padding-right: 15px;
+    justify-content: space-between;
 }
 
 .worked-hours-options{
@@ -100,6 +115,45 @@
 }
 
 .all{
-    grid-column: span 3;
     padding: 10px;
+}
+
+/* t  */
+.tracker{
+    gap: 15px;
+}
+
+.play-img-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #c77dff;
+    border-radius: 50%;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    cursor: pointer;
+    padding: 10px;
+}
+.play-img-wrapper:hover{
+    transition: 0.2s;
+    scale: 1.05;
+}
+.play-img-wrapper img{
+    width: 35px;
+    position: relative;
+    height: 35px;
+    border-radius: 50%;
+}
+
+.vacations-wrapper{
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+    width: 90%;
+}
+.vacation-item{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #edf6f9;
+    border-radius: 8px;
 }
