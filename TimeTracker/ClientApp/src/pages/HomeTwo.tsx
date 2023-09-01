@@ -8,6 +8,8 @@ import Progress from "@components/Home/Progress.tsx";
 import Plans from "@components/Home/Plans.tsx";
 import WorkedHoursList from "@components/Home/WorkedHoursList.tsx";
 import VacationsList from "@components/Home/VacationsList.tsx";
+import {WorkedHours} from "@components/UI";
+import {WorkedHour} from "@redux/types";
 
 
 const HomeTwo = () => {
@@ -38,7 +40,6 @@ const HomeTwo = () => {
     }, []);
 
 
-
     return (
         <div className="home-wrapper">
 
@@ -59,7 +60,7 @@ const HomeTwo = () => {
             <Plans emptyMessage={"You have no scheduled plans"} loading={plansLoading} title={"Upcoming schedule"} plans={workPlans.nextMonth} />
 
 
-            <WorkedHoursList workedHours={workedHours}  />
+            <WorkedHoursList workedHours={workedHours as WorkedHour[]}  />
 
             <VacationsList userId={user?.id!} />
         </div>

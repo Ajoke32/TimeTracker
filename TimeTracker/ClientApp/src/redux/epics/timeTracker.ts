@@ -77,8 +77,8 @@ export const fetchWorkedHoursEpic: Epic = (action: Observable<PayloadAction<Work
         mergeMap(action =>
             FetchWorkedHoursQuery(action.payload).pipe(
                 mergeMap(async resp => {
+                    console.log("users");
                     if (resp.response.errors != null) {
-                        console.log(resp)
                         const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
                         return fetchWorkedHoursFail(errorMessage)
                     }
