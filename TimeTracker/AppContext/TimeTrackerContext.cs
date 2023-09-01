@@ -28,6 +28,8 @@ public class TimeTrackerContext:DbContext
     public DbSet<SickLeave> SickLeaves { get; set; }
     
     public DbSet<CalendarEvent> CalendarEvents { get; set; }
+    
+    public DbSet<QuartzLog> QuartzLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -97,6 +99,11 @@ public class TimeTrackerContext:DbContext
         
         modelBuilder.Entity<SickLeave>()
             .Property(s => s.EndDate)
+            .HasConversion(s => s.ToDateTime(new TimeOnly()),
+                s=>DateOnly.FromDateTime(s));
+        
+        modelBuilder.Entity<QuartzLog>()
+            .Property(s => s.Date)
             .HasConversion(s => s.ToDateTime(new TimeOnly()),
                 s=>DateOnly.FromDateTime(s));
         

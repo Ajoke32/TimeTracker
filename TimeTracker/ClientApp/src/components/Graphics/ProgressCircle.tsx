@@ -1,5 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import './ProgressCircle.css'
+import {useTypedSelector} from "@hooks/customHooks.ts";
 
 
 interface ProgressCircleProps{
@@ -7,28 +8,30 @@ interface ProgressCircleProps{
     dependency?:any
 }
 const ProgressCircle = ({percents,dependency}:ProgressCircleProps) => {
+    const {hoursToWork} = useTypedSelector(s=>s.workedHours);
     percents = isFinite(percents)?percents:0;
     const percentToCount = percents>100?100:percents;
     const circleRef = useRef<SVGCircleElement>(null);
     const radius = 80;
     const length = 2*Math.PI*radius;
-    const  initial = !isNaN(percents)?length - (length*percentToCount)/100:length;
+    const  initial = length - (length*percentToCount)/100;
 
     const appear = [
         { strokeDashoffset: length },
-        { strokeDashoffset: `${initial}` },
+        { strokeDashoffset: `${!isNaN(percents)?length - (length*percentToCount)/100:length}` },
     ];
-
     const timing={
         duration:500,
     }
 
 
-    useEffect(() => {
+    useLayoutEffect(() => {
+
+
         if(circleRef.current!==null){
             circleRef.current.animate(appear,timing);
         }
-    }, [dependency]);
+    }, [dependency,hoursToWork]);
 
 
     return (
@@ -36,7 +39,7 @@ const ProgressCircle = ({percents,dependency}:ProgressCircleProps) => {
             <svg>
                 <circle cx="70" cy="70" r={radius}></circle>
                 <circle ref={circleRef}
-                        style={{strokeDashoffset:initial}}
+                        style={{strokeDashoffset:`${initial}`}}
                         cx="70" cy="70" r={radius}></circle>
             </svg>
             <div className="text">{!isNaN(percents)?Math.round(percents):0}%</div>

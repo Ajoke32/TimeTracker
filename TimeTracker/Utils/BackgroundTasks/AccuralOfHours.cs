@@ -17,18 +17,36 @@ public class AccuralOfHours:IJob
         var fullTimers = await _uow.GenericRepository<User>()
             .GetAsync(u => u.WorkType == WorkType.FullTime
                 ,includeProperties:"Vacations");
-        
-        foreach (var user in fullTimers)
+
+        /*
+        var logs = await _uow.GenericRepository<QuartzLog>()
+            .GetAsync(orderBy:q=>q.OrderByDescending(e=>e.Id));
+        var lastLog = logs.FirstOrDefault(l=>l.Type==Log.AccuralOfHours);
+
+        if (lastLog == null)
         {
-            var vacation = user.Vacations.Find(v => v.StartDate.Date<=DateTime.Now.Date
-                                                    &&v.EndDate>=DateTime.Now.Date);
-            if (vacation != null)
-            {
-                continue;
-            }
-            user.HoursPerMonth += 8;
+            throw new Exception("at least one log must be present in table");
         }
 
+        var hoursCount = (DateTime.Now - lastLog.Date.ToDateTime(new TimeOnly())).Days*8;
+
+        var workedHours = new List<WorkedHour>();
+
+        foreach (var fullTimer in fullTimers)
+        {
+            workedHours.Add(new WorkedHour()
+            {
+                User = fullTimer,
+                UserId = fullTimer.Id,
+                Date = DateTime.Now,
+                StartTime = new TimeOnly(),
+                EndTime = new TimeOnly(),
+                TotalTime = new TimeOnly(hoursCount,0,0)
+            });
+        }
+        */
+        
+        
         await _uow.SaveAsync();
     }
 }

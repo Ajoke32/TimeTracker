@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { startTimer, resetTimer, tick, resetTimerSuccess } from '../../redux';
+import { startTimer, resetTimer, tick} from '../../redux';
 import "./trackers.css";
 import { SmallButton, CurrentDateElement, Timer, WorkedHours } from "@components/UI";
 import { useTypedSelector } from "@hooks/customHooks";
