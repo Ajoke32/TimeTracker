@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from "moment/moment";
 import {WorkedHour} from "@redux/types";
+import {FormattedWorkedHours} from "@redux/intrerfaces";
 
 interface WorkedHoursListProps{
     workedHours:WorkedHour[]
