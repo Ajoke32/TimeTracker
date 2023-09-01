@@ -6,10 +6,9 @@ import moment from "moment";
 import HomeTracker from "@components/Trackers/HomeTracker.tsx";
 import Progress from "@components/Home/Progress.tsx";
 import Plans from "@components/Home/Plans.tsx";
-import WorkedHoursList from "@components/Home/WorkedHoursList.tsx";
 import VacationsList from "@components/Home/VacationsList.tsx";
-import {WorkedHours} from "@components/UI";
-import {WorkedHour} from "@redux/types";
+import WorkedHoursList from "@components/Home/WorkedHoursList.tsx";
+
 
 
 const HomeTwo = () => {
@@ -60,7 +59,7 @@ const HomeTwo = () => {
             <Plans emptyMessage={"You have no scheduled plans"} loading={plansLoading} title={"Upcoming schedule"} plans={workPlans.nextMonth} />
 
 
-            <WorkedHoursList workedHours={workedHours as WorkedHour[]}  />
+            <WorkedHoursList workedHours={workedHours}  />
 
             <VacationsList userId={user?.id!} />
         </div>
