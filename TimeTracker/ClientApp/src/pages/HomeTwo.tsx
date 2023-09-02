@@ -60,7 +60,7 @@ const HomeTwo = () => {
             <Plans emptyMessage={"You have no scheduled plans"} loading={plansLoading} title={"Upcoming schedule"} plans={workPlans.nextMonth} />
 
 
-            <WorkedHoursList workedHours={workedHours as WorkedHour[]}  />
+            <WorkedHoursList workedHours={workedHours}  />
 
             <VacationsList userId={user?.id!} />
         </div>
