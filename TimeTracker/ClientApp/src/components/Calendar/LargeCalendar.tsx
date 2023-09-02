@@ -121,12 +121,17 @@ export const LargeCalendar = ({ date, setter }: CalendarProps) => {
                                 (cell.date.getDate() === new Date().getDate() && isCurrentMonth)
                                     ? "dates-today__date" : ""}
                             onClick={() => { setter(cell) }} >
-                            <span className={getClassName(cell)}>
+                            <div className="date-top__wrapper">
+                                <span className={getClassName(cell)}>
                                 {cell.date.getDate()}
                             </span>
-                            <button type="button" className="calendar-event__btn" onClick={(e) => {
-                                handleAddEventButton(e, cell)
-                            }} />
+                                <button type="button" className="calendar-event__btn" onClick={(e) => {
+                                    handleAddEventButton(e, cell)
+                                }} />
+                            </div>
+                            <div className="event-name__wrapper">
+                                <span>event new event some event event new event some event</span>
+                            </div>
                         </div>
                     ))}
 

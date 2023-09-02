@@ -2,6 +2,11 @@
     display: flex;
 }
 
+.checkbox-wrapper span {
+    display: flex;
+    align-items: center;
+}
+
 .checkbox-inner input {
     position: absolute;
     opacity: 0;

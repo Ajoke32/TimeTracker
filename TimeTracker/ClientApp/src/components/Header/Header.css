@@ -114,10 +114,11 @@
 }
 
 .timer-start-stop__btn > div {
-    width: .8rem;
-    height: .8rem;
+    width: 1rem;
+    height: 1rem;
     border: none;
     cursor: pointer;
+    right: 0;
     
     background-size: contain;
     background-position: center center;
@@ -125,7 +126,7 @@
 }
 
 .timer-stop__icon {
-    background: url("../../assets/images/timer_pause_icon.svg");
+    background: url("../../assets/images/timer_stop_icon.svg");
     opacity: .5;
 }
 

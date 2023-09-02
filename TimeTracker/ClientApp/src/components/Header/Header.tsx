@@ -12,6 +12,7 @@ export const Header = () => {
     const { user } = useTypedSelector(state => state.auth);
     const { isRunning, startedAt, hours, minutes, seconds } = useTypedSelector(state => state.timer);
     const isTrackerPage = (useLocation().pathname === '/tracker');
+    const timer = useTypedSelector(state => state.timer)
     const {hoursToWork} = useTypedSelector(s=>s.workedHours);
     useEffect(() => {
         if (!isTrackerPage && isRunning) {
@@ -61,6 +62,9 @@ export const Header = () => {
                         <div className="header-timer__content" style={!isRunning ? { opacity: '.5' } : {}}>
                             <Timer hours={hours} minutes={minutes} seconds={seconds} />
                         </div>
+                        <button className="timer-start-stop__btn" onClick={handleStartStopButton}>
+                            <div className={timer.isRunning ? "timer-stop__icon" : "timer-start__icon"}></div>
+                        </button>
                     </div>
                 )}
             </div>

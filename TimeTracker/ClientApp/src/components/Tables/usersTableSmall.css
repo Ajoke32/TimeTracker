@@ -2,6 +2,10 @@
     padding: 15px 10px;
 }
 
+.small-users-table-wrapper span {
+    font-size: .9rem;
+}
+
 .pager-wrapper {
     width: 100%;
     display: flex;
