@@ -4,12 +4,12 @@ import {useAppDispatch, useTypedSelector} from "@hooks/customHooks.ts";
 import {
     deleteByVacationId,
     fetchApproverVacationById,
-    updateApproverVacationState,
+    updateApproverVacationState, updateVacation,
     updateVacationState
 } from "@redux/slices";
 import './VacationDetails.css'
 import moment from "moment";
-import {VacationStateEnum} from "@redux/types";
+import {VacationInputType, VacationStateEnum} from "@redux/types";
 import {getApproverVacationString, isVacationAnswered, vacationNotEqual} from "../../utils/vacationHelper.ts";
 
 const VacationDetails = () => {
@@ -20,6 +20,7 @@ const VacationDetails = () => {
     const [error,setError]= useState<string>("");
     const [approveId,setApproveId] = useState<number>();
     const userId = useTypedSelector(s=>s.auth.user?.id);
+    const {vacations}  = useTypedSelector(s=>s.vacations);
     const {updated,deleted,approverVacation:av,loading}
         = useTypedSelector(s=>s.approverVacations);
     function notFound(){
@@ -32,8 +33,17 @@ const VacationDetails = () => {
     }
 
     useEffect(()=>{
+
         if(updated){
             dispatch(updateVacationState(approveId!));
+            const vacation = {...updated};
+            if(message!=="") {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                delete vacation.user;
+                dispatch(updateVacation({...vacation, approverMessage: message}));
+                setMessage("");
+            }
         }
     },[updated])
 
@@ -52,7 +62,6 @@ const VacationDetails = () => {
         dispatch(updateApproverVacationState({
             approverId:userId!,vacationId:av?.vacation.id!,
             isApproved:state!,message:message}));
-        setMessage("");
     }
 
     function archive(vacationId:number){

@@ -21,7 +21,7 @@ public sealed class VacationType: ObjectGraphType<Vacation>
         
         Field(x=>x.User).Description("user");
         
-        Field(x=>x.HaveAnswer).Description("have at least one answer");
+        Field(x=>x.ApproverMessage,nullable:true).Description("approver message");
 
         Field(x => x.ApproverVacations).Description("ApproverVacation");
 

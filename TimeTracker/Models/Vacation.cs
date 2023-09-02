@@ -25,12 +25,9 @@ public class Vacation:SoftDeleteBase
     [Required]
     public DateTime EndDate { get; set; }
     
-    public bool HaveAnswer { get; set; }
+    public string? ApproverMessage { get; set; } 
 
     public List<ApproverVacation> ApproverVacations { get; set; } = new();
 
-    public Vacation()
-    {
-        VacationState = VacationState.Pending;
-    }
+
 }

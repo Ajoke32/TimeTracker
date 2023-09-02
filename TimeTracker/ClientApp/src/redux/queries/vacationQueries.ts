@@ -34,7 +34,7 @@ export function UpdateVacationState(id:number){
 export function FetchUserVacations(input:WorkedFetchType){
 
     return AjaxQuery<{ vacationQuery:{userVacations:Vacation[]} }>(
-        'query GetUserVacations($id:Int!,$take:Int,$skip:Int,$group:[Where!]){vacationQuery{userVacations(userId:$id,take:$take,skip:$skip,group:$group){id,vacationState,deletedAt,isDeleted,haveAnswer,endDate,startDate,message}}}',
+        'query GetUserVacations($id:Int!,$take:Int,$skip:Int,$group:[Where!]){vacationQuery{userVacations(userId:$id,take:$take,skip:$skip,group:$group){id,vacationState,deletedAt,isDeleted,endDate,startDate,message,approverMessage}}}',
         {id:input.userId,take:input.take,skip:input.skip,group:input.group}
     )
 }
@@ -51,7 +51,8 @@ export function UpdateVacation(vacation:Vacation){
         'mutation UpdateVacation($vacation:VacationInputType!){vacationMutation{update(vacation:$vacation){id,startDate,endDate,vacationState}}}',
         {vacation:{...vacation,
                 startDate:moment(vacation.startDate).format("YYYY-MM-DD"),
-                endDate:moment(vacation.endDate).format("YYYY-MM-DD")}}
+                endDate:moment(vacation.endDate).format("YYYY-MM-DD")},
+                validate:vacation.approverMessage===null}
     )
 }
 

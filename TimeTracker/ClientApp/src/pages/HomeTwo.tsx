@@ -11,7 +11,7 @@ import WorkedHoursList from "@components/Home/WorkedHoursList.tsx";
 
 
 
-const HomeTwo = () => {
+export const HomeTwo = () => {
 
     const dispatch = useAppDispatch();
     const {user} = useTypedSelector(s => s.auth);
@@ -66,4 +66,4 @@ const HomeTwo = () => {
     );
 };
 
-export default HomeTwo;
+

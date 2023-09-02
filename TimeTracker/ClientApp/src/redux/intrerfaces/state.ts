@@ -45,7 +45,7 @@ export interface ApproversState extends DefaultState {
 
 export interface VacationApproverState extends DefaultState,PagingWithExtraInfo,FiltersType {
     vacationRequests: ApproverVacation[],
-    updated: boolean,
+    updated: Vacation|null,
     approverVacation:ApproverVacation|null,
     deleted:boolean
 }

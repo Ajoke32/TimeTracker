@@ -14,7 +14,8 @@ import { Tracker } from "../TrackerPage/Tracker";
 import Calendar from "../CalendarPage/Calendar";
 import VacationDetails from "@components/Cards/VacationDetails.tsx";
 import { Dashboard } from '../DashboardPage/Dashboard';
-import HomeTwo from "../HomeTwo.tsx";
+import {HomeTwo} from "../HomeTwo.tsx";
+
 
 
 

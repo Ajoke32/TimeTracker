@@ -65,8 +65,10 @@ export function UpdateApproverVacationState(av:ApproverVacationUpdate){
                   vacationId
                   isApproved,
                   vacation{
+                    id
                     vacationState,
-                    message
+                    message,
+                    userId
                     user{
                       firstName,
                       lastName,

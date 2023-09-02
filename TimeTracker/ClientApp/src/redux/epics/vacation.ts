@@ -114,6 +114,7 @@ const updateVacationEpic:Epic=(action$:Observable<PayloadAction<Vacation>>)=>
             UpdateVacation(action.payload)
                 .pipe(
                     map(res=>{
+                        console.log(res.response, ' resp');
                         if (res.response.errors != null) {
                             return updateVacationFail(res.response.errors[0].message)
                         }
