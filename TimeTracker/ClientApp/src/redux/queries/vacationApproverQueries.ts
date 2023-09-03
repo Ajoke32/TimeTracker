@@ -34,7 +34,7 @@ export function DeleteApproverVacationByVacationId(id:number){
 
 export function FetchApproverVacationById(id:number){
     return AjaxQuery<{approverVacationQuery:{approverVacation:ApproverVacation}}>(
-        'query FetchById($id:Int!){approverVacationQuery{approverVacation(id:$id){isApproved,isDeleted,id,vacation{id,vacationState,startDate,message,endDate,user{firstName,lastName,email,vacationDays}}}}}',
+        'query FetchById($id:Int!){approverVacationQuery{approverVacation(id:$id){isApproved,isDeleted,id,vacation{id,vacationState,startDate,message,endDate,user{firstName,lastName,employmentDate,email,vacationDays}}}}}',
         {id:id}
     )
 }
@@ -65,8 +65,10 @@ export function UpdateApproverVacationState(av:ApproverVacationUpdate){
                   vacationId
                   isApproved,
                   vacation{
+                    id
                     vacationState,
-                    message
+                    message,
+                    userId
                     user{
                       firstName,
                       lastName,

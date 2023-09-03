@@ -1,6 +1,7 @@
 ﻿using GraphQL;
 using GraphQL.Types;
 using TimeTracker.Absctration;
+using TimeTracker.Enums;
 using TimeTracker.GraphQL.Types;
 using TimeTracker.Models;
 using TimeTracker.Utils.Filters;
@@ -20,10 +21,12 @@ public sealed class VacationsQuery:ObjectGraphType
                 
                 var vacations  =  await uow.GenericRepository<Vacation>()
                     .GetAsync(x => x.UserId == id);
-
+                
                 return visitor.Visit(vacations, _);
-            }).UseFiltering()
-            .UsePaging();
+            })
+            .UseFiltering()
+            .UsePaging()
+            .UseOrdering();
 
         Field<VacationType>("vacation")
             .Argument<int>("id")

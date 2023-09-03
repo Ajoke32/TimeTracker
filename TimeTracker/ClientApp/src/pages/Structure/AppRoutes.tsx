@@ -1,9 +1,9 @@
 
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import {
-  HomePage, Login, AddUser, Layout,
+  Login, AddUser, Layout,
   UserVerify, Team, EditUser,
-  ProtectedRoute, CreateVacation,
+  ProtectedRoute,
   VacationRequests, NotFound,
   EmailConfirm
 } from "..";
@@ -14,7 +14,8 @@ import { Tracker } from "../TrackerPage/Tracker";
 import Calendar from "../CalendarPage/Calendar";
 import VacationDetails from "@components/Cards/VacationDetails.tsx";
 import { Dashboard } from '../DashboardPage/Dashboard';
-import HomeTwo from "../HomeTwo.tsx";
+import {HomeTwo} from "../HomeTwo.tsx";
+
 
 
 
@@ -51,10 +52,8 @@ export const AppRoutes = () => {
             </Route>
             <Route path="/vacation">
               <Route index element={<Navigate to='requests' />} />
-              <Route path="create" element={<CreateVacation />} />
               <Route path="requests" element={<VacationRequests />} />
               <Route path="all" element={<VacationsTable />} />
-              <Route path="details/:id" element={<VacationDetails />} />
             </Route>
             <Route path="/login" element={<Navigate to="/" />} />
             <Route path="*" element={<NotFound />} />

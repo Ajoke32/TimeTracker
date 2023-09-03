@@ -8,10 +8,11 @@ import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 interface PagerProps extends PagingWithExtraInfo {
     setTake: ActionCreatorWithPayload<any>,
     setSkip: ActionCreatorWithPayload<any>,
-    capacity: number
+    capacity: number,
+    bottom?:string
 }
 
-const Pager = ({ setSkip, setTake, capacity = 0, perPage, take, skip, extensions }: PagerProps) => {
+const Pager = ({ setSkip, setTake, capacity = 0, perPage, take, skip, extensions,bottom }: PagerProps) => {
 
     const [activePage, setActivePage] = useState<number>(1);
     const dispatch = useAppDispatch();
@@ -67,7 +68,7 @@ const Pager = ({ setSkip, setTake, capacity = 0, perPage, take, skip, extensions
     }, [take, skip]);
 
     return (
-        <div className="pages-wrapper">
+        <div className="pages-wrapper" style={{bottom:`${bottom&&bottom}`}}>
             <button className={`arrow-wrapper left-arrow ${skip == 0 ? 'inactive' : ''}`} disabled={skip == 0} onClick={() => {
                 dispatch(setTake(take - perPage))
                 dispatch(setSkip(skip - perPage))

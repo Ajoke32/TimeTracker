@@ -2,11 +2,14 @@
 
 namespace TimeTracker.Utils.Filters.ExpressionTypes.GraphTypes;
 
-public class OrderByGraphType:InputObjectGraphType<OrderByExpression>
+public sealed class OrderByGraphType:InputObjectGraphType<OrderByExpression>
 {
     public OrderByGraphType()
     {
-        Field(x => x.Property);
+        Field(x => x.PropertyName).Name("property");
+        
         Field(x => x.Direction);
+        
+        Field(x => x.CompareValue,nullable:true).Name("value");
     }
 }

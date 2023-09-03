@@ -8,10 +8,14 @@ import Progress from "@components/Home/Progress.tsx";
 import Plans from "@components/Home/Plans.tsx";
 import VacationsList from "@components/Home/VacationsList.tsx";
 import WorkedHoursList from "@components/Home/WorkedHoursList.tsx";
+import {AjaxQuery} from "@redux/queries";
+import {ajax} from "rxjs/ajax";
+import {map, mergeMap} from "rxjs";
+import {ofType} from "redux-observable";
 
 
 
-const HomeTwo = () => {
+export const HomeTwo = () => {
 
     const dispatch = useAppDispatch();
     const {user} = useTypedSelector(s => s.auth);
@@ -42,7 +46,6 @@ const HomeTwo = () => {
     return (
         <div className="home-wrapper">
 
-
             <Progress userId={user?.id!} />
 
             <Plans emptyMessage={"You have no plans for today"} addPlans={true} loading={plansLoading} plans={workPlans.currentMonth.map(w=>{
@@ -66,4 +69,4 @@ const HomeTwo = () => {
     );
 };
 
-export default HomeTwo;
+

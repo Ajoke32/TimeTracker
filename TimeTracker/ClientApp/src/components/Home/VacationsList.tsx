@@ -22,7 +22,7 @@ const VacationsList = ({userId}:VacationsListProps) => {
             <h2>You vacations</h2>
             {loading?<Loader />:<div className={"vacations-wrapper"}>
                 {vacations.map(v=>{
-                    return <div key={v.id} className={"vacation-item"}>
+                    return <div key={v.id} className={"vacation-card-item"}>
                         <span>{moment(v.startDate).format("M/D/Y")} -- {moment(v.endDate).format("M/D/Y")}</span>
                         <span className={v.vacationState===VacationStateEnum.Edited?"pending":v.vacationState.toLowerCase()}>
                                 {v.vacationState===VacationStateEnum.Edited?"Pending":getStringVacationState(v.vacationState)}
