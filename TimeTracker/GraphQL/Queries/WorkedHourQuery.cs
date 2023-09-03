@@ -17,15 +17,18 @@ using TimeTracker.Utils.Errors;
 using TimeTracker.Utils.Filters;
 using TimeTracker.Visitors;
 using TimeTracker.GraphQL.Types.InputTypes.CalendarEventInput;
+using TimeTracker.Utils.WorkedHoursCalculation;
 
 namespace TimeTracker.GraphQL.Queries;
 
 public sealed class WorkedHourQuery : ObjectGraphType
 {
     private readonly IGenericRepository<WorkedHour> _repos;
-    public WorkedHourQuery(IUnitOfWorkRepository uow, IGraphQlArgumentVisitor visitor)
+    private readonly WorkedHoursHelpers _hoursHelpers;
+    public WorkedHourQuery(IUnitOfWorkRepository uow, IGraphQlArgumentVisitor visitor,WorkedHoursHelpers helpers)
     {
         _repos = uow.GenericRepository<WorkedHour>();
+        _hoursHelpers = helpers;
         Field<ListGraphType<WorkedHourType>>("workedHours")
             .Argument<int>("userId")
             .Argument<DateRangeInputType>("dateRange")
@@ -47,10 +50,11 @@ public sealed class WorkedHourQuery : ObjectGraphType
 
         Field<int>("getWorkedHoursInMonth")
                 .Argument<DateOnlyGraphType>("date")
-                .Resolve(c =>
+                .ResolveAsync(async c =>
                 {
                     var date = c.GetArgument<DateOnly>("date");
-                    return 8 * GetWorkedDaysInMonth(date.Year, date.Month);
+                    var workedDays = await _hoursHelpers.GetWorkedDaysInMonthAsync(date.Year, date.Month);
+                    return 8 * workedDays;
                 });
 
 
@@ -64,11 +68,12 @@ public sealed class WorkedHourQuery : ObjectGraphType
                 var date = _.GetArgument<DateOnly>("date");
                 var user = await uow.GenericRepository<User>()
                     .FindAsync(u => u.Id == id,relatedData:"WorkedHours,WorkPlans")??throw new Exception("not found");
+
+                var workedDays = await _hoursHelpers.GetWorkedDaysInMonthAsync(date.Year, date.Month);
                 
-                var needToWork = user.HoursPerMonth* 8 * GetWorkedDaysInMonth(date.Year,date.Month)/100;
-                
-                var actuallyWorked = user.WorkedHours
-                    .Aggregate(TimeSpan.Zero, (current, wh) => current + wh.TotalTime.ToTimeSpan());
+                var needToWork = _hoursHelpers.GetWorkedHoursInCurrentMonth(user,workedDays);
+
+                var actuallyWorked = _hoursHelpers.GetActuallyWorkedHoursInCurrentMonth(user);
 
                 var plans =user.WorkPlans
                     .FindAll(w => w.Date == DateOnly.FromDateTime(DateTime.Now));
@@ -97,22 +102,8 @@ public sealed class WorkedHourQuery : ObjectGraphType
                     ActuallyWorkedToday = actuallyWorkedToday.TotalHours.ToString("F2") 
                 };
             });
+        
     }
 
-
-    private int GetWorkedDaysInMonth(int year, int month)
-    {
-        var workDays = 0;
-        var daysInMonth = DateTime.DaysInMonth(year, month);
-        for (var day = 1; day <= daysInMonth; day++)
-        {
-            var currentDay = new DateTime(year, month, day);
-            if (currentDay.DayOfWeek != DayOfWeek.Saturday && currentDay.DayOfWeek != DayOfWeek.Sunday)
-            {
-                workDays++;
-            }
-        }
-
-        return workDays;
-    }
+    
 }
