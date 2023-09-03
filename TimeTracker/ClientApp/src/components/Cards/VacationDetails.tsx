@@ -1,5 +1,4 @@
 import React, {ChangeEvent, useEffect, useRef, useState} from 'react';
-import {Navigate, useParams} from "react-router-dom";
 import {useAppDispatch, useTypedSelector} from "@hooks/customHooks.ts";
 import {
     deleteByVacationId,
@@ -9,9 +8,15 @@ import {
 } from "@redux/slices";
 import './VacationDetails.css'
 import moment from "moment";
-import {VacationInputType, VacationStateEnum} from "@redux/types";
-import {getApproverVacationString, isVacationAnswered, vacationNotEqual} from "../../utils/vacationHelper.ts";
+import { VacationStateEnum} from "@redux/types";
+import {
+    getApproverVacationString,
+    hasWarning,
+    isVacationAnswered,
+    vacationNotEqual
+} from "../../utils/vacationHelper.ts";
 import {Loader} from "@components/UI";
+import info from '../../assets/images/warning.png'
 
 interface VacationDetailsProps{
     vacationId:number,
@@ -82,12 +87,19 @@ const VacationDetails = ({vacationId,setIsOpen,isOpen}:VacationDetailsProps) => 
                             <span>{av?.vacation?.user.firstName} {av?.vacation?.user.lastName}</span>
                             <span style={{color:"#006494"}}>({av?.vacation?.user.email})</span>
                         </div>
-                        <span className={getApproverVacationString(av?.isApproved!,av?.vacation?.vacationState.toLowerCase()!)}>
+                        <span style={{display:"flex",alignItems:"center",gap:"5px"}} className={getApproverVacationString(av?.isApproved!,av?.vacation?.vacationState.toLowerCase()!)}>
                                 {getApproverVacationString(av?.isApproved!,av?.vacation?.vacationState.toLowerCase()!)}
                             {(!isVacationAnswered(av?.vacation?.vacationState!)
                                 &&vacationNotEqual(VacationStateEnum.Pending,av?.vacation?.vacationState!)&&av?.isApproved===null)&&' by user'}
                             {av?.isDeleted&&<span style={{color:"#0aa9ff"}}> (archived) </span>}
+                            {hasWarning(av?.vacation.user.employmentDate.toString()!)?
+                                <div className={"tooltip-wrapper"}>
+                                    <img className="tooltip" src={info} style={{width:"20px",height:"20px"}} alt=""/>
+                                    <span style={{top:"20px"}} className="tooltip-text">6 months have not yet passed since the hiring</span>
+                                </div>:""}
                             </span>
+
+
                     </div>
                     <div className="vacation-info">
                         <div className="vacation-days">

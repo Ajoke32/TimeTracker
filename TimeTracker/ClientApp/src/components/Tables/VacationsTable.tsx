@@ -8,7 +8,6 @@ import {
     changeVacationState,
     fetchUserVacations,
     setVacationOrder,
-    setVacationRequestPerPage,
     setVacationsPerPage,
     setVacationsSkip,
     setVacationsTake,
@@ -21,12 +20,9 @@ import {getStringVacationState} from "../../utils/vacationHelper.ts";
 import {Vacation, VacationStateEnum, WorkedFetchType} from "@redux/types";
 import CancelVacationModal from "@components/UI/Modals/CancelVacationModal.tsx";
 import {H4} from "@components/Headings";
-import Filter from "@components/Tables/Filters.tsx";
 import Pager from "@components/Paging/Pager.tsx";
 import PerPageChanger from "@components/UI/Inputs/PerPageChanger.tsx";
-import warningImg from '../../assets/images/warning.png'
 import info from '../../assets/images/info.png'
-import info_two from '../../assets/images/info2.png'
 import {AddVacationForm} from "@components/VacationForms";
 
 export const VacationsTable = () => {
@@ -149,11 +145,11 @@ export const VacationsTable = () => {
                             <span style={{display: "flex", position: "relative", alignItems: 'center', gap: "8px"}}
                                   className={`${v.vacationState === VacationStateEnum.Edited ? "pending" : v.vacationState.toLowerCase()}`}>
                                 {v.vacationState === VacationStateEnum.Edited ? "Pending" : getStringVacationState(v.vacationState)}
-                                {v.approverMessage && <>
+                                {v.approverMessage && <div className={"tooltip-wrapper"}>
                                     <img className="tooltip" style={{width: "25px", height: "25px"}} src={info}
                                          alt="info"/>
-                                    <span className="tooltip-text">{v.approverMessage}</span>
-                                </>}
+                                    <span className="tooltip-text" style={{right:"-125px"}}>{v.approverMessage}</span>
+                                </div>}
 
                             </span>
                             {v.vacationState !== VacationStateEnum.Declined

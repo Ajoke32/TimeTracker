@@ -113,7 +113,6 @@ const fetchApproverVacationByIdEpic:Epic=(action$:Observable<PayloadAction<numbe
             FetchApproverVacationById(action$.payload)
                 .pipe(
                     map(res=>{
-                        console.log(res);
                         if (res.response.errors != null) {
                             return fetchApproverVacationByIdFail(res.response.errors[0].message)
                         }

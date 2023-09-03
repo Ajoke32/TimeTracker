@@ -11,17 +11,18 @@
 
 .tooltip-text {
     visibility: hidden;
-    width: 120px;
+    min-width: 120px;
     background-color: black;
     color: #fff;
     text-align: center;
     border-radius: 6px;
     padding: 5px 0;
-    left: 115px;
     position: absolute;
     z-index: 1;
 }
-
+.tooltip-wrapper{
+    position: relative;
+}
 .tooltip:hover~.tooltip-text{
     visibility: visible;
 }
