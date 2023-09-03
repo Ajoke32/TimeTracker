@@ -181,18 +181,34 @@
 
 .user-name__wrapper {
     display: flex;
+    justify-content: flex-end;
     align-items: center;
-    padding: 0.5rem 3px 0;
+    
 }
 
-.user-name__wrapper > span {
+.user-name__inner {
+    display: flex;
+    align-items: center;
+    margin: 5px;
+    padding: 5px;
+    
+}
+
+.user-name__circle {
+    height: 50%;
+    
+    border-radius: 50%;
+    opacity: .5;
+}
+
+.user-name__inner > span {
     margin-left: 5px;
     font-size: .8rem;
 }
 
 .user-name__wrapper .profile-avatar__wrapper {
-    width: 1.2rem;
-    height: 1.2rem;
+    width: 1rem;
+    height: 1rem;
     border-width: 1px;
 }
 

@@ -211,7 +211,8 @@
 }
 
 .tracker-actions__wrapper button:last-child {
-    background: url("../../assets/images/timetracker_add_hours.svg");
+    margin-left: 2px;
+    background: url("../../assets/images/edit_worked_hours_icon.png");
 }
 
 .time-range__date-wrapper {

@@ -13,8 +13,10 @@ export const TimeRow = ({ workedHour, color, onClick}: { workedHour: SchedulerWo
     return (
         <div className="content-row" >
             <div className="user-name__wrapper">
-                <ProfileAvatar initials={`${user?.firstName[0]}${user?.lastName[0]}`}/>
-                <span>{user?.firstName} {user?.lastName}</span>
+                <div className="user-name__inner">
+                    <div className="user-name__circle" style={{border: `6px solid ${color}`}}></div>
+                    <span>{user?.firstName} {user?.lastName}</span>
+                </div>
             </div>
             
             {workedHour.workPlans.map((item, i) =>
