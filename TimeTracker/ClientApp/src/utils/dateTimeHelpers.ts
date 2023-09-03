@@ -2,6 +2,8 @@ import { CalendarEvent, DateRangeType, WorkPlan, WorkedHour, WorkedTime } from "
 import { addMonth, substractMonth } from ".";
 import moment from "moment";
 import { PickerDateRange } from "@components/index";
+import { CreateWorkedHourType } from "@redux/types";
+import { TimerSliceState } from "@redux/index";
 
 export const GetFormattedUTCDateString = (date: Date): string => {
     let result = "";
@@ -200,3 +202,32 @@ export const convertTimeToIndex = (time: string) => {
 
     return parseInt(minutesStr, 10) + parseInt(hoursStr, 10) * 60;
 };
+
+export const GetCreateWorkedHour = (state: TimerSliceState, timestamp: number, userId: number) => {
+    const startDate = new Date(timestamp);
+    const stopDate = moment(timestamp)
+        .add(state.hours, "hours")
+        .add(state.minutes, 'minutes')
+        .add(state.seconds, 'seconds')
+        .toDate();
+
+    console.log(stopDate)
+
+    const startTime: WorkedTime = {
+        hours: startDate.getUTCHours(),
+        minutes: startDate.getUTCMinutes(),
+        seconds: startDate.getUTCSeconds()
+    }
+
+    const endTime: WorkedTime = {
+        hours: stopDate.getUTCHours(),
+        minutes: stopDate.getUTCMinutes(),
+        seconds: stopDate.getUTCSeconds()
+    }
+    return {
+        userId: userId,
+        date: GetFormattedUTCDateString(stopDate),
+        startTime: GetFormattedTimeString(startTime),
+        endTime: GetFormattedTimeString(endTime)
+    } as CreateWorkedHourType
+}

@@ -25,18 +25,18 @@ const timerSlice = createSlice({
         resetTimerSuccess: createSuccessReducerWithPayload<TimerSliceState, WorkedHour>(
             (state: TimerSliceState, action: PayloadAction<WorkedHour>) => {
                 state.startedAt = null,
-                state.hours = 0,
-                state.minutes = 0,
-                state.seconds = 0,
-                state.isRunning = false
+                    state.hours = 0,
+                    state.minutes = 0,
+                    state.seconds = 0,
+                    state.isRunning = false
             }
         ),
-        resetTimerFail: createErrorReducer(),
+        resetTimerFail: createErrorReducer((state: TimerSliceState) => {
+            state.isRunning = false;
+        }),
 
-        startTimer: (state) => {
-            if (!state.startedAt) 
-                state.startedAt = Date.now();
-        
+        startTimer: (state: TimerSliceState, action: PayloadAction<number | null>) => {
+            state.startedAt = Date.now(); 
             state.isRunning = true;
         },
 

@@ -10,7 +10,6 @@ import {
 import { useTypedSelector } from '@hooks/customHooks';
 import { Permission } from '@redux/enums';
 import { VacationsTable } from "@components/Tables";
-import { Tracker } from "../TrackerPage/Tracker";
 import Calendar from "../CalendarPage/Calendar";
 import VacationDetails from "@components/Cards/VacationDetails.tsx";
 import { Dashboard } from '../DashboardPage/Dashboard';
@@ -27,7 +26,6 @@ export const AppRoutes = () => {
         <>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomeTwo />} />
-            <Route path="/tracker" element={<Tracker />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path='/dashboard' element={<Dashboard />}/>
             <Route path="/team" element={<Outlet />}>

@@ -48,7 +48,7 @@ export const TrackerTimer = ({ workedHour }: { workedHour?: WorkedHour }) => {
 
     const handleStartButton = () => {
         if (!isRunning) {
-            dispatch(startTimer());
+            dispatch(startTimer(startedAt));
         }
     };
 

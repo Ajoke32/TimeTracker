@@ -29,8 +29,7 @@ export const EventForm = ({ date, setIsOpen, event }: EventFormProps) => {
             mode: 'onBlur',
             defaultValues: {
                 id: event?.id,
-                title: '',
-                eventType: isHoliday(date) ? 0 : 1,
+                eventType: isHoliday(date) ? 1 : 0,
                 date: date
             }
         });
@@ -47,11 +46,11 @@ export const EventForm = ({ date, setIsOpen, event }: EventFormProps) => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <span>Add event for {showDate}</span>
+            <span>{event ? `Change event for ${showDate}`: `Add event for ${showDate}`}</span>
 
             <TextInput name="title" placeholder="Title" register={register("title", { required: "Title can't be empty!" })} errors={errors.title} />
 
-            <LargeButton type="submit" value="Add event" />
+            <LargeButton type="submit" value={event ? "Change event" : "Add event"} />
         </form>
     );
 };

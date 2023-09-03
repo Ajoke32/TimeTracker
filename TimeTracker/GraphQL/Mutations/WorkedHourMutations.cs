@@ -78,7 +78,8 @@ public sealed class WorkedHourMutations : ObjectGraphType
                 }
 
                 var exists = await uow.GenericRepository<WorkedHour>()
-                            .FindAsync(p => p.Date.Date == currentValue.Date.Date 
+                            .FindAsync(p => p.Date.Date == currentValue.Date.Date
+                                        && p.Id != currentValue.Id
                                         && p.UserId == currentValue.UserId 
                                         && p.StartTime < wh.EndTime 
                                         && wh.StartTime < p.EndTime);
