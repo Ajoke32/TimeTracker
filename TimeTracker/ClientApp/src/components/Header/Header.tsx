@@ -6,6 +6,7 @@ import {startTimer, resetTimer, tick, fetchWorkedHoursStatisticFail, fetchWorked
 import { useLocation } from 'react-router-dom'
 import { WorkedTime } from "@redux/types";
 import { GetFormattedUTCDateString, GetFormattedTimeString } from "../../utils";
+import moment from "moment";
 
 export const Header = () => {
     const dispatch = useAppDispatch();
@@ -47,7 +48,7 @@ export const Header = () => {
 
             dispatch(resetTimer({
                 userId: user!.id,
-                date: GetFormattedUTCDateString(stopDate),
+                date: moment(GetFormattedUTCDateString(stopDate)).format("YYYY-MM-DDThh:mm:ss"),
                 startTime: GetFormattedTimeString(startTime),
                 endTime: GetFormattedTimeString(endTime)
             }));

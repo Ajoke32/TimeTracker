@@ -226,7 +226,7 @@ export const GetCreateWorkedHour = (state: TimerSliceState, timestamp: number, u
     }
     return {
         userId: userId,
-        date: GetFormattedUTCDateString(stopDate),
+        date: moment(GetFormattedUTCDateString(stopDate)).format("YYYY-MM-DDThh:mm:ss"),
         startTime: GetFormattedTimeString(startTime),
         endTime: GetFormattedTimeString(endTime)
     } as CreateWorkedHourType
