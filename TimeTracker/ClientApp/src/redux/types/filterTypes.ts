@@ -15,7 +15,8 @@ export interface FiltersType {
 export interface OrderingType {
     orderBy: {
         property: string,
-        direction: string
+        direction: string,
+        value?:string
     }
 }
 export interface PagingExtraInfo {
@@ -112,4 +113,7 @@ export const basicOrderingReducers = {
         }
 
     },
+    setOrder:(state: OrderingPagingFilterType, action: PayloadAction<OrderingType>)=>{
+        state.orderBy=action.payload.orderBy;
+    }
 }

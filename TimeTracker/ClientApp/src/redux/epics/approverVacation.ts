@@ -31,6 +31,7 @@ const updateApproverVacationEpic: Epic = (action: Observable<PayloadAction<Appro
             UpdateApproverVacationState(action.payload)
                 .pipe(
                     mergeMap(async resp => {
+                        console.log(resp.response);
                         if (resp.response.errors != null) {
                             return updateApproverVacationStateStateFail(resp.response.errors[0].message)
                         }

@@ -107,6 +107,11 @@ public class TimeTrackerContext:DbContext
             .HasConversion(s => s.ToDateTime(new TimeOnly()),
                 s=>DateOnly.FromDateTime(s));
         
+        modelBuilder.Entity<User>()
+            .Property(s => s.EmploymentDate)
+            .HasConversion(s => s.ToDateTime(new TimeOnly()),
+                s=>DateOnly.FromDateTime(s));
+        
         base.OnModelCreating(modelBuilder);
     }
 

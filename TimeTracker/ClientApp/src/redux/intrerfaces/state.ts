@@ -3,7 +3,7 @@ import { User } from './'
 import {ApproverVacation, Vacation, WorkedHour, WorkedHoursStatistic} from '@redux/types';
 import {
     FiltersType,
-    OrderingPagingFilterType,
+    OrderingPagingFilterType, OrderingType,
     PagingExtraInfo,
     PagingType,
     PagingWithExtraInfo
@@ -45,12 +45,12 @@ export interface ApproversState extends DefaultState {
 
 export interface VacationApproverState extends DefaultState,PagingWithExtraInfo,FiltersType {
     vacationRequests: ApproverVacation[],
-    updated: boolean,
+    updated: Vacation|null,
     approverVacation:ApproverVacation|null,
     deleted:boolean
 }
 
-export interface VacationState extends DefaultState,FiltersType,PagingWithExtraInfo {
+export interface VacationState extends DefaultState,FiltersType,PagingWithExtraInfo,OrderingType {
     created: boolean,
     createdId?: number,
     vacations: Vacation[],

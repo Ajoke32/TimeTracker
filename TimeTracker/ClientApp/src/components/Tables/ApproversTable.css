@@ -71,13 +71,14 @@
 
 
 .input-search:hover,
-.input-search:focus,.input-per-page:is(:hover,:focus){
+.input-search:focus/*,.input-per-page:is(:hover,:focus)*/{
     box-shadow: 0 0 3px 0 #0aa9ff;
 }
 .input-per-page{
     width: 40px;
-    border: 1px solid lightgray;
-    border-radius: 8px;
+    background: none;
+    border: none;
+    outline: none;
     text-align: center;
 }
 .btn-confirm{

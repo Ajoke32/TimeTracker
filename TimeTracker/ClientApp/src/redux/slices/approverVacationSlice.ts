@@ -21,11 +21,12 @@ import {
 const initialState:VacationApproverState = {
     ...defaultState,
     vacationRequests:[],
-    updated:false,
+    updated:null,
     approverVacation:null,
     deleted:false,
     ...{...defaultPagingState,take:4,perPage:4},
-    group:[]
+    group:[],
+
 }
 
 const approverVacationsSlice = createSlice({
@@ -34,12 +35,12 @@ const approverVacationsSlice = createSlice({
     reducers: {
         updateApproverVacationState:createPendingReducerWithPayload<typeof initialState,ApproverVacationUpdate>
         ((state:VacationApproverState)=>{
-            state.updated=false;
+            state.updated=null;
         }),
         updateApproverVacationStateSuccess:(state:VacationApproverState,action:PayloadAction<ApproverVacation>)=>{
             state.approverVacation=action.payload;
             state.loading=false;
-            state.updated=true;
+            state.updated=action.payload.vacation;
         },
         updateApproverVacationStateStateFail:createErrorReducer(),
 
@@ -52,7 +53,7 @@ const approverVacationsSlice = createSlice({
         }),
         fetchRequestsFail:createErrorReducer(),
 
-        /*можливо потрібно буде створити просто один запис*/
+
         /*createApproverVacation:createPendingReducerWithPayload<typeof initialState,VacationApproverInput>(),
         createApproverVacationSuccess:createSuccessReducerWithoutPayload(),
         createApproverVacationFail:createErrorReducer()*/

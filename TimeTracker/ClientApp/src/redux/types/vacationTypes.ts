@@ -17,7 +17,8 @@ export interface Vacation{
     user:User,
     vacationState:VacationStateEnum,
     userId:number,
-    haveAnswer:boolean
+    haveAnswer:boolean,
+    approverMessage?:string
 }
 
 export interface VacationInputType{

@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react'
-import { setUsersSkip, setUsersTake, User } from "../../redux";
 import { Checkbox, SearchInput } from "../UI";
 import "./usersTableSmall.css"
 import { useAppDispatch, useTypedSelector } from "@hooks/customHooks.ts";
-import Pager from '@components/Paging/Pager';
 import { addUsersFilters, fetchUsers, fetchWorkPlans, loadUsers, resetUsersWorkPlans, userFiltersToDefault } from '@redux/slices';
 import { WhereFilter } from '@redux/types/filterTypes';
 import { GetOneMonthDateRange } from '../../utils';
