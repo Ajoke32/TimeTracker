@@ -34,8 +34,8 @@ export function UpdateVacationState(id:number){
 export function FetchUserVacations(input:WorkedFetchType){
 
     return AjaxQuery<{ vacationQuery:{userVacations:Vacation[]} }>(
-        'query GetUserVacations($id:Int!,$take:Int,$skip:Int,$group:[Where!]){vacationQuery{userVacations(userId:$id,take:$take,skip:$skip,group:$group){id,vacationState,deletedAt,isDeleted,endDate,startDate,message,approverMessage}}}',
-        {id:input.userId,take:input.take,skip:input.skip,group:input.group}
+        'query GetUserVacations($id:Int!,$take:Int,$skip:Int,$group:[Where!],$orderBy:OrderBy){vacationQuery{userVacations(userId:$id,take:$take,skip:$skip,group:$group,orderBy:$orderBy){id,vacationState,deletedAt,isDeleted,endDate,startDate,message,approverMessage}}}',
+        {id:input.userId,take:input.take,skip:input.skip,group:input.group,orderBy:input.orderBy}
     )
 }
 

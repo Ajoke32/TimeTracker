@@ -18,6 +18,12 @@ public class EntityFiledTypeConverter
         {
             return Convert.ChangeType(value, typeof(string));
         }
+
+        if (type.IsEnum)
+        {
+            var intValue = int.Parse(value);
+            return Enum.ToObject(type, intValue);
+        }
         
         return Convert.ChangeType(value, type);
     }

@@ -8,7 +8,7 @@ public class LambdaBuilder
 {
   
 
-    public static Expression<Func<T, bool>> BuildLambda<T>(WhereExpression expression,string oprt,ParameterExpression parameter)
+    public static Expression<Func<T, bool>> BuildLambda<T>(BaseExpression expression,string oprt,ParameterExpression parameter)
     {
         Expression body = null;
         var props = expression.PropertyName.Split

@@ -27,7 +27,7 @@ const PerPageChanger = ({count,setPerPage,perPage}:PerPageChangerProps) => {
     return (
         <div className={"input-search"}>
             <span>Show</span>
-            <input onChange={(e)=>changeTake(e)} value={takeValue}
+            <input style={{background:'#fbfaff'}} onChange={(e)=>changeTake(e)} value={takeValue}
                    type="number" placeholder="take" className="input-per-page"/>
         </div>
     );

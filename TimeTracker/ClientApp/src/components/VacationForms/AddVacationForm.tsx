@@ -26,7 +26,7 @@ export const AddVacationForm = ({isOpen,setIsOpen}:AddVacationFormProps) => {
             message:''
         }
     });
-    const modalRef = useRef<HTMLDivElement>(null);
+
     const backRef = useRef<HTMLDivElement>(null);
     const user = useTypedSelector(u=>u.auth.user);
     const {vacationDays,loading:userLoading}

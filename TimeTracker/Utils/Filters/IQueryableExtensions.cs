@@ -47,16 +47,19 @@ public static class IQueryableExtensions
     public static IQueryable<T> ApplyGraphQlOrdering<T>(this IQueryable<T> q, OrderByExpression orderBy)
     {
         var parameter = Expression.Parameter(typeof(T), "f");
+        
+        Expression property = Expression.Property(parameter, orderBy.PropertyName);
+        
+        
+        var lambda = orderBy.CompareValue==null?Expression.Lambda(property, parameter)
+            :LambdaBuilder.BuildLambda<T>(orderBy,"eq",parameter);
 
-        Expression property = Expression.Property(parameter, orderBy.Property);
-
-        var lambda = Expression.Lambda(property, parameter);
-
-
+        var propertyType = orderBy.CompareValue == null ? property.Type:typeof(bool);
+     
         var orderedQuery = Expression.Call(
             typeof(Queryable),
             orderBy.Direction == "ASC" ? "OrderBy" : "OrderByDescending",
-            new[] { typeof(T), property.Type },
+            new[] { typeof(T), propertyType },
             q.Expression,
             lambda
         );
@@ -73,7 +76,7 @@ public static class IQueryableExtensions
     private static MethodCallExpression BuildOrderedQuery<T>(string methodName, OrderByExpression order,
         ParameterExpression parameter, Expression parameters)
     {
-        var property = Expression.Property(parameter, order.Property);
+        var property = Expression.Property(parameter, order.PropertyName);
 
         var lambda = Expression.Lambda(property, parameter);
 

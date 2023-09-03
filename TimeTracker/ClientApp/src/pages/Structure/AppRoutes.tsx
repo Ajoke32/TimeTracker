@@ -54,7 +54,6 @@ export const AppRoutes = () => {
               <Route index element={<Navigate to='requests' />} />
               <Route path="requests" element={<VacationRequests />} />
               <Route path="all" element={<VacationsTable />} />
-              <Route path="details/:id" element={<VacationDetails />} />
             </Route>
             <Route path="/login" element={<Navigate to="/" />} />
             <Route path="*" element={<NotFound />} />

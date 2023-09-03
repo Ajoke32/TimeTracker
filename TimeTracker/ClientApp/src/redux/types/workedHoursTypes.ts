@@ -1,5 +1,5 @@
 import { DateRangeType } from "."
-import { FiltersType, PagingInputType } from "./filterTypes"
+import {FiltersType, OrderingType, PagingInputType} from "./filterTypes"
 
 export interface WorkedHour {
     id: number,
@@ -10,10 +10,12 @@ export interface WorkedHour {
     date: Date,
 }
 
-export interface WorkedFetchType extends PagingInputType, FiltersType {
+export interface WorkedFetchType extends PagingInputType, FiltersType,OrderingType {
     userId: number,
     dateRange: DateRangeType
 }
+
+
 
 export interface WorkedTime {
     hours: number,

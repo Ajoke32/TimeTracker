@@ -1,8 +1,8 @@
 ﻿namespace TimeTracker.Utils.Filters.ExpressionTypes;
 
-public class OrderByExpression
+public class OrderByExpression:BaseExpression
 {
-    public string Property { get; set; }
+    public string Direction { get; set; }=string.Empty;
     
-    public string Direction { get; set; }
+    public override string? CompareValue { get; set; }
 }

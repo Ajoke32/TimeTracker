@@ -8,7 +8,7 @@ import {
 import {VacationState} from "../intrerfaces";
 import {Vacation, VacationChangeType, VacationInputType, WorkedFetchType} from "../types";
 import {
-    basicFilteringReducers,
+    basicFilteringReducers, basicOrderingReducers,
     basicPagingReducers,
     defaultPagingState,
     PagingEntityType
@@ -21,7 +21,12 @@ const initialState:VacationState = {
     vacations:[],
     vacation:null,
     updated:null,
-    group:[]
+    group:[],
+    orderBy:{
+        property:"VacationState",
+        direction:"DESC",
+        value:"4"
+    }
 }
 
 const vacationsSlice = createSlice({
@@ -98,7 +103,8 @@ const vacationsSlice = createSlice({
         fetchVacationByIdFail:createErrorReducer(),
 
         ...basicFilteringReducers,
-        ...basicPagingReducers
+        ...basicPagingReducers,
+        ...basicOrderingReducers
     }
 });
 
@@ -121,4 +127,5 @@ export const  {createVacation,
     deleteVacation,fetchVacationByIdSuccess
     ,addFilters:addVacationFilters,addFilter:addVacationFilter
     ,filtersToDefault:vacationFiltersToDefault,setTake:setVacationsTake
-    ,setSkip:setVacationsSkip,setPerPage:setVacationsPerPage} =  vacationsSlice.actions;
+    ,setSkip:setVacationsSkip,setPerPage:setVacationsPerPage,
+    setOrder:setVacationOrder} =  vacationsSlice.actions;
