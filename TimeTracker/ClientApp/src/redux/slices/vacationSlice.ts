@@ -32,10 +32,11 @@ const vacationsSlice = createSlice({
         ((state:VacationState)=>{
             state.created=false;
         }),
-        createVacationSuccess:createSuccessReducerWithPayload<typeof initialState,number>
-        ((state:VacationState,action:PayloadAction<number>)=>{
+        createVacationSuccess:createSuccessReducerWithPayload<typeof initialState,Vacation>
+        ((state,action)=>{
             state.created=true;
-            state.createdId=action.payload
+            state.createdId=action.payload.id
+            state.vacations.push(action.payload);
         }),
         createVacationFail:createErrorReducer(),
 

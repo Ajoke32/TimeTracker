@@ -1,9 +1,9 @@
 
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import {
-  HomePage, Login, AddUser, Layout,
+  Login, AddUser, Layout,
   UserVerify, Team, EditUser,
-  ProtectedRoute, CreateVacation,
+  ProtectedRoute,
   VacationRequests, NotFound,
   EmailConfirm
 } from "..";
@@ -52,7 +52,6 @@ export const AppRoutes = () => {
             </Route>
             <Route path="/vacation">
               <Route index element={<Navigate to='requests' />} />
-              <Route path="create" element={<CreateVacation />} />
               <Route path="requests" element={<VacationRequests />} />
               <Route path="all" element={<VacationsTable />} />
               <Route path="details/:id" element={<VacationDetails />} />

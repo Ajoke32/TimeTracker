@@ -36,12 +36,13 @@
     display: flex;
     gap: 10px;
     flex-direction: column;
-    width: 60%;
+    width: 40%;
     align-self: center;
     padding: 2rem;
     background: var(--color-white);
     border: 1px solid var(--color-stroke-gray);
     border-radius: 1rem;
+    margin-bottom: 45px;
 }
 
 .add-vacation__form .login-form__messages-wrapper {

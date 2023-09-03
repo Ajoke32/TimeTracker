@@ -22,17 +22,20 @@ import PerPageChanger from "@components/UI/Inputs/PerPageChanger.tsx";
 import warningImg from '../../assets/images/warning.png'
 import info from '../../assets/images/info.png'
 import info_two from '../../assets/images/info2.png'
+import {AddVacationForm} from "@components/VacationForms";
 
 export const VacationsTable = () => {
 
     const {error,group,take,skip,perPage,extensions,updated,loading,vacations}
         = useTypedSelector(s=>s.vacations);
 
-    const fieldsToSearch = ['StartDate','EndDate']
 
     const dispatch = useAppDispatch();
     const userId = useTypedSelector(u=>u.auth.user?.id);
     const [isOpen,setIsOpen]=useState<boolean>(false);
+
+    const [isAddVacationOpen,setIsAddVacationOpen]=useState<boolean>(false);
+
     const [clicked,setClicked] = useState<Vacation>();
     const [selected,setSelected] = useState<string>("all")
     useEffect(()=>{
@@ -72,10 +75,13 @@ export const VacationsTable = () => {
         }));
         setSelected(e.currentTarget.value);
     }
-
+    function handleVacationCreateClick(){
+        setIsAddVacationOpen(true);
+    }
     return (
         <>
         <CancelVacationModal clicked={clicked!} setIsOpen={setIsOpen} setVacation={setClicked} vacation={clicked!} onEdit={handleVacationEdit} onSuccess={handleCancel} isOpen={isOpen} />
+            <AddVacationForm setIsOpen={setIsAddVacationOpen} isOpen={isAddVacationOpen} />
             <div className="vacations-content__wrapper">
 
                 <div className="requests-wrapper">
@@ -90,7 +96,7 @@ export const VacationsTable = () => {
                             </select>
                             <PerPageChanger setPerPage={setVacationsPerPage} perPage={perPage} count={extensions?.count!} />
                         </div>
-                        <a href="/vacation/create" className='btn-small'>Create vacation</a>
+                        <a  className='btn-small' onClick={handleVacationCreateClick}>Create vacation</a>
                     </div>
                 </div>
                 {vacations.length === 0 && <div className="empty info"><H4 value="You have no active vacations"/></div>}

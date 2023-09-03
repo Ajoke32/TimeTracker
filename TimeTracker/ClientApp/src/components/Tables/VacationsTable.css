@@ -21,6 +21,7 @@
     position: absolute;
     z-index: 1;
 }
+
 .tooltip:hover~.tooltip-text{
     visibility: visible;
 }

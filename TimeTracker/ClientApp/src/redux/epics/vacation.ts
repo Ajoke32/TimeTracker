@@ -33,7 +33,7 @@ const addVacationEpic: Epic = (action: Observable<PayloadAction<VacationInputTyp
                         const errorMessage = resp.response.errors[0].message;
                         return createVacationFail(errorMessage)
                     }
-                    return createVacationSuccess(resp.response.data.vacationMutation.create.id);
+                    return createVacationSuccess(resp.response.data.vacationMutation.create);
                 }),
                 catchError((e: Error) => {
                     console.log(e);

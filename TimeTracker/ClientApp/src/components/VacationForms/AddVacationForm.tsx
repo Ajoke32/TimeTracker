@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import {Loader, SmallButton, TextInput} from "../UI";
+import React, {useEffect, useRef} from 'react';
+import {SmallButton, TextInput} from "../UI";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {useAppDispatch, useTypedSelector} from "../../hooks";
-import {H5} from "../Headings";
 import {createVacation, fetchVacationDays, updateApproversVacations} from "../../redux";
 
 
@@ -12,8 +11,11 @@ interface VacationInput{
     endDate:Date,
     message?:string
 }
-
-export const AddVacationForm = () => {
+interface AddVacationFormProps{
+    isOpen:boolean,
+    setIsOpen:(open:boolean)=>void,
+}
+export const AddVacationForm = ({isOpen,setIsOpen}:AddVacationFormProps) => {
 
     const { register,handleSubmit,
         formState: { errors }, reset } = useForm<VacationInput>({
@@ -24,6 +26,8 @@ export const AddVacationForm = () => {
             message:''
         }
     });
+    const modalRef = useRef<HTMLDivElement>(null);
+    const backRef = useRef<HTMLDivElement>(null);
     const user = useTypedSelector(u=>u.auth.user);
     const {vacationDays,loading:userLoading}
         = useTypedSelector(s=>s.user);
@@ -46,11 +50,20 @@ export const AddVacationForm = () => {
     const onSubmit: SubmitHandler<VacationInput> = (data) => {
         dispatch(createVacation({...data,userId:user?.id!}));
         reset()
+        setIsOpen(false);
+    }
+
+    function hideElements(e:React.MouseEvent<HTMLDivElement>){
+        e.stopPropagation();
+        if(backRef.current===e.target) {
+            backRef.current.style.display = "none";
+            setIsOpen(false);
+        }
     }
 
     return (
-        <div className="vacations-content__wrapper">
-            <form onSubmit={handleSubmit(onSubmit)} className="add-vacation__form">
+        <div ref={backRef} onClick={e=>hideElements(e)} className="black-rga" style={{display:`${isOpen?'flex':'none'}`}}>
+            <form  onSubmit={handleSubmit(onSubmit)} className="add-vacation__form">
                 <label style={{marginLeft:"5px"}}>Start date</label>
                 <input {...register("startDate")} name="startDate" className="text-input" type="date" placeholder="Start date"/>
                 <label style={{marginLeft:"5px"}}>End date</label>
