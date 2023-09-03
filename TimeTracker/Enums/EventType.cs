@@ -2,6 +2,7 @@ namespace TimeTracker.Enums;
 
 public enum EventType
 {
-    Holiday,
-    Workday
+    Holiday = 0,
+    Workday = 1,
+    Shortday = 2
 }

@@ -4,7 +4,7 @@ import { CurrentDateElement } from '..';
 import { useAppDispatch, useTypedSelector } from "@hooks/customHooks";
 import { days } from '..';
 import { setPrevMonthDates, setCurrentMonthDates, setNextMonthDates, addMonth, substractMonth, GetOneMonthDateRange, GetThreeMonthDateRange } from '../../utils';
-import { CalendarType, CalendarCell } from '@redux/types';
+import { CalendarType, CalendarCell, CalendarEvent } from '@redux/types';
 import { fetchCalendarEvents, fetchWorkPlans, setDate } from '@redux/slices';
 import { CalendarModal } from '../UI/Modals';
 
@@ -24,6 +24,7 @@ export const LargeCalendar = ({ date, setter }: CalendarProps) => {
 
     const [isCurrentMonth, setIsCurrentMonth] = useState<boolean>(true);
     const [isFormHidden, setIsFormHidden] = useState<Date | null>(null);
+    const [changeEvent, setChangeEvent] = useState<CalendarEvent | undefined>(undefined)
     const [calendar, setCalendar] = useState<CalendarType>(
         {
             previousDates: [],
@@ -75,12 +76,19 @@ export const LargeCalendar = ({ date, setter }: CalendarProps) => {
 
     const handleAddEventButton = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, day: CalendarCell) => {
         e.stopPropagation();
+        setChangeEvent(undefined)
         setIsFormHidden(day.date)
+    }
+
+    const handleEventButton = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>, evt: CalendarEvent) => {
+        e.stopPropagation();
+        setChangeEvent(evt)
+        setIsFormHidden(evt.date)
     }
 
     return (
         <div className="calendar-wrapper">
-            <CalendarModal isHidden={isFormHidden} setIsHidden={setIsFormHidden} />
+            <CalendarModal isHidden={isFormHidden} setIsHidden={setIsFormHidden} event={changeEvent} />
 
             <div className="calendar-header__wrapper">
                 <div className="calendar-date__wrapper">
@@ -121,12 +129,25 @@ export const LargeCalendar = ({ date, setter }: CalendarProps) => {
                                 (cell.date.getDate() === new Date().getDate() && isCurrentMonth)
                                     ? "dates-today__date" : ""}
                             onClick={() => { setter(cell) }} >
-                            <span className={getClassName(cell)}>
-                                {cell.date.getDate()}
-                            </span>
-                            <button type="button" className="calendar-event__btn" onClick={(e) => {
-                                handleAddEventButton(e, cell)
-                            }} />
+                            <div className="date-top__wrapper">
+                                <span className={getClassName(cell)}>
+                                    {cell.date.getDate()}
+                                </span>
+                                <button type="button" className="calendar-event__btn" onClick={(e) => {
+                                    handleAddEventButton(e, cell)
+                                }} />
+                            </div>
+                            <div className="event-name__wrapper">
+                                {cell.events.map((evt) => (
+                                    <span
+                                        key={evt.id}
+                                        style={evt.eventType == 0
+                                            ? { borderLeft: `5px solid #6ede8a` }
+                                            : { borderLeft: `5px solid var(--color-cyan)` }}
+                                        onClick={(e) => { handleEventButton(e, evt) }}
+                                    >{evt.title}</span >
+                                ))}
+                            </div>
                         </div>
                     ))}
 
@@ -142,7 +163,7 @@ export const LargeCalendar = ({ date, setter }: CalendarProps) => {
                         ))}
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

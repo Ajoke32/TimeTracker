@@ -1,7 +1,7 @@
 ﻿import './scheduler.css';
 import "../Calendar/calendars.css"
 import { useState, useEffect } from 'react';
-import { CurrentDateElement } from "@components/UI";
+import {CurrentDateElement} from "@components/UI";
 import { H4 } from "@components/Headings";
 import { CalendarType, CalendarCell, SchedulerWorkedHour, SchedulerWorkPlan } from '@redux/types';
 import { useAppDispatch, useTypedSelector } from '@hooks/customHooks';
@@ -83,7 +83,7 @@ export const Scheduler = ({ cell, back }: { cell: CalendarCell, back: (selectedD
         dispatch(resetUsersWorkPlans(user!.id))
         back(currentDate)
     }
-
+    
     return (
         <div className="component-wrapper">
             <SchedulerModal isHidden={isFormHidden} setIsHidden={setIsFormHidden} />
@@ -92,7 +92,7 @@ export const Scheduler = ({ cell, back }: { cell: CalendarCell, back: (selectedD
                 <div className="calendar-header__wrapper">
                     <div className="calendar-date__wrapper">
                         <button onClick={handleBackButton} id='return-button' />
-                        <CurrentDateElement date={currentDate} showFullDate={true} additional={calendarCell.events.length > 0 ? calendarCell.events[0].title : undefined} />
+                        <CurrentDateElement date={currentDate} showFullDate={true} />
                     </div>
                     <div className="calendar-actions">
                         <div>
@@ -101,7 +101,6 @@ export const Scheduler = ({ cell, back }: { cell: CalendarCell, back: (selectedD
                         </div>
                     </div>
                 </div>
-
                 <div className="working-hours__table">
                     <div className="working-hours__schedule">
                         {hours.map((time, index) => (
@@ -118,7 +117,7 @@ export const Scheduler = ({ cell, back }: { cell: CalendarCell, back: (selectedD
                                 if (!wh.workPlans.length)
                                     return
                                 return (
-                                    <TimeRow workedHour={wh} color={colors[index]} onClick={setIsFormHidden} key={index} />
+                                    <TimeRow workedHour={wh} color={colors[index]} onClick={setIsFormHidden} key={index}/>
                                 )
                             })}
                             {rows < defaultRowsCount &&

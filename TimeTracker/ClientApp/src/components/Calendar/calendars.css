@@ -15,7 +15,7 @@
     justify-content: space-between;
     height: 10%;
     width: 100%;
-    padding: 0 2rem 0 2rem;
+    padding: 0 1rem 0 1rem;
 }
 
 .calendar-date__wrapper {
@@ -64,8 +64,10 @@
 .calendar-days-header>div,
 .calendar-dates>div {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
 }
+
 .calendar-dates>div:hover {
     border: .5px dashed rgb(119, 188, 209);
     cursor: pointer;
@@ -175,7 +177,14 @@
 }
 
 .dates-today__date>span {
-    font-weight: 500;
+    font-weight: 700;
+}
+
+.date-top__wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    height: 25%;
 }
 
 .calendar-event__btn {
@@ -222,4 +231,27 @@
 
 .holiday {
     color: var(--color-red);
+}
+
+.event-name__wrapper {
+    padding: 8% 0 5% 0;
+    height: 75%;
+}
+
+.event-name__wrapper>span {
+    display: flex;
+    font-size: .7rem;
+    font-weight: 600;
+    width: fit-content;
+}
+
+.event-name__wrapper>span::before {
+    content: '';
+    opacity: .5;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+
+.event-name__wrapper>span:hover {
+    text-decoration: underline;
 }

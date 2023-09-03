@@ -31,7 +31,7 @@ const HomeTracker = () => {
 
     const handleStartButton = () => {
         if (!isRunning) {
-            dispatch(startTimer());
+            dispatch(startTimer(startedAt));
         }
     };
 

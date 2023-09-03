@@ -8,7 +8,7 @@ import { DashboardSchedulerModal, DateRangePicker, PickerDateRange, UsersRadioTa
 import moment from "moment";
 import { GetFormattedDateString, GetPickerDateRange, convertTimeToIndex, generateColors } from "../../utils";
 import { fetchWorkedHours } from "@redux/slices";
-import { DashboardTracker } from "@components/Trackers";
+import { DashboardTracker, TrackerSetHours } from "@components/Trackers";
 
 export const DashboardScheduler = () => {
     const dispatch = useAppDispatch()
@@ -22,7 +22,7 @@ export const DashboardScheduler = () => {
     })
     const [selectedUser, setSelectedUser] = useState<number>(user!.id)
     const [isFormHidden, setIsFormHidden] = useState<boolean>(false);
-    const [isModalHidden, setIsModalHidden] = useState<null | WorkedHour>(null);
+    const [isModalHidden, setIsModalHidden] = useState<boolean>(false);
     const [colors, setColors] = useState<string[]>([])
 
     const defaultRowsCount = 6;
@@ -43,22 +43,31 @@ export const DashboardScheduler = () => {
             <DashboardSchedulerModal isHidden={isModalHidden} setIsHidden={setIsModalHidden} />
 
             <div className="worked-hours-wrapper">
-                {loading
-                    ?
-                    <div className="loader-wrapper">
-                        <Loader />
+                <div className="tracker-wrapper">
+                    <div className="tracker-inner">
+                        <TrackerSetHours userId={selectedUser} />
                     </div>
-                    : workedHours.map((wh) => (
-                        <div className="day-worked-hours-wrapper" key={wh.date.toDateString()}>
-                            <div className="worked-hours-date-wrapper">
-                                <CurrentDateElement date={wh.date} showFullDate={true} />
-                            </div>
-                            {wh.workedHours.map((item, i) =>
-                                <DashboardTracker workedHour={item} key={item.id} />
-                            )}
+                </div>
+                <div className="progress-boxes-wrapper">
+                    {loading
+                        ?
+                        <div className="loader-wrapper">
+                            <Loader />
                         </div>
-                    ))
-                }
+                        : workedHours.length ? workedHours.map((wh) => (
+                            <div className="day-worked-hours-wrapper" key={wh.date.toDateString()}>
+                                <div className="worked-hours-date-wrapper">
+                                    <CurrentDateElement date={wh.date} showFullDate={true} />
+                                </div>
+                                {wh.workedHours.map((item, i) =>
+                                    <DashboardTracker workedHour={item} key={item.id} />
+                                )}
+                            </div>
+                        )) :
+                            <div className="no-data-wrapper">
+                                <H4 value="No activity for selected date(s)!" />
+                            </div>
+                    }</div>
             </div>
             <div className="right-side-form">
                 <div className="date-range__wrapper">

@@ -6,15 +6,17 @@ import {startTimer, resetTimer, tick, fetchWorkedHoursStatisticFail, fetchWorked
 import { useLocation } from 'react-router-dom'
 import { WorkedTime } from "@redux/types";
 import { GetFormattedUTCDateString, GetFormattedTimeString } from "../../utils";
+import moment from "moment";
 
 export const Header = () => {
     const dispatch = useAppDispatch();
     const { user } = useTypedSelector(state => state.auth);
     const { isRunning, startedAt, hours, minutes, seconds } = useTypedSelector(state => state.timer);
-    const isTrackerPage = (useLocation().pathname === '/tracker');
+    const isHomePage = (useLocation().pathname === '/');
+    const timer = useTypedSelector(state => state.timer)
     const {hoursToWork} = useTypedSelector(s=>s.workedHours);
     useEffect(() => {
-        if (!isTrackerPage && isRunning) {
+        if (!isHomePage && isRunning) {
             const intervalId = setInterval(() => {
                 dispatch(tick());
             }, 1000);
@@ -27,7 +29,7 @@ export const Header = () => {
 
     const handleStartStopButton = () => {
         if (!isRunning) {
-            dispatch(startTimer());
+            dispatch(startTimer(startedAt));
         } else {
             const startDate = new Date(startedAt!);
             const stopDate = new Date();
@@ -46,7 +48,7 @@ export const Header = () => {
 
             dispatch(resetTimer({
                 userId: user!.id,
-                date: GetFormattedUTCDateString(stopDate),
+                date: moment(GetFormattedUTCDateString(stopDate)).format("YYYY-MM-DDThh:mm:ss"),
                 startTime: GetFormattedTimeString(startTime),
                 endTime: GetFormattedTimeString(endTime)
             }));
@@ -56,11 +58,14 @@ export const Header = () => {
     return (
         <header className="header">
             <div className="header-timer__wrapper">
-                {!isTrackerPage && startedAt && (
+                {!isHomePage && startedAt && (
                     <div className="header-timer__inner">
                         <div className="header-timer__content" style={!isRunning ? { opacity: '.5' } : {}}>
                             <Timer hours={hours} minutes={minutes} seconds={seconds} />
                         </div>
+                        <button className="timer-start-stop__btn" onClick={handleStartStopButton}>
+                            <div className={timer.isRunning ? "timer-stop__icon" : "timer-start__icon"}></div>
+                        </button>
                     </div>
                 )}
             </div>
