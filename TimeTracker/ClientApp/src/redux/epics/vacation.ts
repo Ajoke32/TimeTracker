@@ -33,7 +33,7 @@ const addVacationEpic: Epic = (action: Observable<PayloadAction<VacationInputTyp
                         const errorMessage = resp.response.errors[0].message;
                         return createVacationFail(errorMessage)
                     }
-                    return createVacationSuccess(resp.response.data.vacationMutation.create.id);
+                    return createVacationSuccess(resp.response.data.vacationMutation.create);
                 }),
                 catchError((e: Error) => {
                     console.log(e);
@@ -114,6 +114,7 @@ const updateVacationEpic:Epic=(action$:Observable<PayloadAction<Vacation>>)=>
             UpdateVacation(action.payload)
                 .pipe(
                     map(res=>{
+                        console.log(res.response, ' resp');
                         if (res.response.errors != null) {
                             return updateVacationFail(res.response.errors[0].message)
                         }

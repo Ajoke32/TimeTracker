@@ -22,6 +22,7 @@ using TimeTracker.Utils.Email;
 using TimeTracker.Utils.Environment;
 using TimeTracker.Utils.Filters;
 using TimeTracker.Utils.SoftDelete;
+using TimeTracker.Utils.WorkedHoursCalculation;
 using TimeTracker.Visitors;
 using Vite.AspNetCore;
 using Vite.AspNetCore.Extensions;
@@ -118,6 +119,7 @@ if (builder.Environment.IsDevelopment() && !builder.Environment.IsGraphQl())
     });
 }
 
+builder.Services.AddControllers();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -150,7 +152,7 @@ builder.Services.AddGraphQL(options =>
 });
 
 builder.Services.AddTransient<Authenticate>();
-
+builder.Services.AddScoped<WorkedHoursHelpers>();
 
 var app = builder.Build();
 
@@ -162,10 +164,13 @@ app.UseAuthorization();
 
 app.UseSpaStaticFiles();
 
+app.MapControllers();
 
 app.UseGraphQL();
 
 app.UseGraphQLAltair();
+
+
 
 app.UseSpa(spa =>
 {

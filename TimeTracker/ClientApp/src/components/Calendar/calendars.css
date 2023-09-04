@@ -67,6 +67,7 @@
     flex-direction: column;
     justify-content: space-between;
 }
+
 .calendar-dates>div:hover {
     border: .5px dashed rgb(119, 188, 209);
     cursor: pointer;
@@ -237,16 +238,20 @@
     height: 75%;
 }
 
-.event-name__wrapper > span {
+.event-name__wrapper>span {
     display: flex;
     font-size: .7rem;
     font-weight: 600;
+    width: fit-content;
 }
 
-.event-name__wrapper > span::before {
+.event-name__wrapper>span::before {
     content: '';
-    border-left: 5px solid var(--color-cyan);
     opacity: .5;
     border-radius: 5px;
     margin-right: 5px;
+}
+
+.event-name__wrapper>span:hover {
+    text-decoration: underline;
 }

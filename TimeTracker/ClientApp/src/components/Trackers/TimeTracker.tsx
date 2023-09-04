@@ -13,7 +13,7 @@ export const TimeTracker = ({ workedHour }: { workedHour?: WorkedHour }) => {
 
     return (
         <div className="tracker-wrapper">
-            <div className="tracker-inner">
+            {/* <div className="tracker-inner">
                 {switchAction ? (
                     <TrackerTimer workedHour={workedHour} />
                 ) : (
@@ -25,7 +25,7 @@ export const TimeTracker = ({ workedHour }: { workedHour?: WorkedHour }) => {
                     <button onClick={handleSwitchActionButton} style={switchAction ? { opacity: '1' } : {}} disabled={switchAction}></button>
                     <button onClick={handleSwitchActionButton} style={!switchAction ? { opacity: '1' } : {}} disabled={!switchAction}></button>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };

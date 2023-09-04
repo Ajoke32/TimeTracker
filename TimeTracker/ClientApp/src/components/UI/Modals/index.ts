@@ -1,4 +1,4 @@
-﻿import { SchedulerWorkPlan, WorkedHour } from '@redux/types'
+﻿import { CalendarEvent, SchedulerWorkPlan, WorkedHour } from '@redux/types'
 
 export * from './ConfirmModal'
 export * from './CalendarModal'
@@ -11,6 +11,7 @@ export * from './DashboardSchedulerModal'
 export interface CalendarModalProps {
     isHidden: Date | null,
     setIsHidden: (val: Date | null) => void,
+    event? : CalendarEvent
 }
 
 export interface SchedulerModalModalProps {
@@ -19,6 +20,6 @@ export interface SchedulerModalModalProps {
 }
 
 export interface DashboardSchedulerModalProps {
-    isHidden: WorkedHour | null,
-    setIsHidden: (val: WorkedHour | null) => void,
+    isHidden: boolean,
+    setIsHidden: (val: boolean) => void,
 }

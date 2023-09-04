@@ -92,7 +92,7 @@ export const Scheduler = ({ cell, back }: { cell: CalendarCell, back: (selectedD
                 <div className="calendar-header__wrapper">
                     <div className="calendar-date__wrapper">
                         <button onClick={handleBackButton} id='return-button' />
-                        <CurrentDateElement date={currentDate} showFullDate={true} additional={calendarCell.events.length > 0 ? calendarCell.events[0].title : undefined} />
+                        <CurrentDateElement date={currentDate} showFullDate={true} />
                     </div>
                     <div className="calendar-actions">
                         <div>

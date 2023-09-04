@@ -8,6 +8,7 @@ import {Timer} from "@components/UI";
 import playImg from "../../assets/images/play.png";
 import stopImg from "../../assets/images/stop-button.png";
 import ProgressCircle from "@components/Graphics/ProgressCircle.tsx";
+import moment from "moment";
 
 const HomeTracker = () => {
 
@@ -30,7 +31,7 @@ const HomeTracker = () => {
 
     const handleStartButton = () => {
         if (!isRunning) {
-            dispatch(startTimer());
+            dispatch(startTimer(startedAt));
         }
     };
 
@@ -51,7 +52,7 @@ const HomeTracker = () => {
         }
         dispatch(resetTimer({
             userId: user!.id,
-            date: GetFormattedUTCDateString(stopDate),
+            date: moment(GetFormattedUTCDateString(stopDate)).format("YYYY-MM-DDThh:mm:ss"),
             startTime: GetFormattedTimeString(startTime),
             endTime: GetFormattedTimeString(endTime)
         }));

@@ -2,7 +2,7 @@ import React, {ChangeEvent, useEffect, useRef, useState} from 'react';
 import {Vacation, VacationStateEnum} from "@redux/types";
 import moment from "moment";
 import {useTypedSelector} from "@hooks/customHooks.ts";
-
+import './messageModal.css'
 
 interface CancelVacationModalProps{
     isOpen:boolean,

@@ -48,7 +48,6 @@ public sealed class VacationMutations:ObjectGraphType
                                ??throw new ValidationError("Vacation not found");
                 
                 vacation.VacationState = GetVacationState(vacation.ApproverVacations);
-                vacation.HaveAnswer = true; 
                 await uow.SaveAsync();
                 
                 return vacation;
@@ -57,9 +56,17 @@ public sealed class VacationMutations:ObjectGraphType
 
         Field<VacationType>("update")
             .Argument<VacationInputType>("vacation")
+            .Argument<bool>("validate",nullable:true)
             .ResolveAsync(async ctx =>
             {
+                var validate = ctx.GetArgument<bool>("validate");
                 var vacation = ctx.GetArgument<Vacation>("vacation");
+                if (!validate)
+                {
+                    var vac = await uow.GenericRepository<Vacation>().UpdateAsync(vacation);
+                    await uow.SaveAsync();
+                    return vac;
+                }
                 
                 if (vacation.StartDate.Date<=DateTime.Now.Date)
                 {

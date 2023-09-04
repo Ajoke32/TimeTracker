@@ -1,7 +1,7 @@
 import { Epic, ofType } from "redux-observable";
 import { PayloadAction } from "@reduxjs/toolkit";
-import { catchError, map, mergeMap, Observable, of } from "rxjs";
-import { CreateWorkedHourType, UpdateWorkedHourType, WorkedFetchType, WorkedHour, WorkedHoursStatisticInput } from '@redux/types';
+import { catchError, map, mergeMap, Observable, of, withLatestFrom } from "rxjs";
+import { CreateWorkedHourType, UpdateWorkedHourType, WorkedFetchType, WorkedHour, WorkedHoursStatisticInput, WorkedTime } from '@redux/types';
 import {
     UpdateWorkedHoursQuery, FetchWorkedHoursQuery,
     DeleteWorkedHoursQuery, CreateWorkedHoursQuery, WorkedHoursStatistic
@@ -18,8 +18,8 @@ import {
     resetTimerFail,
     resetTimerSuccess
 } from '../slices';
-import { GetErrorMessage } from "../../utils";
-import { act } from "react-dom/test-utils";
+import { GetCreateWorkedHour, GetErrorMessage, GetFormattedTimeString, GetFormattedUTCDateString, GetFormattedUTCTimeString } from "../../utils";
+import { RootState, TimerSliceState } from "..";
 
 export const createWorkedHourEpic: Epic = (action: Observable<PayloadAction<CreateWorkedHourType>>, state) =>
     action.pipe(
@@ -77,7 +77,6 @@ export const fetchWorkedHoursEpic: Epic = (action: Observable<PayloadAction<Work
         mergeMap(action =>
             FetchWorkedHoursQuery(action.payload).pipe(
                 mergeMap(async resp => {
-                    console.log("users");
                     if (resp.response.errors != null) {
                         const errorMessage = await GetErrorMessage(resp.response.errors[0].message);
                         return fetchWorkedHoursFail(errorMessage)
@@ -153,4 +152,39 @@ export const fetchWorkedHourStatistic: Epic = (action: Observable<PayloadAction<
                 )
         )
     )
-export const workedHourEpics = [fetchWorkedHourStatistic, fetchWorkedHoursEpic, createWorkedHourEpic, editWorkedHourEpic, deleteWorkedHourEpic, resetTimerEpic, resetTimerSuccessEpic]
+
+export const startTimerEpic: Epic = (action$, state$: Observable<RootState>) => {
+    return action$.pipe(
+        ofType("timer/startTimer"),
+        withLatestFrom(state$),
+        mergeMap(([action, state]) => {
+            console.log(state.timer.startedAt)
+            console.log(action.payload)
+            if (state.timer.startedAt !== action.payload) {
+                return CreateWorkedHoursQuery(
+                    GetCreateWorkedHour(state.timer, action.payload, state.auth.user!.id))
+                    .pipe(mergeMap(async (resp) => {
+                        if (resp.response.errors != null) {
+                            console.log(resp.response);
+                            const errorMessage = await GetErrorMessage(
+                                resp.response.errors[0].message
+                            );
+                            return createWorkedHourFail(errorMessage);
+                        }
+                        return createWorkedHourSuccess(
+                            resp.response.data.workedHourMutations.create
+                        );
+                    }),
+                        catchError((e: Error) => {
+                            console.log(e);
+                            return of(createWorkedHourFail("Unexpected error"));
+                        })
+                    );
+            } else {
+                return of();
+            }
+        })
+    );
+}
+
+export const workedHourEpics = [startTimerEpic, fetchWorkedHourStatistic, fetchWorkedHoursEpic, createWorkedHourEpic, editWorkedHourEpic, deleteWorkedHourEpic, resetTimerEpic, resetTimerSuccessEpic]

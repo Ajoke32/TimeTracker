@@ -7,6 +7,7 @@ import { createWorkedHour, deleteWorkedHour, deleteWorkedHourFail, editWorkedHou
 import { WorkedHour, UpdateWorkedHourType, CreateWorkedHourType } from '@redux/types';
 import { GetFormattedDateString, GetFormattedUTCDateString, GetFormattedUTCTimeString } from '../../utils';
 
+
 type Inputs = {
     startTime: string
     endTime: string
@@ -18,7 +19,7 @@ interface TimeInputs {
     endTime: string
 }
 
-export const TrackerSetHours = ({ workedHour }: { workedHour?: WorkedHour }) => {
+export const TrackerSetHours = ({ userId, workedHour }: { userId: number, workedHour?: WorkedHour }) => {
     const defaultValues: TimeInputs = {
         startTime: workedHour ? workedHour.startTime.slice(0, 5) : '08:00',
         endTime: workedHour ? workedHour.endTime.slice(0, 5) : '16:00',
@@ -29,7 +30,6 @@ export const TrackerSetHours = ({ workedHour }: { workedHour?: WorkedHour }) => 
     const [timeInputs, setTimeInputs] = useState<TimeInputs>(defaultValues);
 
     const dispatch = useDispatch();
-    const { user } = useTypedSelector(state => state.auth)
 
     const handleShowDatePicker = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setShowDatePicker(!showDatePicker);
@@ -67,7 +67,7 @@ export const TrackerSetHours = ({ workedHour }: { workedHour?: WorkedHour }) => 
         else {
             data.date = selectedDate;
             dispatch(createWorkedHour({
-                userId: user!.id,
+                userId: userId,
                 startTime: GetFormattedUTCTimeString(data.startTime, data.date),
                 endTime: GetFormattedUTCTimeString(data.endTime, data.date),
                 date: `${data.date}T00:00:00`

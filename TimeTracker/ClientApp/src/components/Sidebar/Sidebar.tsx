@@ -13,13 +13,6 @@ export const Sidebar = () => {
                 <ul className="sidebar-list">
 
                     <li>
-                        <a href="/tracker" className="sidebar-list__link">
-                            <div className="sidebar-list__image-wrapper"><div className="timetracker-img__wrapper"></div></div>
-                            <span>Time Tracker</span>
-                        </a>
-                    </li>
-
-                    <li>
                         <a href="/calendar" className="sidebar-list__link">
                             <div className="sidebar-list__image-wrapper"><div className="calendar-img__wrapper"></div></div>
                             <span>Calendar</span>

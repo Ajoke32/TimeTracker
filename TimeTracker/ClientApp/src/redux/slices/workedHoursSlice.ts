@@ -49,9 +49,10 @@ const workedHoursSlice = createSlice({
                         date: action.payload.date,
                         workedHours: [action.payload],
                     };
-                    state.workedHours.push(newUserFormattedWorkedHours);
+                    state.workedHours = [newUserFormattedWorkedHours, ...state.workedHours];
                 } else {
                     userFormattedWorkedHours.workedHours.push(action.payload);
+                    userFormattedWorkedHours.workedHours = userFormattedWorkedHours.workedHours.sort((a, b) => b.date.getTime() - a.date.getTime())
                 }
             }
         ),
