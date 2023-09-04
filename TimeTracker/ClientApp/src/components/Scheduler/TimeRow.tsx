@@ -8,6 +8,8 @@ export const TimeRow = ({ workedHour, color, onClick}: { workedHour: SchedulerWo
 
     const { user } = useTypedSelector(state => state.auth)
     const minMinutesWorked = 30;
+    const isOnVacation = true;
+    const noWorkPlans = true;
     
 
     return (
@@ -18,8 +20,9 @@ export const TimeRow = ({ workedHour, color, onClick}: { workedHour: SchedulerWo
                     <span>{user?.firstName} {user?.lastName}</span>
                 </div>
             </div>
-            
-            {workedHour.workPlans.map((item, i) =>
+            {noWorkPlans && <div className="time-row__msg-wrapper"><div className="msg-icon__wrapper"><div className="no-workplans__icon-inner"></div></div><span>NO WORKING PLANS</span></div>}
+            { isOnVacation ? (<div className="time-row__msg-wrapper"><div className="msg-icon__wrapper"><div className="on-vacations__icon-inner"></div></div><span>ON VACATION</span></div>)
+            : (workedHour.workPlans.map((item, i) =>
                 convertTimeToIndex(item.totalTime) >= minMinutesWorked &&
                 <div key={i}
                     className={workedHour.userId == user!.id
@@ -44,7 +47,7 @@ export const TimeRow = ({ workedHour, color, onClick}: { workedHour: SchedulerWo
                     }
 
                 </div>
-            )}
+                ))}
         </div>
     )
 }
