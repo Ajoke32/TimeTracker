@@ -73,7 +73,8 @@ export function UpdateApproverVacationState(av:ApproverVacationUpdate){
                       firstName,
                       lastName,
                       email,
-                      vacationDays
+                      vacationDays,
+                      employmentDate
                      }
                   }
                 }
