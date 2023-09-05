@@ -6,7 +6,8 @@ import { days } from '..';
 import { setPrevMonthDates, setCurrentMonthDates, setNextMonthDates, addMonth, substractMonth, GetOneMonthDateRange, GetThreeMonthDateRange } from '../../utils';
 import { CalendarType, CalendarCell, CalendarEvent } from '@redux/types';
 import { fetchCalendarEvents, fetchWorkPlans, setDate } from '@redux/slices';
-import { CalendarModal } from '../UI/Modals';
+import { SchedulerModal } from '../UI/Modals';
+import { CalendarModal } from '@components/UI/Modals/CalendarModal';
 
 interface CalendarProps {
     date?: Date,
@@ -17,10 +18,10 @@ const calendarCellsCount = 42;
 
 export const LargeCalendar = ({ date, setter }: CalendarProps) => {
     const calendarState = useTypedSelector(state => state.calendar);
-    const dispatch = useAppDispatch();
 
     const { currentDate, events, workPlans } = useTypedSelector(state => state.calendar);
     const { user } = useTypedSelector(state => state.auth);
+    const dispatch = useAppDispatch();
 
     const [isCurrentMonth, setIsCurrentMonth] = useState<boolean>(true);
     const [isFormHidden, setIsFormHidden] = useState<Date | null>(null);

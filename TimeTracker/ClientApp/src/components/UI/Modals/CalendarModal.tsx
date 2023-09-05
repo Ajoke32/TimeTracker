@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { CalendarModalProps } from ".";
-import { DayPlanForm, EventForm, TabSwitcher } from '../..';
+import { DayPlanForm, TabSwitcher } from '../..';
+import { EventForm } from '@components/CalendarForms/EventForm';
 
 export const CalendarModal = ({ isHidden, setIsHidden, event }: CalendarModalProps) => {
     const [tab, setTab] = useState<boolean>(true)

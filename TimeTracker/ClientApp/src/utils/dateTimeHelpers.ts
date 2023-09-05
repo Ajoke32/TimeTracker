@@ -211,8 +211,6 @@ export const GetCreateWorkedHour = (state: TimerSliceState, timestamp: number, u
         .add(state.seconds, 'seconds')
         .toDate();
 
-    console.log(stopDate)
-
     const startTime: WorkedTime = {
         hours: startDate.getUTCHours(),
         minutes: startDate.getUTCMinutes(),

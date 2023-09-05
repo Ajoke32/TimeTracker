@@ -11,4 +11,5 @@ export * from './VacationPage'
 export * from './ErrorPage/AccessDenied'
 export * from './ErrorPage/NotFound'
 export * from './EmailConfirmPage/EmailConfirm'
+export * from './CalendarPage/Calendar.tsx'
 
