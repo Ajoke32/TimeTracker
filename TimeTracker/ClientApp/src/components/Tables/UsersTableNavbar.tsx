@@ -56,7 +56,8 @@ export const UsersTableNavbar = () => {
                 { value: true, name: "Inactive" }]} title="Show users" />
                 <SearchInput name="search" placeholder="Search by name or email" onSearch={handleSearch} />
             </div>
-            <button onClick={exportExelClick} className={"btn-base btn-info"}>Export excel</button>
+            {/*<button onClick={exportExelClick} className={"btn-base btn-info"}>Export excel</button>*/}
+            <button className="excel-btn"><div></div> <span>Export excel</span></button>
             {(authState.user!.permissions & Permission.Create) ?
                 <div className="users-table__navbar-btn">
                     <a className="add-user__link" href="/team/adduser">
