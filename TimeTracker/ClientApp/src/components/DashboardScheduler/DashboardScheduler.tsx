@@ -32,7 +32,7 @@ export const DashboardScheduler = () => {
     const defaultRowsCount = 6;
 
     useEffect(() => {
-        setColors(generateColors(0, workedHours.length))
+        setColors(generateColors(workedHours.length))
     }, [workedHours])
 
     useEffect(() => {
