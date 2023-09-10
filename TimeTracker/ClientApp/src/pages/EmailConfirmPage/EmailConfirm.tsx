@@ -1,10 +1,10 @@
-import { Navigate } from "react-router-dom"
-import { useState, useEffect } from "react";
-import { Loader } from "@components/UI";
 import { H5 } from "@components/Headings";
-import { useTypedSelector, useAppDispatch } from "@hooks/customHooks";
+import { Loader } from "@components/UI/Loaders/Loader";
+import { useAppDispatch, useTypedSelector } from "@hooks/customHooks";
 import { emailVerify } from "@redux/slices";
-import "./EmailConfirm.css"
+import { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
+import "./EmailConfirm.css";
 
 type Inputs = {
     password: string
@@ -21,9 +21,9 @@ export const EmailConfirm = () => {
     if (!param)
         return (<Navigate to="/notFound" />)
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(emailVerify(param));
-    },[])
+    }, [])
 
     return (
         <div className="user-verify-page-wrapper">

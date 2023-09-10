@@ -15,7 +15,7 @@ public sealed class CalendarEventMutations : ObjectGraphType
 {
     public CalendarEventMutations(IUnitOfWorkRepository uow, IMapper mapper)
     {
-        Field<CalendarEvent>("create")
+        Field<CalendarEvent>("set")
             .Argument<CalendarEventInputType>("calendarEvent")
             .ResolveAsync(async ctx =>
             {
@@ -33,6 +33,19 @@ public sealed class CalendarEventMutations : ObjectGraphType
                 await uow.SaveAsync();
 
                 return set;
+            });
+
+        Field<CalendarEvent?>("delete")
+            .Argument<CalendarEventInputType>("calendarEvent")
+            .ResolveAsync(async ctx =>
+            {
+                var evt = ctx.GetArgument<CalendarEvent>("calendarEvent");
+
+                var deleted = await uow.GenericRepository<CalendarEvent>().DeleteAsync(evt);
+
+                await uow.SaveAsync();
+
+                return deleted ? evt : null;
             });
     }
 }

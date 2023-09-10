@@ -27,6 +27,8 @@
 }
 .users-table__table th{
     cursor: pointer;
+    font-size: .8rem;
+    font-weight: 500;
 }
 
 .approvers-table__table thead tr,
@@ -41,7 +43,7 @@
 .users-table__table thead tr,
 .users-table__table tbody tr {
     display: grid;
-    grid-template-columns: .5fr repeat(2, 2fr) repeat(3, 1fr);
+    grid-template-columns: .5fr 1.5fr 3fr repeat(3, 1fr);
     grid-template-rows: 4rem;
     grid-column-gap: 0;
     grid-row-gap: 0;
@@ -52,6 +54,10 @@
 .users-table__table thead,
 .users-table__table tbody{
     width: 100%;
+}
+
+.users-table__table span {
+    font-size: .8rem;
 }
 
 .approvers-table__table tbody,
@@ -73,8 +79,12 @@ table thead tr {
 thead tr th {
     display: flex;
     align-items: center;
-    justify-content: center;
     height: 80%;
+}
+
+thead tr th:not(:nth-child(2)):not(:nth-child(3)),
+tbody tr td:not(:nth-child(2)):not(:nth-child(3)) {
+    justify-content: center;
 }
 
 tbody::-webkit-scrollbar {
@@ -100,13 +110,12 @@ tbody::-webkit-scrollbar-thumb:hover {
 .approvers-table__table tbody td{
     display: flex;
     align-items: center;
-    justify-content: center;
 }
 
 .users-table__navbar {
     width: 100%;
     max-height: 20%;
-    margin-bottom: .5rem;
+    margin-bottom: 1rem;
 
     display: inline-flex;
     justify-content: space-between;
@@ -114,19 +123,23 @@ tbody::-webkit-scrollbar-thumb:hover {
 
 .users-table__navbar-left {
     display: inline-flex;
-    width: 70%;
+    width: 60%;
     justify-content: space-between;
 }
 
+.users-table__navbar-left * {
+    font-size: .8rem;
+}
+
 .users-table__navbar-left > div:first-child {
-    width: 25%;
+    width: 30%;
 }
 .users-table__navbar-left > div:last-child {
-    width: 70%;
+    width: 65%;
 }
 
 .users-table__navbar-btn {
-    width: 25%;
+    width: 20%;
 }
 
 .users-table__navbar-btn div {
@@ -136,6 +149,7 @@ tbody::-webkit-scrollbar-thumb:hover {
 
 .users-table__navbar-btn div button {
     font-weight: 500;
+    font-size: .9rem;
     padding: 0;
 }
 
@@ -185,5 +199,73 @@ tbody::-webkit-scrollbar-thumb:hover {
     background-size: contain;
     background-position: center center;
     background-repeat: no-repeat;
+}
+
+.excel-btn {
+    height: 3rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    opacity: .7;
+    border: 1px solid var(--color-stroke-gray);
+    background: transparent;
+    border-radius: 10px;
+    transition: all 0.5s ease-in-out;
+    
+}
+
+.excel-btn > div {
+    width: 24px;
+    height: 24px;
+    background: url("../../assets/images/excel_icon.png");
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.excel-btn:active {
+    
+}
+
+.excel-btn:hover {
+    opacity: 1;
+}
+
+.excel-btn:hover > div {
+    filter: drop-shadow(0 15px 23px darkgreen);
+}
+
+.excel-btn > div {
+    position: absolute;
+    height: 24px;
+    width: calc(100% - 10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.5s;
+}
+
+.excel-btn > span {
+    font-size: .8rem;
+    margin-left: 24px;
+    opacity: 0;
+}
+
+.excel-btn:hover > div {
+    width: 24px;
+}
+
+.excel-btn:hover > span {
+    transition: all 0.5s;
+    opacity: 1;
+}
+
+.excel-btn:focus {
+    outline: none;
+}
+
+.excel-btn:active {
+    transform: scale(0.85);
 }
 

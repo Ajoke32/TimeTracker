@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
-import { TrackerTimer } from "@components/Trackers/TrackerTimer";
-import { TrackerSetHours } from "@components/Trackers/TrackerSetHours";
+import { Timer } from '@components/UI/Misc/Timer';
+import { WorkedHours } from '@components/UI/Misc/WorkedHours';
 import { WorkedHour } from '@redux/types';
-import { Timer, WorkedHours } from '..';
-import { GetTimeFromString } from '../../utils';
-import { DashboardTrackerSetHours } from '.';
+import moment from 'moment';
+import { useState } from 'react';
+import { DashboardTrackerSetHours } from './DashboardTrackerSetHours';
+import "./trackers.css";
 
 export const DashboardTracker = ({ workedHour }: { workedHour: WorkedHour }) => {
     const [switchAction, setSwitchAction] = useState<boolean>(true);
-    const time = GetTimeFromString(workedHour.totalTime)
+    const time = moment.duration(workedHour.totalTime, 'seconds');
 
     const handleSwitchActionButton = () => {
         setSwitchAction(!switchAction);
     }
+
     return (
         <div className="worked-hour-row">
             <div className="tracker-inner">
@@ -22,7 +23,7 @@ export const DashboardTracker = ({ workedHour }: { workedHour: WorkedHour }) => 
                             <div className="timer-tracker">
                                 <WorkedHours workedHour={workedHour} />
                                 <div className="timer-tracker__wrapper worked-hours__timer">
-                                    <Timer hours={time.hours} minutes={time.minutes} seconds={time.seconds} />
+                                    <Timer hours={time.hours()} minutes={time.minutes()} seconds={time.seconds()} />
                                 </div>
                             </div>
                         </div>

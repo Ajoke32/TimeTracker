@@ -1,4 +1,4 @@
-import "./misc.css"
+import "./misc.css";
 
 interface TimerProps {
     hours: number,
@@ -13,7 +13,7 @@ export const Timer = ({ hours, minutes, seconds }: TimerProps) => {
         <div className="timer-wrapper">
             <span>{padZero(hours)}</span>
             <span>{padZero(minutes)}</span>
-           <span>{padZero(seconds)}</span>
+            <span>{padZero(seconds)}</span>
         </div>
     );
 };

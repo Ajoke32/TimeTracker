@@ -1,10 +1,10 @@
-﻿import { useState } from 'react'
+﻿import { useState } from 'react';
+import searchInput from "../../../assets/images/search_input_icon.png";
 import { SearchInputProps } from "./InputProps";
-import './inputs.css'
-import searchInput from "../../../assets/images/search_input_icon.png"
-export const SearchInput = ({ name, placeholder, register,  onSearch,onChangeAdditional }: SearchInputProps) => {
+import './inputs.css';
+export const SearchInput = ({ name, placeholder, register, onSearch, onChangeAdditional }: SearchInputProps) => {
 
-    const [search,setSearch] = useState<string>("");
+    const [search, setSearch] = useState<string>("");
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(event.target.value);
     };
@@ -13,22 +13,22 @@ export const SearchInput = ({ name, placeholder, register,  onSearch,onChangeAdd
     return (
         <div className="input-wrapper">
             <div className="input-wrapper__inner">
-                <input 
-                    type="search" 
-                    name={name} 
-                    placeholder={placeholder} 
-                    {...register} 
-                    onChange={(e)=>{
+                <input
+                    type="search"
+                    name={name}
+                    placeholder={placeholder}
+                    {...register}
+                    onChange={(e) => {
                         handleInputChange(e);
-                        if(onChangeAdditional) {
+                        if (onChangeAdditional) {
                             onChangeAdditional(e);
                         }
                     }}
-                    className="search-input" 
+                    className="search-input"
                     autoComplete='off'
-                    />
-                <button onClick={()=>onSearch(search)} className="search-input__toggle-btn">
-                    <img src={searchInput}  alt="search"/>
+                />
+                <button onClick={() => onSearch(search)} className="search-input__toggle-btn">
+                    <img src={searchInput} alt="search" />
                 </button>
             </div>
         </div >

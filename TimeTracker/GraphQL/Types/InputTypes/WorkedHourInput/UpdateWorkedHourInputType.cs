@@ -9,8 +9,8 @@ public sealed class UpdateWorkedHourInputType: InputObjectGraphType<WorkedHourUp
     {
         Field(v => v.Id).Description("record id");
 
-        Field(x => x.StartTime).Description("start time");
+        Field(x => x.StartDate).Description("start date");
 
-        Field(x => x.EndTime).Description("end time");
+        Field(x => x.EndDate).Description("end date");
     }
 }

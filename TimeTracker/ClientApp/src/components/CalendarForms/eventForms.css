@@ -68,6 +68,21 @@
     display: flex;
 }
 
+.form-inputs-wrapper {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.form-inputs-wrapper > div:first-child {
+    flex: 1 1 70%;
+    margin: 0 5px 0 0;
+}
+
+.form-inputs-wrapper > div:last-child {
+    flex: 0 0 30%;
+}
+
 .button-group-wrapper .btn-large__wrapper {
     flex: 1 1 auto;
     width: 100%;

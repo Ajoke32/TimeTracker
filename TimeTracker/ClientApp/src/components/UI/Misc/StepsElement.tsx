@@ -1,12 +1,11 @@
-import React from 'react';
-import {Hr} from "./Hr";
+import { Hr } from "./Hr";
 
 interface StepsElementProps {
     title: string,
     currentStep: number;
 }
 
-export const StepsElement = ({title, currentStep} : StepsElementProps) => {
+export const StepsElement = ({ title, currentStep }: StepsElementProps) => {
     return (
         <div className="steps-element__wrapper">
             <span className="steps-element__title">{title}</span>

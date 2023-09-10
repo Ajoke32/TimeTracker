@@ -1,12 +1,13 @@
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { TextInput, PasswordInput } from "../UI";
-import { LargeButton } from "../UI";
-import { InputTooltip } from "../UI";
-import { Loader } from "../UI";
-import { H1, H5 } from "../Headings"
-import "./LoginForm.css"
+import { LargeButton } from '@components/UI/Buttons/LargeButton';
+import { PasswordInput } from '@components/UI/Inputs/PasswordInput';
+import { TextInput } from '@components/UI/Inputs/TextInput';
+import { Loader } from '@components/UI/Loaders/Loader';
+import { InputTooltip } from '@components/UI/Tooltips/InputTooltip';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAppDispatch, useTypedSelector } from "../../hooks";
 import { login } from "../../redux";
+import { H1, H5 } from "../Headings";
+import "./LoginForm.css";
 
 
 type Inputs = {

@@ -1,11 +1,15 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { startTimer, resetTimer, tick} from '../../redux';
-import "./trackers.css";
-import { SmallButton, CurrentDateElement, Timer, WorkedHours } from "@components/UI";
+import { SmallButton } from "@components/UI/Buttons/SmallButton";
+import { CurrentDateElement } from "@components/UI/Misc/CurrentDateElement";
+import { Timer } from "@components/UI/Misc/Timer";
+import { WorkedHours } from "@components/UI/Misc/WorkedHours";
 import { useTypedSelector } from "@hooks/customHooks";
-import { GetFormattedUTCDateString, GetFormattedTimeString, GetTimeFromString } from '../../utils';
-import { WorkedHour, WorkedTime } from '@redux/types';
+import { WorkedHour } from '@redux/types';
+import moment from 'moment';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { resetTimer, startTimer, tick } from '../../redux';
+import { GetTimeFromString } from "../../utils/dateTimeHelpers";
+import "./trackers.css";
 
 export const TrackerTimer = ({ workedHour }: { workedHour?: WorkedHour }) => {
 
@@ -14,7 +18,7 @@ export const TrackerTimer = ({ workedHour }: { workedHour?: WorkedHour }) => {
 
         return (
             <>
-                <CurrentDateElement date={new Date(workedHour.date)} showFullDate={true} />
+                <CurrentDateElement date={workedHour.startDate.toDate()} showFullDate={true} />
                 <div className="tracker-content__wrapper">
                     <div className="tracker-content__inner">
                         <div className="timer-tracker">
@@ -56,29 +60,17 @@ export const TrackerTimer = ({ workedHour }: { workedHour?: WorkedHour }) => {
         const startDate = new Date(startedAt!);
         const stopDate = new Date();
 
-        const startTime: WorkedTime = {
-            hours: startDate.getUTCHours(),
-            minutes: startDate.getUTCMinutes(),
-            seconds: startDate.getUTCSeconds()
-        }
-
-        const endTime: WorkedTime = {
-            hours: stopDate.getUTCHours(),
-            minutes: stopDate.getUTCMinutes(),
-            seconds: stopDate.getUTCSeconds()
-        }
         dispatch(resetTimer({
             userId: user!.id,
-            date: GetFormattedUTCDateString(stopDate),
-            startTime: GetFormattedTimeString(startTime),
-            endTime: GetFormattedTimeString(endTime)
+            startDate: moment(startDate).utc().format("YYYY-MM-DDTHH:mm:ss"),
+            endDate: moment(stopDate).utc().format("YYYY-MM-DDTHH:mm:ss")
         }));
-      
+
     }
 
     return (
         <>
-            <CurrentDateElement date={new Date()} showFullDate={true}/>
+            <CurrentDateElement date={new Date()} showFullDate={true} />
             <div className="tracker-content__wrapper">
                 <div className="tracker-content__inner">
                     <div className="timer-tracker">

@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import {Loader} from "@components/UI";
 import ProgressCircle from "@components/Graphics/ProgressCircle.tsx";
-import {useAppDispatch, useTypedSelector} from "@hooks/customHooks.ts";
-import {fetchWorkedHoursStatistic} from "@redux/slices";
+import { Loader } from "@components/UI/Loaders/Loader";
+import { useAppDispatch, useTypedSelector } from "@hooks/customHooks.ts";
+import { fetchWorkedHoursStatistic } from "@redux/slices";
+import React, { useEffect, useState } from 'react';
 interface HoursStatistic {
     need: number,
     actuallyWorked: number
@@ -11,18 +11,17 @@ const stats: HoursStatistic = {
     need: 0,
     actuallyWorked: 0
 }
-interface ProgressProps{
-    userId:number
+interface ProgressProps {
+    userId: number
 }
-const Progress = ({userId}:ProgressProps) => {
+const Progress = ({ userId }: ProgressProps) => {
     const dispatch = useAppDispatch();
-    const {startedAt} = useTypedSelector(s=>s.timer);
-    const {hoursToWork, loading} = useTypedSelector(s => s.workedHours);
+    const { hoursToWork, loading } = useTypedSelector(s => s.workedHours);
     const [hoursFor, setHoursFor] = useState<HoursStatistic>(stats);
     const [selectValue, setSelectValue] = useState<string>("today");
 
     useEffect(() => {
-        dispatch(fetchWorkedHoursStatistic({userId: userId, date: new Date()}));
+        dispatch(fetchWorkedHoursStatistic({ userId: userId, date: new Date() }));
     }, []);
 
     useEffect(() => {
@@ -49,19 +48,19 @@ const Progress = ({userId}:ProgressProps) => {
         }
     }
     return (
-        <div className={"progress-wrapper"} style={{justifyContent: `${loading ? "center" : ""}`}}>
-            {loading ? <Loader/> :
+        <div className={"progress-wrapper"} style={{ justifyContent: `${loading ? "center" : ""}` }}>
+            {loading ? <Loader /> :
                 <>
                     <div className={"worked-hours-options"}>
                         <h2>Hours worked for</h2>
                         <select onChange={(e) => handleSelectChange(e)}
-                                value={selectValue}>
+                            value={selectValue}>
                             <option value="today">today</option>
                             <option value="month">month</option>
                         </select>
                     </div>
                     <ProgressCircle
-                        percents={hoursFor.actuallyWorked * 100 / hoursFor.need} dependency={selectValue}/>
+                        percents={hoursFor.actuallyWorked * 100 / hoursFor.need} dependency={selectValue} />
                 </>
             }
         </div>

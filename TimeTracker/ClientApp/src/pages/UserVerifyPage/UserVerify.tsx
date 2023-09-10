@@ -1,10 +1,11 @@
-import { Navigate } from "react-router-dom"
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { useState } from "react";
-import { PasswordInput, LargeButton } from "@components/UI";
+import { LargeButton } from "@components/UI/Buttons/LargeButton";
+import { PasswordInput } from "@components/UI/Inputs/PasswordInput";
 import { useAppDispatch } from "@hooks/customHooks";
 import { userVerify } from "@redux/slices";
-import "./UserVerify.css"
+import { useState } from "react";
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { Navigate } from "react-router-dom";
+import "./UserVerify.css";
 
 type Inputs = {
     password: string
@@ -15,7 +16,7 @@ export const UserVerify = () => {
     const dispatch = useAppDispatch();
     const urlParams = new URLSearchParams(window.location.search)
     const [param, setParam] = useState<string | null>(urlParams.get('verify'));
-    
+
     const { register, handleSubmit,
         formState: { errors }, reset } = useForm<Inputs>({
             mode: 'onBlur',

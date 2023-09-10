@@ -1,18 +1,17 @@
-import { Dropdown, SearchInput, LargeButton, SmallButton, } from "../UI";
+import { LargeButton } from "@components/UI/Buttons/LargeButton";
+import { Dropdown } from "@components/UI/Dropdowns/Dropdown";
+import { SearchInput } from "@components/UI/Inputs/SearchInput";
+import { WhereFilter } from "@redux/types/filterTypes.ts";
+import React from "react";
+import { useAppDispatch, useTypedSelector } from "../../hooks";
 import {
-    User,
     Permission,
-    removeUserFilter,
     addUserFilter,
     addUsersFilters,
+    removeUserFilter,
     userFiltersToDefault,
     usersPagingToDefault
 } from "../../redux";
-import { useAppDispatch, useTypedSelector } from "../../hooks";
-import { userFields } from "@redux/types";
-import Filter from "./Filters";
-import React, { useState } from "react";
-import { WhereFilter } from "@redux/types/filterTypes.ts";
 
 export const UsersTableNavbar = () => {
     const authState = useTypedSelector(state => state.auth);
@@ -40,12 +39,12 @@ export const UsersTableNavbar = () => {
         dispatch(addUsersFilters(filters));
     }
 
-    function exportExelClick(){
-        fetch("/upload",{
-            method:"GET"
-        }).then(res=>{
+    function exportExelClick() {
+        fetch("/upload", {
+            method: "GET"
+        }).then(res => {
             console.log(res.ok);
-            window.location.href="/upload"
+            window.location.href = "/upload"
         });
     }
 
@@ -56,7 +55,8 @@ export const UsersTableNavbar = () => {
                 { value: true, name: "Inactive" }]} title="Show users" />
                 <SearchInput name="search" placeholder="Search by name or email" onSearch={handleSearch} />
             </div>
-            <button onClick={exportExelClick} className={"btn-base btn-info"}>Export excel</button>
+            {/*<button onClick={exportExelClick} className={"btn-base btn-info"}>Export excel</button>*/}
+            <button onClick={exportExelClick} className="excel-btn"><div></div> <span>Export excel</span></button>
             {(authState.user!.permissions & Permission.Create) ?
                 <div className="users-table__navbar-btn">
                     <a className="add-user__link" href="/team/adduser">

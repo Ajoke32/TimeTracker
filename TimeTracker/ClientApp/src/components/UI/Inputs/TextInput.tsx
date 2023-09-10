@@ -1,6 +1,6 @@
+import { ErrorTooltip } from "../Tooltips/ErrorTooltip";
 import { TextInputProps } from "./InputProps";
-import './inputs.css'
-import { ErrorTooltip } from "../Tooltips";
+import './inputs.css';
 
 export const TextInput = ({ name, placeholder, register, errors, isDisabled }: TextInputProps) => {
 

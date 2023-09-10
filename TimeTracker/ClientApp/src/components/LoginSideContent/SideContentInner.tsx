@@ -1,7 +1,7 @@
-﻿import "./LoginSideContent.css"
+﻿import { DefaultTooltip } from "@components/UI/Tooltips/DefaultTooltip";
 import { H2 } from "../Headings";
-import { DefaultTooltip } from "../UI/Tooltips";
-import { SideContentImage } from "./";
+import "./LoginSideContent.css";
+import { SideContentImage } from "./SideContentImage";
 
 export const SideContentInner = () => {
     return (

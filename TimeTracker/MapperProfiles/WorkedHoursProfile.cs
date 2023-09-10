@@ -12,13 +12,13 @@ public class WorkedHourProfile : Profile
         CreateMap<WorkedHourInputDto, WorkedHour>()
             .ForMember(x => x.TotalTime,
                 o =>
-                    o.MapFrom(src => TimeOnly.FromTimeSpan(src.EndTime - src.StartTime)));
+                    o.MapFrom(src => (int)(src.EndDate - src.StartDate).TotalSeconds));
             
         CreateMap<WorkedHourUpdateDto, WorkedHour>()
             .ForMember(x => x.Id,
                 o => o.UseDestinationValue())
             .ForMember(x => x.TotalTime,
                 o =>
-                    o.MapFrom(src => TimeOnly.FromTimeSpan(src.EndTime - src.StartTime)));
+                    o.MapFrom(src => (int)(src.EndDate - src.StartDate).TotalSeconds));
     }
 }

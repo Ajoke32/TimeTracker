@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import "./misc.css"
+import "./misc.css";
 
 export const TabSwitcher = ({ tab, setter }: { tab: boolean, setter: (value: React.SetStateAction<boolean>) => void }) => {
     const onclick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

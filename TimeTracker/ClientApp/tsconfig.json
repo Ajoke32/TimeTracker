@@ -24,7 +24,10 @@
     "paths": {
       "@components/*": ["./src/components/*"],
       "@redux/*": ["./src/redux/*"],
-      "@hooks/*": ["./src/hooks/*"]
+      "@hooks/*": ["./src/hooks/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@pages/*": ["./src/pages/*"],
+      "@styles/*": ["./src/styles/*"]
     }
   },
   "include": ["src"],

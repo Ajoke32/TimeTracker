@@ -1,7 +1,9 @@
-import { User } from "../../redux";
-import { ProfileAvatar, Checkbox, SearchInput } from "../UI";
+import { Checkbox } from "@components/UI/Checkboxes/Checkbox";
+import { SearchInput } from "@components/UI/Inputs/SearchInput";
+import { ProfileAvatar } from "@components/UI/Misc/ProfileAvatar";
 import { useState } from "react";
-import "./tables.css"
+import { User } from "../../redux";
+import "./tables.css";
 
 interface ApproversTableProps {
     users: User[],
@@ -9,7 +11,7 @@ interface ApproversTableProps {
     onChange: (approvers: number[]) => void,
 }
 
-export const ApproversTable = ({users, onChange, approvers} : ApproversTableProps) => {
+export const ApproversTable = ({ users, onChange, approvers }: ApproversTableProps) => {
     const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
 
     const handleCheckboxChange = (userId: number, checked: boolean) => {
@@ -19,8 +21,8 @@ export const ApproversTable = ({users, onChange, approvers} : ApproversTableProp
 
         onChange(updatedApprovers);
     };
-    
-    
+
+
     const handleSearch = (searchValue: string) => {
         const filtered = users.filter(
             (user) =>
@@ -32,35 +34,35 @@ export const ApproversTable = ({users, onChange, approvers} : ApproversTableProp
 
     return (
         <div className="approvers-table__wrapper">
-            <SearchInput name="userSearch" placeholder="Search user" onSearch={handleSearch}/>
+            <SearchInput name="userSearch" placeholder="Search user" onSearch={handleSearch} />
             <div className="table-wrapper__inner">
                 <table className="approvers-table__table">
                     <thead>
-                    <tr>
-                        <th></th>
-                        <th className="flex-grow-3">User</th>
-                        <th>Add as approver</th>
-                    </tr>
+                        <tr>
+                            <th></th>
+                            <th className="flex-grow-3">User</th>
+                            <th>Add as approver</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {filteredUsers.map((user) => (
-                        <tr key={user.id}>
-                            <td>
-                                <ProfileAvatar initials={`${user.firstName[0]}${user.lastName[0]}`}/>
-                            </td>
-                            <td className="approvers-table__username-row table__name-col">
-                                <span className="table__name-col__fullname">{user.firstName} {user.lastName}</span>
-                            </td>
-                            <td>
-                                <Checkbox
-                                    value={user.id}
-                                    optionName={null}
-                                    isChecked={approvers.includes(user.id)}
-                                    onChange={(value, checked) => handleCheckboxChange(value, checked)}
-                                />
-                            </td>
-                        </tr>
-                    ))}
+                        {filteredUsers.map((user) => (
+                            <tr key={user.id}>
+                                <td>
+                                    <ProfileAvatar initials={`${user.firstName[0]}${user.lastName[0]}`} />
+                                </td>
+                                <td className="approvers-table__username-row table__name-col">
+                                    <span className="table__name-col__fullname">{user.firstName} {user.lastName}</span>
+                                </td>
+                                <td>
+                                    <Checkbox
+                                        value={user.id}
+                                        optionName={null}
+                                        isChecked={approvers.includes(user.id)}
+                                        onChange={(value, checked) => handleCheckboxChange(value, checked)}
+                                    />
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>

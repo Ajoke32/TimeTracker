@@ -1,12 +1,16 @@
-import React, { ChangeEvent, useState } from 'react';
+import { LargeButton } from "@components/UI/Buttons/LargeButton";
+import { useAppDispatch } from '@hooks/customHooks';
+import { deleteWorkedHour, editWorkedHour } from '@redux/slices';
+import { UpdateWorkedHourType, WorkedHour } from '@redux/types';
+import React, { useState } from 'react';
 import { SubmitHandler, useForm } from "react-hook-form";
-import { LargeButton } from "@components/UI";
-import { months } from '..';
-import { CalendarCell, CreateWorkedHourType, SchedulerWorkPlan, SetWorkPlanType, UpdateWorkedHourType, WorkPlan, WorkedHour } from '@redux/types';
-import { useAppDispatch, useTypedSelector } from '@hooks/customHooks';
-import { GetFormattedDateString, GetFormattedUTCDateString, GetFormattedUTCTimeString } from '../../utils';
-import { deleteWorkPlan, deleteWorkedHour, editWorkedHour, setWorkPlan } from '@redux/slices';
-import { WorkedHourFormProps } from '.';
+import { GetInputUtcDateTimeString, GetTimeFromString } from "../../utils/dateTimeHelpers";
+import { months } from "../constants";
+
+interface WorkedHourFormProps {
+    setIsOpen: (val: WorkedHour | null) => void,
+    workedHour: WorkedHour
+}
 
 interface TimeInputs {
     startTime: string
@@ -19,10 +23,11 @@ interface Inputs extends TimeInputs {
 
 export const WorkedHourForm = ({ setIsOpen, workedHour }: WorkedHourFormProps) => {
     const defaultValues: TimeInputs = {
-        startTime: workedHour ? workedHour.startTime : '08:00',
-        endTime: workedHour ? workedHour.endTime : '18:00',
+        startTime: workedHour ? workedHour.startDate.format("") : '08:00',
+        endTime: workedHour ? workedHour.endDate.format("") : '16:00',
     }
-    const showDate = `${workedHour.date.getDate()} ${months[workedHour.date.getMonth()]}`;
+
+    const showDate = `${workedHour.startDate.toDate().getDate()} ${months[workedHour.startDate.toDate().getMonth()]}`;
     const dispatch = useAppDispatch();
 
     const [timeInputs, setTimeInputs] = useState<TimeInputs>(defaultValues);
@@ -41,12 +46,16 @@ export const WorkedHourForm = ({ setIsOpen, workedHour }: WorkedHourFormProps) =
     }
 
     const onSubmit: SubmitHandler<Inputs> = (data) => {
-        const dateStr = GetFormattedDateString(workedHour.date)
+        const startTime = GetTimeFromString(data.startTime)
+        const endTime = GetTimeFromString(data.endTime)
+
+        workedHour.startDate.set({ 'hours': startTime.hours, 'minutes': startTime.minutes, 'seconds': startTime.seconds })
+        workedHour.endDate.set({ 'hours': endTime.hours, 'minutes': endTime.minutes, 'seconds': endTime.seconds })
 
         dispatch(editWorkedHour({
             id: data.id,
-            startTime: GetFormattedUTCTimeString(data.startTime, dateStr),
-            endTime: GetFormattedUTCTimeString(data.endTime, dateStr),
+            startDate: GetInputUtcDateTimeString(workedHour.startDate),
+            endDate: GetInputUtcDateTimeString(workedHour.endDate),
         } as UpdateWorkedHourType))
         setIsOpen(null);
     }
