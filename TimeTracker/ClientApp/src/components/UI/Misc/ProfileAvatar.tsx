@@ -1,8 +1,7 @@
-import React from 'react';
-import "./misc.css"
+import "./misc.css";
 
-export const ProfileAvatar = ({initials} : {initials:string}) => {
-    
+export const ProfileAvatar = ({ initials }: { initials: string }) => {
+
     return (
         <div className="profile-avatar__wrapper">
             <span>{initials}</span>

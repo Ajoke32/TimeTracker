@@ -1,14 +1,12 @@
-import React, {useEffect} from 'react';
-import {useDispatch} from "react-redux";
-import {useTypedSelector} from "@hooks/customHooks.ts";
-import {resetTimer, startTimer, tick} from "@redux/slices";
-import {WorkedTime} from "@redux/types";
-import {GetFormattedTimeString, GetFormattedUTCDateString} from "../../utils";
-import {Timer} from "@components/UI";
+import { Timer } from "@components/UI/Misc/Timer";
+import { useTypedSelector } from "@hooks/customHooks.ts";
+import { resetTimer, startTimer, tick } from "@redux/slices";
+import moment from "moment";
+import { useEffect } from 'react';
+import { useDispatch } from "react-redux";
 import playImg from "../../assets/images/play.png";
 import stopImg from "../../assets/images/stop-button.png";
-import ProgressCircle from "@components/Graphics/ProgressCircle.tsx";
-import moment from "moment";
+import "./trackers.css";
 
 const HomeTracker = () => {
 
@@ -39,22 +37,10 @@ const HomeTracker = () => {
         const startDate = new Date(startedAt!);
         const stopDate = new Date();
 
-        const startTime: WorkedTime = {
-            hours: startDate.getUTCHours(),
-            minutes: startDate.getUTCMinutes(),
-            seconds: startDate.getUTCSeconds()
-        }
-
-        const endTime: WorkedTime = {
-            hours: stopDate.getUTCHours(),
-            minutes: stopDate.getUTCMinutes(),
-            seconds: stopDate.getUTCSeconds()
-        }
         dispatch(resetTimer({
             userId: user!.id,
-            date: moment(GetFormattedUTCDateString(stopDate)).format("YYYY-MM-DDThh:mm:ss"),
-            startTime: GetFormattedTimeString(startTime),
-            endTime: GetFormattedTimeString(endTime)
+            startDate: moment(startDate).utc().format("YYYY-MM-DDTHH:mm:ss"),
+            endDate: moment(stopDate).utc().format("YYYY-MM-DDTHH:mm:ss")
         }));
 
     }
@@ -67,8 +53,8 @@ const HomeTracker = () => {
                 minutes={minutes}
                 seconds={seconds}
             />
-            <div className={"play-img-wrapper"} onClick={isRunning?handleStopButton:handleStartButton}>
-                {isRunning?<img src={stopImg} alt="play"/>:<img style={{left:"2px"}} src={playImg} alt="play"/>}
+            <div className={"play-img-wrapper"} onClick={isRunning ? handleStopButton : handleStartButton}>
+                {isRunning ? <img src={stopImg} alt="play" /> : <img style={{ left: "2px" }} src={playImg} alt="play" />}
             </div>
         </div>
     );

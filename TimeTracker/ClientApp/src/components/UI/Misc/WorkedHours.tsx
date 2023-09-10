@@ -1,6 +1,6 @@
 import { WorkedHour } from "@redux/types"
 
-export const WorkedHours = ({workedHour} : {workedHour: WorkedHour}) => {
+export const WorkedHours = ({ workedHour }: { workedHour: WorkedHour }) => {
     return (
         <>
             <div className="worked-time-range__wrapper">
@@ -8,7 +8,7 @@ export const WorkedHours = ({workedHour} : {workedHour: WorkedHour}) => {
                     <input
                         type="time"
                         className="time-input"
-                        value={workedHour.startTime}
+                        value={workedHour.startDate.format("HH:mm")}
                         disabled={true}
                     />
                 </div>
@@ -19,7 +19,7 @@ export const WorkedHours = ({workedHour} : {workedHour: WorkedHour}) => {
                     <input
                         type="time"
                         className="time-input"
-                        value={workedHour.endTime}
+                        value={workedHour.endDate.format("HH:mm")}
                         disabled={true}
                     />
                 </div>

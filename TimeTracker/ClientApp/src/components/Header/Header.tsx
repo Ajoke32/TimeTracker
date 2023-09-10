@@ -1,12 +1,11 @@
-﻿import "./Header.css"
-import { ProfileAvatar, Timer } from "@components/UI";
-import { useAppDispatch, useTypedSelector } from "../../hooks";
-import { useEffect } from "react";
-import {startTimer, resetTimer, tick, fetchWorkedHoursStatisticFail, fetchWorkedHoursStatistic} from "@redux/slices";
-import { useLocation } from 'react-router-dom'
-import { WorkedTime } from "@redux/types";
-import { GetFormattedUTCDateString, GetFormattedTimeString } from "../../utils";
+﻿import { ProfileAvatar } from "@components/UI/Misc/ProfileAvatar";
+import { Timer } from "@components/UI/Misc/Timer";
+import { resetTimer, startTimer, tick } from "@redux/slices";
 import moment from "moment";
+import { useEffect } from "react";
+import { useLocation } from 'react-router-dom';
+import { useAppDispatch, useTypedSelector } from "../../hooks";
+import "./Header.css";
 
 export const Header = () => {
     const dispatch = useAppDispatch();
@@ -14,7 +13,7 @@ export const Header = () => {
     const { isRunning, startedAt, hours, minutes, seconds } = useTypedSelector(state => state.timer);
     const isHomePage = (useLocation().pathname === '/');
     const timer = useTypedSelector(state => state.timer)
-    const {hoursToWork} = useTypedSelector(s=>s.workedHours);
+
     useEffect(() => {
         if (!isHomePage && isRunning) {
             const intervalId = setInterval(() => {
@@ -34,23 +33,10 @@ export const Header = () => {
             const startDate = new Date(startedAt!);
             const stopDate = new Date();
 
-            const startTime: WorkedTime = {
-                hours: startDate.getUTCHours(),
-                minutes: startDate.getUTCMinutes(),
-                seconds: startDate.getUTCSeconds()
-            }
-
-            const endTime: WorkedTime = {
-                hours: stopDate.getUTCHours(),
-                minutes: stopDate.getUTCMinutes(),
-                seconds: stopDate.getUTCSeconds()
-            }
-
             dispatch(resetTimer({
                 userId: user!.id,
-                date: moment(GetFormattedUTCDateString(stopDate)).format("YYYY-MM-DDThh:mm:ss"),
-                startTime: GetFormattedTimeString(startTime),
-                endTime: GetFormattedTimeString(endTime)
+                startDate: moment(startDate).utc().format("YYYY-MM-DDTHH:mm:ss"),
+                endDate: moment(stopDate).utc().format("YYYY-MM-DDTHH:mm:ss")
             }));
         }
     };

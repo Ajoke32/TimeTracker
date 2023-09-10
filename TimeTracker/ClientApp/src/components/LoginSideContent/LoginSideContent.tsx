@@ -1,4 +1,4 @@
-﻿import { SideContentInner } from "./";
+﻿import { SideContentInner } from "./SideContentInner";
 
 export const LoginSideContent = () => {
     return (

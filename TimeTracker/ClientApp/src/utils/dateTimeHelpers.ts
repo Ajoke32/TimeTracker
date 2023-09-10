@@ -1,33 +1,10 @@
-import { CalendarEvent, DateRangeType, WorkPlan, WorkedHour, WorkedTime } from "@redux/types";
-import { addMonth, substractMonth } from ".";
-import moment from "moment";
-import { PickerDateRange } from "@components/index";
-import { CreateWorkedHourType } from "@redux/types";
+import { PickerDateRange } from "@components/UI/DateRangePicker/DateRangePicker";
 import { TimerSliceState } from "@redux/index";
-
-export const GetFormattedUTCDateString = (date: Date): string => {
-    let result = "";
-
-    result = result.concat(`${date.getUTCFullYear()}-`);
-    result = result.concat(date.getUTCMonth() < 9 ? `0${date.getUTCMonth() + 1}` : `${date.getUTCMonth() + 1}`);
-    result = result.concat(date.getUTCDate() < 10 ? `-0${date.getUTCDate()}` : `-${date.getUTCDate()}`);
-
-    return result;
-}
+import { CalendarEvent, CreateWorkedHourType, DateRangeType, WorkPlan, WorkedHour, WorkedTime } from "@redux/types";
+import moment, { Moment } from "moment";
 
 export const GetFormattedUTCTimeString = (time: string, date: string): string => {
-    let result = "";
-
-    const localDate = new Date(`${date} ${time}`)
-    const hours = localDate.getUTCHours();
-    const minutes = localDate.getUTCMinutes();
-    const seconds = localDate.getUTCSeconds();
-
-    result = result.concat(hours > 9 ? `${hours}:` : `0${hours}:`)
-    result = result.concat(minutes > 9 ? `${minutes}` : `0${minutes}`)
-    result = result.concat(seconds > 9 ? `:${seconds}` : `:0${seconds}`)
-
-    return result;
+    return moment(`${date} ${time}`).utc().format("HH:mm:ss");
 }
 
 export const GetFormattedDateString = (date: Date): string => {
@@ -47,6 +24,15 @@ export const GetFormattedTimeString = (time: WorkedTime | string): string => {
     return result;
 }
 
+export const GetMomentFromTime = (time: string): Moment => {
+    const [hours, minutes, seconds] = time.split(':').map(Number)
+    return moment().set({ 'hours': hours, 'minutes': minutes, 'seconds': seconds ?? 0 })
+}
+
+export const GetInputUtcDateTimeString = (moment: Moment): string => {
+    return moment.utc().format("YYYY-MM-DDTHH:mm:ss")
+}
+
 export const GetTimeFromString = (time: string): WorkedTime => {
     const values = time.split(':')
     return {
@@ -56,84 +42,51 @@ export const GetTimeFromString = (time: string): WorkedTime => {
     } as WorkedTime
 }
 
-export const GetLocalDateFromUTC = (utc: string): Date => {
-    return new Date(`${utc} UTC`);
+export const GetLocalDateFromUtc = (utc: Date): Date => {
+    const dateStr = moment(utc).format("YYYY-MM-DD HH:mm:ss")
+    return new Date(`${dateStr} UTC`);
+}
+
+export const GetLocalMomentFromUtc = (utc: Moment): Moment => {
+    return moment(new Date(`${utc.format("YYYY-MM-DD HH:mm:ss")} UTC`));
 }
 
 export const GetLocalWorkedHour = (wh: WorkedHour): WorkedHour => {
-    const dateOnly = wh.date.toString().split("T")[0]
-
-    const utcStart = `${dateOnly} ${wh.startTime}`;
-    const utcEnd = `${dateOnly} ${wh.endTime}`
-
-    const localStart = GetLocalDateFromUTC(utcStart)
-    const localEnd = GetLocalDateFromUTC(utcEnd)
-
-    const localStartTime: WorkedTime = {
-        hours: localStart.getHours(),
-        minutes: localStart.getMinutes(),
-        seconds: localStart.getSeconds()
-    }
-    const localEndTime: WorkedTime = {
-        hours: localEnd.getHours(),
-        minutes: localEnd.getMinutes(),
-        seconds: localEnd.getSeconds()
-    }
-
-    wh.date = localStart
-    wh.startTime = GetFormattedTimeString(localStartTime)
-    wh.endTime = GetFormattedTimeString(localEndTime)
-
+    wh.startDate = GetLocalMomentFromUtc(moment(wh.startDate))
+    wh.endDate = GetLocalMomentFromUtc(moment(wh.endDate))
     return wh;
 }
 
 export const GetThreeMonthDateRange = (date: Date): DateRangeType => {
-    const previousMonth = substractMonth(date);
-    const nextMonth = addMonth(date);
-
-    const firstDayOfMonth = new Date(previousMonth.getFullYear(), previousMonth.getMonth(), 1)
-    const lastDayOfMonth = new Date(nextMonth.getFullYear(), addMonth(nextMonth).getMonth(), 0);
-
-    const firstTime = GetFormattedUTCTimeString("00:00:00", GetFormattedDateString(firstDayOfMonth))
-    const lastTime = GetFormattedUTCTimeString("00:00:00", GetFormattedDateString(lastDayOfMonth))
+    const dateMoment = moment(date).utc();
 
     return {
-        startDate: `${GetFormattedUTCDateString(firstDayOfMonth)}T${firstTime}`,
-        endDate: `${GetFormattedUTCDateString(lastDayOfMonth)}T${lastTime}`
+        startDate: dateMoment.clone().subtract(1, 'month').startOf('month').format("YYYY-MM-DDTHH:mm:ss"),
+        endDate: dateMoment.clone().add(1, 'month').endOf('month').format("YYYY-MM-DDTHH:mm:ss"),
     }
 }
 
 export const GetPickerDateRange = (range: PickerDateRange): DateRangeType => {
-    const startDate = range.startDate!.toDate();
-    const endDate = range.endDate ? range.endDate.toDate() : startDate;
-
-    const firstTime = GetFormattedUTCTimeString("00:00:00", GetFormattedDateString(startDate))
-    const lastTime = GetFormattedUTCTimeString("00:00:00", GetFormattedDateString(endDate))
+    const startDate = range.startDate.utc().format("YYYY-MM-DDTHH:mm:ss")
+    const endDate = range.endDate ? range.endDate.utc().format("YYYY-MM-DDTHH:mm:ss") : startDate;
 
     return {
-        startDate: `${GetFormattedDateString(startDate)}T${firstTime}`,
-        endDate: `${GetFormattedDateString(endDate)}T${lastTime}`
+        startDate: startDate,
+        endDate: endDate
     }
 }
 
 export const GetOneMonthDateRange = (date: Date): DateRangeType => {
-
-    const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1)
-    const lastDayOfMonth = new Date(date.getFullYear(), addMonth(date).getMonth(), 0);
-
-    const firstTime = GetFormattedUTCTimeString("00:00:00", GetFormattedDateString(firstDayOfMonth))
-    const lastTime = GetFormattedUTCTimeString("00:00:00", GetFormattedDateString(lastDayOfMonth))
+    const dateMoment = moment(date).utc();
 
     return {
-        startDate: `${GetFormattedUTCDateString(firstDayOfMonth)}T${firstTime}`,
-        endDate: `${GetFormattedUTCDateString(lastDayOfMonth)}T${lastTime}`
+        startDate: dateMoment.startOf('month').format("YYYY-MM-DDTHH:mm:ss"),
+        endDate: dateMoment.endOf('month').format("YYYY-MM-DDTHH:mm:ss"),
     }
 }
 
 export const GetLocalCalendarEvent = (event: CalendarEvent): CalendarEvent => {
-    const dateOnly = event.date.toString().split("T")[0]
-
-    event.date = GetLocalDateFromUTC(dateOnly);
+    event.date = GetLocalDateFromUtc(event.date);
 
     return event;
 }
@@ -144,24 +97,12 @@ export const GetLocalWorkPlan = (plan: WorkPlan): WorkPlan => {
     const utcStart = `${dateOnly} ${plan.startTime}`;
     const utcEnd = `${dateOnly} ${plan.endTime}`
 
-    const localStart = GetLocalDateFromUTC(utcStart)
-    const localEnd = GetLocalDateFromUTC(utcEnd)
+    const localStart = moment(GetLocalDateFromUtc(new Date(utcStart)))
+    const localEnd = moment(GetLocalDateFromUtc(new Date(utcEnd)))
 
-    const localStartTime: WorkedTime = {
-        hours: localStart.getHours(),
-        minutes: localStart.getMinutes(),
-        seconds: localStart.getSeconds()
-    }
-
-    const localEndTime: WorkedTime = {
-        hours: localEnd.getHours(),
-        minutes: localEnd.getMinutes(),
-        seconds: localEnd.getSeconds()
-    }
-
-    plan.date = localStart
-    plan.startTime = GetFormattedTimeString(localStartTime)
-    plan.endTime = GetFormattedTimeString(localEndTime)
+    plan.date = localStart.toDate()
+    plan.startTime = localStart.format('HH:mm:ss')
+    plan.endTime = localEnd.format('HH:mm:ss')
 
     return plan;
 }
@@ -203,29 +144,16 @@ export const convertTimeToIndex = (time: string) => {
     return parseInt(minutesStr, 10) + parseInt(hoursStr, 10) * 60;
 };
 
-export const GetCreateWorkedHour = (state: TimerSliceState, timestamp: number, userId: number) => {
-    const startDate = new Date(timestamp);
+export const GetNewWorkedHour = (state: TimerSliceState, timestamp: number, userId: number) => {
+    const startDate = moment(timestamp);
     const stopDate = moment(timestamp)
         .add(state.hours, "hours")
         .add(state.minutes, 'minutes')
-        .add(state.seconds, 'seconds')
-        .toDate();
+        .add(state.seconds, 'seconds');
 
-    const startTime: WorkedTime = {
-        hours: startDate.getUTCHours(),
-        minutes: startDate.getUTCMinutes(),
-        seconds: startDate.getUTCSeconds()
-    }
-
-    const endTime: WorkedTime = {
-        hours: stopDate.getUTCHours(),
-        minutes: stopDate.getUTCMinutes(),
-        seconds: stopDate.getUTCSeconds()
-    }
     return {
         userId: userId,
-        date: moment(GetFormattedUTCDateString(stopDate)).format("YYYY-MM-DDThh:mm:ss"),
-        startTime: GetFormattedTimeString(startTime),
-        endTime: GetFormattedTimeString(endTime)
+        startDate: startDate.format("YYYY-MM-DDTHH:mm:ss"),
+        endDate: stopDate.format("YYYY-MM-DDTHH:mm:ss")
     } as CreateWorkedHourType
 }

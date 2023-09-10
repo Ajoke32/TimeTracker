@@ -1,11 +1,17 @@
-import { Epic, ofType } from "redux-observable";
-import { PayloadAction } from "@reduxjs/toolkit";
-import { catchError, map, mergeMap, Observable, of, withLatestFrom } from "rxjs";
-import { CreateWorkedHourType, UpdateWorkedHourType, WorkedFetchType, WorkedHour, WorkedHoursStatisticInput, WorkedTime } from '@redux/types';
 import {
-    UpdateWorkedHoursQuery, FetchWorkedHoursQuery,
-    DeleteWorkedHoursQuery, CreateWorkedHoursQuery, WorkedHoursStatistic
+    CreateWorkedHoursQuery,
+    DeleteWorkedHoursQuery,
+    FetchWorkedHoursQuery,
+    UpdateWorkedHoursQuery,
+    WorkedHoursStatistic
 } from "@redux/queries";
+import { CreateWorkedHourType, UpdateWorkedHourType, WorkedFetchType, WorkedHour, WorkedHoursStatisticInput } from '@redux/types';
+import { PayloadAction } from "@reduxjs/toolkit";
+import { Epic, ofType } from "redux-observable";
+import { Observable, catchError, map, mergeMap, of, withLatestFrom } from "rxjs";
+import { RootState } from "..";
+import { GetNewWorkedHour } from "../../utils/dateTimeHelpers";
+import { GetErrorMessage } from "../../utils";
 import {
     createWorkedHourFail,
     createWorkedHourSuccess,
@@ -18,8 +24,6 @@ import {
     resetTimerFail,
     resetTimerSuccess
 } from '../slices';
-import { GetCreateWorkedHour, GetErrorMessage, GetFormattedTimeString, GetFormattedUTCDateString, GetFormattedUTCTimeString } from "../../utils";
-import { RootState, TimerSliceState } from "..";
 
 export const createWorkedHourEpic: Epic = (action: Observable<PayloadAction<CreateWorkedHourType>>, state) =>
     action.pipe(
@@ -162,7 +166,7 @@ export const startTimerEpic: Epic = (action$, state$: Observable<RootState>) => 
             console.log(action.payload)
             if (state.timer.startedAt !== action.payload) {
                 return CreateWorkedHoursQuery(
-                    GetCreateWorkedHour(state.timer, action.payload, state.auth.user!.id))
+                    GetNewWorkedHour(state.timer, action.payload, state.auth.user!.id))
                     .pipe(mergeMap(async (resp) => {
                         if (resp.response.errors != null) {
                             console.log(resp.response);

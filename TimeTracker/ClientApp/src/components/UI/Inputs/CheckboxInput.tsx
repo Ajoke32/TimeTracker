@@ -1,5 +1,5 @@
-﻿import { CheckboxInputProps } from "./InputProps";
-import { Checkbox } from "../Checkboxes";
+﻿import { Checkbox } from "../Checkboxes/Checkbox";
+import { CheckboxInputProps } from "./InputProps";
 
 export const CheckboxInput = ({ title, options, values, selected, setSelected, isMultipleChoice }: CheckboxInputProps) => {
     const handleCheckboxChange = (value: number, checked: boolean) => {

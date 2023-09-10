@@ -1,12 +1,15 @@
-﻿import "./Team.css"
-import { H4, UsersTable, UsersTableNavbar, Loader } from "../../components";
-import { useState, useEffect } from 'react';
+﻿import "@components/UI/Buttons/buttons.css";
+import { useEffect } from 'react';
 import { useAppDispatch, useTypedSelector } from "../../hooks";
-import { User, fetchUsers, setUsersTake, setUsersSkip, removeUserFilter } from "../../redux";
-import "@components/UI/Buttons/buttons.css"
+import { fetchUsers, removeUserFilter, setUsersSkip, setUsersTake } from "../../redux";
+import "./Team.css";
 
-import { WhereFilter } from "@redux/types/filterTypes.ts";
+import { H4 } from "@components/Headings";
 import Pager from "@components/Paging/Pager.tsx";
+import { UsersTable } from "@components/Tables/UsersTable";
+import { UsersTableNavbar } from "@components/Tables/UsersTableNavbar";
+import { Loader } from "@components/UI/Loaders/Loader";
+import { WhereFilter } from "@redux/types/filterTypes.ts";
 
 export const Team = () => {
     const dispatch = useAppDispatch();
@@ -56,9 +59,9 @@ export const Team = () => {
                         }
                     </div>
                 </div>
-                {count>perPage&&
+                {count > perPage &&
                     <Pager bottom={"50px"} capacity={2} skip={skip} take={take} setSkip={setUsersSkip} setTake={setUsersTake}
-                           extensions={{count:count}} perPage={perPage} />
+                        extensions={{ count: count }} perPage={perPage} />
                 }
 
             </div>

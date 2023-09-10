@@ -76,3 +76,8 @@ export interface FetchUsersPlansType {
     dateRange: DateRangeType,
     userIds: number[]
 }
+
+export interface FetchUsersPlansSuccessType {
+    workPlans: WorkPlan[],
+    userIds: number[]
+}

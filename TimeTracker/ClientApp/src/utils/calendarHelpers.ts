@@ -84,10 +84,10 @@ export const addDay = (date: Date): Date => {
     return newDate;
 }
 
-export const generateColors = (index: number, count: number) => {
+export const generateColors = (count: number) => {
     const colorsArr: string[] = [];
 
-    for (let i = index; i < count; i++) {
+    for (let i = 0; i < count; i++) {
         const randomR = Math.floor(Math.random() * 100) + 100;
         const randomG = Math.floor(Math.random() * 100) + 155;
         const randomB = Math.floor(Math.random() * 100) + 200;

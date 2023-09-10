@@ -1,7 +1,7 @@
-import { Hr } from "../UI";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux";
-import "./Sidebar.css"
+import { Hr } from "../UI/Misc/Hr";
+import "./Sidebar.css";
 
 export const Sidebar = () => {
 
@@ -25,14 +25,14 @@ export const Sidebar = () => {
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    
+
                     <li>
                         <a href="/vacation/all" className="sidebar-list__link">
                             <div className="sidebar-list__image-wrapper"><div className="vacations-img__wrapper"></div></div>
                             <span>My vacations</span>
                         </a>
                     </li>
-                    
+
                     <li>
                         <a href="/vacation/requests" className="sidebar-list__link">
                             <div className="sidebar-list__image-wrapper"><div className="requests-img__wrapper"></div></div>

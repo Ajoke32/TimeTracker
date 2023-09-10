@@ -1,9 +1,9 @@
-﻿import { UserForm, Inputs } from "@components/UserForms";
+﻿import { UserForm } from "@components/UserForms/UserForm";
 import { useAppDispatch } from "@hooks/customHooks";
-import { useEffect } from "react";
 import { editUser, fetchUser } from "@redux/slices";
 import { UserEditType, UserType } from "@redux/types";
-import { useParams, Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { Navigate, useParams } from "react-router-dom";
 
 export const EditUser = () => {
     const { userId } = useParams();

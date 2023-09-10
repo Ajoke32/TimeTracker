@@ -1,9 +1,10 @@
-﻿import "./AddUser.css"
-import { useState, useEffect } from 'react';
-import { UserForm, AddApproversForm } from "@components/UserForms";
+﻿import { AddApproversForm } from "@components/UserForms/AddApproversForm";
+import { UserForm } from "@components/UserForms/UserForm";
 import { useAppDispatch, useTypedSelector } from "@hooks/customHooks";
 import { userAdd } from "@redux/slices";
 import { UserAddType, UserType } from "@redux/types";
+import { useEffect, useState } from 'react';
+import "./AddUser.css";
 
 export const AddUser = () => {
     const dispatch = useAppDispatch();

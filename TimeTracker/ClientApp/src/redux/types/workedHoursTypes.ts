@@ -1,21 +1,19 @@
+import { Moment } from "moment"
 import { DateRangeType } from "."
 import {FiltersType, OrderingType, PagingInputType} from "./filterTypes"
 
 export interface WorkedHour {
     id: number,
     userId: number,
-    startTime: string,
-    endTime: string,
-    totalTime: string,
-    date: Date,
+    startDate: Moment,
+    endDate: Moment,
+    totalTime: any,
 }
 
 export interface WorkedFetchType extends PagingInputType, FiltersType,OrderingType {
     userId: number,
     dateRange: DateRangeType
 }
-
-
 
 export interface WorkedTime {
     hours: number,
@@ -25,15 +23,14 @@ export interface WorkedTime {
 
 export interface CreateWorkedHourType {
     userId: number,
-    date: string,
-    startTime: string,
-    endTime: string,
+    startDate: string,
+    endDate: string,
 }
 
 export interface UpdateWorkedHourType {
     id: number,
-    startTime: string,
-    endTime: string,
+    startDate: string,
+    endDate: string,
 }
 
 export interface WorkedHoursStatistic{

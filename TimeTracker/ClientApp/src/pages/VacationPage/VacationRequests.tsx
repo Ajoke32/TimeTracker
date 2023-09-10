@@ -1,4 +1,4 @@
-import {VacationsRequestTable} from "../../components";
+import { VacationsRequestTable } from "@components/Tables/VacationsRequestTable";
 
 
-export const VacationRequests = () =>  <VacationsRequestTable />
+export const VacationRequests = () => <VacationsRequestTable />

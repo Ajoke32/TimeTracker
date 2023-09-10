@@ -1,10 +1,12 @@
-﻿import { useState, useEffect } from 'react';
-import { CheckboxInput, SmallButton, TextInput } from "../UI";
-import { RangeInput } from "../UI/Inputs/RangeInput";
-import { useAppDispatch, useTypedSelector } from "../../hooks";
+﻿import { SmallButton } from '@components/UI/Buttons/SmallButton';
+import { CheckboxInput } from '@components/UI/Inputs/CheckboxInput';
+import { TextInput } from '@components/UI/Inputs/TextInput';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Permission, fetchUser, User, editUser } from '../../redux';
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom';
+import { useAppDispatch, useTypedSelector } from "../../hooks";
+import { Permission, User, editUser, fetchUser } from '../../redux';
+import { RangeInput } from "../UI/Inputs/RangeInput";
 
 type Inputs = {
     hoursPerMonth: number,

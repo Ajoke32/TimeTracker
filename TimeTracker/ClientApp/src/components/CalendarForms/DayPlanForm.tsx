@@ -1,13 +1,13 @@
-import React, { ChangeEvent, useState } from 'react';
-import { SubmitHandler, useForm } from "react-hook-form";
-import { LargeButton } from "@components/UI";
-import { months } from '..';
-import "./eventForms.css"
-import { CalendarCell, CreateWorkedHourType, SchedulerWorkPlan, SetWorkPlanType, WorkPlan } from '@redux/types';
+import { LargeButton } from "@components/UI/Buttons/LargeButton";
 import { useAppDispatch, useTypedSelector } from '@hooks/customHooks';
-import { GetFormattedDateString, GetFormattedUTCDateString, GetFormattedUTCTimeString } from '../../utils';
 import { deleteWorkPlan, setWorkPlan } from '@redux/slices';
-import { WorkPlanFormProps } from '.';
+import { SchedulerWorkPlan, SetWorkPlanType } from '@redux/types';
+import { GetFormattedDateString, GetFormattedUTCTimeString } from '@utils/dateTimeHelpers';
+import React, { useState } from 'react';
+import { SubmitHandler, useForm } from "react-hook-form";
+import { months } from '../constants';
+import "./eventForms.css";
+import { WorkPlanFormProps } from './props';
 
 type Inputs = {
     id: number | null,
@@ -24,7 +24,7 @@ interface TimeInputs {
 export const DayPlanForm = ({ date, setIsOpen, workPlan }: WorkPlanFormProps) => {
     const defaultValues: TimeInputs = {
         startTime: workPlan ? workPlan.startTime : '08:00',
-        endTime: workPlan ? workPlan.endTime : '18:00',
+        endTime: workPlan ? workPlan.endTime : '16:00',
     }
     const showDate = `${date.getDate()} ${months[date.getMonth()]}`;
     const dispatch = useAppDispatch();
@@ -58,7 +58,10 @@ export const DayPlanForm = ({ date, setIsOpen, workPlan }: WorkPlanFormProps) =>
             endTime: GetFormattedUTCTimeString(data.endTime, dateStr),
             date: dateStr
         } as SetWorkPlanType))
+
         setIsOpen(null);
+
+
     }
 
     const handleDelete = (workPlan: SchedulerWorkPlan) => {

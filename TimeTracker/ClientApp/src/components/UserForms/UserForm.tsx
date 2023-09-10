@@ -1,10 +1,14 @@
+import { SmallButton } from "@components/UI/Buttons/SmallButton";
+import { CheckboxInput } from "@components/UI/Inputs/CheckboxInput";
+import { RangeInput } from "@components/UI/Inputs/RangeInput";
+import { TextInput } from "@components/UI/Inputs/TextInput";
+import { StepsElement } from "@components/UI/Misc/StepsElement";
 import { useAppDispatch, useTypedSelector } from "@hooks/customHooks";
-import { useEffect, useState } from 'react';
-import { TextInput, CheckboxInput, SmallButton, StepsElement, RangeInput } from "@components/UI";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { UserFormProps, Inputs } from ".";
 import { Permission } from "@redux/enums";
+import { useEffect, useState } from 'react';
+import { SubmitHandler, useForm } from "react-hook-form";
 import "./AddUserForms.css";
+import { Inputs, UserFormProps } from "./props";
 
 
 
@@ -48,8 +52,7 @@ export const UserForm = ({ formDataHandler, step }: UserFormProps) => {
         data.hoursPerMonth = parseInt((hoursPerMonthValue).toString())
         formDataHandler(data);
 
-        if(!user)
-        {
+        if (!user) {
             reset();
             setCheckedOptions(0)
             setHoursPerMonthValue(100)

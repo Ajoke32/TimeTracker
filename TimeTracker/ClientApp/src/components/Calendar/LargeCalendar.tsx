@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import "./calendars.css"
-import { CurrentDateElement } from '..';
-import { useAppDispatch, useTypedSelector } from "@hooks/customHooks";
-import { days } from '..';
-import { setPrevMonthDates, setCurrentMonthDates, setNextMonthDates, addMonth, substractMonth, GetOneMonthDateRange, GetThreeMonthDateRange } from '../../utils';
-import { CalendarType, CalendarCell, CalendarEvent } from '@redux/types';
-import { fetchCalendarEvents, fetchWorkPlans, setDate } from '@redux/slices';
-import { SchedulerModal } from '../UI/Modals';
 import { CalendarModal } from '@components/UI/Modals/CalendarModal';
+import { useAppDispatch, useTypedSelector } from "@hooks/customHooks";
+import { fetchCalendarEvents, fetchWorkPlans, setDate } from '@redux/slices';
+import { CalendarCell, CalendarEvent, CalendarType } from '@redux/types';
+import React, { useEffect, useState } from 'react';
+import { addMonth, setCurrentMonthDates, setNextMonthDates, setPrevMonthDates, substractMonth } from '../../utils';
+import { GetOneMonthDateRange, GetThreeMonthDateRange } from '../../utils/dateTimeHelpers';
+import "./calendars.css";
+import { CurrentDateElement } from '@components/UI/Misc/CurrentDateElement';
+import { days } from '@components/constants';
 
 interface CalendarProps {
     date?: Date,

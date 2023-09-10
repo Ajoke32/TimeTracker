@@ -1,4 +1,4 @@
-import { GetFormattedDateString, GetFormattedUTCTimeString } from '../../utils';
+import moment from 'moment';
 import { AjaxQuery } from './query';
 import { WorkPlan, CalendarEvent, DateRangeType, SetWorkPlanType, SetCalendarEventType, FetchUsersPlansType, SchedulerWorkPlan, DeleteWorkPlanType } from '@redux/types';
 
@@ -83,13 +83,13 @@ export function SetCalendarEventQuery(calendarEvent: SetCalendarEventType) {
 
 export function DeleteWorkPlanQuery(workPlan: SchedulerWorkPlan) {
   //const token = ReadCookie('user');
-  const dateStr = GetFormattedDateString(workPlan.date);
+  const dateMoment = moment(workPlan.date);
   const arg: DeleteWorkPlanType = {
     id: workPlan.id,
-    date: dateStr,
+    date: dateMoment.format("YYYY-MM-DD"),
     userId: workPlan.userId,
-    startTime: GetFormattedUTCTimeString(workPlan.startTime, dateStr),
-    endTime: GetFormattedUTCTimeString(workPlan.endTime, dateStr)
+    startTime: "", //! empty string test
+    endTime: ""
   }
 
   return AjaxQuery<{ workPlanMutations: { delete: WorkPlan | null } }>(

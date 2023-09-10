@@ -1,14 +1,18 @@
-import "./dashboardScheduler.css"
-import React, { useState, useEffect, useRef } from 'react';
-import { CurrentDateElement, Loader } from "@components/UI";
 import { H4 } from "@components/Headings";
-import { SchedulerWorkPlan, WorkedHour } from '@redux/types';
+import { UsersRadioTable } from "@components/Tables/UsersRadioTable";
+import { DashboardTracker } from "@components/Trackers/DashboardTracker";
+import { TrackerSetHours } from "@components/Trackers/TrackerSetHours";
+import { DateRangePicker, PickerDateRange } from "@components/UI/DateRangePicker/DateRangePicker";
+import { Loader } from "@components/UI/Loaders/Loader";
+import { CurrentDateElement } from "@components/UI/Misc/CurrentDateElement";
+import { DashboardSchedulerModal } from "@components/UI/Modals/DashboardSchedulerModal";
 import { useAppDispatch, useTypedSelector } from '@hooks/customHooks';
-import { DashboardSchedulerModal, DateRangePicker, PickerDateRange, UsersRadioTable, dashboardHours } from '..';
-import moment from "moment";
-import { GetFormattedDateString, GetPickerDateRange, convertTimeToIndex, generateColors } from "../../utils";
 import { fetchWorkedHours } from "@redux/slices";
-import { DashboardTracker, TrackerSetHours } from "@components/Trackers";
+import moment from "moment";
+import { useEffect, useState } from 'react';
+import { generateColors } from "../../utils";
+import { GetPickerDateRange } from "../../utils/dateTimeHelpers";
+import "./dashboardScheduler.css";
 
 export const DashboardScheduler = () => {
     const dispatch = useAppDispatch()
@@ -74,7 +78,7 @@ export const DashboardScheduler = () => {
                     <div className="show-datepicker__btn" onClick={() => { setIsFormHidden(!isFormHidden) }} />
                     {dateRange.startDate &&
                         <div className="current-date__wrapper">
-                            <span>{GetFormattedDateString(dateRange.startDate.toDate())}</span>
+                            <span>{dateRange.startDate.format("YYYY-MM-DD")}</span>
                         </div>
                     }
                     {dateRange.endDate && !dateRange.endDate.isSame(dateRange.startDate) &&
@@ -83,7 +87,7 @@ export const DashboardScheduler = () => {
                                 <span>-</span>
                             </div>
                             <div className="current-date__wrapper">
-                                <span>{GetFormattedDateString(dateRange.endDate.toDate())}</span>
+                                <span>{dateRange.endDate.format("YYYY-MM-DD")}</span>
                             </div>
                         </>
                     }

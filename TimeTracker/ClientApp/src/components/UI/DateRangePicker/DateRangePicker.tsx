@@ -1,7 +1,7 @@
-import './dateRange.css'
-import React, { MouseEventHandler, useEffect, useState } from 'react';
-import moment, { Moment } from 'moment';
 import { datePickerDays } from '@components/constants';
+import moment, { Moment } from 'moment';
+import React, { useEffect, useState } from 'react';
+import './dateRange.css';
 
 export interface DatePickerCalendarType {
     previousDates: Moment[],
