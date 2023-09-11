@@ -8,11 +8,9 @@ public class WorkedHour
 
     public User User { get; set; } = null!;
 
-    public DateTime Date { get; set; }
-
-    public TimeOnly StartTime { get; set; }
+    public DateTime StartDate { get; set; }
     
-    public TimeOnly EndTime { get; set; }
+    public DateTime EndDate { get; set; }
     
-    public TimeOnly TotalTime { get; set; }
+    public int TotalTime { get; set; }
 }

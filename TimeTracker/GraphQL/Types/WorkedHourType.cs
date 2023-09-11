@@ -11,11 +11,9 @@ public sealed class WorkedHourType: ObjectGraphType<WorkedHour>
 
         Field(x=>x.UserId).Description("user id");
 
-        Field(x => x.Date).Description("working date");
+        Field(x => x.StartDate).Description("date of start");
 
-        Field(x => x.StartTime).Description("start time");
-
-        Field(x => x.EndTime).Description("end time");
+        Field(x => x.EndDate).Description("date of end");
 
         Field(x => x.TotalTime).Description("user's total worked time");
     }

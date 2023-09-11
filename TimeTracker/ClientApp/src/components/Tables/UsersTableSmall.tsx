@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react'
-import { Checkbox, SearchInput } from "../UI";
-import "./usersTableSmall.css"
+import { Checkbox } from "@components/UI/Checkboxes/Checkbox";
+import { SearchInput } from "@components/UI/Inputs/SearchInput";
 import { useAppDispatch, useTypedSelector } from "@hooks/customHooks.ts";
 import { addUsersFilters, fetchUsers, fetchWorkPlans, loadUsers, resetUsersWorkPlans, userFiltersToDefault } from '@redux/slices';
 import { WhereFilter } from '@redux/types/filterTypes';
-import { GetOneMonthDateRange } from '../../utils';
+import { useEffect, useState } from 'react';
+import { GetOneMonthDateRange } from '../../utils/dateTimeHelpers';
+import "./usersTableSmall.css";
 
 
-export const UsersTableSmall = () => {
+export const UsersTableSmall = ({selectedUsers, setSelectedUsers} : {selectedUsers: number[], setSelectedUsers: React.Dispatch<React.SetStateAction<number[]>>}) => {
 
     const dispatch = useAppDispatch();
     const fieldsToSearch = ["Email", "FirstName", "LastName"];
@@ -19,7 +20,6 @@ export const UsersTableSmall = () => {
 
     const [filtered, setFiltered] = useState<boolean>(false)
     const [plansAdded, setPlansAdded] = useState<boolean>(false)
-    const [selectedUsers, setSelectedUsers] = useState<number[]>([])
     const [take, setTake] = useState<number>(10)
 
     useEffect(() => {

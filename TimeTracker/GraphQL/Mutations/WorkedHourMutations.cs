@@ -21,18 +21,16 @@ public sealed class WorkedHourMutations : ObjectGraphType
             {
                 var wh = ctx.GetArgument<WorkedHourInputDto>("workedHour");
 
-                if (wh.Date.Date >= DateTime.UtcNow.Date
-                && (wh.StartTime > TimeOnly.FromDateTime(DateTime.UtcNow)
-                || wh.EndTime > TimeOnly.FromDateTime(DateTime.UtcNow)))
+                if (wh.StartDate > DateTime.UtcNow
+                || wh.EndDate > DateTime.UtcNow)
                 {
                     throw new ValidationError("Can't create worked hour for future");
                 }
 
                 var exists = await uow.GenericRepository<WorkedHour>()
-                            .FindAsync(p => p.Date.Date == wh.Date.Date 
-                                        && p.UserId == wh.UserId 
-                                        && p.StartTime < wh.EndTime 
-                                        && wh.StartTime < p.EndTime);
+                            .FindAsync(p => p.UserId == wh.UserId
+                                        && p.StartDate < wh.EndDate
+                                        && wh.StartDate < p.EndDate);
 
                 if (exists is not null)
                     throw new ValidationError("Worked hours intersect!");
@@ -70,19 +68,16 @@ public sealed class WorkedHourMutations : ObjectGraphType
                 var currentValue = await uow.GenericRepository<WorkedHour>().FindAsync(w => w.Id == wh.Id)
                             ?? throw new ValidationError("Record not found"); // Temp error
 
-                if (currentValue.Date >= DateTime.UtcNow
-                && (wh.StartTime > TimeOnly.FromDateTime(DateTime.UtcNow)
-                || wh.EndTime > TimeOnly.FromDateTime(DateTime.UtcNow)))
+                if (wh.StartDate > DateTime.UtcNow || wh.EndDate > DateTime.UtcNow)
                 {
                     throw new ValidationError("Can't create worked hour for future");
                 }
 
                 var exists = await uow.GenericRepository<WorkedHour>()
-                            .FindAsync(p => p.Date.Date == currentValue.Date.Date
-                                        && p.Id != currentValue.Id
-                                        && p.UserId == currentValue.UserId 
-                                        && p.StartTime < wh.EndTime 
-                                        && wh.StartTime < p.EndTime);
+                            .FindAsync(p => p.Id != currentValue.Id
+                                        && p.UserId == currentValue.UserId
+                                        && p.StartDate < wh.EndDate
+                                        && wh.StartDate < p.EndDate);
 
                 if (exists is not null)
                     throw new ValidationError("Worked hours intersect!");

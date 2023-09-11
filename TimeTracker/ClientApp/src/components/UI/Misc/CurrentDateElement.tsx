@@ -1,4 +1,4 @@
-import { months } from "../../";
+import { months } from "../../constants";
 
 export const CurrentDateElement = ({ date, showFullDate = false, additional }: { date: Date, showFullDate: boolean, additional?: string }) => {
 

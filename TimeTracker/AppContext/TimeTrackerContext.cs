@@ -45,29 +45,6 @@ public class TimeTrackerContext:DbContext
             .HasForeignKey(a => a.UserId)
             .OnDelete(DeleteBehavior.NoAction);
         
-        
-        modelBuilder.Entity<WorkedHour>()
-            .Property(a => a.StartTime)
-            .HasConversion(
-                v => v.ToTimeSpan(),
-                v => TimeOnly.FromTimeSpan(v)
-            );
-        
-        modelBuilder.Entity<WorkedHour>()
-            .Property(a => a.EndTime)
-            .HasConversion(
-                v => v.ToTimeSpan(),
-                v => TimeOnly.FromTimeSpan(v)
-            );
-
-        modelBuilder.Entity<WorkedHour>()
-            .Property(a => a.TotalTime)
-            .HasConversion(
-                v => v.ToTimeSpan(),
-                v => TimeOnly.FromTimeSpan(v)
-            );
-        
-        
         modelBuilder.Entity<WorkPlan>()
             .Property(a => a.StartTime)
             .HasConversion(

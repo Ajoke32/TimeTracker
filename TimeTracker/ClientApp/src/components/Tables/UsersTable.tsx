@@ -1,7 +1,7 @@
-﻿import {deleteUser, setUsersOrdering, User} from "../../redux";
-import { ProfileAvatar} from "../UI";
-import "./tables.css"
-import {useAppDispatch, useTypedSelector} from "@hooks/customHooks.ts";
+﻿import { ProfileAvatar } from "@components/UI/Misc/ProfileAvatar";
+import { useAppDispatch } from "@hooks/customHooks.ts";
+import { deleteUser, setUsersOrdering, User } from "../../redux";
+import "./tables.css";
 
 
 export const UsersTable = ({ users }: { users: User[] }) => {
@@ -10,12 +10,12 @@ export const UsersTable = ({ users }: { users: User[] }) => {
 
     const handleConfirmButtonClick = (value: number) => {
         const conf = confirm("Are you sure?")
-        if(conf){
+        if (conf) {
             dispatch(deleteUser(value));
         }
     };
 
-    function setOrderBy(prop:string){
+    function setOrderBy(prop: string) {
         dispatch(setUsersOrdering(prop));
     }
 
@@ -26,9 +26,9 @@ export const UsersTable = ({ users }: { users: User[] }) => {
                     <tr>
                         <th></th>
                         <th>User</th>
-                        <th onClick={()=>setOrderBy("Email")}>Email</th>
-                        <th onClick={()=>setOrderBy("VacationDays")}>Vacation Days</th>
-                        <th onClick={()=>setOrderBy("HoursPerMonth")}>Working hours</th>
+                        <th onClick={() => setOrderBy("Email")}>Email</th>
+                        <th onClick={() => setOrderBy("VacationDays")}>Vacation Days</th>
+                        <th onClick={() => setOrderBy("HoursPerMonth")}>Working hours</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -56,7 +56,7 @@ export const UsersTable = ({ users }: { users: User[] }) => {
                                     <div className="users-table__actions-edit">
                                         <a href={`/team/edituser/${user.id}`} />
                                     </div>
-                                    <div className="users-table__actions-archieve" onClick={()=>handleConfirmButtonClick(user.id)}>
+                                    <div className="users-table__actions-archieve" onClick={() => handleConfirmButtonClick(user.id)}>
 
                                     </div>
 

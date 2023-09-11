@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { calculateTotalPages } from "../../utils/paging.ts";
 import { useAppDispatch } from "@hooks/customHooks.ts";
 import { PagingWithExtraInfo } from "@redux/types/filterTypes.ts";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import { useEffect, useState } from 'react';
+import { calculateTotalPages } from "../../utils/paging.ts";
 
 
 interface PagerProps extends PagingWithExtraInfo {
     setTake: ActionCreatorWithPayload<any>,
     setSkip: ActionCreatorWithPayload<any>,
     capacity: number,
-    bottom?:string
+    bottom?: string
 }
 
-const Pager = ({ setSkip, setTake, capacity = 0, perPage, take, skip, extensions,bottom }: PagerProps) => {
+const Pager = ({ setSkip, setTake, capacity = 0, perPage, take, skip, extensions, bottom }: PagerProps) => {
 
     const [activePage, setActivePage] = useState<number>(1);
     const dispatch = useAppDispatch();
@@ -68,7 +68,7 @@ const Pager = ({ setSkip, setTake, capacity = 0, perPage, take, skip, extensions
     }, [take, skip]);
 
     return (
-        <div className="pages-wrapper" style={{bottom:`${bottom&&bottom}`}}>
+        <div className="pages-wrapper" style={{ bottom: `${bottom && bottom}` }}>
             <button className={`arrow-wrapper left-arrow ${skip == 0 ? 'inactive' : ''}`} disabled={skip == 0} onClick={() => {
                 dispatch(setTake(take - perPage))
                 dispatch(setSkip(skip - perPage))

@@ -1,5 +1,6 @@
-import { LoginForm, LoginSideContent } from "../../components";
-import "./Login.css"
+import { LoginForm } from "@components/LoginForm/LoginForm";
+import { LoginSideContent } from "@components/LoginSideContent/LoginSideContent";
+import "./Login.css";
 
 export const Login = () => {
 

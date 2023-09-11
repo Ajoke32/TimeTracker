@@ -1,16 +1,16 @@
-import React, {useState} from 'react';
-import {WhereFilter} from "@redux/types/filterTypes.ts";
-import {useAppDispatch} from "@hooks/customHooks.ts";
-import {ActionCreatorWithoutPayload, ActionCreatorWithPayload} from "@reduxjs/toolkit";
+import { useAppDispatch } from "@hooks/customHooks.ts";
+import { WhereFilter } from "@redux/types/filterTypes.ts";
+import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import React, { useState } from 'react';
 
 
-interface FilterProps{
-    addFilter:ActionCreatorWithPayload<WhereFilter>,
-    filterFields:string[],
-    filtersToDefault:ActionCreatorWithoutPayload
+interface FilterProps {
+    addFilter: ActionCreatorWithPayload<WhereFilter>,
+    filterFields: string[],
+    filtersToDefault: ActionCreatorWithoutPayload
 }
 
-const Filter = ({addFilter,filterFields,filtersToDefault}:FilterProps) => {
+const Filter = ({ addFilter, filterFields, filtersToDefault }: FilterProps) => {
 
     const [clicked, setClicked] = useState<boolean>(false);
     const dispatch = useAppDispatch();
@@ -45,22 +45,22 @@ const Filter = ({addFilter,filterFields,filtersToDefault}:FilterProps) => {
     }
 
     function handleApplyFilters() {
-        dispatch(addFilter({...filter, value: value}));
+        dispatch(addFilter({ ...filter, value: value }));
     }
 
     return (
         <>
-            <button style={{marginRight: "10px", marginLeft: "10px"}} onClick={() => setClicked(!clicked)}
-                    className="btn-base btn-info">Filter
+            <button style={{ marginRight: "10px", marginLeft: "10px" }} onClick={() => setClicked(!clicked)}
+                className="btn-base btn-info">Filter
             </button>
-            <div style={{alignSelf: "center", position: "relative", display: `${clicked ? 'block' : 'none'}`}}>
+            <div style={{ alignSelf: "center", position: "relative", display: `${clicked ? 'block' : 'none'}` }}>
 
                 <div style={{
                     position: "absolute",
-                    display: "flex",flexDirection:"column", gap: "10px", backgroundColor: "#fff", padding: "5px",
+                    display: "flex", flexDirection: "column", gap: "10px", backgroundColor: "#fff", padding: "5px",
                     zIndex: "100", borderRadius: "8px", left: "0", top: "10px"
                 }} className="filter-select">
-                    <div style={{display:"flex",flexDirection:'row',gap:"5px"}}>
+                    <div style={{ display: "flex", flexDirection: 'row', gap: "5px" }}>
                         <div className='select-group'>
                             <label htmlFor="">Column</label>
                             <select id='property' onChange={(e) => handleSelectChange(e)} className="input-base">
@@ -82,13 +82,13 @@ const Filter = ({addFilter,filterFields,filtersToDefault}:FilterProps) => {
                         </div>
                         <div className='select-group'>
                             <label htmlFor="">Value</label>
-                            <input  value={value} onChange={(e) => {
+                            <input value={value} onChange={(e) => {
                                 setValue(e.target.value)
                             }}
-                                   className="input-base" type="text" placeholder="comparison value"/>
+                                className="input-base" type="text" placeholder="comparison value" />
                         </div>
                     </div>
-                    <div style={{display:"flex",gap:"10px",alignSelf:"flex-end"}}>
+                    <div style={{ display: "flex", gap: "10px", alignSelf: "flex-end" }}>
                         <button className="btn-base btn-decline" onClick={() => {
                             dispatch(filtersToDefault())
                         }}>Reset

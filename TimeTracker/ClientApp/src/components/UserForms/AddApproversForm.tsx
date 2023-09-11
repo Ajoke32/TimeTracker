@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
-import { ApproversTable } from "../Tables";
-import { fetchApprovers, addApprovers, fetchUser, users } from "../../redux";
-import { SmallButton, StepsElement, Loader } from "../UI";
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useTypedSelector } from "../../hooks";
+import { addApprovers, fetchApprovers } from "../../redux";
+import { ApproversTable } from "../Tables/ApproversTable";
 
-import "./AddUserForms.css"
+import { SmallButton } from '@components/UI/Buttons/SmallButton';
+import { Loader } from '@components/UI/Loaders/Loader';
+import { StepsElement } from '@components/UI/Misc/StepsElement';
+import "./AddUserForms.css";
 
 export const AddApproversForm = ({ step }: { step?: number }) => {
     const dispatch = useAppDispatch();
@@ -18,8 +20,10 @@ export const AddApproversForm = ({ step }: { step?: number }) => {
     }
 
     const loadMore = () => {
-        dispatch(fetchApprovers({ take: 5, skip: fetched,
-            userId: user!.id!,group:[],orderBy:{property:"",direction:""}}));
+        dispatch(fetchApprovers({
+            take: 5, skip: fetched,
+            userId: user!.id!, group: [], orderBy: { property: "", direction: "" }
+        }));
     }
 
     useEffect(() => {

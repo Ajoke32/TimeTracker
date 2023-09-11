@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { CalendarModalProps } from ".";
-import { DayPlanForm,  TabSwitcher } from '../..';
-import {useAppDispatch} from "@hooks/customHooks.ts";
-import {modalClose} from "@redux/slices";
-import {EventForm} from "@components/CalendarForms/EventForm.tsx";
+import { DayPlanForm } from '@components/CalendarForms/DayPlanForm';
+import { EventForm } from '@components/CalendarForms/EventForm';
+import { useState } from 'react';
+import { TabSwitcher } from '../Misc/TabSwitcher';
+import { CalendarModalProps } from "./props";
+
 
 export const CalendarModal = ({ isHidden, setIsHidden, event }: CalendarModalProps) => {
     const [tab, setTab] = useState<boolean>(true)

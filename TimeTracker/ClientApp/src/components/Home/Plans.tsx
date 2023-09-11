@@ -1,39 +1,38 @@
-
-import PlanList, {PlansListProps} from "@components/Home/PlanList.tsx";
-import {empty} from "rxjs";
-import {ChangeEvent, useState} from "react";
+import PlanList, { PlansListProps } from "@components/Home/PlanList.tsx";
+import { useAppDispatch, useTypedSelector } from "@hooks/customHooks.ts";
+import { setWorkPlan } from "@redux/slices";
+import { SetWorkPlanType } from "@redux/types";
 import moment from "moment";
-import {useAppDispatch, useTypedSelector} from "@hooks/customHooks.ts";
-import {setWorkPlan} from "@redux/slices";
-import {SetWorkPlanType} from "@redux/types";
-import {GetFormattedUTCTimeString} from "../../utils";
+import { ChangeEvent, useState } from "react";
 
-interface PlansProps extends  PlansListProps{
-    title:string,
-    addPlans?:boolean,
-    emptyMessage:string
+interface PlansProps extends PlansListProps {
+    title: string,
+    addPlans?: boolean,
+    emptyMessage: string
 }
-const Plans = ({plans,title,loading,emptyMessage,addPlans=false}:PlansProps) => {
+const Plans = ({ plans, title, loading, emptyMessage, addPlans = false }: PlansProps) => {
     const dispatch = useAppDispatch();
-    const {user} = useTypedSelector(s => s.auth);
-    const [startTime,setStartTime] = useState(moment().format("hh:mm"));
-    const [endTime,setEndTime] = useState(moment().add(1,'hour').format("hh:mm"));
+    const { user } = useTypedSelector(s => s.auth);
+    const [startTime, setStartTime] = useState(moment().format("HH:mm"));
+    const [endTime, setEndTime] = useState(moment().add(1, 'hour').format("HH:mm"));
 
 
-    function handlePushPlan(){
-         const startTimeStr = moment(startTime,"HH:mm:ss").format("hh:mm:ss");
-         const endTimeStr = moment(endTime,"HH:mm:ss").format("hh:mm:ss");
-         dispatch(setWorkPlan({
-             userId: user?.id!,
-             startTime:GetFormattedUTCTimeString(startTimeStr,moment().format("YYYY-MM-DD")),
-             endTime:GetFormattedUTCTimeString(endTimeStr,moment().format("YYYY-MM-DD")),
-             date:moment().format("YYYY-MM-DD")
-         } as SetWorkPlanType))
+    function handlePushPlan() {
+        const startTimeMoment = moment(startTime, "HH:mm:ss");
+        const endTimeMoment = moment(endTime, "HH:mm:ss");
+        
+
+        dispatch(setWorkPlan({
+            userId: user?.id!,
+            startTime:startTimeMoment.utc().format("HH:mm:ss"),
+            endTime: endTimeMoment.utc().format("HH:mm:ss"),
+            date: moment().format("YYYY-MM-DD")
+        } as SetWorkPlanType))
     }
-    function  onStartTimeInput(e:ChangeEvent<HTMLInputElement>) {
+    function onStartTimeInput(e: ChangeEvent<HTMLInputElement>) {
         setStartTime(e.target.value);
     }
-    function  onEndTimeInput(e:ChangeEvent<HTMLInputElement>) {
+    function onEndTimeInput(e: ChangeEvent<HTMLInputElement>) {
         setEndTime(e.target.value);
     }
     return (
@@ -42,11 +41,11 @@ const Plans = ({plans,title,loading,emptyMessage,addPlans=false}:PlansProps) => 
 
 
             <PlanList emptyMessage={emptyMessage} plans={plans} loading={loading} />
-            {addPlans&&<div className={"push-plan"}>
+            {addPlans && <div className={"push-plan"}>
                 <form>
-                    <input onChange={(e)=>onStartTimeInput(e)} value={startTime} style={{padding: "5px"}} className={"time-input"} type="time"/>
+                    <input onChange={(e) => onStartTimeInput(e)} value={startTime} style={{ padding: "5px" }} className={"time-input"} type="time" />
                     <span>-</span>
-                    <input onChange={e=>onEndTimeInput(e)} value={endTime} style={{padding: "5px"}} className={"time-input"} type="time"/>
+                    <input onChange={e => onEndTimeInput(e)} value={endTime} style={{ padding: "5px" }} className={"time-input"} type="time" />
                     <input style={{
                         border: "none",
                         borderRadius: "15px",
@@ -54,7 +53,7 @@ const Plans = ({plans,title,loading,emptyMessage,addPlans=false}:PlansProps) => 
                         color: 'white',
                         cursor: "pointer"
                     }}
-                      onClick={handlePushPlan}    className={"btn-confirm"} type="button" value="push plan"/>
+                        onClick={handlePushPlan} className={"btn-confirm"} type="button" value="push plan" />
                 </form>
             </div>}
         </div>

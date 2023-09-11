@@ -1,14 +1,13 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { UserSliceState, User, FormattedWorkedHours } from '../intrerfaces';
-import { DateRangeType, UpdateWorkedHourType, UserAddType, UserEditType, WorkedFetchType, WorkedHour } from "../types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { User, UserSliceState } from '../intrerfaces';
+import { UserAddType, UserEditType } from "../types";
 import {
-    defaultState, createPendingReducerWithPayload,
-    createSuccessReducerWithPayload, createErrorReducer,
-    createSuccessReducerWithoutPayload
+    createErrorReducer,
+    createPendingReducerWithPayload,
+    createSuccessReducerWithoutPayload,
+    createSuccessReducerWithPayload,
+    defaultState
 } from "./generic";
-import { PagingEntityType } from "@redux/types/filterTypes";
-import { GetLocalWorkedHour } from "../../utils";
-import moment from "moment";
 
 const initialState: UserSliceState = {
     ...defaultState,

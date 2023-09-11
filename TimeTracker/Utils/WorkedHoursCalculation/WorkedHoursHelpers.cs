@@ -51,7 +51,7 @@ public class WorkedHoursHelpers
 
     public TimeSpan GetActuallyWorkedHoursInCurrentMonth(User user)
     {
-        return user.WorkedHours.FindAll(wh => wh.Date.Month == DateTime.Now.Month && wh.Date.Year == DateTime.Now.Year)
-            .Aggregate(TimeSpan.Zero, (current, wh) => current + wh.TotalTime.ToTimeSpan());
+        return user.WorkedHours.FindAll(wh => wh.StartDate.Month == DateTime.Now.Month && wh.StartDate.Year == DateTime.Now.Year)
+            .Aggregate(TimeSpan.Zero, (current, wh) => current + TimeSpan.FromSeconds(wh.TotalTime));
     }
 }

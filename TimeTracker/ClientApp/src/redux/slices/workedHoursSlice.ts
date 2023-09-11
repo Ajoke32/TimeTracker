@@ -1,26 +1,26 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { FormattedWorkedHours, WorkedHoursSlice } from '..';
 import {
-    WorkedHour,
-    UpdateWorkedHourType,
     CreateWorkedHourType,
-    WorkedHoursStatisticInput,
-    WorkedHoursStatistic,
     DateRangeType,
+    UpdateWorkedHourType,
+    WorkedHour,
+    WorkedHoursStatistic,
+    WorkedHoursStatisticInput,
 } from '@redux/types';
+import {
+    PagingEntityType,
+    basicPagingReducers,
+    defaultPagingState,
+} from "@redux/types/filterTypes.ts";
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import moment from 'moment';
+import { FormattedWorkedHours, WorkedHoursSlice } from '..';
+import { GetLocalWorkedHour } from '../../utils/dateTimeHelpers';
 import {
     createErrorReducer,
     createPendingReducerWithPayload,
     createSuccessReducerWithPayload,
     defaultState
 } from "./generic";
-import { GetLocalWorkedHour } from '../../utils';
-import {
-    basicPagingReducers,
-    defaultPagingState,
-    PagingEntityType,
-} from "@redux/types/filterTypes.ts";
-import moment from 'moment';
 
 
 
@@ -38,21 +38,23 @@ const workedHoursSlice = createSlice({
         createWorkedHour: createPendingReducerWithPayload<WorkedHoursSlice, CreateWorkedHourType>(),
         createWorkedHourSuccess: createSuccessReducerWithPayload<WorkedHoursSlice, WorkedHour>(
             (state: WorkedHoursSlice, action: PayloadAction<WorkedHour>) => {
+                action.payload.startDate = moment( action.payload.startDate.toString().slice(0, -1))
+                action.payload.endDate = moment( action.payload.endDate.toString().slice(0, -1))
                 action.payload = GetLocalWorkedHour(action.payload)
 
                 const userFormattedWorkedHours = state.workedHours.find(
-                    (formattedHours) => moment(formattedHours.date).isSame(moment(action.payload.date), 'day')
+                    (formattedHours) => moment(formattedHours.date).isSame(action.payload.startDate, 'day')
                 );
 
                 if (!userFormattedWorkedHours) {
                     const newUserFormattedWorkedHours: FormattedWorkedHours = {
-                        date: action.payload.date,
+                        date: action.payload.startDate.toDate(),
                         workedHours: [action.payload],
                     };
                     state.workedHours = [newUserFormattedWorkedHours, ...state.workedHours];
                 } else {
                     userFormattedWorkedHours.workedHours.push(action.payload);
-                    userFormattedWorkedHours.workedHours = userFormattedWorkedHours.workedHours.sort((a, b) => b.date.getTime() - a.date.getTime())
+                    userFormattedWorkedHours.workedHours = userFormattedWorkedHours.workedHours.sort((a, b) => b.startDate.valueOf() - a.startDate.valueOf())
                 }
             }
         ),
@@ -66,12 +68,12 @@ const workedHoursSlice = createSlice({
                     action.payload.entities[index] = GetLocalWorkedHour(wh)
 
                     const userFormattedWorkedHours = workedHours.find(
-                        (formattedHours) => moment(formattedHours.date).isSame(moment(wh.date), 'day')
+                        (formattedHours) => moment(formattedHours.date).isSame(wh.startDate, 'day')
                     );
 
                     if (!userFormattedWorkedHours) {
                         const newUserFormattedWorkedHours: FormattedWorkedHours = {
-                            date: wh.date,
+                            date: wh.startDate.toDate(),
                             workedHours: [wh],
                         };
                         workedHours.push(newUserFormattedWorkedHours);
@@ -91,6 +93,9 @@ const workedHoursSlice = createSlice({
                         (workedHour) => workedHour.id === action.payload.id
                     );
                     if (index !== -1) {
+                        action.payload.startDate = moment( action.payload.startDate.toString().slice(0, -1))
+                        action.payload.endDate = moment( action.payload.endDate.toString().slice(0, -1))
+
                         wh.workedHours[index] = GetLocalWorkedHour(action.payload);
                         break;
                     }

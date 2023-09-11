@@ -1,7 +1,4 @@
-import { UserAddType, UserEditType, UserType } from '@redux/types'
-
-export * from './UserForm'
-export * from './AddApproversForm'
+import { UserAddType, UserEditType } from '@redux/types'
 
 export interface UserFormProps {
     formDataHandler: (data: UserAddType | UserEditType) => void,

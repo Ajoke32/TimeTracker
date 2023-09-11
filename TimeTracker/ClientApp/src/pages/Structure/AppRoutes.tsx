@@ -1,19 +1,24 @@
 
-import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
-import {
-  Login, AddUser, Layout,
-  UserVerify, Team, EditUser,
-  ProtectedRoute,
-  VacationRequests, NotFound,
-  EmailConfirm
-} from "..";
+import { VacationsTable } from "@components/Tables/VacationsTable.tsx";
+import { useTypedSelector } from '@hooks/customHooks';
 import { Permission } from '@redux/enums';
-import { VacationsTable } from "@components/Tables";
+import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
+import {
+  AddUser,
+  EditUser,
+  EmailConfirm,
+  Layout,
+  Login,
+  NotFound,
+  ProtectedRoute,
+  Team,
+  UserVerify,
+  VacationRequests
+} from "..";
 import Calendar from "../CalendarPage/Calendar";
 import { Dashboard } from '../DashboardPage/Dashboard';
-import {HomeTwo} from "../HomeTwo.tsx";
-import { useTypedSelector } from '@hooks/customHooks';
-import {HomePageTest} from "../HomePageTest.tsx";
+import { HomeTwo } from "../HomeTwo.tsx";
+
 
 
 
@@ -27,9 +32,8 @@ export const AppRoutes = () => {
         <>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomeTwo />} />
-            <Route path="/home" element={<HomePageTest />} />
             <Route path="/calendar" element={<Calendar />} />
-            <Route path='/dashboard' element={<Dashboard />}/>
+            <Route path='/dashboard' element={<Dashboard />} />
             <Route path="/team" element={<Outlet />}>
               <Route index element={<Team />} />
               <Route path="addUser"

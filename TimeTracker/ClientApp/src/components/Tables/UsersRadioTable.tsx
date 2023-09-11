@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
-import { setUsersSkip, setUsersTake, User } from "../../redux";
-import { Checkbox, PickerDateRange, RadioButton, SearchInput } from "../UI";
-import "./usersTableSmall.css"
+import { PickerDateRange } from "@components/UI/DateRangePicker/DateRangePicker";
+import { SearchInput } from "@components/UI/Inputs/SearchInput";
+import { RadioButton } from "@components/UI/RadioButtons/RadioButton";
 import { useAppDispatch, useTypedSelector } from "@hooks/customHooks.ts";
-import Pager from '@components/Paging/Pager';
-import { addUsersFilters, fetchUsers, fetchWorkPlans, fetchWorkedHours, loadUsers, resetUsersWorkPlans, userFiltersToDefault } from '@redux/slices';
+import { addUsersFilters, fetchUsers, fetchWorkedHours, loadUsers, userFiltersToDefault } from '@redux/slices';
 import { WhereFilter } from '@redux/types/filterTypes';
-import { GetOneMonthDateRange, GetPickerDateRange } from '../../utils';
+import { useEffect, useState } from 'react';
+import { GetPickerDateRange } from '../../utils/dateTimeHelpers';
+import "./usersTableSmall.css";
 
 
 export const UsersRadioTable = ({ selectedUser, setSelectedUser, dateRange }: {

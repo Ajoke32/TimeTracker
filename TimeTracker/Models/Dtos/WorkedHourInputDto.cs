@@ -4,11 +4,9 @@ public class WorkedHourInputDto
 {
     public int UserId { get; set; }
 
-    public DateTime Date { get; set; }
+    public DateTime StartDate { get; set; }
 
-    public TimeOnly StartTime { get; set; }
+    public DateTime EndDate { get; set; }
     
-    public TimeOnly EndTime { get; set; }
-
-    public TimeOnly TotalTime { get; set; }
+    public int TotalTime { get; set; }
 }

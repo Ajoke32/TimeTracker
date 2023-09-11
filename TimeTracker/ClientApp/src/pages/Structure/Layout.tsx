@@ -1,7 +1,8 @@
-import { Outlet } from "react-router-dom";
-import {Header, Sidebar} from "../../components/";
-import "./Layout.css"
+import { Header } from "@components/Header/Header";
+import { Sidebar } from "@components/Sidebar/Sidebar";
 import StateInfoModal from "@components/UI/Modals/StateInfoModal.tsx";
+import { Outlet } from "react-router-dom";
+import "./Layout.css";
 
 
 
@@ -17,10 +18,10 @@ export const Layout = () => {
                 </div>
             </div>
             <div className="layout-header__wrapper">
-                <Header/>
+                <Header />
             </div>
             <div className="layout-sidebar__wrapper">
-                <Sidebar/>
+                <Sidebar />
             </div>
             <div className="layout-content__wrapper">
                 <main>

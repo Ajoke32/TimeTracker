@@ -1,17 +1,19 @@
-import { createSlice, current, PayloadAction } from "@reduxjs/toolkit"
+import {
+    CalendarEvent,
+    DateRangeType, FetchUsersPlansSuccessType, FetchUsersPlansType, SchedulerWorkPlan,
+    SetCalendarEventType,
+    SetWorkPlanType,
+    WorkPlan
+} from "@redux/types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CalendarSlice, FormattedCalendarArr, SortedCalendarArr } from "..";
+import { GetLocalCalendarEvent, GetLocalWorkPlan } from "../../utils/dateTimeHelpers";
 import {
     createErrorReducer,
     createPendingReducerWithPayload,
     createSuccessReducerWithPayload,
     defaultState
 } from "./generic";
-import {
-    CalendarEvent, WorkPlan,
-    SetWorkPlanType, SetCalendarEventType,
-    DateRangeType, FetchUsersPlansType, SchedulerWorkPlan
-} from "@redux/types";
-import { GetLocalCalendarEvent, GetLocalWorkPlan } from "../../utils";
 
 const initialState: CalendarSlice = {
     ...defaultState,
@@ -98,31 +100,50 @@ const calendarSlice = createSlice({
         ),
 
         fetchWorkPlans: createPendingReducerWithPayload<CalendarSlice, FetchUsersPlansType>(),
-        fetchWorkPlansSuccess: createSuccessReducerWithPayload<CalendarSlice, WorkPlan[]>(
-            (state: CalendarSlice, action: PayloadAction<WorkPlan[]>) => {
+        fetchWorkPlansSuccess: createSuccessReducerWithPayload<CalendarSlice, FetchUsersPlansSuccessType>(
+            (state: CalendarSlice, action: PayloadAction<FetchUsersPlansSuccessType>) => {
                 const sortedEvents: FormattedCalendarArr<SortedCalendarArr> = state.workPlans
 
-                action.payload.forEach((element) => {
-                    const local = GetLocalWorkPlan(element)
+                action.payload.userIds.forEach((userId) => {
+                    const userWorkPlans = action.payload.workPlans.filter((wp) => wp.userId === userId);
 
-                    const userEvents = sortedEvents[
-                        local.date.getMonth() == state.currentDate.getMonth()
-                            ? 'currentMonth'
-                            : local.date.getMonth() < state.currentDate.getMonth()
-                                ? 'previousMonth' : 'nextMonth'];
-
-                    const existingUser = userEvents.find((u) => u.userId === local.userId);
-
-                    if (existingUser) {
-                        if (!existingUser.workPlans.find(w => w.id == local.id))
-                            existingUser.workPlans.push(local)
+                    if (!userWorkPlans.length) {
+                        const currentWorkPlans = state.workPlans['currentMonth'];
+                        const userCurrentWorkPlans = currentWorkPlans.find(wp => wp.userId == userId)
+                        
+                        if (!userCurrentWorkPlans)
+                            currentWorkPlans.push({
+                                userId: userId,
+                                workPlans: [],
+                            });
                     }
-                    else {
-                        userEvents.push({
-                            userId: local.userId,
-                            workPlans: [local],
-                        })
-                    }
+                    else
+                        userWorkPlans.forEach((element) => {
+                            const local = GetLocalWorkPlan(element);
+
+                            const userEvents = state.workPlans[
+                                local.date.getMonth() === state.currentDate.getMonth()
+                                    ? 'currentMonth'
+                                    : local.date.getMonth() < state.currentDate.getMonth()
+                                        ? 'previousMonth'
+                                        : 'nextMonth'
+                            ];
+
+                            const existingUser = userEvents.find((u) => u.userId === local.userId);
+
+                            if (existingUser) {
+                                const existingWorkPlan = existingUser.workPlans.find((w) => w.id === local.id);
+
+                                if (!existingWorkPlan) {
+                                    existingUser.workPlans.push(local);
+                                }
+                            } else {
+                                userEvents.push({
+                                    userId: local.userId,
+                                    workPlans: [local],
+                                });
+                            }
+                        });
                 });
 
                 state.workPlans = sortedEvents;
@@ -196,9 +217,22 @@ const calendarSlice = createSlice({
                 state.workPlans = userEvents;
             }),
 
-        deleteCalendarEvent: createPendingReducerWithPayload<CalendarSlice, number>(),
-        deleteCalendarEventSuccess: createSuccessReducerWithPayload<CalendarSlice, number>(
-            (state: CalendarSlice, action: PayloadAction<number>) => {
+        deleteCalendarEvent: createPendingReducerWithPayload<CalendarSlice, CalendarEvent>(),
+        deleteCalendarEventSuccess: createSuccessReducerWithPayload<CalendarSlice, CalendarEvent>(
+            (state: CalendarSlice, action: PayloadAction<CalendarEvent>) => {
+                const local = GetLocalCalendarEvent(action.payload);
+                const { events, currentDate } = state;
+                const month =
+                    local.date.getMonth() === currentDate.getMonth()
+                        ? 'currentMonth'
+                        : local.date.getMonth() < currentDate.getMonth()
+                            ? 'previousMonth'
+                            : 'nextMonth';
+
+                state.events = {
+                    ...events,
+                    [month]: events[month].filter((w) => w.id !== local.id),
+                };
             }),
 
         deleteFail: createErrorReducer(),
@@ -218,6 +252,7 @@ export const {
     setCalendarEvent, setFail,
     resetUsersWorkPlans,
     deleteWorkPlan, deleteWorkPlanSuccess,
+    deleteCalendarEvent, deleteCalendarEventSuccess,
     deleteFail } = calendarSlice.actions;
 
 export const calendar = calendarSlice.reducer;
