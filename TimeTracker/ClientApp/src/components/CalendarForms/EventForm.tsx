@@ -4,7 +4,7 @@ import "./eventForms.css"
 import { CalendarCell, SetCalendarEventType } from '@redux/types';
 import { months } from '..';
 import { useAppDispatch } from '@hooks/customHooks';
-import { setCalendarEvent } from '@redux/slices';
+import {modalClose, setCalendarEvent} from '@redux/slices';
 import { GetFormattedDateString } from '../../utils';
 import { EventFormProps } from ".";
 
@@ -20,6 +20,9 @@ export const EventForm = ({ date, setIsOpen, event }: EventFormProps) => {
     const showDate = `${date.getDate()} ${months[date.getMonth()]}`;
     const dispatch = useAppDispatch()
 
+    function handle(){
+        dispatch(modalClose());
+    }
     const isHoliday = (date: Date): boolean => {
         return date.getDay() == 0 || date.getDay() == 6
     }

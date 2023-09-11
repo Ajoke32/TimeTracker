@@ -6,7 +6,8 @@ import { days } from '..';
 import { setPrevMonthDates, setCurrentMonthDates, setNextMonthDates, addMonth, substractMonth, GetOneMonthDateRange, GetThreeMonthDateRange } from '../../utils';
 import { CalendarType, CalendarCell, CalendarEvent } from '@redux/types';
 import { fetchCalendarEvents, fetchWorkPlans, setDate } from '@redux/slices';
-import { CalendarModal } from '../UI/Modals';
+import {CalendarModal} from "@components/UI/Modals/CalendarModal.tsx";
+
 
 interface CalendarProps {
     date?: Date,

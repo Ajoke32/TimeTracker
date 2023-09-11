@@ -7,13 +7,13 @@ import {
   VacationRequests, NotFound,
   EmailConfirm
 } from "..";
-import { useTypedSelector } from '@hooks/customHooks';
 import { Permission } from '@redux/enums';
 import { VacationsTable } from "@components/Tables";
 import Calendar from "../CalendarPage/Calendar";
-import VacationDetails from "@components/Cards/VacationDetails.tsx";
 import { Dashboard } from '../DashboardPage/Dashboard';
 import {HomeTwo} from "../HomeTwo.tsx";
+import { useTypedSelector } from '@hooks/customHooks';
+import {HomePageTest} from "../HomePageTest.tsx";
 
 
 
@@ -27,6 +27,7 @@ export const AppRoutes = () => {
         <>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomeTwo />} />
+            <Route path="/home" element={<HomePageTest />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path='/dashboard' element={<Dashboard />}/>
             <Route path="/team" element={<Outlet />}>

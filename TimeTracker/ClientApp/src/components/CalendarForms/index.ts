@@ -1,6 +1,6 @@
 import { WorkPlan, CalendarEvent, SchedulerWorkPlan } from '@redux/types'
 
-export * from './EventForm'
+
 export * from './DayPlanForm'
 
 

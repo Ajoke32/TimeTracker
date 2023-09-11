@@ -8,10 +8,6 @@ import Progress from "@components/Home/Progress.tsx";
 import Plans from "@components/Home/Plans.tsx";
 import VacationsList from "@components/Home/VacationsList.tsx";
 import WorkedHoursList from "@components/Home/WorkedHoursList.tsx";
-import {AjaxQuery} from "@redux/queries";
-import {ajax} from "rxjs/ajax";
-import {map, mergeMap} from "rxjs";
-import {ofType} from "redux-observable";
 
 
 
