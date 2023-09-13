@@ -1,4 +1,6 @@
+export * from './DayPlanForm'
 import { CalendarEvent, SchedulerWorkPlan } from '@redux/types'
+
 
 export interface EventFormProps {
     date: Date,

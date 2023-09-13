@@ -3,11 +3,11 @@ import { Dropdown } from "@components/UI/Dropdowns/Dropdown";
 import { TextInput } from "@components/UI/Inputs/TextInput";
 import { useAppDispatch } from '@hooks/customHooks';
 import { EventType } from '@redux/enums';
-import { deleteCalendarEvent, setCalendarEvent } from '@redux/slices';
+import {deleteCalendarEvent, modalClose, setCalendarEvent} from '@redux/slices';
 import { CalendarEvent, SetCalendarEventType } from '@redux/types';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from "react-hook-form";
-import { GetFormattedDateString } from '../../utils/dateTimeHelpers';
+import { GetFormattedDateString } from '@utils/dateTimeHelpers.ts';
 import { months } from '../constants';
 import "./eventForms.css";
 import { EventFormProps } from "./props";
@@ -36,6 +36,9 @@ export const EventForm = ({ date, setIsOpen, event }: EventFormProps) => {
     const [timeInputs, setTimeInputs] = useState<TimeInputs>(defaultValues);
     const showDate = `${date.getDate()} ${months[date.getMonth()]}`;
 
+    function handle(){
+        dispatch(modalClose());
+    }
     const isHoliday = (date: Date): boolean => {
         return date.getDay() == 0 || date.getDay() == 6
     }

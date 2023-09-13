@@ -1,4 +1,5 @@
-﻿import { CalendarEvent, SchedulerWorkPlan } from '@redux/types'
+import { CalendarEvent, SchedulerWorkPlan } from '@redux/types'
+
 
 export interface CalendarModalProps {
     isHidden: Date | null,

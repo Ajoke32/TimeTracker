@@ -2,6 +2,7 @@ import { AjaxQuery } from './query';
 import { User } from '../intrerfaces';
 import { UserAddType, FetchUsersType } from '../types'
 import { ReadCookie } from '../../utils';
+import {user} from "@redux/slices";
 
 export function UserLoginQuery(userData: { email: string, password: string }) {
   return AjaxQuery<{ userQuery: { login: string } }>(
@@ -140,12 +141,17 @@ export function EmailConfirmQuery(token: string) {
   )
 }
 
-export function FetchUsersCountQuery(){
-    return AjaxQuery<{ userQuery: { getUsersCount: number } }>(
-        `query{
-          userQuery{
-            getUsersCount
-          }
-       }`,
+export function RefreshTokenQuery(userId:number){
+    return AjaxQuery<{userQuery:{refreshToken:string}}>(
+        `
+            query RefreshToken($userId:Int){
+              userQuery{
+                refreshToken(userId:$userId)
+              }
+            }
+        `,
+        {
+            userId:userId
+        }
     )
 }

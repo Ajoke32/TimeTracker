@@ -3,6 +3,8 @@ import { AuthSliceState, } from '../intrerfaces';
 import { UserLoginType } from "../types";
 import { DeleteCookie, GetUserFromToken, IsUserAuthenticated, SetCookie } from "../../utils";
 import {
+    createErrorReducer,
+    createPendingReducer,
     createPendingReducerWithPayload,
     createSuccessReducerWithPayload,
     defaultState
@@ -39,8 +41,22 @@ const authSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
+
+        refreshToken:createPendingReducerWithPayload<typeof initialState,number>(),
+        refreshTokenFail:createErrorReducer(),
+        refreshTokenSuccess:createSuccessReducerWithPayload<typeof initialState,string>
+        ((state,action)=>{
+           SetCookie('user',action.payload);
+           state.user=GetUserFromToken();
+            if (IsUserAuthenticated()) {
+                state.status = true;
+            }
+        })
     },
 });
 
+
+export const { login, logout, loginFail
+    , loginSuccess,refreshTokenSuccess,refreshTokenFail,refreshToken } = authSlice.actions;
+
 export const auth = authSlice.reducer;
-export const { login, logout, loginFail, loginSuccess } = authSlice.actions;

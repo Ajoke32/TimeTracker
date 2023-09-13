@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { TabSwitcher } from '../Misc/TabSwitcher';
 import { CalendarModalProps } from "./props";
 
+
 export const CalendarModal = ({ isHidden, setIsHidden, event }: CalendarModalProps) => {
     const [tab, setTab] = useState<boolean>(true)
 
