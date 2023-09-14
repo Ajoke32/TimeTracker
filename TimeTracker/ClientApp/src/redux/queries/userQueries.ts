@@ -3,6 +3,7 @@ import { User } from '../intrerfaces';
 import { UserAddType, FetchUsersType } from '../types'
 import { ReadCookie } from '../../utils';
 import {user} from "@redux/slices";
+import {CodeVerifyInput, CreatePasswordInput} from "@redux/types/passwordVerifyTypes.ts";
 
 export function UserLoginQuery(userData: { email: string, password: string }) {
   return AjaxQuery<{ userQuery: { login: string } }>(
@@ -153,5 +154,44 @@ export function RefreshTokenQuery(userId:number){
         {
             userId:userId
         }
+    )
+}
+
+export function ResetPasswordQuery(email:string){
+    return AjaxQuery<{passwordRecoveryQuery:{passwordRecovery:number}}>(
+        `
+            query PasswordRecovery($email:String!){
+              passwordRecoveryQuery{
+                passwordRecovery(email:$email)
+              }
+            }
+        `,
+        {email:email}
+    )
+}
+
+export function CodeVerifyQuery({code,userId}:CodeVerifyInput){
+    return AjaxQuery<{passwordRecoveryQuery:{verifyCode:boolean}}>(
+        `
+            query PasswordRecovery($code:String!,$userId:Int!){
+              passwordRecoveryQuery{
+                verifyCode(code:$code,userId:$userId)
+              }
+            }
+        `,
+        {code:code,userId:userId}
+    )
+}
+
+export function CreatePasswordQuery({password,userId}:CreatePasswordInput){
+    return AjaxQuery<{passwordRecoveryQuery:{createNewPassword:string}}>(
+        `
+            query CreatePassword($pass:String!,$userId:Int!){
+              passwordRecoveryQuery{
+                createNewPassword(password:$pass,userId:$userId)
+              }
+            }
+        `,
+        {pass:password,userId:userId}
     )
 }

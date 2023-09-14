@@ -18,6 +18,9 @@ export interface DefaultState {
 export interface AuthSliceState extends DefaultState {
     user: User | null,
     status: boolean,
+    isEmailConfirmationDelivered:boolean,
+    userId:number|null,
+    isCodeMatch:boolean
 }
 
 export interface UserSliceState extends DefaultState {

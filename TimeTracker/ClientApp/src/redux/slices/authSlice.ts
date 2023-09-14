@@ -9,11 +9,15 @@ import {
     createSuccessReducerWithPayload,
     defaultState
 } from "./generic";
+import {CodeVerifyInput, CreatePasswordInput} from "@redux/types/passwordVerifyTypes.ts";
 
 const initialState: AuthSliceState = {
     ...defaultState,
     user: GetUserFromToken(),
     status: IsUserAuthenticated(),
+    isEmailConfirmationDelivered:false,
+    userId:null,
+    isCodeMatch:false
 };
 
 const authSlice = createSlice({
@@ -51,12 +55,45 @@ const authSlice = createSlice({
             if (IsUserAuthenticated()) {
                 state.status = true;
             }
-        })
+        }),
+
+        resetPassword:createPendingReducerWithPayload<typeof  initialState,string>
+        ((state,action)=>{
+            state.userId=null;
+            state.isEmailConfirmationDelivered=false;
+        }),
+        resetPasswordSuccess:createSuccessReducerWithPayload<typeof initialState,number>
+        ((state,action)=>{
+            state.isEmailConfirmationDelivered=true;
+            state.userId=action.payload;
+        }),
+        resetPasswordFail:createErrorReducer(),
+
+        codeVerify:createPendingReducerWithPayload<typeof initialState,CodeVerifyInput>
+        ((state,action)=>{
+            state.isCodeMatch=false;
+        }),
+        codeVerifySuccess:createSuccessReducerWithPayload<typeof initialState,boolean>
+        ((state,action)=>{
+            state.isCodeMatch=action.payload;
+            state.error=!action.payload?"code does not match":"";
+        }),
+        codeVerifyFail:createErrorReducer(),
+
+        createPassword:createPendingReducerWithPayload<typeof initialState,CreatePasswordInput>(),
+        createPasswordSuccess:createSuccessReducerWithPayload<typeof initialState,string>
+        ((state,action)=>{
+            state.message=action.payload;
+        }),
+        createPasswordFail:createErrorReducer()
     },
 });
 
 
 export const { login, logout, loginFail
-    , loginSuccess,refreshTokenSuccess,refreshTokenFail,refreshToken } = authSlice.actions;
+    , loginSuccess,refreshTokenSuccess,refreshTokenFail
+    ,refreshToken,resetPassword,resetPasswordSuccess
+    ,resetPasswordFail,codeVerify,codeVerifySuccess
+    ,codeVerifyFail,createPasswordFail,createPasswordSuccess,createPassword } = authSlice.actions;
 
 export const auth = authSlice.reducer;
