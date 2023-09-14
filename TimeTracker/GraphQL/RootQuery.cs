@@ -8,31 +8,28 @@ public sealed class RootQuery:ObjectGraphType
     public RootQuery()
     {
         
-        Field<UserQuery>()
-            .Name("userQuery")
+        Field<UserQuery>("userQuery")
             .Resolve(_ => new { });
         
-        Field<ApproverVacationQuery>()
-            .Name("approverVacationQuery")
+        Field<ApproverVacationQuery>("approverVacationQuery")
             .Resolve(_ => new { });
         
-        Field<VacationsQuery>()
-            .Name("vacationQuery")
+        Field<VacationsQuery>("vacationQuery")
             .Resolve(_ => new { });
         
-        Field<WorkedHourQuery>()
-            .Name("workedHourQuery")
+        Field<WorkedHourQuery>("workedHourQuery")
             .Resolve(_ => new { });
             
-        Field<WorkPlanQuery>()
-            .Name("workPlanQuery")
+        Field<WorkPlanQuery>("workPlanQuery")
             .Resolve(_ => new { });
             
-        Field<CalendarEventQuery>()
-            .Name("calendarEventQuery")
+        Field<CalendarEventQuery>("calendarEventQuery")
             .Resolve(_ => new { });
 
         Field<SickLeaveQuery>("sickLeavesQuery")
+            .Resolve(_ => new { });
+
+        Field<PasswordRecoveryQuery>("passwordRecoveryQuery")
             .Resolve(_ => new { });
     }
 }

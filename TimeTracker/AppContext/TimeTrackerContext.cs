@@ -30,6 +30,8 @@ public class TimeTrackerContext:DbContext
     public DbSet<CalendarEvent> CalendarEvents { get; set; }
     
     public DbSet<QuartzLog> QuartzLogs { get; set; }
+    
+    public DbSet<PasswordVerify> PasswordRecoveries { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
