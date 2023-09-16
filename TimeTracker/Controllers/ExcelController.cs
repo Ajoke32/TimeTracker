@@ -45,7 +45,7 @@ public class ExcelController:Controller
             var actuallyWorked = _hoursHelpers.GetActuallyWorkedHoursInCurrentMonth(user);
             worksheet.Cell(currentRow, 4).Value = $"{needToWork} h";
             worksheet.Cell(currentRow, 4).Value = $"{needToWork} h";
-            worksheet.Cell(currentRow, 5).Value = $"{actuallyWorked.ToString()} h";
+            worksheet.Cell(currentRow, 5).Value = $"{actuallyWorked.TotalHours:F2} h";
             worksheet.Cell(currentRow, 6).Value = $"{(actuallyWorked.TotalHours * 100 / needToWork):F2}%";
             
             worksheet.Cell(currentRow, 1).WorksheetColumn().Width = 30;

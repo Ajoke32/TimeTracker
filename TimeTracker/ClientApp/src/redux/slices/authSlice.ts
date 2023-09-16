@@ -85,7 +85,11 @@ const authSlice = createSlice({
         ((state,action)=>{
             state.message=action.payload;
         }),
-        createPasswordFail:createErrorReducer()
+        createPasswordFail:createErrorReducer(),
+
+        googleAuth:createPendingReducer(),
+        googleAuthSuccess:createSuccessReducerWithPayload<typeof initialState,string>(),
+        googleAuthFail:createErrorReducer()
     },
 });
 
@@ -94,6 +98,7 @@ export const { login, logout, loginFail
     , loginSuccess,refreshTokenSuccess,refreshTokenFail
     ,refreshToken,resetPassword,resetPasswordSuccess
     ,resetPasswordFail,codeVerify,codeVerifySuccess
-    ,codeVerifyFail,createPasswordFail,createPasswordSuccess,createPassword } = authSlice.actions;
+    ,codeVerifyFail,createPasswordFail,createPasswordSuccess
+    ,createPassword,googleAuth,googleAuthSuccess,googleAuthFail } = authSlice.actions;
 
 export const auth = authSlice.reducer;

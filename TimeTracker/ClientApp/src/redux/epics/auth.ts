@@ -14,6 +14,8 @@ import {
 } from '../slices';
 import { GetErrorMessage } from "../../utils";
 import {CodeVerifyInput, CreatePasswordInput} from "@redux/types/passwordVerifyTypes.ts";
+import {ajax} from "rxjs/ajax";
+
 
 export const userLoginEpic: Epic = (action: Observable<PayloadAction<UserLoginType>>, state) =>
     action.pipe(
@@ -111,5 +113,29 @@ export const createPasswordEpic:Epic = (action$:Observable<PayloadAction<CreateP
                         return of(createPasswordFail("Unexpected error"));
                     })
                 )
+        )
+    )
+
+const clientId = "719631149139-2puo0bcbfep0lmo7cspt1r050b4n94o8.apps.googleusercontent.com";
+const redirectUrl = "https://localhost:5166/google-auth";
+
+export const googleAuthEpic:Epic = (action:Observable<PayloadAction<string>>,state)=>
+    action.pipe(
+        ofType("auth/googleAuth"),
+        mergeMap(action=>
+         ajax.get(`https://accounts.google.com/o/oauth2/v2/auth?
+                       scope=https%3A//www.googleapis.com/auth/drive.metadata.readonly&
+                       response_type=code&
+                       redirect_uri=${redirectUrl}&
+                       client_id=${clientId}`)
+             .pipe(
+                 map(res=>{
+                     console.log(res);
+                 }),
+                 catchError((e:Error)=>{
+                     console.log(e);
+                     return of();
+                 })
+             )
         )
     )

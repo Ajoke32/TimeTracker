@@ -20,6 +20,7 @@ import { Dashboard } from '../DashboardPage/Dashboard';
 import { HomeTwo } from "../HomeTwo.tsx";
 import React from "react";
 import PasswordRecovery from "@pages/PasswordRecoveryPage/PasswordRecovery.tsx";
+import GoogleAuthPage from "@pages/GoogleAuthPage.tsx";
 
 
 
@@ -67,6 +68,7 @@ export const AppRoutes = () => {
       ) : (
         <>
           <Route path="/userVerify" element={<UserVerify />} />
+          <Route path="/google-auth" element={<GoogleAuthPage />} />
           <Route path="/emailConfirm" element={<EmailConfirm />} />
           <Route path="/passwordRecovery" element={<PasswordRecovery />} />
           <Route path="/login" element={<Login />} />

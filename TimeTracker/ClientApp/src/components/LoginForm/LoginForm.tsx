@@ -5,7 +5,7 @@ import { Loader } from '@components/UI/Loaders/Loader';
 import { InputTooltip } from '@components/UI/Tooltips/InputTooltip';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAppDispatch, useTypedSelector } from "../../hooks";
-import { login } from "../../redux";
+import {googleAuth, login} from "../../redux";
 import { H1, H5 } from "../Headings";
 import "./LoginForm.css";
 
@@ -30,6 +30,11 @@ export const LoginForm = () => {
     const onSubmit: SubmitHandler<Inputs> = (data) => {
         dispatch(login(data));
         reset();
+    }
+    const clientId = "719631149139-2puo0bcbfep0lmo7cspt1r050b4n94o8.apps.googleusercontent.com";
+    const redirectUrl = "http://localhost:5166/google-auth";
+    function googleLoginHandle(){
+        window.location.href=window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/drive.metadata.readonly&response_type=code&redirect_uri=${redirectUrl}&client_id=${clientId}`;
     }
 
     return (
@@ -58,6 +63,9 @@ export const LoginForm = () => {
 
                 <div className='submit-wrapper'>
                     <LargeButton type="submit" value="Login" />
+                </div>
+                <div className='submit-wrapper'>
+                   <button type="button" onClick={googleLoginHandle}>Google login</button>
                 </div>
             </form>
 
