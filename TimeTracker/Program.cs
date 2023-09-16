@@ -87,10 +87,13 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddDataProtection();
 
-/*builder.Services.AddQuartz(q =>
+/*
+builder.Services.AddQuartz(q =>
 {
     q.UseMicrosoftDependencyInjectionJobFactory();
+    
     var accuralOfHoursJobKey = new JobKey("auto");
+    
     q.AddJob<AccuralOfHours>(o=>o.WithIdentity(accuralOfHoursJobKey));
     q.AddTrigger(o =>
     {
@@ -98,7 +101,18 @@ builder.Services.AddDataProtection();
             .WithIdentity("auth-trigger")
             .WithCronSchedule("0 0 0 ? * MON,FRI *");
     });
+
+    var checkWorkedHoursJobKey = new JobKey("workedHours");
+
+    q.AddJob<CheckWorkedHoursPerMonth>(o => o.WithIdentity(checkWorkedHoursJobKey));
     
+    q.AddTrigger(o =>
+    {
+        o.ForJob(checkWorkedHoursJobKey)
+            .WithIdentity("trigger")
+            .WithCronSchedule("0 0 08 L * ?");
+    });
+
 });
 
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);*/
@@ -127,6 +141,7 @@ builder.Services.AddScoped<IRepositoryFactory, RepositoryFactory>();
 
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<EmailTokenService>();
+builder.Services.AddScoped<EmailMessageBuilder>();
 builder.Services.AddScoped<IGraphQlArgumentVisitor, GraphQlArgumentsVisitor>();
 
 builder.Services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();

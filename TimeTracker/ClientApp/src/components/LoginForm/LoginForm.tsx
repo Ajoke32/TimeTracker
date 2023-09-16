@@ -48,7 +48,7 @@ export const LoginForm = () => {
                     <div className="password-input__wrapper">
                         <PasswordInput name="password" placeholder="Password" register={register("password", { required: "Password can't be empty!" })} errors={errors.password} />
 
-                        <InputTooltip description="Forgot your password?" url="/" urlTitle="Click here" />
+                        <InputTooltip description="Forgot your password?" url="/passwordRecovery" urlTitle="Click here" />
                     </div>
                 </div>
 

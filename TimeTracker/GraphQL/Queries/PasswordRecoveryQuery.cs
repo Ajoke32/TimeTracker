@@ -9,8 +9,10 @@ namespace TimeTracker.GraphQL.Queries;
 
 public sealed class PasswordRecoveryQuery:ObjectGraphType
 {
+    private IUnitOfWorkRepository _uow;
     public PasswordRecoveryQuery(IUnitOfWorkRepository uow)
     {
+        _uow = uow;
         Field<int>("passwordRecovery")
             .Argument<string>("email")
             .ResolveAsync(async context =>
@@ -26,15 +28,7 @@ public sealed class PasswordRecoveryQuery:ObjectGraphType
                 
                 var code = Guid.NewGuid();
 
-                var encrypted = BCrypt.Net.BCrypt.HashPassword(code.ToString());
-
-                await uow.GenericRepository<PasswordVerify>().CreateAsync(new PasswordVerify()
-                {
-                    Code = encrypted,
-                    RequestDate = DateTime.Now,
-                    UserId = user.Id,
-                    User = user
-                });
+                await CreatePasswordRecoveryRequestAsync(code.ToString(), user);
                 
                 emailService.SendEmail(email,$"<div>{code}</div>","Password recovery");
 
@@ -53,6 +47,12 @@ public sealed class PasswordRecoveryQuery:ObjectGraphType
                 var verify = await uow.GenericRepository<PasswordVerify>()
                     .FindAsync(u => u.UserId == email) ?? throw new ArgumentException("user not found");
 
+                if ((DateTime.Now-verify.RequestDate).TotalSeconds > 300)
+                {
+                    throw new ArgumentException("Code expired");
+                }
+                
+                
                 var code = context.GetArgument<string>("code");
                 
                 var isRecovered = BCrypt.Net.BCrypt.Verify(code, verify.Code);
@@ -95,5 +95,34 @@ public sealed class PasswordRecoveryQuery:ObjectGraphType
                 
                 return "Password reset successfully";
             });
+    }
+    
+    private async Task CreatePasswordRecoveryRequestAsync(string code,User user)
+    {
+        var encrypted = BCrypt.Net.BCrypt.HashPassword(code);
+
+        var passwordVerify = await _uow.GenericRepository<PasswordVerify>()
+            .FindAsync(pw => pw.UserId == user.Id);
+
+        if (passwordVerify != null)
+        {
+            passwordVerify.Code = encrypted;
+            passwordVerify.IsRecovered = false;
+            passwordVerify.RequestDate=DateTime.Now;
+            
+            await _uow.GenericRepository<PasswordVerify>()
+                .UpdateAsync(passwordVerify);
+            
+            return;
+        }
+        
+        await _uow.GenericRepository<PasswordVerify>().CreateAsync(new PasswordVerify()
+        {
+            Code = encrypted,
+            RequestDate = DateTime.Now,
+            UserId = user.Id,
+            User = user
+        });
+        
     }
 }

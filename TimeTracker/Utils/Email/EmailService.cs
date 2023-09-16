@@ -12,38 +12,25 @@ namespace TimeTracker.Utils.Email;
 public class EmailService
 {
     private readonly EmailTokenService _tokenService;
+    
     private readonly IUnitOfWorkRepository _uow;
     
-    public EmailService(EmailTokenService tokenService, IUnitOfWorkRepository uow)
+    private readonly EmailMessageBuilder _emailMessageBuilder;
+    public EmailService(EmailTokenService tokenService, IUnitOfWorkRepository uow,EmailMessageBuilder emailMessageBuilder)
     {
         _tokenService = tokenService;
         _uow = uow;
+        _emailMessageBuilder = emailMessageBuilder;
     }
   
     public void SendEmail(string to,string body,string subject)
     {
-        var smtpClient = new SmtpClient
-        {
-            Host = "smtp.gmail.com",
-            Port = 587,
-            DeliveryMethod = SmtpDeliveryMethod.Network,
-            UseDefaultCredentials = false,
-            EnableSsl = true,
-            Credentials = new NetworkCredential("time.tackerproj@gmail.com","qyeskibiiegkgili")
-        };
-        
-        var mailMessage = new MailMessage
-        {
-            From = new MailAddress("time.tackerproj@gmail.com"),
-            Subject = subject,
-            Body = body,
-            IsBodyHtml = true,
-        };
-        
-        mailMessage.To.Add(to);
-        
-        smtpClient.SendAsync(mailMessage,null);
+        _emailMessageBuilder
+            .BuildEmailMessage(subject,body)
+            .AddReceiver(to)
+            .SendEmailMessage(isAsync:true);
     }
+    
 
     public async Task SendAccountRegistrationAsync(int userId, string userEmail)
     {
