@@ -19,10 +19,15 @@ const PasswordRecovery = () => {
 
     const [value,setFormValue] = useState<string>("");
 
+    const [matchValue,setMatchValue] = useState<string>("");
+
     const [step,setStep] = useState<number>(0);
+
+    const [isPasswordCreated,setIsPasswordCreated] = useState<boolean>();
 
     const dispatchFunctions = [handlePasswordRecovery,handleCodeVerify,handlePasswordCreate];
 
+    const [matchError,setMatchError] = useState<string>("");
 
     useEffect(() => {
         if(isEmailConfirmationDelivered){
@@ -49,9 +54,14 @@ const PasswordRecovery = () => {
     }
 
     function handlePasswordCreate(){
+        if(value!==matchValue){
+            setMatchError("password doesn't match");
+            return;
+        }
         if(userId!==null){
             dispatch(createPassword({userId:userId,password:value}));
             setFormValue("");
+            setIsPasswordCreated(true);
         }
     }
 
@@ -63,9 +73,12 @@ const PasswordRecovery = () => {
                 {error!==null||message!==null
                     &&<h1 style={{textAlign:"center",color:`${error?'red':"#a2d2ff"}`}}>{error} {message}</h1>}
                 {loading&&<h1 style={{textAlign:"center"}}>{loadingMessages[step]}</h1>}
-               <StepForm isLastStep={step===2} placeHolder={formPlaceHolders[step]} setValue={setFormValue}
-                         value={value}
-                         dispatchFunction={dispatchFunctions[step]} />
+                {isPasswordCreated?<div>
+                        <a href="/login">to login page</a>
+                    </div>:
+                    <StepForm error={matchError} setMatchInputValue={setMatchValue} isLastStep={step===2} placeHolder={formPlaceHolders[step]} setValue={setFormValue}
+                              value={value}
+                              dispatchFunction={dispatchFunctions[step]} />}
             </div>
         </div>
     );
