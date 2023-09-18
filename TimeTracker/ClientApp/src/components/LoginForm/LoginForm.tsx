@@ -31,10 +31,9 @@ export const LoginForm = () => {
         dispatch(login(data));
         reset();
     }
-    const clientId = "719631149139-2puo0bcbfep0lmo7cspt1r050b4n94o8.apps.googleusercontent.com";
-    const redirectUrl = "http://localhost:5166/google-auth";
+
     function googleLoginHandle(){
-        window.location.href=window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/drive.metadata.readonly&response_type=code&redirect_uri=${redirectUrl}&client_id=${clientId}`;
+       window.location.href="/to-google-auth";
     }
 
     return (

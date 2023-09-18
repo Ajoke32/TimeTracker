@@ -1,9 +1,9 @@
 import { combineEpics, Epic } from "redux-observable";
 import { catchError } from "rxjs";
 import {
+    authorizeWithGoogleEpic,
     codeVerifyEpic,
     createPasswordEpic,
-    googleAuthEpic,
     refreshTokenEpic,
     resetPasswordEpic,
     userLoginEpic
@@ -31,7 +31,7 @@ export const rootEpic: Epic = (action$, store$, dependencies) =>
         resetPasswordEpic,
         codeVerifyEpic,
         createPasswordEpic,
-        googleAuthEpic,
+        authorizeWithGoogleEpic,
         ...userEpics,
         ...usersEpics,
         ...workedHourEpics,

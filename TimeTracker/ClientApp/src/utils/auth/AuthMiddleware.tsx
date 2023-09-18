@@ -1,5 +1,5 @@
 import React from 'react';
-import {IsUserAuthenticated} from "@utils/authProvider.ts";
+import {GetUserFromToken, IsUserAuthenticated} from "@utils/authProvider.ts";
 import {useAppDispatch, useTypedSelector} from "@hooks/customHooks.ts";
 import {refreshToken} from "@redux/slices";
 
@@ -11,10 +11,11 @@ const AuthMiddleware:React.FC<IAuthMiddleware> = ({children}) => {
 
     const dispatch = useAppDispatch();
 
-    const {user} = useTypedSelector(s=>s.auth);
+    const cookieUser = GetUserFromToken();
 
-    if(!IsUserAuthenticated()&&user!==null){
-       dispatch(refreshToken(user.id));
+
+    if(!IsUserAuthenticated()&&cookieUser!==null){
+       dispatch(refreshToken(cookieUser.id));
     }
 
     return (

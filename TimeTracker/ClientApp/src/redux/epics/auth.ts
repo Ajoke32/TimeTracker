@@ -4,7 +4,11 @@ import {catchError, map, mergeMap, Observable, of} from "rxjs";
 import {CodeVerifyQuery, CreatePasswordQuery, RefreshTokenQuery, ResetPasswordQuery, UserLoginQuery} from "../queries";
 import { UserLoginType } from "../types";
 import {
-    codeVerifyFail, codeVerifySuccess, createPasswordFail, createPasswordSuccess,
+    authorizeWithGoogleFail, authorizeWithGoogleSuccess,
+    codeVerifyFail,
+    codeVerifySuccess,
+    createPasswordFail,
+    createPasswordSuccess,
     loginFail,
     loginSuccess,
     refreshTokenFail,
@@ -15,6 +19,7 @@ import {
 import { GetErrorMessage } from "../../utils";
 import {CodeVerifyInput, CreatePasswordInput} from "@redux/types/passwordVerifyTypes.ts";
 import {ajax} from "rxjs/ajax";
+import {AuthorizeWithGoogleQuery} from "@redux/queries/googleAuthQueries.ts";
 
 
 export const userLoginEpic: Epic = (action: Observable<PayloadAction<UserLoginType>>, state) =>
@@ -116,26 +121,24 @@ export const createPasswordEpic:Epic = (action$:Observable<PayloadAction<CreateP
         )
     )
 
-const clientId = "719631149139-2puo0bcbfep0lmo7cspt1r050b4n94o8.apps.googleusercontent.com";
-const redirectUrl = "https://localhost:5166/google-auth";
 
-export const googleAuthEpic:Epic = (action:Observable<PayloadAction<string>>,state)=>
-    action.pipe(
-        ofType("auth/googleAuth"),
+
+
+
+export const authorizeWithGoogleEpic:Epic = (action$:Observable<PayloadAction<string>>,state$)=>
+    action$.pipe(
+        ofType("auth/authorizeWithGoogle"),
         mergeMap(action=>
-         ajax.get(`https://accounts.google.com/o/oauth2/v2/auth?
-                       scope=https%3A//www.googleapis.com/auth/drive.metadata.readonly&
-                       response_type=code&
-                       redirect_uri=${redirectUrl}&
-                       client_id=${clientId}`)
-             .pipe(
-                 map(res=>{
-                     console.log(res);
-                 }),
-                 catchError((e:Error)=>{
-                     console.log(e);
-                     return of();
-                 })
-             )
+            AuthorizeWithGoogleQuery(action.payload)
+                .pipe(
+                    map(res=>{
+
+                        return authorizeWithGoogleSuccess(res.response.data.userQuery.googleAuth);
+                    }),
+                    catchError((e:Error)=>{
+                        console.log(e);
+                        return of(authorizeWithGoogleFail(e.message));
+                    })
+                )
         )
     )
