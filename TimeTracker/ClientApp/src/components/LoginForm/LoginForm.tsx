@@ -32,10 +32,6 @@ export const LoginForm = () => {
         reset();
     }
 
-    function googleLoginHandle(){
-       window.location.href="/to-google-auth";
-    }
-
     return (
         <div className="login-form__wrapper">
 
@@ -53,6 +49,7 @@ export const LoginForm = () => {
                         <PasswordInput name="password" placeholder="Password" register={register("password", { required: "Password can't be empty!" })} errors={errors.password} />
 
                         <InputTooltip description="Forgot your password?" url="/passwordRecovery" urlTitle="Click here" />
+                        <span> Or<a className="tooltip-link" href="/to-google-auth">sign in with Google</a></span>
                     </div>
                 </div>
 
@@ -63,9 +60,7 @@ export const LoginForm = () => {
                 <div className='submit-wrapper'>
                     <LargeButton type="submit" value="Login" />
                 </div>
-                <div className='submit-wrapper'>
-                   <button type="button" onClick={googleLoginHandle}>Google login</button>
-                </div>
+
             </form>
 
         </div>
