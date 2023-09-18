@@ -5,7 +5,7 @@ import { Loader } from '@components/UI/Loaders/Loader';
 import { InputTooltip } from '@components/UI/Tooltips/InputTooltip';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAppDispatch, useTypedSelector } from "../../hooks";
-import { login } from "../../redux";
+import { login} from "../../redux";
 import { H1, H5 } from "../Headings";
 import "./LoginForm.css";
 
@@ -49,6 +49,7 @@ export const LoginForm = () => {
                         <PasswordInput name="password" placeholder="Password" register={register("password", { required: "Password can't be empty!" })} errors={errors.password} />
 
                         <InputTooltip description="Forgot your password?" url="/passwordRecovery" urlTitle="Click here" />
+                        <span> Or<a className="tooltip-link" href="/to-google-auth">sign in with Google</a></span>
                     </div>
                 </div>
 
@@ -59,6 +60,7 @@ export const LoginForm = () => {
                 <div className='submit-wrapper'>
                     <LargeButton type="submit" value="Login" />
                 </div>
+
             </form>
 
         </div>

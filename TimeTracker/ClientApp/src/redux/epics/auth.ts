@@ -4,7 +4,11 @@ import {catchError, map, mergeMap, Observable, of} from "rxjs";
 import {CodeVerifyQuery, CreatePasswordQuery, RefreshTokenQuery, ResetPasswordQuery, UserLoginQuery} from "../queries";
 import { UserLoginType } from "../types";
 import {
-    codeVerifyFail, codeVerifySuccess, createPasswordFail, createPasswordSuccess,
+    authorizeWithGoogleFail, authorizeWithGoogleSuccess,
+    codeVerifyFail,
+    codeVerifySuccess,
+    createPasswordFail,
+    createPasswordSuccess,
     loginFail,
     loginSuccess,
     refreshTokenFail,
@@ -14,6 +18,9 @@ import {
 } from '../slices';
 import { GetErrorMessage } from "../../utils";
 import {CodeVerifyInput, CreatePasswordInput} from "@redux/types/passwordVerifyTypes.ts";
+import {ajax} from "rxjs/ajax";
+import {AuthorizeWithGoogleQuery} from "@redux/queries/googleAuthQueries.ts";
+
 
 export const userLoginEpic: Epic = (action: Observable<PayloadAction<UserLoginType>>, state) =>
     action.pipe(
@@ -109,6 +116,28 @@ export const createPasswordEpic:Epic = (action$:Observable<PayloadAction<CreateP
                     }),
                     catchError((e:Error)=>{
                         return of(createPasswordFail("Unexpected error"));
+                    })
+                )
+        )
+    )
+
+
+
+
+
+export const authorizeWithGoogleEpic:Epic = (action$:Observable<PayloadAction<string>>,state$)=>
+    action$.pipe(
+        ofType("auth/authorizeWithGoogle"),
+        mergeMap(action=>
+            AuthorizeWithGoogleQuery(action.payload)
+                .pipe(
+                    map(res=>{
+
+                        return authorizeWithGoogleSuccess(res.response.data.userQuery.googleAuth);
+                    }),
+                    catchError((e:Error)=>{
+                        console.log(e);
+                        return of(authorizeWithGoogleFail(e.message));
                     })
                 )
         )

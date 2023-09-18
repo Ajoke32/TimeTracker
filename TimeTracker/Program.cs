@@ -51,6 +51,11 @@ builder.Services.AddAuthentication(conf =>
         RequireExpirationTime = true,
         RequireSignedTokens = false
     };
+}).AddGoogle(go =>
+{
+    var configuration = builder.Configuration;
+    go.ClientId = configuration["Authentication:Google:ClientId"]!;
+    go.ClientSecret = configuration["Authentication:Google:ClientSecret"]!;
 });
 
 builder.Services.AddSingleton<IAuthorizationHandler, PermissionHandler>();

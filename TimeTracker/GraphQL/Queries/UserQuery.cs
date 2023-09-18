@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Nodes;
 using AutoMapper;
+using DocumentFormat.OpenXml.InkML;
 using GraphQL;
 using GraphQL.Execution;
 using GraphQL.Types;
@@ -26,10 +28,18 @@ public sealed class UserQuery : ObjectGraphType
 {
 
     private readonly IUnitOfWorkRepository _uow;
-    public UserQuery(IUnitOfWorkRepository uow,IGraphQlArgumentVisitor visitor)
+
+    private readonly HttpClient _httpClient;
+
+    private readonly IConfiguration _configuration;
+    
+    public UserQuery(IUnitOfWorkRepository uow,
+        IGraphQlArgumentVisitor visitor,IConfiguration configuration)
     {
         _uow = uow;
-
+        _httpClient = new HttpClient();
+        _configuration = configuration;
+        
         Field<ListGraphType<UserType>>("users")
             .Argument<string>("include", nullable: true, configure: c => c.DefaultValue = "")
             .ResolveAsync(async ctx =>
@@ -144,6 +154,36 @@ public sealed class UserQuery : ObjectGraphType
                     .GetAsync(u => ids.Contains(u.Id));
             });
         
+
+        Field<string>("googleAuth")
+            .Argument<string>("email")
+            .ResolveAsync(async context =>
+            {
+                var email = context.GetArgument<string>("email");
+               
+                var user = await uow.GenericRepository<User>()
+                    .FindAsync(u => u.Email == email);
+
+                if (user == null)
+                {
+                    throw new ArgumentException("Account with you email not registered in our system");
+                }
+
+                var authenticate = context.RequestServices.GetRequiredService<Authenticate>();
+                
+                var token = authenticate.GenerateToken(user);
+                
+                var refToken = authenticate.GenerateRefreshToken();
+                
+                user.RefreshToken = refToken.Token;
+                
+                user.RefreshTokenExpiration = refToken.Expiration;
+                
+                await _uow.SaveAsync();
+
+                return token;
+            });
+
     }
 
     private async Task<string> AuthorizeConfirmedEmailAsync(User actualUser,string password,Authenticate authenticate)

@@ -20,7 +20,10 @@ export interface AuthSliceState extends DefaultState {
     status: boolean,
     isEmailConfirmationDelivered:boolean,
     userId:number|null,
-    isCodeMatch:boolean
+    isCodeMatch:boolean,
+    googleToken:GoogleAccessToken|null,
+    isAuthorizedWithGoogle:boolean,
+    defaultToken:string|null
 }
 
 export interface UserSliceState extends DefaultState {

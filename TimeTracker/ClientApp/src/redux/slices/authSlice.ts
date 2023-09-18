@@ -17,7 +17,10 @@ const initialState: AuthSliceState = {
     status: IsUserAuthenticated(),
     isEmailConfirmationDelivered:false,
     userId:null,
-    isCodeMatch:false
+    isCodeMatch:false,
+    googleToken:null,
+    isAuthorizedWithGoogle:false,
+    defaultToken:null
 };
 
 const authSlice = createSlice({
@@ -85,7 +88,19 @@ const authSlice = createSlice({
         ((state,action)=>{
             state.message=action.payload;
         }),
-        createPasswordFail:createErrorReducer()
+        createPasswordFail:createErrorReducer(),
+
+
+        authorizeWithGoogle:createPendingReducerWithPayload<typeof initialState,string>
+        ((state, action)=>{
+            state.isAuthorizedWithGoogle=false;
+        }),
+        authorizeWithGoogleSuccess:createSuccessReducerWithPayload<typeof initialState,string>
+        ((state, action)=>{
+            state.isAuthorizedWithGoogle=true;
+            state.defaultToken=action.payload;
+        }),
+        authorizeWithGoogleFail:createErrorReducer()
     },
 });
 
@@ -94,6 +109,8 @@ export const { login, logout, loginFail
     , loginSuccess,refreshTokenSuccess,refreshTokenFail
     ,refreshToken,resetPassword,resetPasswordSuccess
     ,resetPasswordFail,codeVerify,codeVerifySuccess
-    ,codeVerifyFail,createPasswordFail,createPasswordSuccess,createPassword } = authSlice.actions;
+    ,codeVerifyFail,createPasswordFail,createPasswordSuccess
+    ,createPassword,
+    authorizeWithGoogleSuccess,authorizeWithGoogleFail,authorizeWithGoogle} = authSlice.actions;
 
 export const auth = authSlice.reducer;
