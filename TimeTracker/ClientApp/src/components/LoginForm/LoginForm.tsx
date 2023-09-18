@@ -5,7 +5,7 @@ import { Loader } from '@components/UI/Loaders/Loader';
 import { InputTooltip } from '@components/UI/Tooltips/InputTooltip';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAppDispatch, useTypedSelector } from "../../hooks";
-import {googleAuth, login} from "../../redux";
+import { login} from "../../redux";
 import { H1, H5 } from "../Headings";
 import "./LoginForm.css";
 
