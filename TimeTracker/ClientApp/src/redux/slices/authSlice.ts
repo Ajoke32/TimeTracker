@@ -10,6 +10,7 @@ import {
     defaultState
 } from "./generic";
 import {CodeVerifyInput, CreatePasswordInput} from "@redux/types/passwordVerifyTypes.ts";
+import {ExternalAuthTokenType, ExternalAuthType, UserInfoResponse} from "@redux/types/authTypes.ts";
 
 const initialState: AuthSliceState = {
     ...defaultState,
@@ -17,10 +18,11 @@ const initialState: AuthSliceState = {
     status: IsUserAuthenticated(),
     isEmailConfirmationDelivered:false,
     userId:null,
+    accessToken:"",
     isCodeMatch:false,
-    googleToken:null,
-    isAuthorizedWithGoogle:false,
-    defaultToken:null
+    userEmail:"",
+    currentAuth:"",
+    userToken:""
 };
 
 const authSlice = createSlice({
@@ -41,6 +43,7 @@ const authSlice = createSlice({
                 state.user = GetUserFromToken();
                 if (IsUserAuthenticated()) {
                     state.status = true;
+                    state.message="Successfully authorized"
                 }
             }),
         loginFail: (state: AuthSliceState, action: PayloadAction<string>) => {
@@ -89,18 +92,31 @@ const authSlice = createSlice({
             state.message=action.payload;
         }),
         createPasswordFail:createErrorReducer(),
-
-
-        authorizeWithGoogle:createPendingReducerWithPayload<typeof initialState,string>
+        getAccessToken:createPendingReducerWithPayload<typeof initialState,ExternalAuthType>(),
+        getAccessTokenSuccess:createSuccessReducerWithPayload<typeof initialState,string>
         ((state, action)=>{
-            state.isAuthorizedWithGoogle=false;
+            state.accessToken=action.payload;
         }),
-        authorizeWithGoogleSuccess:createSuccessReducerWithPayload<typeof initialState,string>
+        getAccessTokenFail:createErrorReducer(),
+
+        getUserInfoFromToken:createPendingReducerWithPayload<typeof initialState,ExternalAuthTokenType>
+        ((state,action)=>{
+            state.userEmail="";
+        }),
+
+        getUserInfoFromTokenSuccess:createSuccessReducerWithPayload<typeof initialState,UserInfoResponse>
         ((state, action)=>{
-            state.isAuthorizedWithGoogle=true;
-            state.defaultToken=action.payload;
+            state.userEmail=action.payload.email;
         }),
-        authorizeWithGoogleFail:createErrorReducer()
+        getUserInfoFromTokenFail:createErrorReducer(),
+
+        authorizeWithEmail:createPendingReducerWithPayload<typeof initialState,string>(),
+        authorizeWithEmailSuccess:createSuccessReducerWithPayload<typeof initialState,string>
+        ((state, action)=>{
+            state.userToken=action.payload;
+        }),
+        authorizeWithEmailFail:createErrorReducer()
+
     },
 });
 
@@ -110,7 +126,8 @@ export const { login, logout, loginFail
     ,refreshToken,resetPassword,resetPasswordSuccess
     ,resetPasswordFail,codeVerify,codeVerifySuccess
     ,codeVerifyFail,createPasswordFail,createPasswordSuccess
-    ,createPassword,
-    authorizeWithGoogleSuccess,authorizeWithGoogleFail,authorizeWithGoogle} = authSlice.actions;
+    ,createPassword,getAccessToken,getAccessTokenSuccess,getAccessTokenFail,
+    getUserInfoFromTokenFail,getUserInfoFromTokenSuccess,
+    getUserInfoFromToken,authorizeWithEmailSuccess,authorizeWithEmailFail,authorizeWithEmail} = authSlice.actions;
 
 export const auth = authSlice.reducer;

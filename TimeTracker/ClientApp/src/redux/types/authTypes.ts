@@ -1,22 +1,29 @@
 
-interface GoogleAccessToken {
-    accessToken:string,
-    expiresIn:number,
+
+export interface AccessTokenType{
+    access_token:string,
     scope:string,
-    tokenType:string
+    token_type:string
 }
 
-interface GoogleIdToken{
-    aud:string,
-    azp:string,
-    email:string,
-    email_verified:boolean,
-    exp:number,
-    hd:string,
-    iat:number,
-    iss:string,
-    jti:string,
-    nbf:number,
-    nonce:string,
-    sub:string
+export interface ExternalAuthType{
+    code:string,
+    authType:string
+}
+
+export interface ExternalAuthTokenType{
+    token:string,
+    authType:string,
+}
+
+export interface UserInfoResponse{
+    email:string;
+}
+
+export function getUserInfoUrl(authType:string){
+    switch (authType){
+        case "google":return "https://www.googleapis.com/oauth2/v3/userinfo"
+        case "github":return "https://api.github.com/user"
+        default:throw new Error("auth type not available");
+    }
 }

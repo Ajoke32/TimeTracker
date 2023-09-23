@@ -1,25 +1,55 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net.Http.Headers;
+using System.Security.Authentication;
+using System.Text.Json.Nodes;
+using Microsoft.AspNetCore.Mvc;
+using TimeTracker.Utils.OAuth;
 
 namespace TimeTracker.Controllers;
 
 public class AuthController:Controller
 {
-
-    private readonly IConfiguration _configuration;
+    private readonly AuthFactory _authFactory;
     
-    public AuthController(IConfiguration configuration)
+    private  readonly HttpClient _httpClient = new HttpClient();
+    
+    private string _authType = string.Empty;
+    public AuthController(AuthFactory factory)
     {
-        _configuration = configuration;
+        _authFactory = factory;
     }
     
-    [HttpGet("to-google-auth")]
-    public IActionResult RedirectToGoogleAuth()
+    [HttpGet("to-external-auth")]
+    public IActionResult RedirectToAuth(string authType)
     {
-        var clientId = _configuration["Authentication:Google:ClientId"]!;
-        var url = "https://timetrackerproject.azurewebsites.net/google-auth";
 
-        var redirectUrl = $"https://accounts.google.com/o/oauth2/v2/auth?response_type=id_token&redirect_uri={url}&client_id={clientId}&nonce=sdkoqkwew&scope=email";
-
+        var auth = _authFactory.GetInstance(authType);
+        var redirectUrl = auth.GetRedirectUrl();
         return Redirect(redirectUrl);
     }
+    
+    [HttpPost("access-token")]
+    public async Task<IActionResult> GetAccessToken(string code,string authType)
+    {
+        
+        var auth = _authFactory.GetInstance(authType);
+        
+        
+        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+        var accessTokenUrl = auth.GetAccessTokenUrl(code);
+        var response = await _httpClient.PostAsync(accessTokenUrl,null);
+        
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception($"An error occured: {response.ReasonPhrase}, status:{response.StatusCode}");
+        }
+
+        var responseContent = await response.Content.ReadAsStringAsync();
+
+        var json = JsonNode.Parse(responseContent);
+
+        return Ok(json);
+    }
+    
 }
