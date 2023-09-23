@@ -33,7 +33,7 @@ const AuthPage = () => {
             }));
         }
     }, []);
-    
+
     useEffect(() => {
         if(accessToken!==""){
             dispatch(getUserInfoFromToken({

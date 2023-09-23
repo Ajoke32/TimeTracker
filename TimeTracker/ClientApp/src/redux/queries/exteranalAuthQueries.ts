@@ -10,7 +10,7 @@ import {AjaxQuery} from "@redux/queries/query.ts";
 
 
 export function GetAccessTokenQuery(auth:ExternalAuthType){
-    return ajax.post<AccessTokenType>(`http://localhost:5166/access-token?code=${auth.code}&authType=${auth.authType}`,)
+    return ajax.post<AccessTokenType>(`https://timetrackerproject.azurewebsites.net/access-token?code=${auth.code}&authType=${auth.authType}`,)
 }
 
 export function GetUserFromAccessTokenQuery(auth:ExternalAuthTokenType){
