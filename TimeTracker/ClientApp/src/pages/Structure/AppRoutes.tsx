@@ -20,7 +20,8 @@ import { Dashboard } from '../DashboardPage/Dashboard';
 import { HomeTwo } from "../HomeTwo.tsx";
 import React from "react";
 import PasswordRecovery from "@pages/PasswordRecoveryPage/PasswordRecovery.tsx";
-import GoogleAuthPage from "@pages/GoogleAuthPage.tsx";
+import AuthPage from "@pages/AuthPage.tsx";
+
 
 
 
@@ -37,6 +38,7 @@ export const AppRoutes = () => {
             <Route index element={<HomeTwo />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path='/dashboard' element={<Dashboard />} />
+            <Route path="/external-auth" element={<AuthPage />} />
             <Route path="/team" element={<Outlet />}>
               <Route index element={<Team />} />
               <Route path="addUser"
@@ -68,7 +70,7 @@ export const AppRoutes = () => {
       ) : (
         <>
           <Route path="/userVerify" element={<UserVerify />} />
-          <Route path="/google-auth" element={<GoogleAuthPage />} />
+          <Route path="/external-auth" element={<AuthPage />} />
           <Route path="/emailConfirm" element={<EmailConfirm />} />
           <Route path="/passwordRecovery" element={<PasswordRecovery />} />
           <Route path="/login" element={<Login />} />

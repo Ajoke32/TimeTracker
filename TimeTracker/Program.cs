@@ -12,6 +12,7 @@ using Quartz;
 using TimeTracker.Absctration;
 using TimeTracker.AppContext;
 using TimeTracker.Enums;
+using TimeTracker.Extensions;
 using TimeTracker.GraphQL;
 using TimeTracker.GraphQL.Schemes;
 using TimeTracker.MapperProfiles;
@@ -21,6 +22,7 @@ using TimeTracker.Utils.BackgroundTasks;
 using TimeTracker.Utils.Email;
 using TimeTracker.Utils.Environment;
 using TimeTracker.Utils.Filters;
+using TimeTracker.Utils.OAuth;
 using TimeTracker.Utils.SoftDelete;
 using TimeTracker.Utils.WorkedHoursCalculation;
 using TimeTracker.Visitors;
@@ -55,6 +57,8 @@ builder.Services.AddAuthentication(conf =>
 
 builder.Services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
 
+
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("LoggedIn", (a) => { a.RequireAuthenticatedUser(); });
@@ -71,6 +75,30 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Create", p => { p.Requirements.Add(new PermissionRequirement(Permissions.Create)); });
 
     options.AddPolicy("Delete", p => { p.Requirements.Add(new PermissionRequirement(Permissions.Delete)); });
+});
+
+builder.Services.AddGithubAuth(conf =>
+{
+    conf.AppUrl = "https://timetrackerproject.azurewebsites.net";
+    conf.AuthApi = "https://github.com/login/oauth/authorize";
+    conf.RedirectUrl = "external-auth";
+    conf.AccessTokenUrl = "https://github.com/login/oauth/access_token";
+    conf.OptionalAccessTokenUrlParameters["redirect_uri"] = "https://timetrackerproject.azurewebsites.net/external-auth";
+    return conf;
+});
+
+builder.Services.AddGoogleAuth(conf =>
+{
+    conf.AppUrl = "https://timetrackerproject.azurewebsites.net";
+    conf.AuthApi = "https://accounts.google.com/o/oauth2/v2/auth";
+    conf.RedirectUrl = "external-auth";
+    conf.AccessTokenUrl = "https://www.googleapis.com/oauth2/v4/token";
+    conf.OptionalParameters["response_type"] = "code";
+    conf.OptionalParameters["authType"] = "google";
+    conf.OptionalParameters["scope"] = "openid email";
+    conf.OptionalAccessTokenUrlParameters["grant_type"] = "authorization_code";
+    conf.OptionalAccessTokenUrlParameters["redirect_uri"] = "https://timetrackerproject.azurewebsites.net/external-auth";
+    return conf;
 });
 
 builder.Services.AddCors(options =>
@@ -143,6 +171,7 @@ builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<EmailTokenService>();
 builder.Services.AddScoped<EmailMessageBuilder>();
 builder.Services.AddScoped<IGraphQlArgumentVisitor, GraphQlArgumentsVisitor>();
+builder.Services.AddScoped<AuthFactory>();
 
 builder.Services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
 

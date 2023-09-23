@@ -155,7 +155,7 @@ public sealed class UserQuery : ObjectGraphType
             });
         
 
-        Field<string>("googleAuth")
+        Field<string>("externalAuth")
             .Argument<string>("email")
             .ResolveAsync(async context =>
             {
@@ -169,7 +169,7 @@ public sealed class UserQuery : ObjectGraphType
                     throw new ArgumentException("Account with you email not registered in our system");
                 }
 
-                var authenticate = context.RequestServices.GetRequiredService<Authenticate>();
+                var authenticate = context.RequestServices!.GetRequiredService<Authenticate>();
                 
                 var token = authenticate.GenerateToken(user);
                 

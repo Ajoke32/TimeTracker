@@ -4,11 +4,15 @@ import {catchError, map, mergeMap, Observable, of} from "rxjs";
 import {CodeVerifyQuery, CreatePasswordQuery, RefreshTokenQuery, ResetPasswordQuery, UserLoginQuery} from "../queries";
 import { UserLoginType } from "../types";
 import {
-    authorizeWithGoogleFail, authorizeWithGoogleSuccess,
+    authorizeWithEmailFail, authorizeWithEmailSuccess,
     codeVerifyFail,
     codeVerifySuccess,
     createPasswordFail,
     createPasswordSuccess,
+    getAccessTokenFail,
+    getAccessTokenSuccess,
+    getUserInfoFromTokenFail,
+    getUserInfoFromTokenSuccess,
     loginFail,
     loginSuccess,
     refreshTokenFail,
@@ -18,8 +22,12 @@ import {
 } from '../slices';
 import { GetErrorMessage } from "../../utils";
 import {CodeVerifyInput, CreatePasswordInput} from "@redux/types/passwordVerifyTypes.ts";
-import {ajax} from "rxjs/ajax";
-import {AuthorizeWithGoogleQuery} from "@redux/queries/googleAuthQueries.ts";
+import {
+    AuthorizeWithEmailQuery,
+    GetAccessTokenQuery,
+    GetUserFromAccessTokenQuery
+} from "@redux/queries/exteranalAuthQueries.ts";
+import {ExternalAuthTokenType, ExternalAuthType} from "@redux/types/authTypes.ts";
 
 
 export const userLoginEpic: Epic = (action: Observable<PayloadAction<UserLoginType>>, state) =>
@@ -50,7 +58,6 @@ export const refreshTokenEpic:Epic = (action$:Observable<PayloadAction<number>>,
                 .pipe(
                     map(resp=>{
                         if (resp.response.errors != null) {
-
                             return refreshTokenFail(resp.response.errors[0].message);
                         }
                         return refreshTokenSuccess(resp.response.data.userQuery.refreshToken)
@@ -125,19 +132,55 @@ export const createPasswordEpic:Epic = (action$:Observable<PayloadAction<CreateP
 
 
 
-export const authorizeWithGoogleEpic:Epic = (action$:Observable<PayloadAction<string>>,state$)=>
+export const externalAuthorizeEpic:Epic = (action$:Observable<PayloadAction<ExternalAuthType>>,state$)=>
     action$.pipe(
-        ofType("auth/authorizeWithGoogle"),
+        ofType("auth/getAccessToken"),
         mergeMap(action=>
-            AuthorizeWithGoogleQuery(action.payload)
+            GetAccessTokenQuery(action.payload)
                 .pipe(
                     map(res=>{
-
-                        return authorizeWithGoogleSuccess(res.response.data.userQuery.googleAuth);
+                        return getAccessTokenSuccess(res.response.access_token);
                     }),
                     catchError((e:Error)=>{
-                        console.log(e);
-                        return of(authorizeWithGoogleFail(e.message));
+                        return of(getAccessTokenFail(e.message));
+                    })
+                )
+        )
+    )
+
+export const getUserInfoFromTokenEpic:Epic= (action$:Observable<PayloadAction<ExternalAuthTokenType>>,state$)=>
+    action$.pipe(
+        ofType("auth/getUserInfoFromToken"),
+        mergeMap(action$=>
+            GetUserFromAccessTokenQuery(action$.payload)
+                .pipe(
+                    map(res=>{
+                        if(!res.response.email){
+                            return getUserInfoFromTokenFail("You email not available, make this visible in you account setting")
+                        }
+                        return getUserInfoFromTokenSuccess(res.response);
+                    }),
+                    catchError((e:Error)=>{
+                        return of(getUserInfoFromTokenFail(e.message));
+                    })
+                )
+        )
+    )
+
+export const authorizeWithEmailEpic:Epic=(action$:Observable<PayloadAction<string>>,state$)=>
+    action$.pipe(
+        ofType("auth/authorizeWithEmail"),
+        mergeMap(action$=>
+            AuthorizeWithEmailQuery(action$.payload)
+                .pipe(
+                    map(res=>{
+                        if(res.response.errors){
+                            return authorizeWithEmailFail(res.response.errors[0].message);
+                        }
+                        return authorizeWithEmailSuccess(res.response.data.userQuery.externalAuth);
+                    }),
+                    catchError((e:Error)=>{
+                        return of(authorizeWithEmailFail(e.message));
                     })
                 )
         )
