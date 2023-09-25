@@ -12,7 +12,6 @@ public class AuthController:Controller
     
     private  readonly HttpClient _httpClient = new HttpClient();
     
-    private string _authType = string.Empty;
     public AuthController(AuthFactory factory)
     {
         _authFactory = factory;
