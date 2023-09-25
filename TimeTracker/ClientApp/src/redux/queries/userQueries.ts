@@ -1,6 +1,6 @@
 import { AjaxQuery } from './query';
 import { User } from '../intrerfaces';
-import { UserAddType, FetchUsersType } from '../types'
+import {UserAddType, FetchUsersType, UpdateTwoStepAuth, UserLoginType, TwoStepInput, TwoStepLoginInput} from '../types'
 import { ReadCookie } from '../../utils';
 import {user} from "@redux/slices";
 import {CodeVerifyInput, CreatePasswordInput} from "@redux/types/passwordVerifyTypes.ts";
@@ -193,5 +193,70 @@ export function CreatePasswordQuery({password,userId}:CreatePasswordInput){
             }
         `,
         {pass:password,userId:userId}
+    )
+}
+
+export function UpdateTwoStepAuthQuery({isEnabled,userId,authType,phoneNumber}:UpdateTwoStepAuth){
+    return AjaxQuery<{userMutations:{updateTwoStepAuth:boolean}}>(
+        `mutation Update($isEnabled:Boolean!,$phoneNumber:String,$userId:Int!,$authType:Int!){
+              userMutation{
+                updateTwoStepAuth(isEnabled:$isEnabled,phoneNumber:$phoneNumber,userId:$userId,authType:$authType)
+              }
+            }`,
+        {
+            isEnabled:isEnabled,
+            userId:userId,
+            authType:authType,
+            phoneNumber:phoneNumber
+        }
+    )
+}
+
+export function VerifyUserLoginQuery(input:UserLoginType){
+    return AjaxQuery<{userQuery:{verifyUserLogin:User}}>(
+        `query Verify($user: UserLoginInputType!){
+            userQuery{
+                verifyUserLogin(user:$user){
+                    email,
+                    isTwoStepAuthEnabled,
+                    firstName,
+                    phoneNumber,
+                    authType
+                }
+            }
+        }`,
+        {
+            user:input
+        }
+    )
+}
+
+
+export function SendTwoFactorCodeQuery({to,authType}:TwoStepInput){
+    return AjaxQuery<{twoFactorAuthQuery:{sendCode:string}}>(
+        `query Send($to:String!,$authType:String!){
+            twoFactorAuthQuery{
+                sendCode(to:$to,authType:$authType)
+            }
+        }`,
+        {
+            to:to,
+            authType:authType
+        }
+    )
+}
+
+export function TwoFactorLoginQuery({to,email,code}:TwoStepLoginInput){
+    return AjaxQuery<{twoFactorAuthQuery:{login:string}}>(
+        `query Login($to:String!,$email:String!,$code:String!){
+            twoFactorAuthQuery{
+                login(to:$to,email:$email,code:$code)
+            }
+        }`,
+        {
+            to:to,
+            email:email,
+            code:code
+        }
     )
 }

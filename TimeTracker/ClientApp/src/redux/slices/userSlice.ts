@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User, UserSliceState } from '../intrerfaces';
-import { UserAddType, UserEditType } from "../types";
+import {UpdateTwoStepAuth, UserAddType, UserEditType} from "../types";
 import {
     createErrorReducer,
     createPendingReducerWithPayload,
@@ -50,6 +50,10 @@ const userSlice = createSlice({
         fetchVacationDaysFail: createErrorReducer(),
 
         emailVerify: createPendingReducerWithPayload<UserSliceState, string>(),
+
+        updateTwoStepAuth:createPendingReducerWithPayload<typeof initialState,UpdateTwoStepAuth>(),
+        updateTwoStepAuthSuccess:createSuccessReducerWithPayload<typeof initialState,boolean>(),
+        updateTwoStepAuthFail:createErrorReducer()
     },
 });
 
@@ -61,6 +65,6 @@ export const {
     fetchUser, fetchUserFail, fetchUserSuccess,
     editUser, editUserFail, editUserSuccess,
     fetchVacationDaysSuccess, fetchVacationDaysFail,
-    fetchVacationDays, emailVerify,
+    fetchVacationDays, emailVerify,updateTwoStepAuthSuccess,updateTwoStepAuthFail,updateTwoStepAuth
 } = userSlice.actions;
 

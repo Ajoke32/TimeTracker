@@ -18,5 +18,6 @@ public sealed class UserInputType:InputObjectGraphType<UserInputDto>
         Field(x => x.VacationDays).Description("user vacation days");
 
         Field(x => x.HoursPerMonth).Description("hours per month");
+        
     }
 }

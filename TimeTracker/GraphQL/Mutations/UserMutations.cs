@@ -144,6 +144,40 @@ public sealed class UserMutations:ObjectGraphType
             await uow.SaveAsync();
             return true;
         });
-        
+
+
+        Field<bool>("updateTwoStepAuth")
+            .Argument<int>("userId")
+            .Argument<int>("authType")
+            .Argument<bool>("isEnabled")
+            .Argument<string?>("phoneNumber",nullable:true)
+            .ResolveAsync(async context =>
+            {
+                var id = context.GetArgument<int>("userId");
+
+                var authType = context.GetArgument<int>("authType");
+
+                var isEnabled = context.GetArgument<bool>("isEnabled");
+                
+                
+                var auth = (TwoStepAuthType)authType;
+                
+                var user = await uow.GenericRepository<User>()
+                    .FindAsync(u => u.Id == id)??throw new ArgumentException("user not found");
+
+                user.AuthType = auth;
+                user.IsTwoStepAuthEnabled = isEnabled;
+
+                if (auth is TwoStepAuthType.PhoneNumber or TwoStepAuthType.WhatsApp)
+                {
+                    var phoneNumber = context.GetArgument<string?>("phoneNumber");
+                    user.PhoneNumber = phoneNumber;
+                }
+
+                await uow.SaveAsync();
+
+                return true;
+            });
+
     }
 }

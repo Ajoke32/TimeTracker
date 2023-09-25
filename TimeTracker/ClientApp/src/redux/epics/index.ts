@@ -3,10 +3,10 @@ import { catchError } from "rxjs";
 import {
     authorizeWithEmailEpic,
     codeVerifyEpic,
-    createPasswordEpic, externalAuthorizeEpic, getUserInfoFromTokenEpic,
+    createPasswordEpic, externalAuthorizeEpic, getUserInfoFromTokenEpic, LoginWithCodeEpic,
     refreshTokenEpic,
-    resetPasswordEpic,
-    userLoginEpic
+    resetPasswordEpic, SendTwoFactorCodeEpic,
+    userLoginEpic, verifyUserLoginEpic
 } from './auth'
 import {
     userEpics
@@ -34,6 +34,9 @@ export const rootEpic: Epic = (action$, store$, dependencies) =>
         externalAuthorizeEpic,
         getUserInfoFromTokenEpic,
         authorizeWithEmailEpic,
+        verifyUserLoginEpic,
+        SendTwoFactorCodeEpic,
+        LoginWithCodeEpic,
         ...userEpics,
         ...usersEpics,
         ...workedHourEpics,

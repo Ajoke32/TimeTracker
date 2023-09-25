@@ -3,9 +3,17 @@ import { PayloadAction } from "@reduxjs/toolkit";
 import { catchError, map, mergeMap, Observable, of } from "rxjs";
 
 import {
-    AddUserQuery, PasswordConfirmQuery,
-    FetchUserQuery, EditUserQuery, FetchUserVacationDays,
-    DeleteUser, EmailConfirmQuery, FetchWorkedHoursQuery, UpdateWorkedHoursQuery, DeleteWorkedHoursQuery
+    AddUserQuery,
+    PasswordConfirmQuery,
+    FetchUserQuery,
+    EditUserQuery,
+    FetchUserVacationDays,
+    DeleteUser,
+    EmailConfirmQuery,
+    FetchWorkedHoursQuery,
+    UpdateWorkedHoursQuery,
+    DeleteWorkedHoursQuery,
+    UpdateTwoStepAuthQuery
 } from "@redux/queries";
 import {
     userAddFail, userAddSuccess,
@@ -13,9 +21,9 @@ import {
     fetchUserFail, fetchUserSuccess,
     editUserFail, editUserSuccess,
     fetchVacationDaysFail, fetchVacationDaysSuccess,
-    deleteUserFail, deleteUserSuccess
+    deleteUserFail, deleteUserSuccess, updateTwoStepAuthFail, updateTwoStepAuthSuccess
 } from '../slices';
-import { UpdateWorkedHourType, UserAddType, WorkedFetchType } from "../types";
+import {UpdateTwoStepAuth, UpdateWorkedHourType, UserAddType, WorkedFetchType} from "../types";
 import { User } from "../intrerfaces";
 import { GetErrorMessage } from "../../utils";
 
@@ -153,6 +161,24 @@ export const emailConfirmEpic: Epic = (action: Observable<PayloadAction<string>>
         )
     );
 
+export  const updateTwoStepAuthEpic:Epic = (action$:Observable<PayloadAction<UpdateTwoStepAuth>>)=>
+    action$.pipe(
+        ofType("user/updateTwoStepAuth"),
+        mergeMap(action$=>
+            UpdateTwoStepAuthQuery(action$.payload).pipe(
+                map(res=>{
+                    return updateTwoStepAuthSuccess(res.response.data.userMutations.updateTwoStepAuth);
+                }),
+                catchError((e: Error) => {
+                    console.log(e);
+                    return of(updateTwoStepAuthFail(e.message))
+                })
+            )
+        )
+    )
+
+
+
 export const userEpics = [
     addUserEpic,
     DeleteUserEpic,
@@ -160,5 +186,6 @@ export const userEpics = [
     fetchUserEpic,
     editUserEpic,
     fetchVacationDaysEpic,
-    emailConfirmEpic
+    emailConfirmEpic,
+    updateTwoStepAuthEpic
 ]

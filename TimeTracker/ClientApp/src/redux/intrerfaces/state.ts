@@ -24,7 +24,9 @@ export interface AuthSliceState extends DefaultState {
     isCodeMatch:boolean,
     userEmail:string,
     currentAuth:string,
-    userToken:string
+    userToken:string,
+    verifiedUser:User|null,
+    twoStepCodeStatus:string
 }
 
 export interface UserSliceState extends DefaultState {

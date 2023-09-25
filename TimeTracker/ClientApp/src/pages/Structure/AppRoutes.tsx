@@ -21,6 +21,7 @@ import { HomeTwo } from "../HomeTwo.tsx";
 import React from "react";
 import PasswordRecovery from "@pages/PasswordRecoveryPage/PasswordRecovery.tsx";
 import AuthPage from "@pages/AuthPage.tsx";
+import SettingsCard from "@components/Settings/SettingsCard.tsx";
 
 
 
@@ -39,6 +40,7 @@ export const AppRoutes = () => {
             <Route path="/calendar" element={<Calendar />} />
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path="/external-auth" element={<AuthPage />} />
+            <Route path="/settings" element={<SettingsCard />} />
             <Route path="/team" element={<Outlet />}>
               <Route index element={<Team />} />
               <Route path="addUser"

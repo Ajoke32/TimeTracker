@@ -29,7 +29,8 @@ public class Authenticate
             new ("Id",user.Id.ToString()),
             new ("Permissions",Convert.ToInt32(user.Permissions).ToString()),
             new ("WorkType",user.WorkType.ToString()),
-            new ("VacationDays",user.VacationDays.ToString())
+            new ("VacationDays",user.VacationDays.ToString()),
+            new("IsTwoStepAuthEnabled",$"{user.IsTwoStepAuthEnabled}")
         };
         
         var key = Encoding.UTF8.GetBytes(_config["Jwt:Key"]!);

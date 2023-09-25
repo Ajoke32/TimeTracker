@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { AuthSliceState, } from '../intrerfaces';
-import { UserLoginType } from "../types";
+import {AuthSliceState, User,} from '../intrerfaces';
+import {TwoStepInput, TwoStepLoginInput, UserLoginType, UserType} from "../types";
 import { DeleteCookie, GetUserFromToken, IsUserAuthenticated, SetCookie } from "../../utils";
 import {
     createErrorReducer,
@@ -22,7 +22,9 @@ const initialState: AuthSliceState = {
     isCodeMatch:false,
     userEmail:"",
     currentAuth:"",
-    userToken:""
+    userToken:"",
+    verifiedUser:null,
+    twoStepCodeStatus:""
 };
 
 const authSlice = createSlice({
@@ -45,6 +47,9 @@ const authSlice = createSlice({
                     state.status = true;
                     state.message="Successfully authorized"
                 }
+                state.verifiedUser=null;
+                state.twoStepCodeStatus="";
+                state.userToken=""
             }),
         loginFail: (state: AuthSliceState, action: PayloadAction<string>) => {
             state.status = false;
@@ -115,8 +120,37 @@ const authSlice = createSlice({
         ((state, action)=>{
             state.userToken=action.payload;
         }),
-        authorizeWithEmailFail:createErrorReducer()
+        authorizeWithEmailFail:createErrorReducer(),
 
+        verifyUserLogin:createPendingReducerWithPayload<typeof initialState,UserLoginType>
+        ((state, action)=>{
+            state.verifiedUser=null;
+        }),
+        verifyUserLoginFail:createErrorReducer(),
+        verifyUserLoginSuccess:createSuccessReducerWithPayload<typeof initialState,User>
+        ((state, action)=>{
+            state.verifiedUser=action.payload;
+        }),
+
+        sendTwoStepCode:createPendingReducerWithPayload<typeof initialState,TwoStepInput>
+        ((state, action)=>{
+            state.twoStepCodeStatus=""
+        }),
+        sendTwoStepCodeSuccess:createSuccessReducerWithPayload<typeof initialState,string>
+        ((state, action)=>{
+            state.twoStepCodeStatus=action.payload;
+        }),
+        sendTwoStepCodeFail:createErrorReducer(),
+
+        loginWithCode:createPendingReducerWithPayload<typeof initialState,TwoStepLoginInput>
+        ((state, action)=>{
+            state.userToken="";
+        }),
+        loginWithCodeSuccess:createPendingReducerWithPayload<typeof initialState,string>
+        ((state, action)=>{
+            state.userToken=action.payload;
+        }),
+        loginWithCodeFail:createErrorReducer()
     },
 });
 
@@ -128,6 +162,7 @@ export const { login, logout, loginFail
     ,codeVerifyFail,createPasswordFail,createPasswordSuccess
     ,createPassword,getAccessToken,getAccessTokenSuccess,getAccessTokenFail,
     getUserInfoFromTokenFail,getUserInfoFromTokenSuccess,
-    getUserInfoFromToken,authorizeWithEmailSuccess,authorizeWithEmailFail,authorizeWithEmail} = authSlice.actions;
+    getUserInfoFromToken,authorizeWithEmailSuccess,authorizeWithEmailFail,
+    verifyUserLogin,loginWithCodeSuccess,sendTwoStepCodeSuccess,sendTwoStepCodeFail,sendTwoStepCode,loginWithCodeFail,loginWithCode,verifyUserLoginSuccess,verifyUserLoginFail,authorizeWithEmail} = authSlice.actions;
 
 export const auth = authSlice.reducer;
