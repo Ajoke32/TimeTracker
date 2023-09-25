@@ -21,7 +21,7 @@ export const LoginForm = () => {
     const dispatch = useAppDispatch();
     const {loading, error,twoStepCodeStatus,userToken, user, verifiedUser, currentAuth} = useTypedSelector(state => state.auth);
 
-    const [step, setStep] = useState<number>(1);
+    const [step, setStep] = useState<number>(0);
 
     const [code,setCode] = useState<string>("");
 
