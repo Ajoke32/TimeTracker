@@ -1,4 +1,5 @@
-﻿using GraphQL.Types;
+﻿using DocumentFormat.OpenXml.Drawing;
+using GraphQL.Types;
 using TimeTracker.Models;
 using TimeTracker.Models.Dtos;
 
@@ -20,6 +21,13 @@ public sealed class UserType:ObjectGraphType<User>
         Field<int>("permissions")
             .Resolve(context => (int)context.Source.Permissions)
             .Description("");
+
+        Field(x => x.PhoneNumber);
+
+        Field(x => x.IsTwoStepAuthEnabled,nullable:true);
+        
+        Field<int>("authType")
+            .Resolve(ct => (int)ct.Source.AuthType);
 
         Field(x => x.VacationDays).Description("");
 

@@ -1,4 +1,4 @@
-import {FiltersType, OrderingType, PagingExtraInfo, WhereFilter} from "@redux/types/filterTypes.ts";
+import {FiltersType, OrderingType, WhereFilter} from "@redux/types/filterTypes.ts";
 
 
 export interface UserLoginType {
@@ -26,10 +26,28 @@ export interface FetchUserType {
     userId: number
 }
 
+export interface UpdateTwoStepAuth{
+    userId:number,
+    authType:number,
+    isEnabled:boolean,
+    phoneNumber?:string
+}
+
 export interface FetchUsersType extends FetchUserType,FiltersType,OrderingType{
     take?: number,
     skip?: number,
     group:WhereFilter[]
 }
 
-export const userFields = ['FirstName','LastName',"Email","HoursPerMonth","WorkingHours","VacationDays"]
+export interface TwoStepInput{
+    to:string,
+    authType:string
+}
+
+export interface TwoStepLoginInput{
+    code:string,
+    to:string,
+    email:string
+}
+
+

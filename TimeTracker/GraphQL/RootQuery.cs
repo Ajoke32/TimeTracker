@@ -31,5 +31,8 @@ public sealed class RootQuery:ObjectGraphType
 
         Field<PasswordRecoveryQuery>("passwordRecoveryQuery")
             .Resolve(_ => new { });
+        
+        Field<TwoFactorAuthQuery>("twoFactorAuthQuery")
+            .Resolve(_ => new { });
     }
 }

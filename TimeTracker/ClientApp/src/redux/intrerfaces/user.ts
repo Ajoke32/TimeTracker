@@ -11,6 +11,9 @@ export interface User{
     vacationDays: number;
     hoursPerMonth: number;
     vacations?:Vacation[],
-    employmentDate:Date
+    employmentDate:Date,
+    isTwoStepAuthEnabled:boolean,
+    phoneNumber:string,
+    authType:number
 }
 

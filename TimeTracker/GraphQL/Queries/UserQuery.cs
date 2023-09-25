@@ -104,6 +104,28 @@ public sealed class UserQuery : ObjectGraphType
                     
                 return await AuthorizeConfirmedEmailAsync(searchUser, args.Password, authService!);
             });
+        
+        Field<UserType>("verifyUserLogin")
+            .Argument<UserLoginInputType>("user")
+            .ResolveAsync(async ctx =>
+            {
+                var args = ctx.GetArgument<User>("user");
+
+                var searchUser = await uow.GenericRepository<User>()
+                    .FindAsync(u => u.Email == args.Email);
+                
+                if (searchUser == null||searchUser.IsDeleted)
+                {
+                    throw new QueryError(Error.ERR_WRONG_CREDENTIALS);
+                }
+
+                if (!BCrypt.Net.BCrypt.Verify(args.Password, searchUser.Password))
+                {
+                    throw new QueryError(Error.ERR_WRONG_CREDENTIALS);
+                }
+                
+                return searchUser;
+            });
 
         Field<bool>("verifyUser")
             .Argument<string>("token")
@@ -154,7 +176,9 @@ public sealed class UserQuery : ObjectGraphType
                     .GetAsync(u => ids.Contains(u.Id));
             });
         
-
+        
+        
+        
         Field<string>("externalAuth")
             .Argument<string>("email")
             .ResolveAsync(async context =>
@@ -166,7 +190,7 @@ public sealed class UserQuery : ObjectGraphType
 
                 if (user == null)
                 {
-                    throw new ArgumentException("Account with you email not registered in our system");
+                    throw new ArgumentException("Account with you email not registered");
                 }
 
                 var authenticate = context.RequestServices!.GetRequiredService<Authenticate>();
@@ -179,7 +203,7 @@ public sealed class UserQuery : ObjectGraphType
                 
                 user.RefreshTokenExpiration = refToken.Expiration;
                 
-                await _uow.SaveAsync();
+                await _uow.SaveAsync(); 
 
                 return token;
             });
