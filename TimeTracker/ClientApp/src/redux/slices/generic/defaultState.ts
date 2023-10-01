@@ -48,12 +48,13 @@ export function createPendingReducer<T extends DefaultState>(callback:Function|n
     }
 }
 
-export function createPendingReducerWithPayload<T extends DefaultState,V>(callback:(state:T,action:PayloadAction<V>)=>void=()=>{}){
+export function createPendingReducerWithPayload<T extends DefaultState,V>(callback?:(state:T,action:PayloadAction<V>)=>void){
     return (state:T,action:PayloadAction<V>)=>{
         state.loading=true;
         state.error=null;
         state.message=null;
-        if(callback!==null)
+        if(callback!==undefined)
             callback(state,action);
     }
 }
+

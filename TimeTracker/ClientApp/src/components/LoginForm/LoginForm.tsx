@@ -5,7 +5,7 @@ import {Loader} from '@components/UI/Loaders/Loader';
 import {InputTooltip} from '@components/UI/Tooltips/InputTooltip';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {useAppDispatch, useTypedSelector} from "../../hooks";
-import {auth, login, loginSuccess, loginWithCode, sendTwoStepCode, verifyUserLogin} from "../../redux";
+import {auth, login, loginSuccess, loginWithCode, verifyUserLogin} from "../../redux";
 import {H1, H5} from "../Headings";
 import "./LoginForm.css";
 import googleImg from '../../assets/images/search.png'
@@ -23,17 +23,17 @@ export const LoginForm = () => {
 
     const [step, setStep] = useState<number>(0);
 
-    const [code,setCode] = useState<string>("");
+    const [val,setVal] = useState<string>("");
 
     const [showTwoStep, setShowTwoStep] = useState<boolean>(false);
 
-    const [to,setTo] = useState<string>("");
+    const [data,setData] = useState<Inputs>({
+        email:"",
+        password:""
+    })
 
-    const [inputData, setInputData] = useState<Inputs>({
-        email: "", password: ""
-    });
 
-    const stepMsg = ['Sign in', 'Enter code']
+    const stepMsg = ['Sign in', 'Enter the code']
 
     const {
         register, handleSubmit,
@@ -47,47 +47,30 @@ export const LoginForm = () => {
     });
 
     useEffect(() => {
-        if (verifiedUser === null) {
+        if(verifiedUser==null){
             return;
         }
-
-        if (verifiedUser.isTwoStepAuthEnabled) {
-
-            let to:string="";
-            let authType = verifiedUser.authType===1?"sms":verifiedUser.authType==2?"whatsapp":"email";
-
-            if (verifiedUser.authType===1||verifiedUser.authType===2){
-                to = `+${verifiedUser.phoneNumber}`;
-            }else{
-                to = verifiedUser.email;
-            }
-
-            dispatch(sendTwoStepCode({
-                to: to,
-                authType: authType
-            }));
-
+        if(verifiedUser.isTwoStepAuthEnabled){
             setShowTwoStep(true);
-            setTo(to);
-        } else {
-            dispatch(login(inputData));
+            setStep(1);
+        }else{
+            dispatch(login(data));
         }
-
     }, [verifiedUser]);
-
-
 
     useEffect(() => {
         if(userToken!==""){
-            dispatch(loginSuccess(userToken));
             setStep(0);
+            setShowTwoStep(false);
+            dispatch(loginSuccess(userToken))
         }
     }, [userToken]);
 
     const onSubmit: SubmitHandler<Inputs> = (data) => {
         dispatch(verifyUserLogin(data));
-        setInputData(data);
+        setData(data);
     }
+
 
     function handleAuthClick(e: React.MouseEvent<HTMLAnchorElement>) {
         e.preventDefault();
@@ -96,14 +79,11 @@ export const LoginForm = () => {
         window.location.href = `/to-external-auth?authType=${authType}`;
     }
 
-    function handleLoginWithCode(){
-        if(twoStepCodeStatus==="pending"){
-            dispatch(loginWithCode({
-                to:to,
-                email:verifiedUser?.email!,
-                code:code
-            }));
-        }
+    function authWithCode(){
+        dispatch(loginWithCode({
+            id:verifiedUser?.id!,
+            code:val
+        }))
     }
 
     const LoginFromFirstStep = () => {
@@ -147,7 +127,7 @@ export const LoginForm = () => {
                         <InputTooltip description="Don't have an account?" url="/auth" urlTitle="Get started"/>
                     </div>
                     <div className='submit-wrapper'>
-                        <LargeButton type="submit" value="Login"/>
+                        <LargeButton  type="submit" value="Login"/>
                     </div>
                 </form>
             </>
@@ -156,19 +136,17 @@ export const LoginForm = () => {
 
     return (
         <div className="login-form__wrapper">
-
             <H1 value={stepMsg[step]}/>
             <div className="login-form__messages-wrapper" style={{display: `${error ? "flex" : "none"}`}}>
                 {loading ? <Loader/> : ""}
                 <H5 value={error ? error : ""}/>
             </div>
-            {showTwoStep ? step === 0 ? <LoginFromFirstStep/> :
-                <form className="login-form" style={{gap: "10px", marginTop: "10px"}}>
-                    <input value={code} onChange={(e)=>{
-                        setCode(e.target.value);
-                    }} type="text" placeholder="your code" className="text-input" autoComplete='off'/>
-                    <LargeButton handleClick={handleLoginWithCode} type="button" value="Login"/>
-                </form> : <LoginFromFirstStep/>}
+            {showTwoStep?<div className="login-form" style={{gap:"15px",marginTop:"20px"}}>
+                <input onChange={(e)=>{
+                    setVal(e.target.value);
+                }} value={val} className="text-input" type="text" placeholder="You code"/>
+                <LargeButton handleClick={authWithCode} type="submit" value="Login"/>
+            </div>:<LoginFromFirstStep />}
         </div>
     );
 }

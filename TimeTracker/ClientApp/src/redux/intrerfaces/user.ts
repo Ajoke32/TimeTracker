@@ -13,7 +13,5 @@ export interface User{
     vacations?:Vacation[],
     employmentDate:Date,
     isTwoStepAuthEnabled:boolean,
-    phoneNumber:string,
-    authType:number
 }
 

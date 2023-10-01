@@ -10,7 +10,12 @@ import {
     defaultState
 } from "./generic";
 import {CodeVerifyInput, CreatePasswordInput} from "@redux/types/passwordVerifyTypes.ts";
-import {ExternalAuthTokenType, ExternalAuthType, UserInfoResponse} from "@redux/types/authTypes.ts";
+import {
+    ExternalAuthTokenType,
+    ExternalAuthType,
+    QrCodeGenerateInput,
+    UserInfoResponse, VerifyTwoStepInput
+} from "@redux/types/authTypes.ts";
 
 const initialState: AuthSliceState = {
     ...defaultState,
@@ -24,8 +29,11 @@ const initialState: AuthSliceState = {
     currentAuth:"",
     userToken:"",
     verifiedUser:null,
-    twoStepCodeStatus:""
+    twoStepCodeStatus:"",
+    enableTwoStepCode:"",
+    qrCodeLink:""
 };
+
 
 const authSlice = createSlice({
     name: 'auth',
@@ -132,15 +140,6 @@ const authSlice = createSlice({
             state.verifiedUser=action.payload;
         }),
 
-        sendTwoStepCode:createPendingReducerWithPayload<typeof initialState,TwoStepInput>
-        ((state, action)=>{
-            state.twoStepCodeStatus=""
-        }),
-        sendTwoStepCodeSuccess:createSuccessReducerWithPayload<typeof initialState,string>
-        ((state, action)=>{
-            state.twoStepCodeStatus=action.payload;
-        }),
-        sendTwoStepCodeFail:createErrorReducer(),
 
         loginWithCode:createPendingReducerWithPayload<typeof initialState,TwoStepLoginInput>
         ((state, action)=>{
@@ -150,7 +149,24 @@ const authSlice = createSlice({
         ((state, action)=>{
             state.userToken=action.payload;
         }),
-        loginWithCodeFail:createErrorReducer()
+        loginWithCodeFail:createErrorReducer(),
+
+        getQrCode:createPendingReducerWithPayload<AuthSliceState,QrCodeGenerateInput>
+        ((state, action)=>{
+            state.enableTwoStepCode=""
+        }),
+        getQrCodeSuccess:createSuccessReducerWithPayload<AuthSliceState,string>
+        ((state, action)=>{
+            state.qrCodeLink=action.payload
+        }),
+        getQrCodeFail:createErrorReducer(),
+
+        verifyEnableTwoStep:createPendingReducerWithPayload<AuthSliceState,VerifyTwoStepInput>(),
+        verifyEnableTwoStepSuccess:createSuccessReducerWithPayload<AuthSliceState,string>
+        ((state, action)=>{
+            state.enableTwoStepCode=action.payload;
+        }),
+        verifyEnableTwoStepFail:createErrorReducer()
     },
 });
 
@@ -163,6 +179,6 @@ export const { login, logout, loginFail
     ,createPassword,getAccessToken,getAccessTokenSuccess,getAccessTokenFail,
     getUserInfoFromTokenFail,getUserInfoFromTokenSuccess,
     getUserInfoFromToken,authorizeWithEmailSuccess,authorizeWithEmailFail,
-    verifyUserLogin,loginWithCodeSuccess,sendTwoStepCodeSuccess,sendTwoStepCodeFail,sendTwoStepCode,loginWithCodeFail,loginWithCode,verifyUserLoginSuccess,verifyUserLoginFail,authorizeWithEmail} = authSlice.actions;
+    verifyUserLogin,getQrCodeFail,verifyEnableTwoStepFail,verifyEnableTwoStepSuccess,verifyEnableTwoStep,getQrCodeSuccess,getQrCode,loginWithCodeSuccess,loginWithCodeFail,loginWithCode,verifyUserLoginSuccess,verifyUserLoginFail,authorizeWithEmail} = authSlice.actions;
 
 export const auth = authSlice.reducer;

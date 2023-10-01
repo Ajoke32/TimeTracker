@@ -26,7 +26,9 @@ export interface AuthSliceState extends DefaultState {
     currentAuth:string,
     userToken:string,
     verifiedUser:User|null,
-    twoStepCodeStatus:string
+    twoStepCodeStatus:string,
+    enableTwoStepCode:string,
+    qrCodeLink:string
 }
 
 export interface UserSliceState extends DefaultState {

@@ -10,9 +10,7 @@ import {
     FetchUserVacationDays,
     DeleteUser,
     EmailConfirmQuery,
-    FetchWorkedHoursQuery,
-    UpdateWorkedHoursQuery,
-    DeleteWorkedHoursQuery,
+
     UpdateTwoStepAuthQuery
 } from "@redux/queries";
 import {
@@ -167,7 +165,7 @@ export  const updateTwoStepAuthEpic:Epic = (action$:Observable<PayloadAction<Upd
         mergeMap(action$=>
             UpdateTwoStepAuthQuery(action$.payload).pipe(
                 map(res=>{
-                    return updateTwoStepAuthSuccess(res.response.data.userMutations.updateTwoStepAuth);
+                    return updateTwoStepAuthSuccess(res.response.data.userMutation.updateTwoStepAuth);
                 }),
                 catchError((e: Error) => {
                     console.log(e);

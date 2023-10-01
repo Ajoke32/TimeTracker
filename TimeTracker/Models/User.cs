@@ -20,13 +20,12 @@ public class User:SoftDeleteBase
     [Required] public string Password { get; set; } = string.Empty;
     
     [Required] public WorkType WorkType { get; set; }
-
-    public string? PhoneNumber { get; set; } = string.Empty;
     
     public bool? IsTwoStepAuthEnabled { get; set; }
     
-    [Column(TypeName = "int")]
-    public TwoStepAuthType AuthType { get; set; }
+    public string? PathId { get; set; }
+    
+    public string? PathSid { get; set; }
     
     public int AvailableVacationDays { get; set; }
     

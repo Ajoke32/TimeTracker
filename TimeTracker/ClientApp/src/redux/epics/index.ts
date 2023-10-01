@@ -3,10 +3,16 @@ import { catchError } from "rxjs";
 import {
     authorizeWithEmailEpic,
     codeVerifyEpic,
-    createPasswordEpic, externalAuthorizeEpic, getUserInfoFromTokenEpic, LoginWithCodeEpic,
+    createPasswordEpic,
+    EnableTwoStepVerifyEpic,
+    externalAuthorizeEpic,
+    GetQrCodeEpic,
+    getUserInfoFromTokenEpic,
+    LoginWithCodeEpic,
     refreshTokenEpic,
-    resetPasswordEpic, SendTwoFactorCodeEpic,
-    userLoginEpic, verifyUserLoginEpic
+    resetPasswordEpic,
+    userLoginEpic,
+    verifyUserLoginEpic
 } from './auth'
 import {
     userEpics
@@ -17,6 +23,7 @@ import { addApproversEpic, fetchApproversEpic } from "./approvers";
 import {vacationApproverEpics } from "./approverVacation";
 import { workedHourEpics } from "./timeTracker";
 import { calendarEpics } from "./calendar";
+
 
 
 
@@ -35,8 +42,9 @@ export const rootEpic: Epic = (action$, store$, dependencies) =>
         getUserInfoFromTokenEpic,
         authorizeWithEmailEpic,
         verifyUserLoginEpic,
-        SendTwoFactorCodeEpic,
         LoginWithCodeEpic,
+        GetQrCodeEpic,
+        EnableTwoStepVerifyEpic,
         ...userEpics,
         ...usersEpics,
         ...workedHourEpics,

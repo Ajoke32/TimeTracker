@@ -78,6 +78,7 @@
     display: flex;
     text-decoration: none;
     align-items: center;
+    background-color: #fff;
     justify-content: space-between;
     padding: 10px;
     border: 2px solid lightblue;

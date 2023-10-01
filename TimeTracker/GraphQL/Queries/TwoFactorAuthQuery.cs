@@ -1,13 +1,12 @@
-﻿using GraphQL;
+﻿using System.Text;
+using System.Text.Json.Nodes;
+using GraphQL;
 using GraphQL.Types;
 using TimeTracker.Absctration;
-using TimeTracker.Enums;
 using TimeTracker.Models;
 using TimeTracker.Utils.Auth;
-using TimeTracker.Utils.Errors;
 using Twilio;
-using Twilio.Rest.Chat.V2;
-using Twilio.Rest.Verify.V2.Service;
+using Twilio.Rest.Verify.V2.Service.Entity;
 
 namespace TimeTracker.GraphQL.Queries;
 
@@ -19,57 +18,94 @@ public sealed class TwoFactorAuthQuery : ObjectGraphType
         var authToken = config["Authentication:Twilio:AuthToken"]!;
         var serviceSid = config["Authentication:Twilio:ServiceSid"]!;
         
-        Field<string>("sendCode")
-            .Argument<string>("to")
-            .Argument<string>("authType")
-            .Resolve(ctx =>
+        Field<string>("getQrCode")
+            .Argument<string>("accountName")
+            .Argument<int>("id")
+            .ResolveAsync(async ctx =>
             {
-                var authType = ctx.GetArgument<string>("authType");
+                var accName = ctx.GetArgument<string>("accountName");
 
-                var to = ctx.GetArgument<string>("to");
-                
+                var id = ctx.GetArgument<int>("id");
+
+                var user =  await uow.GenericRepository<User>()
+                    .FindAsync(u => u.Id == id);
                 
                 TwilioClient.Init(accountSid, authToken);
-                
-           
-                var verification = VerificationResource.Create(
-                    to: to,
-                    channel: authType,
-                    pathServiceSid: serviceSid
+
+                var pathId = Guid.NewGuid().ToString();
+        
+                var factor = NewFactorResource.Create(
+                    friendlyName:accName,
+                    factorType:NewFactorResource.FactorTypesEnum.Totp,
+                    pathServiceSid:serviceSid,
+                    pathIdentity:pathId
                 );
-                    
-             
-                return verification.Status;
+
+                var json = JsonNode.Parse(factor.Binding.ToString());
+
+                user.PathId = pathId;
+                user.PathSid = factor.Sid;
+
+                await uow.SaveAsync();
+               
+                return $"https://api.qrserver.com/v1/create-qr-code/?data={json["uri"]}&amp";
             });
 
-        Field<string>("login")
+        Field<string>("verify")
+            .Argument<int>("id")
             .Argument<string>("code")
-            .Argument<string>("to")
-            .Argument<string>("email")
-            .ResolveAsync( async ctx =>
+            .ResolveAsync(async ctx =>
             {
+                var id = ctx.GetArgument<int>("id");
                 var code = ctx.GetArgument<string>("code");
-
-                var to = ctx.GetArgument<string>("to");
-
+                
+                var user =  await uow.GenericRepository<User>()
+                    .FindAsync(u => u.Id == id)??throw new Exception("not found");
+                
                 TwilioClient.Init(accountSid, authToken);
 
-                var verificationCheck = VerificationCheckResource.Create(
-                    to: to,
-                    code: code,
-                    pathServiceSid:serviceSid
+                var factor = FactorResource.Update(
+                    friendlyName:user.FirstName,
+                    authPayload: code,
+                    pathServiceSid: serviceSid,
+                    pathIdentity: user.PathId,
+                    pathSid: user.PathSid
                 );
+                    
+                return factor.Status.ToString();
+            });
 
-                if (verificationCheck.Status != "approved")
+
+        Field<string>("verifyLogin")
+            .Argument<string>("code")
+            .Argument<int>("id")
+            .ResolveAsync(async ctx =>
+            {
+                var id = ctx.GetArgument<int>("id");
+                var code = ctx.GetArgument<string>("code");
+                
+                var user =  await uow.GenericRepository<User>()
+                    .FindAsync(u => u.Id == id)??throw new Exception("not found");
+                
+                TwilioClient.Init(accountSid, authToken);
+
+                var challenge = ChallengeResource.Create(
+                    authPayload: code,
+                    factorSid: user.PathSid,
+                    pathServiceSid: serviceSid,
+                    pathIdentity: user.PathId
+                );
+                if (challenge.Status == ChallengeResource.ChallengeStatusesEnum.Denied ||
+                    challenge.Status == ChallengeResource.ChallengeStatusesEnum.Expired)
                 {
-                    throw new QueryError(Error.ERR_WRONG_CREDENTIALS);
+                    throw new Exception("Invalid code");
                 }
 
-                var email = ctx.GetArgument<string>("email");
+                if (challenge.Status == ChallengeResource.ChallengeStatusesEnum.Pending)
+                {
+                    throw new Exception("Invalid code, try again");
+                }
                 
-                var user = await uow.GenericRepository<User>()
-                    .FindAsync(u => u.Email == email)??throw new QueryError(Error.ERR_WRONG_CREDENTIALS);
-
                 var authenticate = ctx.RequestServices!.GetRequiredService<Authenticate>();
                 
                 var token = authenticate.GenerateToken(user);
@@ -80,6 +116,29 @@ public sealed class TwoFactorAuthQuery : ObjectGraphType
         
                 return token;
             });
-        
+
+        /*Field<string>("list")
+            .Resolve(ctx =>
+            {
+
+                TwilioClient.Init(accountSid, authToken);
+
+                var factors = FactorResource.Read(
+                    pathServiceSid: serviceSid,
+                    pathIdentity: "963e6ace-5799-4583-b8af-2cd1a58d1dee",
+                    limit: 20
+                );
+                var str = new StringBuilder();
+
+                foreach (var record in factors)
+                {
+                    str.Append($"Sid:{record.Sid}, Identity:{record.Identity}, Status:{record.Status}");
+                    str.Append('\n');
+                }
+
+                return str.ToString();
+            });*/
+
+
     }
 }

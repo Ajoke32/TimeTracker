@@ -8,5 +8,6 @@ export interface TokenStructure {
     Permissions: string,
     VacationDays: string,
     WorkType: WorkType,
+    IsTwoStepAuthEnabled:boolean
     exp: string 
 }
