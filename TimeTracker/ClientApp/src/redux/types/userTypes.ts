@@ -28,9 +28,7 @@ export interface FetchUserType {
 
 export interface UpdateTwoStepAuth{
     userId:number,
-    authType:number,
     isEnabled:boolean,
-    phoneNumber?:string
 }
 
 export interface FetchUsersType extends FetchUserType,FiltersType,OrderingType{
@@ -46,8 +44,7 @@ export interface TwoStepInput{
 
 export interface TwoStepLoginInput{
     code:string,
-    to:string,
-    email:string
+    id:number
 }
 
 

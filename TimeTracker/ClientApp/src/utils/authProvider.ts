@@ -29,6 +29,7 @@ export const GetUserFromToken = (): User | null => {
             permissions: parseInt(decodedToken.Permissions),
             vacationDays: parseInt(decodedToken.VacationDays),
             workType: decodedToken.WorkType,
+            isTwoStepAuthEnabled:decodedToken.IsTwoStepAuthEnabled
         }
         return result as User;
     }

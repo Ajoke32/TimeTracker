@@ -1,8 +1,8 @@
 ﻿using System.Net.Http.Headers;
-using System.Security.Authentication;
 using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Mvc;
 using TimeTracker.Utils.OAuth;
+
 
 namespace TimeTracker.Controllers;
 
@@ -10,7 +10,7 @@ public class AuthController:Controller
 {
     private readonly AuthFactory _authFactory;
     
-    private  readonly HttpClient _httpClient = new HttpClient();
+    private  readonly HttpClient _httpClient = new();
     
     public AuthController(AuthFactory factory)
     {

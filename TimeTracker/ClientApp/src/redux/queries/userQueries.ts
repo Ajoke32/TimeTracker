@@ -4,6 +4,7 @@ import {UserAddType, FetchUsersType, UpdateTwoStepAuth, UserLoginType, TwoStepIn
 import { ReadCookie } from '../../utils';
 import {user} from "@redux/slices";
 import {CodeVerifyInput, CreatePasswordInput} from "@redux/types/passwordVerifyTypes.ts";
+import {QrCodeGenerateInput, VerifyTwoStepInput} from "@redux/types/authTypes.ts";
 
 export function UserLoginQuery(userData: { email: string, password: string }) {
   return AjaxQuery<{ userQuery: { login: string } }>(
@@ -196,18 +197,16 @@ export function CreatePasswordQuery({password,userId}:CreatePasswordInput){
     )
 }
 
-export function UpdateTwoStepAuthQuery({isEnabled,userId,authType,phoneNumber}:UpdateTwoStepAuth){
-    return AjaxQuery<{userMutations:{updateTwoStepAuth:boolean}}>(
-        `mutation Update($isEnabled:Boolean!,$phoneNumber:String,$userId:Int!,$authType:Int!){
+export function UpdateTwoStepAuthQuery({isEnabled,userId}:UpdateTwoStepAuth){
+    return AjaxQuery<{userMutation:{updateTwoStepAuth:boolean}}>(
+        `mutation Update($isEnabled:Boolean!,$userId:Int!){
               userMutation{
-                updateTwoStepAuth(isEnabled:$isEnabled,phoneNumber:$phoneNumber,userId:$userId,authType:$authType)
+                updateTwoStepAuth(isEnabled:$isEnabled,userId:$userId)
               }
             }`,
         {
             isEnabled:isEnabled,
             userId:userId,
-            authType:authType,
-            phoneNumber:phoneNumber
         }
     )
 }
@@ -220,8 +219,7 @@ export function VerifyUserLoginQuery(input:UserLoginType){
                     email,
                     isTwoStepAuthEnabled,
                     firstName,
-                    phoneNumber,
-                    authType
+                    id
                 }
             }
         }`,
@@ -246,17 +244,44 @@ export function SendTwoFactorCodeQuery({to,authType}:TwoStepInput){
     )
 }
 
-export function TwoFactorLoginQuery({to,email,code}:TwoStepLoginInput){
-    return AjaxQuery<{twoFactorAuthQuery:{login:string}}>(
-        `query Login($to:String!,$email:String!,$code:String!){
-            twoFactorAuthQuery{
-                login(to:$to,email:$email,code:$code)
+export function TwoFactorLoginQuery({id,code}:TwoStepLoginInput){
+    return AjaxQuery<{twoFactorAuthQuery:{verifyLogin:string}}>(
+        `query Login($code:String!,$id:Int!){
+             twoFactorAuthQuery{
+                verifyLogin(id:$id,code:$code)
             }
         }`,
         {
-            to:to,
-            email:email,
-            code:code
+            id:id,
+            code:code,
+        }
+    )
+}
+
+export function GetQrCodeQuery({accountName,id}:QrCodeGenerateInput){
+    return AjaxQuery<{twoFactorAuthQuery:{getQrCode:string}}>(
+        `query GetQrCode($acc:String!,$id:Int!){
+          twoFactorAuthQuery{
+            getQrCode(accountName:$acc,id:$id)
+          }
+        }`,
+        {
+            acc:accountName,
+            id:id
+        }
+    )
+}
+
+export function VerifyEnableTwoStepQuery({code,id}:VerifyTwoStepInput){
+    return AjaxQuery<{twoFactorAuthQuery:{getQrCode:string}}>(
+        `query GetQrCode($code:String!,$id:Int!){
+          twoFactorAuthQuery{
+            verify(code:$code,id:$id)
+          }
+        }`,
+        {
+            code:code,
+            id:id
         }
     )
 }

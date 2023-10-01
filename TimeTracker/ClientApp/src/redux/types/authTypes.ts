@@ -19,6 +19,16 @@ export interface ExternalAuthTokenType{
 export interface UserInfoResponse{
     email:string;
 }
+export interface QrCodeGenerateInput{
+    id:number,
+    accountName:string
+}
+
+export interface VerifyTwoStepInput{
+    id:number,
+    code:string
+}
+
 
 export function getUserInfoUrl(authType:string){
     switch (authType){

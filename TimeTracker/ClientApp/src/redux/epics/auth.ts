@@ -3,29 +3,37 @@ import { PayloadAction } from "@reduxjs/toolkit";
 import {catchError, map, mergeMap, Observable, of} from "rxjs";
 import {
     CodeVerifyQuery,
-    CreatePasswordQuery,
+    CreatePasswordQuery, GetQrCodeQuery,
     RefreshTokenQuery,
     ResetPasswordQuery, SendTwoFactorCodeQuery, TwoFactorLoginQuery,
-    UserLoginQuery,
+    UserLoginQuery, VerifyEnableTwoStepQuery,
     VerifyUserLoginQuery
 } from "../queries";
 import {TwoStepInput, TwoStepLoginInput, UpdateTwoStepAuth, UserLoginType} from "../types";
 import {
-    authorizeWithEmailFail, authorizeWithEmailSuccess,
+    authorizeWithEmailFail,
+    authorizeWithEmailSuccess,
     codeVerifyFail,
     codeVerifySuccess,
     createPasswordFail,
     createPasswordSuccess,
     getAccessTokenFail,
     getAccessTokenSuccess,
+    getQrCodeFail,
+    getQrCodeSuccess,
     getUserInfoFromTokenFail,
     getUserInfoFromTokenSuccess,
     loginFail,
-    loginSuccess, loginWithCodeFail, loginWithCodeSuccess,
+    loginSuccess,
+    loginWithCodeFail,
+    loginWithCodeSuccess,
     refreshTokenFail,
     refreshTokenSuccess,
     resetPasswordFail,
-    resetPasswordSuccess, sendTwoStepCodeFail, sendTwoStepCodeSuccess, verifyUserLoginFail, verifyUserLoginSuccess
+    resetPasswordSuccess,
+    verifyEnableTwoStepSuccess,
+    verifyUserLoginFail,
+    verifyUserLoginSuccess
 } from '../slices';
 import { GetErrorMessage } from "../../utils";
 import {CodeVerifyInput, CreatePasswordInput} from "@redux/types/passwordVerifyTypes.ts";
@@ -34,7 +42,12 @@ import {
     GetAccessTokenQuery,
     GetUserFromAccessTokenQuery
 } from "@redux/queries/exteranalAuthQueries.ts";
-import {ExternalAuthTokenType, ExternalAuthType} from "@redux/types/authTypes.ts";
+import {
+    ExternalAuthTokenType,
+    ExternalAuthType,
+    QrCodeGenerateInput,
+    VerifyTwoStepInput
+} from "@redux/types/authTypes.ts";
 import {Inputs} from "@components/UserForms/props.ts";
 
 
@@ -202,7 +215,7 @@ export const verifyUserLoginEpic:Epic=(action$:Observable<PayloadAction<UserLogi
                 .pipe(
                     map(res=>{
                         if(res.response.errors!==undefined){
-                            return verifyUserLoginFail("an error occurred");
+                            return verifyUserLoginFail("Wrong credentials");
                         }
                         return verifyUserLoginSuccess(res.response.data.userQuery.verifyUserLogin);
                     }),
@@ -215,26 +228,6 @@ export const verifyUserLoginEpic:Epic=(action$:Observable<PayloadAction<UserLogi
     )
 
 
-export const SendTwoFactorCodeEpic:Epic = (action$:Observable<PayloadAction<TwoStepInput>>,state)=>
-    action$.pipe(
-        ofType("auth/sendTwoStepCode"),
-        mergeMap(action$=>
-            SendTwoFactorCodeQuery(action$.payload)
-                .pipe(
-                    map(res=>{
-                        if(res.response.errors!==undefined){
-                            console.log(res.response.errors);
-                            return sendTwoStepCodeFail("error");
-                        }
-                        return sendTwoStepCodeSuccess(res.response.data.twoFactorAuthQuery.sendCode);
-                    }),
-                    catchError((e)=>{
-                        console.log("Sent two factor code fail",e);
-                        return of(sendTwoStepCodeFail(e.message));
-                    })
-                )
-        )
-    )
 
 export const LoginWithCodeEpic:Epic = (action$:Observable<PayloadAction<TwoStepLoginInput>>,state)=>
     action$.pipe(
@@ -244,13 +237,50 @@ export const LoginWithCodeEpic:Epic = (action$:Observable<PayloadAction<TwoStepL
                 .pipe(
                     map(res=>{
                         if(res.response.errors!==undefined){
-                            return loginWithCodeFail("error occurred");
+                            return loginWithCodeFail("Invalid code");
                         }
-                        return loginWithCodeSuccess(res.response.data.twoFactorAuthQuery.login);
+                        return loginWithCodeSuccess(res.response.data.twoFactorAuthQuery.verifyLogin);
                     }),
                     catchError((e)=>{
                         console.log("Login with code fail",e);
-                        return of(loginWithCodeFail(e.message));
+                        return of(loginWithCodeFail("An error occurred, try later"));
+                    })
+                )
+        )
+    )
+
+export const GetQrCodeEpic:Epic =  (action$:Observable<PayloadAction<QrCodeGenerateInput>>,state)=>
+    action$.pipe(
+        ofType("auth/getQrCode"),
+        mergeMap(action$=>
+            GetQrCodeQuery(action$.payload)
+                .pipe(
+                    map(res=>{
+                        if(res.response.errors!==undefined){
+                            return getQrCodeFail("error occurred");
+                        }
+                        return getQrCodeSuccess(res.response.data.twoFactorAuthQuery.getQrCode);
+                    }),
+                    catchError((e)=>{
+                        console.log("Qr code generation failed",e);
+                        return of(getQrCodeFail(e.message));
+                    })
+                )
+        )
+    )
+
+export const EnableTwoStepVerifyEpic:Epic =  (action$:Observable<PayloadAction<VerifyTwoStepInput>>,state)=>
+    action$.pipe(
+        ofType("auth/verifyEnableTwoStep"),
+        mergeMap(action$=>
+            VerifyEnableTwoStepQuery(action$.payload)
+                .pipe(
+                    map(res=>{
+                        return verifyEnableTwoStepSuccess(res.response.data.twoFactorAuthQuery.getQrCode);
+                    }),
+                    catchError((e)=>{
+                        console.log("Qr code generation failed",e);
+                        return of(verifyUserLoginFail(e.message));
                     })
                 )
         )

@@ -21,13 +21,8 @@ public sealed class UserType:ObjectGraphType<User>
         Field<int>("permissions")
             .Resolve(context => (int)context.Source.Permissions)
             .Description("");
-
-        Field(x => x.PhoneNumber);
-
-        Field(x => x.IsTwoStepAuthEnabled,nullable:true);
         
-        Field<int>("authType")
-            .Resolve(ct => (int)ct.Source.AuthType);
+        Field(x => x.IsTwoStepAuthEnabled,nullable:true);
 
         Field(x => x.VacationDays).Description("");
 
