@@ -276,10 +276,10 @@ export const EnableTwoStepVerifyEpic:Epic =  (action$:Observable<PayloadAction<V
             VerifyEnableTwoStepQuery(action$.payload)
                 .pipe(
                     map(res=>{
-                        return verifyEnableTwoStepSuccess(res.response.data.twoFactorAuthQuery.getQrCode);
+                        return verifyEnableTwoStepSuccess(res.response.data.twoFactorAuthQuery.verify);
                     }),
                     catchError((e)=>{
-                        console.log("Qr code generation failed",e);
+                        console.log("Two step auth active failed",e);
                         return of(verifyUserLoginFail(e.message));
                     })
                 )

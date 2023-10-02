@@ -273,7 +273,7 @@ export function GetQrCodeQuery({accountName,id}:QrCodeGenerateInput){
 }
 
 export function VerifyEnableTwoStepQuery({code,id}:VerifyTwoStepInput){
-    return AjaxQuery<{twoFactorAuthQuery:{getQrCode:string}}>(
+    return AjaxQuery<{twoFactorAuthQuery:{verify:string}}>(
         `query GetQrCode($code:String!,$id:Int!){
           twoFactorAuthQuery{
             verify(code:$code,id:$id)
