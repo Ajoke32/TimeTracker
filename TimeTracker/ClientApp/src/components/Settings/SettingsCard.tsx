@@ -20,8 +20,9 @@ const SettingsCard = () => {
     const twoStepAuthMessage = user?.isTwoStepAuthEnabled?"Disable two step authentication"
         :"Enable two step authentication"
 
-    
+
     useEffect(() => {
+        console.log(qrCodeLink);
         setShowQrCode(qrCodeLink!=="");
     }, [qrCodeLink]);
 
@@ -57,18 +58,19 @@ const SettingsCard = () => {
         }));
     }
 
- /* <button className="btn btn-info" onClick={handleSave}>Enable two step auth</button>*/
+
     return (
         <div className="card-wrapper">
             <div className="card">
-                {message!==""?<h2 style={{textAlign:"center"}}>{message}</h2>:
-                    Boolean(user?.isTwoStepAuthEnabled)?<button className="btn btn-info" onClick={handleSave}>Enable two step auth</button>
+                {message!==""?<h2 style={{textAlign:"center"}}>{message}</h2>
                         :showQrCode? <div style={{display:"flex",flexDirection:"column",gap:"15px"}}>
                     <h2>Scan qr code  and then enter verification token</h2>
                     <img style={{width:"150px",height:"150px"}} src={qrCodeLink} alt="qr-code"/>
                     <input onChange={(e)=>setCode(e.target.value)} type="text" placeholder="Your code" className="input-search"/>
                     <button onClick={verifyUserCode} className="btn btn-confirm">Verify code</button>
-                </div>: <div style={{display:"flex",flexDirection:"column",gap:"15px"}}>
+                </div>:Boolean(user?.isTwoStepAuthEnabled)?
+                        <button className="btn btn-info" onClick={handleSave}>Enable two step auth</button>
+                        :<div style={{display:"flex",flexDirection:"column",gap:"15px"}}>
                         <h2 style={{textAlign:"center"}}>Two step auth enabled</h2>
                         <button onClick={unSetTwoStep} className="btn btn-base btn-decline">Disable</button>
                     </div>}
