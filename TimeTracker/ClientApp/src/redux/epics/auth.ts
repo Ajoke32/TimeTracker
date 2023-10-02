@@ -256,6 +256,7 @@ export const GetQrCodeEpic:Epic =  (action$:Observable<PayloadAction<QrCodeGener
             GetQrCodeQuery(action$.payload)
                 .pipe(
                     map(res=>{
+                        console.log(res);
                         if(res.response.errors!==undefined){
                             return getQrCodeFail("error occurred");
                         }
